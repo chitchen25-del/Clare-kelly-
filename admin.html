@@ -1,101 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Practitioner Dashboard | The Natural Healing Clinic</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg-color: #FAFAF7; --text-main: #2C352D; --primary-sage: #5A6B5D; --secondary-sand: #E3E0D8; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Lora', serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; }
-        h1, h2, h3, h4, th, .nav-logo, .btn { font-family: 'Montserrat', sans-serif; }
-        nav { display: flex; justify-content: space-between; padding: 1rem 5%; background: white; border-bottom: 1px solid var(--secondary-sand); }
-        .nav-logo { font-size: 1rem; font-weight: 600; text-transform: uppercase; color: var(--primary-sage); }
-        .btn { padding: 0.8rem 1.5rem; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; border-radius: 4px; cursor: pointer; border: none; background: var(--primary-sage); color: white; }
-        .btn-outline { background: transparent; border: 1px solid var(--primary-sage); color: var(--primary-sage); }
-        .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 1rem; }
-        .form-container { width: 100%; max-width: 400px; background: white; padding: 3rem 2.5rem; border-radius: 6px; border: 1px solid var(--secondary-sand); text-align: center; }
-        label { display: block; font-size: 0.75rem; text-transform: uppercase; color: #555; margin-bottom: 0.4rem; text-align: left; font-weight: 600;}
-        input, select, textarea { width: 100%; padding: 0.8rem; margin-bottom: 1.2rem; border: 1px solid var(--secondary-sand); border-radius: 3px; font-family: 'Lora', serif; background: #fff; }
-        .dashboard-wrapper { display: none; max-width: 1400px; margin: 3rem auto; padding: 0 2%; }
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        .panel { background: white; padding: 1.5rem; border-radius: 6px; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem; }
-        .panel h3 { font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem; }
-        .chat-box { height: 250px; overflow-y: auto; background: #F4F3EE; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
-        .msg { padding: 0.8rem; border-radius: 6px; max-width: 80%; font-size: 0.9rem; }
-        .msg.client { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; }
-        .msg.admin { background: var(--primary-sage); color: white; align-self: flex-end; }
-        .client-file-card { background: #FAF9F5; border: 1px solid var(--secondary-sand); padding: 1.2rem; border-radius: 4px; margin-bottom: 1rem; }
-    </style>
-</head>
-<body>
-    <nav>
-        <div class="nav-logo">Practitioner Admin</div>
-        <button id="btn-logout" class="btn btn-outline" style="display: none;" onclick="location.reload();">Sign Out</button>
-    </nav>
-
-    <div id="admin-login" class="login-wrapper">
-        <div class="form-container">
-            <h2>Authorized Access</h2>
-            <form onsubmit="return processAdminLogin(event)">
-                <label>Admin Email</label><input type="text" id="admin-email" placeholder="test or email" required>
-                <label>Password</label><input type="password" id="admin-password" placeholder="test or password" required>
-                <button type="submit" class="btn" style="width: 100%;">Secure Login</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="admin-dashboard" class="dashboard-wrapper">
-        <div style="margin-bottom: 2rem; border-bottom: 2px solid var(--secondary-sand); padding-bottom: 1rem;">
-            <h1 style="font-size: 2.2rem; font-weight: 300;">Welcome, Clare</h1>
-        </div>
-
-        <div class="dashboard-grid">
-            <!-- CLIENT FILES & INTAKE DIRECTORY -->
-            <div class="panel" style="grid-column: span 2;">
-                <h3>Client Files & Medical Questionnaires</h3>
-                <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.5rem;">View patient intake details, add clinical notes, and upload historical client documents.</p>
-                <div id="admin-client-files-list">
-                    <p style="color: #888;">Loading client records...</p>
-                </div>
-            </div>
-
-            <!-- INBOX PANEL -->
-            <div class="panel">
-                <h3>Live Patient Inbox</h3>
-                <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Messages sent from active client portals.</p>
-                <div class="chat-box" id="admin-chat-box">
-                    <p style="color: #888;">Loading messages from database...</p>
-                </div>
-            </div>
-
-            <!-- BROADCAST / ADVICE PANEL -->
-            <div class="panel">
-                <h3>Send Advice, Articles & Files</h3>
-                <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Broadcast to all clients or send targeted advice to a specific patient.</p>
-                <form onsubmit="return publishBroadcast(event)">
-                    <label>Send To</label>
-                    <select id="broadcast-recipient">
-                        <option value="all">Publish to All Clients (Mass Broadcast)</option>
-                    </select>
-
-                    <label>Subject / Article Title</label>
-                    <input type="text" id="broadcast-title" placeholder="e.g. Personal Protocol Adjustment" required>
-                    
-                    <label>Detailed Advice / Content</label>
-                    <textarea id="broadcast-content" style="height: 100px;" placeholder="Write comprehensive advice here..." required></textarea>
-                    
-                    <label>Attach Protocol / Document (PDF, Image)</label>
-                    <input type="file" id="broadcast-file">
-
-                    <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Send Advice & Files</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
@@ -146,8 +48,11 @@
         async function loadClientFiles(db) {
             const container = document.getElementById('admin-client-files-list');
             try {
-                const { data: appointments, error } = await db.from('appointments').select('*');
-                if(error || !appointments || appointments.length === 0) {
+                // Fetch from appointments for client names/IDs, and medical_files for questionnaire data
+                const { data: appointments } = await db.from('appointments').select('*');
+                const { data: medicalFiles } = await db.from('medical_files').select('*');
+
+                if(!appointments || appointments.length === 0) {
                     container.innerHTML = '<p style="color: #666;">No registered clients found yet.</p>';
                     return;
                 }
@@ -155,28 +60,42 @@
                 const uniqueClients = Array.from(new Set(appointments.map(a => a.client_id)))
                     .map(id => appointments.find(a => a.client_id === id));
 
-                container.innerHTML = uniqueClients.map(client => `
-                    <div class="client-file-card">
-                        <h4 style="color: var(--primary-sage); font-size: 1.1rem; margin-bottom: 0.5rem;">${client.client_name}</h4>
-                        <p style="font-size: 0.85rem; color: #555; margin-bottom: 0.8rem;"><strong>Client ID:</strong> ${client.client_id}</p>
-                        <div style="background: white; padding: 1rem; border: 1px solid var(--secondary-sand); border-radius: 3px; margin-bottom: 1rem; font-size: 0.9rem;">
-                            <strong>Medical Intake & Questionnaire Summary:</strong><br>
-                            <p style="margin-top: 0.5rem; color: #333; white-space: pre-line; background: #FAFAF7; padding: 0.8rem; border-radius: 3px; border-left: 3px solid var(--primary-sage);">${client.intake_details || 'Questionnaire not yet completed by client.'}</p>
-                        </div>
+                container.innerHTML = uniqueClients.map(client => {
+                    // Find matching medical file for this client
+                    const medFile = medicalFiles ? medicalFiles.find(m => m.client_id === client.client_id) : null;
+                    
+                    // Format questionnaire details if they exist in the row
+                    let intakeDisplay = 'Questionnaire not yet completed by client.';
+                    if (medFile) {
+                        intakeDisplay = `
+                            <strong>Session Date:</strong> ${medFile.session_date || 'N/A'}<br>
+                            <strong>Details:</strong> ${JSON.stringify(medFile, null, 2)}
+                        `;
+                    }
 
-                        <form onsubmit="return savePractitionerNote(event, '${client.client_id}')" style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 1rem; align-items: end;">
-                            <div>
-                                <label>Add Practitioner Note</label>
-                                <input type="text" id="note-text-${client.client_id}" placeholder="Type consultation notes..." style="margin-bottom:0;" required>
+                    return `
+                        <div class="client-file-card">
+                            <h4 style="color: var(--primary-sage); font-size: 1.1rem; margin-bottom: 0.5rem;">${client.client_name}</h4>
+                            <p style="font-size: 0.85rem; color: #555; margin-bottom: 0.8rem;"><strong>Client ID:</strong> ${client.client_id}</p>
+                            <div style="background: white; padding: 1rem; border: 1px solid var(--secondary-sand); border-radius: 3px; margin-bottom: 1rem; font-size: 0.9rem;">
+                                <strong>Medical Intake & Questionnaire Data:</strong><br>
+                                <pre style="margin-top: 0.5rem; color: #333; background: #FAFAF7; padding: 0.8rem; border-radius: 3px; border-left: 3px solid var(--primary-sage); font-family: inherit; white-space: pre-wrap;">${intakeDisplay}</pre>
                             </div>
-                            <div>
-                                <label>Upload File / Document</label>
-                                <input type="file" id="note-file-${client.client_id}" style="margin-bottom:0;">
-                            </div>
-                            <button type="submit" class="btn" style="padding: 0.8rem 1rem;">Update File</button>
-                        </form>
-                    </div>
-                `).join('');
+
+                            <form onsubmit="return savePractitionerNote(event, '${client.client_id}')" style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 1rem; align-items: end;">
+                                <div>
+                                    <label>Add Practitioner Note</label>
+                                    <input type="text" id="note-text-${client.client_id}" placeholder="Type consultation notes..." style="margin-bottom:0;" required>
+                                </div>
+                                <div>
+                                    <label>Upload File / Document</label>
+                                    <input type="file" id="note-file-${client.client_id}" style="margin-bottom:0;">
+                                </div>
+                                <button type="submit" class="btn" style="padding: 0.8rem 1rem;">Update File</button>
+                            </form>
+                        </div>
+                    `;
+                }).join('');
             } catch(err) {
                 container.innerHTML = '<p style="color: red;">Error loading client records.</p>';
             }
@@ -296,5 +215,3 @@
             return false;
         }
     </script>
-</body>
-</html>
