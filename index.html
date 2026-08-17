@@ -160,8 +160,8 @@
         <!-- Interactive Auth Container -->
         <div id="auth-container">
             <div class="auth-tabs">
-                <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</div>
-                <div class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Register & Book</div>
+                <div class="auth-tab active" id="tab-login">Sign In</div>
+                <div class="auth-tab" id="tab-signup">Register & Book</div>
             </div>
 
             <!-- Login Form -->
@@ -198,9 +198,9 @@
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU'; 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Safe Element Selectors & Click Triggers
+        // Robust Event Listeners for Mobile & Desktop
         const authContainer = document.getElementById('auth-container');
-        
+
         function togglePortal() {
             if (authContainer.style.display === 'block') {
                 authContainer.style.display = 'none';
@@ -210,26 +210,32 @@
             }
         }
 
-        document.getElementById('nav-portal-btn').onclick = togglePortal;
-        document.getElementById('hero-portal-btn').onclick = togglePortal;
-        document.getElementById('banner-portal-btn').onclick = togglePortal;
+        document.getElementById('nav-portal-btn').addEventListener('click', togglePortal);
+        document.getElementById('hero-portal-btn').addEventListener('click', togglePortal);
+        document.getElementById('banner-portal-btn').addEventListener('click', togglePortal);
 
-        function switchTab(tab) {
-            document.getElementById('tab-login').classList.remove('active');
-            document.getElementById('tab-signup').classList.remove('active');
-            document.getElementById('login-panel').classList.remove('active');
-            document.getElementById('signup-panel').classList.remove('active');
-            
-            if (tab === 'login') {
-                document.getElementById('tab-login').classList.add('active');
-                document.getElementById('login-panel').classList.add('active');
-            } else {
-                document.getElementById('tab-signup').classList.add('active');
-                document.getElementById('signup-panel').classList.add('active');
-            }
-        }
+        // Tab Switching Logic
+        const tabLogin = document.getElementById('tab-login');
+        const tabSignup = document.getElementById('tab-signup');
+        const loginPanel = document.getElementById('login-panel');
+        const signupPanel = document.getElementById('signup-panel');
 
-        document.getElementById('login-submit-btn').onclick = async () => {
+        tabLogin.addEventListener('click', () => {
+            tabLogin.classList.add('active');
+            tabSignup.classList.remove('active');
+            loginPanel.classList.add('active');
+            signupPanel.classList.remove('active');
+        });
+
+        tabSignup.addEventListener('click', () => {
+            tabSignup.classList.add('active');
+            tabLogin.classList.remove('active');
+            signupPanel.classList.add('active');
+            loginPanel.classList.remove('active');
+        });
+
+        // Login Action
+        document.getElementById('login-submit-btn').addEventListener('click', async () => {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             
@@ -239,9 +245,10 @@
             } else {
                 alert('Successfully logged in!');
             }
-        };
+        });
 
-        document.getElementById('signup-submit-btn').onclick = async () => {
+        // Signup & Booking Action
+        document.getElementById('signup-submit-btn').addEventListener('click', async () => {
             const name = document.getElementById('signup-name').value;
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
@@ -262,9 +269,9 @@
                 alert('Registration failed: ' + error.message);
             } else {
                 alert('Account created and booking request submitted for ' + preferredDate + '! You can now sign in.');
-                switchTab('login');
+                tabLogin.click();
             }
-        };
+        });
     </script>
 </body>
 </html>
