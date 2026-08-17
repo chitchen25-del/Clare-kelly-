@@ -160,14 +160,16 @@
                     .map(id => appointments.find(a => a.client_id === id));
 
                 container.innerHTML = uniqueClients.map(client => {
-                    // Match the medical file using client_id
+                    const clientAppts = appointments.filter(a => a.client_id === client.client_id);
                     const medFile = medicalFiles ? medicalFiles.find(m => m.client_id === client.client_id) : null;
                     
                     let intakeDisplay = 'Questionnaire not yet completed by client.';
-                    if (medFile && medFile.intake_details) {
+                    
+                    const foundApptWithIntake = clientAppts.find(a => a.intake_details);
+                    if (foundApptWithIntake && foundApptWithIntake.intake_details) {
+                        intakeDisplay = foundApptWithIntake.intake_details;
+                    } else if (medFile && medFile.intake_details) {
                         intakeDisplay = medFile.intake_details;
-                    } else if (medFile) {
-                        intakeDisplay = JSON.stringify(medFile, null, 2);
                     }
 
                     return `
