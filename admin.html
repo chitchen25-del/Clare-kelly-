@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Practitioner Dashboard | The Natural Healing Clinic</title>
     
-    <!-- Supabase Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Import Premium Fonts -->
+    <!-- Import Premium Fonts (Loaded first so it looks good) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -29,7 +26,6 @@
         }
         h1, h2, h3, th, .nav-logo, .btn { font-family: 'Montserrat', sans-serif; }
         
-        /* Minimal Admin Nav */
         nav {
             display: flex;
             justify-content: space-between;
@@ -56,8 +52,7 @@
             color: white;
             transition: all 0.3s ease;
             text-align: center;
-            /* Critical for iOS Safari to recognize it as clickable */
-            touch-action: manipulation; 
+            appearance: none; /* Strips native iOS button styling */
         }
         .btn:hover, .btn:active { background-color: #4A594D; }
         .btn-outline { border-color: var(--primary-sage); color: var(--primary-sage); background: transparent; border: 1px solid var(--primary-sage); }
@@ -69,7 +64,7 @@
         .form-container p { color: #666; font-size: 0.9rem; margin-bottom: 2rem; }
         
         label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 0.4rem; text-align: left; }
-        input { width: 100%; padding: 0.8rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 3px; font-family: 'Lora', serif; font-size: 1rem; }
+        input { width: 100%; padding: 0.8rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 3px; font-family: 'Lora', serif; font-size: 1rem; appearance: none; }
 
         /* Dashboard Layout */
         .dashboard-wrapper { display: none; max-width: 1200px; margin: 3rem auto; padding: 0 5%; }
@@ -85,12 +80,10 @@
         .panel { background: white; padding: 2rem; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid var(--secondary-sand); }
         .panel h3 { font-size: 1.2rem; color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem; }
 
-        /* Tables */
-        .table-responsive { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; min-width: 500px; }
+        .table-responsive { overflow-x: auto; }
         th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #888; padding-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); }
         td { padding: 1rem 0; border-bottom: 1px solid #f0f0f0; font-size: 0.95rem; color: var(--text-main); }
-        tr:last-child td { border-bottom: none; }
         .badge { background: #E3E0D8; color: var(--text-main); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-family: 'Montserrat', sans-serif; font-weight: 500; white-space: nowrap; }
         .badge.new { background: var(--primary-sage); color: white; }
 
@@ -101,22 +94,25 @@
 
     <nav>
         <div class="nav-logo">Practitioner Admin</div>
-        <button id="btn-logout" class="btn btn-outline" style="display: none; padding: 0.5rem 1rem; font-size: 0.8rem;">Sign Out</button>
+        <button id="btn-logout" class="btn btn-outline" style="display: none; padding: 0.5rem 1rem; font-size: 0.8rem;" onclick="location.reload();">Sign Out</button>
     </nav>
 
-    <!-- ADMIN LOGIN SCREEN -->
+    <!-- ADMIN LOGIN SCREEN (Using a native form) -->
     <div id="admin-login" class="login-wrapper">
         <div class="form-container">
             <h2>Authorized Access</h2>
             <p>Please sign in to the practitioner portal.</p>
             
-            <label>Admin Email</label>
-            <input type="text" id="admin-email" placeholder="clare@..." autocorrect="off" autocapitalize="none">
-            
-            <label>Password</label>
-            <input type="password" id="admin-password" placeholder="••••••••">
-            
-            <button id="btn-login" class="btn" style="width: 100%;">Secure Login</button>
+            <form id="login-form" onsubmit="return processAdminLogin(event)">
+                <label>Admin Email</label>
+                <input type="text" id="admin-email" placeholder="clare@..." autocorrect="off" autocapitalize="none" required>
+                
+                <label>Password</label>
+                <input type="password" id="admin-password" placeholder="••••••••" required>
+                
+                <!-- Explicit submit button natively triggers the form -->
+                <button type="submit" class="btn" style="width: 100%;">Secure Login</button>
+            </form>
         </div>
     </div>
 
@@ -127,12 +123,11 @@
                 <h1 style="font-size: 2.2rem; font-weight: 300;">Welcome, Clare</h1>
                 <p style="color: #666; font-size: 1.1rem;">Here is your upcoming schedule and clinic overview.</p>
             </div>
-            <button id="btn-download" class="btn btn-outline">Export Patient Files</button>
+            <button class="btn btn-outline" onclick="alert('Export initiated.');">Export Patient Files</button>
         </div>
 
         <div class="dashboard-grid">
             
-            <!-- LEFT COLUMN: Roster -->
             <div class="panel">
                 <h3>Upcoming Appointments</h3>
                 <div class="table-responsive">
@@ -154,19 +149,20 @@
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: Schedule Controls -->
             <div>
                 <div class="panel" style="margin-bottom: 2rem;">
                     <h3>Block Time Off</h3>
-                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.5rem;">Select a date to close the clinic. Clients will not be able to book on this day.</p>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.5rem;">Select a date to close the clinic.</p>
                     
-                    <label>Select Date</label>
-                    <input type="date" id="block-date">
-                    
-                    <label>Reason (e.g., Annual Leave)</label>
-                    <input type="text" id="block-reason" placeholder="Out of office...">
-                    
-                    <button id="btn-block" class="btn" style="width: 100%;">Close Clinic</button>
+                    <form id="block-form" onsubmit="return blockDate(event)">
+                        <label>Select Date</label>
+                        <input type="date" id="block-date" required>
+                        
+                        <label>Reason (e.g., Annual Leave)</label>
+                        <input type="text" id="block-reason" placeholder="Out of office...">
+                        
+                        <button type="submit" class="btn" style="width: 100%;">Close Clinic</button>
+                    </form>
                 </div>
 
                 <div class="panel">
@@ -176,99 +172,69 @@
                     </ul>
                 </div>
             </div>
-
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 The Natural Healing Clinic. Admin Portal v2.0</p>
+        <p>&copy; 2026 The Natural Healing Clinic. Admin Portal v3.0</p>
     </footer>
 
-    <!-- Native Event Listeners (Bulletproof for iOS Safari) -->
+    <!-- INLINE SCRIPT: Executed immediately without waiting for external links -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        function processAdminLogin(e) {
+            // Prevent the native form from refreshing the page
+            if(e) e.preventDefault();
             
-            // Get Elements
-            const loginBtn = document.getElementById('btn-login');
-            const logoutBtn = document.getElementById('btn-logout');
-            const blockBtn = document.getElementById('btn-block');
-            const downloadBtn = document.getElementById('btn-download');
-
-            // 1. LOGIN LOGIC
-            loginBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('admin-email').value.trim();
-                const pass = document.getElementById('admin-password').value.trim();
+            const email = document.getElementById('admin-email').value.trim();
+            const pass = document.getElementById('admin-password').value.trim();
+            
+            if (email === 'test' && pass === 'test') {
+                // Instantly Swap Views
+                document.getElementById('admin-login').style.display = 'none';
+                document.getElementById('admin-dashboard').style.display = 'block';
+                document.getElementById('btn-logout').style.display = 'inline-block';
                 
-                if (email === 'test' && pass === 'test') {
-                    // Instantly Swap Views
-                    document.getElementById('admin-login').style.display = 'none';
-                    document.getElementById('admin-dashboard').style.display = 'block';
-                    logoutBtn.style.display = 'inline-block';
-                    
-                    // Inject Mock Data
-                    document.getElementById('appointment-list').innerHTML = `
-                        <tr>
-                            <td style="font-weight: 500; min-width: 140px;">Oct 12, 2026<br><span style="color: #666; font-size: 0.85rem;">10:00 AM</span></td>
-                            <td style="min-width: 120px;">Jane Smith</td>
-                            <td style="min-width: 160px;">6-Week Vitality Protocol</td>
-                            <td><span class="badge new">Confirmed</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 500;">Oct 14, 2026<br><span style="color: #666; font-size: 0.85rem;">1:30 PM</span></td>
-                            <td>David O'Connor</td>
-                            <td>Initial Consultation</td>
-                            <td><span class="badge new">Confirmed</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 500;">Oct 15, 2026<br><span style="color: #666; font-size: 0.85rem;">9:00 AM</span></td>
-                            <td>Sarah Jenkins</td>
-                            <td>4-Week Lymphatic Reset</td>
-                            <td><span class="badge">Session 2/4</span></td>
-                        </tr>
-                    `;
+                // Inject Mock Data
+                document.getElementById('appointment-list').innerHTML = `
+                    <tr>
+                        <td style="font-weight: 500; min-width: 140px;">Oct 12, 2026<br><span style="color: #666; font-size: 0.85rem;">10:00 AM</span></td>
+                        <td style="min-width: 120px;">Jane Smith</td>
+                        <td style="min-width: 160px;">6-Week Vitality Protocol</td>
+                        <td><span class="badge new">Confirmed</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 500;">Oct 14, 2026<br><span style="color: #666; font-size: 0.85rem;">1:30 PM</span></td>
+                        <td>David O'Connor</td>
+                        <td>Initial Consultation</td>
+                        <td><span class="badge new">Confirmed</span></td>
+                    </tr>
+                `;
 
-                    document.getElementById('blocked-dates-list').innerHTML = `
-                        <li style="padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;"><strong>Oct 31, 2026</strong> <br> <span style="color: #888; font-size: 0.85rem;">Bank Holiday</span></li>
-                        <li style="padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;"><strong>Nov 05, 2026</strong> <br> <span style="color: #888; font-size: 0.85rem;">Training Course</span></li>
-                    `;
-                } else {
-                    alert('Invalid credentials. (Hint: use "test" for both email and password to view the prototype).');
-                }
-            });
+                document.getElementById('blocked-dates-list').innerHTML = `
+                    <li style="padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;"><strong>Oct 31, 2026</strong> <br> <span style="color: #888; font-size: 0.85rem;">Bank Holiday</span></li>
+                `;
+            } else {
+                alert('Invalid credentials. Use "test" for both email and password.');
+            }
+            return false;
+        }
 
-            // 2. LOGOUT LOGIC
-            logoutBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                location.reload(); // Instantly resets the page back to login
-            });
+        function blockDate(e) {
+            if(e) e.preventDefault();
+            const date = document.getElementById('block-date').value;
+            const reason = document.getElementById('block-reason').value || 'Unavailable';
 
-            // 3. BLOCK DATE LOGIC
-            blockBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const date = document.getElementById('block-date').value;
-                const reason = document.getElementById('block-reason').value || 'Unavailable';
-
-                if(!date) { 
-                    alert("Please select a date from the calendar first."); 
-                    return; 
-                }
-
-                alert(`Success! The clinic is now closed on ${date} for: ${reason}`);
-                const list = document.getElementById('blocked-dates-list');
-                list.innerHTML += `<li style="padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;"><strong>${date}</strong> <br> <span style="color: #888; font-size: 0.85rem;">${reason}</span></li>`;
-                
-                // Clear the form
-                document.getElementById('block-date').value = '';
-                document.getElementById('block-reason').value = '';
-            });
-
-            // 4. DOWNLOAD LOGIC
-            downloadBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('Secure client database export initiated. A CSV file will be sent to clare@thenaturalhealingclinic.co.im');
-            });
-        });
+            alert(`Success! The clinic is now closed on ${date}.`);
+            const list = document.getElementById('blocked-dates-list');
+            list.innerHTML += `<li style="padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;"><strong>${date}</strong> <br> <span style="color: #888; font-size: 0.85rem;">${reason}</span></li>`;
+            
+            document.getElementById('block-date').value = '';
+            document.getElementById('block-reason').value = '';
+            return false;
+        }
     </script>
+
+    <!-- Supabase Library loaded last so it NEVER blocks the page -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
 </body>
 </html>
