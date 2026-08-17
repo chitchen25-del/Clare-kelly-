@@ -42,16 +42,7 @@
         .nav-logo { font-size: 1.1rem; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; color: var(--primary-sage); }
         .nav-links { display: flex; gap: 1rem; align-items: center; }
 
-        .nav-link-text {
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--primary-sage);
-            cursor: pointer;
-            margin-right: 1rem;
-            transition: color 0.3s ease;
-        }
+        .nav-link-text { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); cursor: pointer; margin-right: 1rem; transition: color 0.3s ease; }
         .nav-link-text:hover { color: var(--text-main); }
 
         .btn {
@@ -93,7 +84,6 @@
         /* Elegant Two-Column Layouts */
         .section { padding: 8rem 5%; display: flex; flex-wrap: wrap; align-items: center; gap: 6rem; max-width: 1200px; margin: 0 auto; }
         .section-text { flex: 1.2; min-width: 320px; }
-        
         .section-image-wrapper { flex: 1; min-width: 320px; position: relative; }
         .section-image-wrapper img { width: 100%; height: auto; border-radius: 6px; box-shadow: 0 25px 50px rgba(90, 107, 93, 0.15); object-fit: cover; max-height: 650px; }
         .section-image { flex: 1; min-width: 320px; height: 500px; border-radius: 4px; background-position: center; background-size: cover; box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
@@ -105,7 +95,7 @@
         .help-list li { margin-bottom: 0.8rem; position: relative; padding-left: 1.2rem; }
         .help-list li::before { content: "✓"; position: absolute; left: 0; color: var(--primary-sage); font-weight: bold; }
 
-        /* Pricing Section */
+        /* Pricing Cards (For Packages) */
         .pricing-section { padding: 7rem 5%; background-color: #FAFAF7; border-top: 1px solid var(--secondary-sand); }
         .pricing-section.alt { background-color: white; }
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; max-width: 1200px; margin: 4rem auto 0 auto; }
@@ -124,6 +114,16 @@
         .price-features { list-style: none; text-align: left; margin-bottom: 2.5rem; font-size: 0.95rem; color: #555; }
         .price-features li { margin-bottom: 1rem; padding-left: 1.5rem; position: relative; line-height: 1.5; }
         .price-features li::before { content: "—"; position: absolute; left: 0; color: var(--primary-sage); }
+
+        /* Clinical Service Menu (For targeted sessions) */
+        .service-menu-section { padding: 7rem 5%; background-color: white; border-top: 1px solid var(--secondary-sand); }
+        .menu-category-title { font-size: 1.8rem; font-weight: 300; margin-bottom: 3rem; color: var(--text-main); text-align: center; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 3rem; max-width: 1000px; margin: 0 auto 5rem auto; }
+        .menu-item { border-bottom: 1px solid #f0f0f0; padding-bottom: 1.5rem; }
+        .menu-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.8rem; }
+        .menu-header h4 { font-size: 1.1rem; font-weight: 600; color: var(--text-main); font-family: 'Montserrat', sans-serif; }
+        .menu-price { font-family: 'Montserrat', sans-serif; font-weight: 500; color: var(--primary-sage); font-size: 1.1rem; white-space: nowrap; margin-left: 1rem; }
+        .menu-item p { color: #666; font-size: 0.9rem; line-height: 1.6; }
 
         /* News & Research Grid */
         .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; max-width: 1200px; margin: 0 auto; }
@@ -214,9 +214,9 @@
             <button type="button" class="btn" onclick="openScreen('screen-register')">Make An Appointment</button>
         </section>
 
+        <!-- Philosophy Section -->
         <section class="section">
             <div class="section-image" style="background-image: url('https://images.unsplash.com/photo-1544161513-37651a511674?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');"></div>
-
             <div class="section-text">
                 <span class="section-subtitle">Our Philosophy</span>
                 <h2>Results in a Realistic Timeframe</h2>
@@ -238,57 +238,135 @@
             </div>
         </section>
 
-        <!-- Functional Medicine Pricing -->
+        <!-- PILLAR 3: Functional Medicine & Transformation (Cards) -->
         <section class="pricing-section">
             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-                <span class="section-subtitle">Root-Cause Analysis</span>
+                <span class="section-subtitle">Pillar 1: Deep Transformation</span>
                 <h2>Functional Medicine</h2>
-                <p style="color: #666;">Choose the programme that's right for you right now.</p>
+                <p style="color: #666;">Comprehensive, root-cause investigation and structured restorative pathways.</p>
             </div>
             
             <div class="pricing-grid">
                 <div class="price-card">
                     <div>
                         <div class="price-title">Performance Health Audit</div>
-                        <div class="price-duration">90-Minute Consultation</div>
+                        <div class="price-duration">Functional Kickstart</div>
                         <div class="price-amount">£175</div>
                         <ul class="price-features">
-                            <li>Deep-dive Functional Medicine consultation</li>
-                            <li>Full symptom timeline review (standard medicine misses)</li>
+                            <li>90-minute deep-dive functional consultation</li>
+                            <li>Full symptom timeline review (identifying what standard medicine misses)</li>
                             <li>Top 3 root-cause priorities identified</li>
-                            <li>Personalised action plan (diet, lifestyle, testing)</li>
+                            <li>Personalised action plan (diet, lifestyle, targeted testing)</li>
                         </ul>
-                        <div class="guarantee-badge">£100 off the 90-Day Programme if you book within 7 days.</div>
                     </div>
                     <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Health Audit</button>
                 </div>
 
                 <div class="price-card featured">
-                    <div class="featured-badge">Only 4 Spaces/Month</div>
+                    <div class="featured-badge">Comprehensive Protocol</div>
+                    <div>
+                        <div class="price-title">360° Burnout & Adrenal Protocol</div>
+                        <div class="price-duration">12-Week Executive Program</div>
+                        <div class="price-amount">£1,450</div>
+                        <ul class="price-features">
+                            <li>Complete root-cause functional health investigation</li>
+                            <li>Bi-weekly hands-on Vagal/Bowen resets to physically rebuild the nervous system</li>
+                            <li>Curated functional supplementation blueprint</li>
+                            <li>Ongoing clinical timeline tracking & support</li>
+                        </ul>
+                        <div class="guarantee-badge">Designed for severe chronic fatigue, systemic inflammation, and executive burnout.</div>
+                    </div>
+                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Apply For Protocol</button>
+                </div>
+
+                <div class="price-card">
                     <div>
                         <div class="price-title">The Gut Reset</div>
                         <div class="price-duration">21-Day Programme</div>
                         <div class="price-amount">£297 <span>£500</span></div>
                         <ul class="price-features">
-                            <li>60-min gut assessment (worth £150)</li>
-                            <li>Personalised 21-day protocol (clear, calm, repair phases)</li>
-                            <li>Curated supplement guidance specific to your results</li>
-                            <li>2x check-in calls (weeks 1 & 3)</li>
-                            <li>Gut symptom tracker + food guidance PDF</li>
+                            <li>60-min functional gut assessment (worth £150)</li>
+                            <li>Personalised 21-day protocol (clear, calm, repair)</li>
+                            <li>Curated supplement guidance</li>
+                            <li>2x clinical check-in calls</li>
                         </ul>
-                        <div class="guarantee-badge">Follow the protocol and feel no different? You get a free follow-up session.</div>
                     </div>
-                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Book Gut Reset</button>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Gut Reset</button>
                 </div>
             </div>
         </section>
 
-        <!-- Hands-On Treatments Pricing -->
+        <!-- PILLARS 1 & 2: Advanced Clinical Therapies (Menu List) -->
+        <section class="service-menu-section">
+            <div style="text-align: center; max-width: 600px; margin: 0 auto 4rem auto;">
+                <span class="section-subtitle">Targeted Interventions</span>
+                <h2>Specialized Clinical Therapy</h2>
+                <p style="color: #666;">Expert, evidence-informed hands-on protocols tailored to specific systemic needs.</p>
+            </div>
+
+            <!-- Pillar: Lymphatics -->
+            <h3 class="menu-category-title">Advanced Lymphatic & Fluid Dynamics</h3>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="menu-header">
+                        <h4>Post-Operative Lymphatic Recovery</h4>
+                        <span class="menu-price">£95 / £450 (Course of 5)</span>
+                    </div>
+                    <p>Specialized, ultra-gentle drainage vital for clients recovering from orthopedic surgeries, liposuction, or cosmetic procedures. Accelerates cellular healing, minimizes scar tissue fibrosis, and rapidly reduces post-surgical edema.</p>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-header">
+                        <h4>The Sculpt & Flush (Facial/TMJ)</h4>
+                        <span class="menu-price">£85</span>
+                    </div>
+                    <p>A highly sought-after aesthetic and therapeutic treatment focusing purely on the cranium, face, and neck. Relieves jaw tension (TMJ), clears sinus congestion, and naturally depuffs and sculpts the facial tissues.</p>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-header">
+                        <h4>Maternal Wellness: Fluid Release</h4>
+                        <span class="menu-price">£80</span>
+                    </div>
+                    <p>Safe, specialized lymphatic support for expectant mothers suffering from heavy legs, swollen ankles, and systemic fluid retention during the 2nd and 3rd trimesters.</p>
+                </div>
+            </div>
+
+            <!-- Pillar: Nervous System & Soft Tissue -->
+            <h3 class="menu-category-title">Nervous System & Soft-Tissue Reset</h3>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="menu-header">
+                        <h4>The Vagal Reset (Autonomic Therapy)</h4>
+                        <span class="menu-price">£85</span>
+                    </div>
+                    <p>A targeted somatic session focusing purely on stimulating the Vagus nerve to pull the body out of chronic sympathetic dominance ('fight or flight'). Essential for severe anxiety, emotional trauma holding, and burnout.</p>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-header">
+                        <h4>Elite Athletic Optimization & Recovery</h4>
+                        <span class="menu-price">£90</span>
+                    </div>
+                    <p>Tailored for cyclists, TT riders, and endurance athletes. Combines deep fascial release with structural realignment to enhance biomechanics, resolve micro-tears, and speed up lactic acid clearance.</p>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-header">
+                        <h4>Pediatric & Infant Rebalance</h4>
+                        <span class="menu-price">£55</span>
+                    </div>
+                    <p>Incredibly gentle, non-invasive Bowen and fascial work designed for babies experiencing colic, reflux, restricted neck movement post-birth, or sleep disturbances.</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button type="button" class="btn" onclick="openScreen('screen-register')">Book A Specialized Session</button>
+            </div>
+        </section>
+
+        <!-- PILLAR 4: Core Standards (Cards) -->
         <section class="pricing-section alt">
             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-                <span class="section-subtitle">Clinical Therapy</span>
-                <h2>Hands-on Treatments</h2>
-                <p style="color: #666;">Combining Lymphatic Drainage, Bowen Therapy, and Sports/Vagal work.</p>
+                <span class="section-subtitle">Clinical Baseline</span>
+                <h2>Core Clinic Standards</h2>
+                <p style="color: #666;">Foundational care for standard referrals and ongoing maintenance.</p>
             </div>
             
             <div class="pricing-grid">
@@ -296,10 +374,9 @@
                     <div>
                         <div class="price-title">Initial Consultation</div>
                         <div class="price-duration">60 Minutes</div>
-                        <div class="price-amount">£80</div>
+                        <div class="price-amount">£85</div>
                         <ul class="price-features">
-                            <li>Comprehensive medical case history</li>
-                            <li>Postural assessment</li>
+                            <li>Comprehensive medical case history & postural assessment</li>
                             <li>Introductory treatment (Bowen, Lymphatic, or Vagal)</li>
                         </ul>
                     </div>
@@ -307,42 +384,34 @@
                 </div>
 
                 <div class="price-card featured">
-                    <div class="featured-badge">Max 6 New Clients/Month</div>
                     <div>
                         <div class="price-title">The Reset Series</div>
                         <div class="price-duration">3-Week Series</div>
-                        <div class="price-amount">£175 <span>£210</span></div>
+                        <div class="price-amount">£210</div>
                         <ul class="price-features">
                             <li>3x Bowen Therapy sessions over 3 weeks</li>
-                            <li>Pre-session intake form & postural assessment</li>
-                            <li>Home care guide between sessions</li>
+                            <li>Pre-session intake form & home care guide</li>
                             <li>Priority booking — your slot is secured</li>
                         </ul>
                         <div class="guarantee-badge">Complete all 3 sessions with no meaningful improvement? Your 4th is on me.</div>
                     </div>
                     <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Book The Reset Series</button>
                 </div>
+
+                <div class="price-card">
+                    <div>
+                        <div class="price-title">Standard Care & Maintenance</div>
+                        <div class="price-duration">Flexible Booking</div>
+                        <div class="price-amount">£75 <span style="text-decoration:none; font-size:1rem;">/ session</span></div>
+                        <ul class="price-features">
+                            <li>Standard Follow-Up Session: £75</li>
+                            <li>Maintenance Block (6 Sessions): £420</li>
+                            <li><i>Discounted blocks paid upfront, used flexibly.</i></li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book a Session</button>
+                </div>
             </div>
-        </section>
-
-        <!-- Interactive FAQ -->
-        <section class="faq-section">
-            <h2 style="text-align: center; margin-bottom: 3rem;">Making An Appointment</h2>
-            
-            <details>
-                <summary>What should I expect during my first visit?</summary>
-                <p>A medical history will be taken on the initial visit, and a list of your medications will be needed. We will discuss your goals and perform a postural assessment before beginning treatment.</p>
-            </details>
-            
-            <details>
-                <summary>What should I wear to my session?</summary>
-                <p>The treatment can be done through loose, thin clothing. Please wear something you feel comfortable moving around in.</p>
-            </details>
-
-            <details>
-                <summary>How many sessions will I need?</summary>
-                <p>Did you know you can turn the volume down on your pain? It won't happen by itself and you need to be ready to work towards it with me. A course of 4 sessions over a period of a month is the normal recommendation for sustainable results.</p>
-            </details>
         </section>
     </div>
 
@@ -376,7 +445,7 @@
         </section>
     </div>
 
-    <!-- ================= SCREEN 3: JOURNAL & RESEARCH (NEW TAB) ================= -->
+    <!-- ================= SCREEN 3: JOURNAL & RESEARCH ================= -->
     <div id="screen-news" class="page-screen">
         <div style="background-color: white; padding: 4rem 5%; border-bottom: 1px solid var(--secondary-sand);">
             <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
@@ -388,7 +457,6 @@
 
         <section style="padding: 6rem 5%; background-color: var(--bg-color);">
             <div class="news-grid">
-                
                 <!-- Article 1 -->
                 <div class="news-card">
                     <div>
@@ -398,7 +466,6 @@
                     </div>
                     <a href="https://www.ifm.org/news-insights/the-functional-medicine-approach-to-the-microbiome/" target="_blank" class="news-link">Read Research Outline &rarr;</a>
                 </div>
-
                 <!-- Article 2 -->
                 <div class="news-card">
                     <div>
@@ -408,7 +475,6 @@
                     </div>
                     <a href="https://pubmed.ncbi.nlm.nih.gov/25655383/" target="_blank" class="news-link">View Clinical Study &rarr;</a>
                 </div>
-
                 <!-- Article 3 -->
                 <div class="news-card">
                     <div>
@@ -418,7 +484,6 @@
                     </div>
                     <a href="https://pubmed.ncbi.nlm.nih.gov/29563853/" target="_blank" class="news-link">Read Peer-Reviewed Paper &rarr;</a>
                 </div>
-
                 <!-- Article 4 -->
                 <div class="news-card">
                     <div>
@@ -428,7 +493,6 @@
                     </div>
                     <a href="https://pubmed.ncbi.nlm.nih.gov/32338270/" target="_blank" class="news-link">View Medical Journal &rarr;</a>
                 </div>
-
             </div>
         </section>
     </div>
@@ -438,14 +502,11 @@
         <div class="form-container">
             <h2>Client Portal Login</h2>
             <p class="subtitle">Access your secure treatment progression files and manage bookings.</p>
-            
             <form onsubmit="return window.processClientLogin(event)">
                 <label>Email Address</label>
                 <input type="email" id="login-email" placeholder="you@example.com" autocorrect="off" autocapitalize="none" required>
-                
                 <label>Password</label>
                 <input type="password" id="login-password" placeholder="••••••••" required>
-                
                 <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Sign In to Portal</button>
             </form>
         </div>
@@ -472,10 +533,15 @@
                 
                 <label>Select Treatment Pathway</label>
                 <select id="reg-service">
-                    <option value="Initial Consultation (£80)">Initial Hands-on Consultation (£80)</option>
-                    <option value="The Reset Series (£175)">The Reset Series - 3 Weeks (£175)</option>
+                    <!-- Dropdown Updated to match new premium services -->
+                    <option value="Initial Consultation (£85)">Initial Consultation (£85)</option>
+                    <option value="Post-Op Lymphatic Recovery (£95)">Post-Op Lymphatic Recovery (£95)</option>
+                    <option value="The Sculpt & Flush (£85)">The Sculpt & Flush (£85)</option>
+                    <option value="The Vagal Reset (£85)">The Vagal Reset (£85)</option>
+                    <option value="Elite Athletic Optimization (£90)">Elite Athletic Optimization (£90)</option>
                     <option value="Performance Health Audit (£175)">Performance Health Audit (£175)</option>
-                    <option value="The Gut Reset (£297)">The Gut Reset - 21 Days (£297)</option>
+                    <option value="The Gut Reset (£297)">The Gut Reset (£297)</option>
+                    <option value="360 Burnout Protocol (£1,450)">360° Burnout Protocol (£1,450)</option>
                 </select>
                 
                 <label>Preferred First Session Date</label>
@@ -496,7 +562,6 @@
 
             <div class="dash-card">
                 <h3 style="color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Upcoming Appointments</h3>
-                
                 <div id="client-appointments-list">
                     <p style="color: #888;">Loading your secure schedule...</p>
                 </div>
