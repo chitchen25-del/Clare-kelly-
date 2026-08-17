@@ -5,102 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>The Natural Healing Clinic | Isle of Man</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-color: #FAFAF7;
-            --text-main: #2C352D;
-            --primary-sage: #5A6B5D;
-            --secondary-sand: #E3E0D8;
-            --card-bg: #FFFFFF;
+            --bg-color: #F7F6F2;
+            --text-main: #252D26;
+            --primary-sage: #4A594D;
+            --sage-hover: #3B473D;
+            --secondary-sand: #E5E2D9;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --gold-accent: #C5A880;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            font-family: 'Lora', serif;
+            font-family: 'Cormorant Garamond', serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            line-height: 1.7;
+            line-height: 1.8;
+            font-size: 1.15rem;
         }
         h1, h2, h3, h4, .nav-logo, .btn, .price-amount { font-family: 'Montserrat', sans-serif; }
         
-        /* Navigation */
+        /* Luxury Navigation */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 5%;
-            background-color: var(--bg-color);
+            padding: 2rem 6%;
+            background-color: rgba(247, 246, 242, 0.9);
+            backdrop-filter: blur(12px);
             position: sticky;
             top: 0;
             z-index: 100;
             border-bottom: 1px solid var(--secondary-sand);
         }
-        .nav-logo { font-size: 1.1rem; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; color: var(--primary-sage); }
-        .nav-links { display: flex; gap: 1rem; align-items: center; }
+        .nav-logo { font-size: 1rem; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; color: var(--primary-sage); }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
 
-        .nav-link-text { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); cursor: pointer; margin-right: 1rem; transition: color 0.3s ease; }
-        .nav-link-text:hover { color: var(--text-main); }
+        .nav-link-text { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); cursor: pointer; transition: color 0.3s ease; }
+        .nav-link-text:hover { color: var(--gold-accent); }
 
         .btn {
             display: inline-block;
-            padding: 0.8rem 2rem;
+            padding: 0.9rem 2.2rem;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 600;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            border-radius: 3px;
+            border-radius: 2px;
             cursor: pointer;
             border: none;
             background-color: var(--primary-sage);
             color: white;
-            transition: background 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: center;
-            appearance: none;
+            box-shadow: 0 10px 30px rgba(74, 89, 77, 0.15);
         }
-        .btn:hover, .btn:active { background-color: #4A594D; }
-        .btn-outline { border-color: var(--primary-sage); color: var(--primary-sage); background: transparent; border: 1px solid var(--primary-sage); }
+        .btn:hover, .btn:active { background-color: var(--sage-hover); transform: translateY(-2px); }
+        .btn-outline { border: 1px solid var(--primary-sage); color: var(--primary-sage); background: transparent; box-shadow: none; }
         .btn-outline:hover { background-color: var(--primary-sage); color: white; }
 
-        .btn-danger { background-color: #a94442; color: white; padding: 0.4rem 0.8rem; font-size: 0.75rem; }
-        .btn-danger:hover { background-color: #843534; }
+        .btn-danger { background-color: #a94442; color: white; padding: 0.4rem 0.8rem; font-size: 0.75rem; box-shadow: none; }
+        .btn-danger:hover { background-color: #843534; transform: none; }
 
         /* Screen Controller */
-        .page-screen { display: none; animation: fadeIn 0.4s ease; }
+        .page-screen { display: none; animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         .page-screen.visible { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Premium Hero Section */
+        /* Cinematic Hero Section */
         .hero {
             text-align: center;
-            padding: 9rem 5%;
-            background: linear-gradient(rgba(250, 250, 247, 0.85), rgba(250, 250, 247, 0.95)), url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover;
+            padding: 11rem 6%;
+            background: linear-gradient(rgba(247, 246, 242, 0.88), rgba(247, 246, 242, 0.96)), url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover;
             border-bottom: 1px solid var(--secondary-sand);
         }
-        .hero h1 { font-size: 3.5rem; font-weight: 300; margin-bottom: 1.5rem; letter-spacing: -1px; }
-        .hero p { font-size: 1.25rem; margin-bottom: 2.5rem; color: #555; max-width: 700px; margin-left: auto; margin-right: auto; font-style: italic; }
+        .hero h1 { font-size: 3.8rem; font-weight: 300; margin-bottom: 1.5rem; letter-spacing: -1px; color: var(--text-main); }
+        .hero p { font-size: 1.4rem; margin-bottom: 3rem; color: #555; max-width: 700px; margin-left: auto; margin-right: auto; font-style: italic; }
 
-        /* Elegant Two-Column Layouts */
-        .section { padding: 8rem 5%; display: flex; flex-wrap: wrap; align-items: center; gap: 6rem; max-width: 1200px; margin: 0 auto; }
+        /* Two-Column Layouts */
+        .section { padding: 9rem 6%; display: flex; flex-wrap: wrap; align-items: center; gap: 6rem; max-width: 1300px; margin: 0 auto; }
         .section-text { flex: 1.2; min-width: 320px; }
         .section-image-wrapper { flex: 1; min-width: 320px; position: relative; }
-        .portrait-img { width: 100%; height: auto; border-radius: 6px; box-shadow: 0 25px 50px rgba(90, 107, 93, 0.15); object-fit: cover; max-height: 650px; }
+        .portrait-img { width: 100%; height: auto; border-radius: 4px; box-shadow: 0 30px 60px rgba(74, 89, 77, 0.15); object-fit: cover; max-height: 650px; }
         
         .image-arch-container {
             position: relative;
-            border-radius: 200px 200px 12px 12px;
+            border-radius: 250px 250px 12px 12px;
             overflow: hidden;
-            box-shadow: 0 35px 70px rgba(44, 53, 45, 0.18);
-            border: 2px solid var(--secondary-sand);
-            background-color: #E3E0D8;
+            box-shadow: 0 40px 80px rgba(37, 45, 38, 0.15);
+            border: 1px solid var(--secondary-sand);
+            background-color: var(--secondary-sand);
         }
         .image-arch {
             width: 100%;
-            height: 600px;
+            height: 620px;
             object-fit: cover;
             display: block;
-            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
             filter: saturate(0.95) contrast(1.05);
         }
         .image-arch-container:hover .image-arch {
@@ -109,138 +113,139 @@
         }
         .image-floating-badge {
             position: absolute;
-            bottom: 25px;
-            left: 25px;
-            right: 25px;
-            background: rgba(250, 250, 247, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 1.2rem 1.5rem;
-            border-radius: 6px;
-            border: 1px solid rgba(227, 224, 216, 0.8);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+            background: rgba(247, 246, 242, 0.92);
+            backdrop-filter: blur(16px);
+            padding: 1.4rem 1.8rem;
+            border-radius: 4px;
+            border: 1px solid rgba(229, 226, 217, 0.8);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.06);
         }
         .image-floating-badge span {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 2.5px;
             color: var(--primary-sage);
             display: block;
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.3rem;
             font-weight: 600;
         }
         .image-floating-badge p {
-            font-family: 'Lora', serif;
-            font-size: 0.95rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
             color: var(--text-main);
             font-style: italic;
             margin: 0;
+            line-height: 1.4;
         }
         
-        .section-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); margin-bottom: 1rem; display: block; }
-        h2 { font-size: 2.4rem; font-weight: 300; margin-bottom: 1.5rem; line-height: 1.2; }
+        .section-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--gold-accent); margin-bottom: 1.2rem; display: block; font-weight: 600; }
+        h2 { font-size: 2.8rem; font-weight: 300; margin-bottom: 1.5rem; line-height: 1.2; letter-spacing: -0.5px; }
         
-        .help-list { column-count: 2; column-gap: 2rem; list-style: none; color: #555; font-size: 0.95rem; margin-top: 1.5rem; }
-        .help-list li { margin-bottom: 0.8rem; position: relative; padding-left: 1.2rem; }
-        .help-list li::before { content: "✓"; position: absolute; left: 0; color: var(--primary-sage); font-weight: bold; }
+        .help-list { column-count: 2; column-gap: 2.5rem; list-style: none; color: #555; font-size: 1.05rem; margin-top: 2rem; }
+        .help-list li { margin-bottom: 0.9rem; position: relative; padding-left: 1.5rem; }
+        .help-list li::before { content: "—"; position: absolute; left: 0; color: var(--gold-accent); font-weight: bold; }
 
-        /* Pricing Section */
-        .pricing-section { padding: 7rem 5%; background-color: #FAFAF7; border-top: 1px solid var(--secondary-sand); }
-        .pricing-section.alt { background-color: white; }
-        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; max-width: 1200px; margin: 4rem auto 0 auto; }
+        /* Pricing & Services */
+        .pricing-section { padding: 8rem 6%; background-color: #FAFAF7; border-top: 1px solid var(--secondary-sand); }
+        .pricing-section.alt { background-color: var(--bg-color); }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; max-width: 1300px; margin: 4rem auto 0 auto; }
         
-        .price-card { background: var(--card-bg); border: 1px solid var(--secondary-sand); border-radius: 4px; padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
-        .price-card.featured { border-color: var(--primary-sage); box-shadow: 0 15px 35px rgba(90, 107, 93, 0.1); transform: translateY(-10px); }
+        .price-card { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--secondary-sand); border-radius: 4px; padding: 3.5rem 2.5rem; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 20px 40px rgba(74, 89, 77, 0.04); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .price-card:hover { transform: translateY(-6px); }
+        .price-card.featured { border-color: var(--primary-sage); box-shadow: 0 25px 50px rgba(74, 89, 77, 0.08); }
         
-        .featured-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary-sage); color: white; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.4rem 1.2rem; border-radius: 20px; font-family: 'Montserrat', sans-serif; white-space: nowrap; }
-        .guarantee-badge { display: block; margin: 1.5rem auto; padding: 0.8rem; background: #F4F3EE; border: 1px dashed var(--primary-sage); font-size: 0.85rem; color: var(--text-main); font-weight: 500; }
+        .featured-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--primary-sage); color: white; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; padding: 0.4rem 1.5rem; border-radius: 20px; font-family: 'Montserrat', sans-serif; white-space: nowrap; }
+        .guarantee-badge { display: block; margin: 1.8rem auto; padding: 1rem; background: rgba(229, 226, 217, 0.4); border: 1px dashed var(--primary-sage); font-size: 0.95rem; color: var(--text-main); font-style: italic; }
         
-        .price-title { font-size: 1.3rem; font-weight: 500; margin-bottom: 0.5rem; }
-        .price-duration { font-size: 0.85rem; color: #888; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
-        .price-amount { font-size: 2.5rem; font-weight: 300; color: var(--text-main); margin-bottom: 1.5rem; }
-        .price-amount span { font-size: 1rem; color: #888; text-decoration: line-through; margin-left: 0.5rem; }
+        .price-title { font-size: 1.4rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .price-duration { font-size: 0.75rem; color: #888; margin-bottom: 1.8rem; text-transform: uppercase; letter-spacing: 2px; font-family: 'Montserrat', sans-serif; }
+        .price-amount { font-size: 2.8rem; font-weight: 300; color: var(--text-main); margin-bottom: 2rem; }
+        .price-amount span { font-size: 1rem; color: #888; text-decoration: line-through; margin-left: 0.5rem; font-family: 'Montserrat', sans-serif; }
         
-        .price-features { list-style: none; text-align: left; margin-bottom: 2.5rem; font-size: 0.95rem; color: #555; }
-        .price-features li { margin-bottom: 1rem; padding-left: 1.5rem; position: relative; line-height: 1.5; }
-        .price-features li::before { content: "—"; position: absolute; left: 0; color: var(--primary-sage); }
+        .price-features { list-style: none; text-align: left; margin-bottom: 3rem; font-size: 1.05rem; color: #555; }
+        .price-features li { margin-bottom: 1.2rem; padding-left: 1.8rem; position: relative; line-height: 1.5; }
+        .price-features li::before { content: "—"; position: absolute; left: 0; color: var(--gold-accent); }
 
         /* Clinical Service Menu */
-        .service-menu-section { padding: 7rem 5%; background-color: white; border-top: 1px solid var(--secondary-sand); }
-        .menu-category-title { font-size: 1.8rem; font-weight: 300; margin-bottom: 3rem; color: var(--text-main); text-align: center; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem; max-width: 800px; margin-left: auto; margin-right: auto; }
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 3rem; max-width: 1000px; margin: 0 auto 5rem auto; }
-        .menu-item { border-bottom: 1px solid #f0f0f0; padding-bottom: 1.5rem; }
-        .menu-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.8rem; }
-        .menu-header h4 { font-size: 1.1rem; font-weight: 600; color: var(--text-main); font-family: 'Montserrat', sans-serif; }
+        .service-menu-section { padding: 8rem 6%; background-color: white; border-top: 1px solid var(--secondary-sand); }
+        .menu-category-title { font-size: 2rem; font-weight: 300; margin-bottom: 3.5rem; color: var(--text-main); text-align: center; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1.2rem; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 3.5rem; max-width: 1100px; margin: 0 auto 5rem auto; }
+        .menu-item { border-bottom: 1px solid var(--secondary-sand); padding-bottom: 2rem; }
+        .menu-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
+        .menu-header h4 { font-size: 1.2rem; font-weight: 600; color: var(--text-main); font-family: 'Montserrat', sans-serif; letter-spacing: 0.5px; }
         .menu-price { font-family: 'Montserrat', sans-serif; font-weight: 500; color: var(--primary-sage); font-size: 1.1rem; white-space: nowrap; margin-left: 1rem; }
-        .menu-item p { color: #666; font-size: 0.9rem; line-height: 1.6; }
+        .menu-item p { color: #666; font-size: 1.05rem; line-height: 1.7; }
 
-        /* News & Research Grid */
-        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; max-width: 1200px; margin: 0 auto; }
-        .news-card { background: white; border: 1px solid var(--secondary-sand); border-radius: 4px; padding: 3rem 2.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease; }
-        .news-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(90, 107, 93, 0.08); border-color: var(--primary-sage); }
-        .news-meta { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 1.2rem; font-family: 'Montserrat', sans-serif; font-weight: 600; }
-        .news-title { font-size: 1.4rem; font-weight: 400; margin-bottom: 1rem; line-height: 1.4; color: var(--text-main); }
-        .news-excerpt { font-size: 0.95rem; color: #666; margin-bottom: 2.5rem; line-height: 1.6; }
-        .news-link { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); text-decoration: none; display: inline-block; border-bottom: 1px solid transparent; transition: border-color 0.3s; }
-        .news-link:hover { border-bottom-color: var(--primary-sage); }
+        /* Journal Grid */
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 3rem; max-width: 1300px; margin: 0 auto; }
+        .news-card { background: white; border: 1px solid var(--secondary-sand); border-radius: 4px; padding: 3.5rem 3rem; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 15px 35px rgba(0,0,0,0.02); }
+        .news-card:hover { transform: translateY(-6px); box-shadow: 0 25px 50px rgba(74, 89, 77, 0.08); border-color: var(--primary-sage); }
+        .news-meta { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-accent); margin-bottom: 1.5rem; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+        .news-title { font-size: 1.6rem; font-weight: 400; margin-bottom: 1.2rem; line-height: 1.4; color: var(--text-main); }
+        .news-excerpt { font-size: 1.05rem; color: #666; margin-bottom: 3rem; line-height: 1.7; }
+        .news-link { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); text-decoration: none; display: inline-block; border-bottom: 1px solid transparent; transition: border-color 0.3s; }
+        .news-link:hover { border-bottom-color: var(--primary-sage); color: var(--gold-accent); }
 
         /* Forms Container */
-        .form-container { max-width: 550px; margin: 5rem auto; background: white; padding: 3.5rem; border-radius: 4px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 1px solid var(--secondary-sand); }
-        .form-container h2 { text-align: center; margin-bottom: 1rem; font-size: 1.8rem; }
-        .form-container p.subtitle { text-align: center; color: #666; margin-bottom: 2rem; }
+        .form-container { max-width: 600px; margin: 6rem auto; background: white; padding: 4rem; border-radius: 4px; box-shadow: 0 25px 60px rgba(0,0,0,0.04); border: 1px solid var(--secondary-sand); }
+        .form-container h2 { text-align: center; margin-bottom: 0.8rem; font-size: 2.2rem; font-weight: 300; }
+        .form-container p.subtitle { text-align: center; color: #666; margin-bottom: 3rem; font-style: italic; }
         
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
         .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
 
-        label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif; font-weight: 600;}
-        input, select, textarea { width: 100%; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 3px; background: #fff; font-family: 'Lora', serif; font-size: 1rem; appearance: none; transition: border-color 0.3s; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-sage); }
-        textarea { resize: vertical; height: 120px; }
+        label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 0.6rem; font-family: 'Montserrat', sans-serif; font-weight: 600;}
+        input, select, textarea { width: 100%; padding: 1.1rem; margin-bottom: 1.8rem; border: 1px solid var(--secondary-sand); border-radius: 2px; background: #fff; font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; appearance: none; transition: all 0.3s ease; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-sage); box-shadow: 0 0 0 3px rgba(74, 89, 77, 0.08); }
+        textarea { resize: vertical; height: 130px; }
 
-        .gdpr-box { background: #F4F3EE; border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 4px; margin-bottom: 2rem; font-size: 0.85rem; color: #555; line-height: 1.6; }
-        .gdpr-box h4 { font-family: 'Montserrat', sans-serif; color: var(--primary-sage); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+        .gdpr-box { background: #F4F3EE; border: 1px solid var(--secondary-sand); padding: 1.8rem; border-radius: 3px; margin-bottom: 2.5rem; font-size: 0.95rem; color: #555; line-height: 1.7; }
+        .gdpr-box h4 { font-family: 'Montserrat', sans-serif; color: var(--primary-sage); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.6rem; font-weight: 600; }
 
-        /* Client Dashboard & Messaging */
-        .dashboard-container { max-width: 1200px; margin: 4rem auto; padding: 0 5%; display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
-        .dash-header { border-bottom: 2px solid var(--secondary-sand); padding-bottom: 1.5rem; margin-bottom: 2rem; }
-        .dash-card { background: white; padding: 2rem; border-radius: 4px; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 1.5rem; }
-        .dash-card h3 { color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem; }
+        /* Client Dashboard */
+        .dashboard-container { max-width: 1300px; margin: 5rem auto; padding: 0 6%; display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+        .dash-card { background: white; padding: 2.5rem; border-radius: 4px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 2rem; }
+        .dash-card h3 { color: var(--primary-sage); margin-bottom: 1.8rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-size: 1.3rem; font-weight: 500; }
         
-        .chat-box { height: 250px; overflow-y: auto; background: #F4F3EE; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
-        .msg { padding: 0.8rem; border-radius: 6px; max-width: 85%; font-size: 0.9rem; }
+        .chat-box { height: 280px; overflow-y: auto; background: #F4F3EE; padding: 1.2rem; border-radius: 3px; margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem; }
+        .msg { padding: 0.9rem 1.2rem; border-radius: 4px; max-width: 85%; font-size: 1.05rem; }
         .msg.client { background: var(--primary-sage); color: white; align-self: flex-end; }
         .msg.admin { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; }
 
-        .broadcast-item { padding-bottom: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid #f0f0f0; }
-        .broadcast-item h4 { font-size: 1.1rem; margin-bottom: 0.5rem; }
-        .broadcast-item p { font-size: 0.9rem; color: #555; }
-        .broadcast-date { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem; display: block;}
+        .broadcast-item { padding-bottom: 1.8rem; margin-bottom: 1.8rem; border-bottom: 1px solid #f0f0f0; }
+        .broadcast-item h4 { font-size: 1.2rem; margin-bottom: 0.6rem; font-family: 'Montserrat', sans-serif; font-weight: 500; }
+        .broadcast-item p { font-size: 1.05rem; color: #555; }
+        .broadcast-date { font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.4rem; display: block; font-family: 'Montserrat', sans-serif; }
 
         /* AI AGENT WIDGET */
-        .ai-fab { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--primary-sage); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; z-index: 1000; transition: transform 0.3s; }
-        .ai-fab:hover { transform: scale(1.05); }
-        .ai-window { display: none; position: fixed; bottom: 90px; right: 20px; width: 350px; background: white; border-radius: 8px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border: 1px solid var(--secondary-sand); z-index: 1000; overflow: hidden; }
-        .ai-header { background: var(--text-main); color: white; padding: 1rem; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; display: flex; justify-content: space-between; }
-        .ai-body { height: 300px; padding: 1rem; background: #FAFAF7; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; }
+        .ai-fab { position: fixed; bottom: 25px; right: 25px; width: 65px; height: 65px; background: var(--primary-sage); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 15px 35px rgba(0,0,0,0.2); cursor: pointer; z-index: 1000; transition: transform 0.3s; }
+        .ai-fab:hover { transform: scale(1.06); }
+        .ai-window { display: none; position: fixed; bottom: 100px; right: 25px; width: 380px; background: white; border-radius: 6px; box-shadow: 0 25px 60px rgba(0,0,0,0.15); border: 1px solid var(--secondary-sand); z-index: 1000; overflow: hidden; }
+        .ai-header { background: var(--text-main); color: white; padding: 1.2rem; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 1px; display: flex; justify-content: space-between; }
+        .ai-body { height: 320px; padding: 1.2rem; background: #FAFAF7; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; }
         .ai-input { display: flex; border-top: 1px solid var(--secondary-sand); }
-        .ai-input input { border: none; padding: 1rem; width: 100%; border-radius: 0; margin: 0; }
-        .ai-input button { background: var(--primary-sage); color: white; border: none; padding: 0 1.5rem; cursor: pointer; font-family: 'Montserrat'; font-weight: bold;}
+        .ai-input input { border: none; padding: 1.1rem; width: 100%; border-radius: 0; margin: 0; font-size: 1rem; }
+        .ai-input button { background: var(--primary-sage); color: white; border: none; padding: 0 1.8rem; cursor: pointer; font-family: 'Montserrat'; font-weight: bold;}
 
         /* Footer */
-        footer { padding: 4rem 5%; border-top: 1px solid var(--secondary-sand); color: #666; background: white; display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1200px; margin: 0 auto; gap: 2rem; }
-        .footer-col h4 { color: var(--primary-sage); margin-bottom: 1rem; font-size: 1rem; }
-        .footer-col p { font-size: 0.9rem; margin-bottom: 0.5rem; }
+        footer { padding: 5rem 6%; border-top: 1px solid var(--secondary-sand); color: #666; background: white; display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1300px; margin: 0 auto; gap: 3rem; }
+        .footer-col h4 { color: var(--primary-sage); margin-bottom: 1.2rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; }
+        .footer-col p { font-size: 1.05rem; margin-bottom: 0.6rem; }
         
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.4rem; }
-            .section { padding: 4rem 5%; gap: 3rem; }
-            .nav-links { gap: 0.5rem; }
+            .hero h1 { font-size: 2.8rem; }
+            .section { padding: 5rem 6%; gap: 3rem; }
+            .nav-links { gap: 1rem; }
             .nav-link-text { display: none; }
-            .btn { padding: 0.7rem 1rem; font-size: 0.75rem; }
+            .btn { padding: 0.8rem 1.5rem; font-size: 0.75rem; }
             .price-card.featured { transform: none; }
             .help-list { column-count: 1; }
-            .image-arch-container { border-radius: 150px 150px 10px 10px; }
-            .image-arch { height: 400px; }
+            .image-arch-container { border-radius: 180px 180px 10px 10px; }
+            .image-arch { height: 420px; }
             .dashboard-container { grid-template-columns: 1fr; }
             .ai-window { width: 90%; right: 5%; bottom: 90px; }
             footer { flex-direction: column; text-align: center; }
@@ -317,9 +322,9 @@
                 <span class="section-subtitle">Our Philosophy</span>
                 <h2>Results in a Realistic Timeframe</h2>
                 <p style="margin-bottom: 1.5rem; color: #555;">The main aim of my clinic is to get results, in a quick and realistic timeframe. If you suffer from pain or discomfort, then I am here to help.</p>
-                <p style="color: #555; margin-bottom: 2rem;">I offer a holistic approach to modern-day aches and pains. The Natural Healing Clinic is complementary to the mainstream medical protocol. My treatment plan is focused on two areas: the individual needs of the patient and the best method to obtain results in an ideal timeframe.</p>
+                <p style="color: #555; margin-bottom: 2.5rem;">I offer a holistic approach to modern-day aches and pains. The Natural Healing Clinic is complementary to the mainstream medical protocol. My treatment plan is focused on two areas: the individual needs of the patient and the best method to obtain results in an ideal timeframe.</p>
                 
-                <h4 style="margin-bottom: 1rem; color: var(--primary-sage);">Do You Need Help With:</h4>
+                <h4 style="margin-bottom: 1rem; color: var(--primary-sage); font-family: 'Montserrat', sans-serif; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px;">Do You Need Help With:</h4>
                 <ul class="help-list">
                     <li>Pain Management</li>
                     <li>Acute & Chronic Muscular Pain</li>
@@ -336,7 +341,7 @@
 
         <!-- Functional Medicine Pricing -->
         <section class="pricing-section">
-            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+            <div style="text-align: center; max-width: 700px; margin: 0 auto;">
                 <span class="section-subtitle">Pillar 1: Deep Transformation</span>
                 <h2>Functional Medicine</h2>
                 <p style="color: #666;">Comprehensive, root-cause investigation and structured restorative pathways.</p>
@@ -394,7 +399,7 @@
 
         <!-- Specialized Clinical Therapy Menu -->
         <section class="service-menu-section">
-            <div style="text-align: center; max-width: 600px; margin: 0 auto 4rem auto;">
+            <div style="text-align: center; max-width: 700px; margin: 0 auto 4rem auto;">
                 <span class="section-subtitle">Targeted Interventions</span>
                 <h2>Specialized Clinical Therapy</h2>
                 <p style="color: #666;">Expert, evidence-informed hands-on protocols tailored to specific systemic needs.</p>
@@ -450,14 +455,14 @@
                 </div>
             </div>
             
-            <div style="text-align: center; margin-top: 2rem;">
+            <div style="text-align: center; margin-top: 3rem;">
                 <button type="button" class="btn" onclick="openScreen('screen-register')">Book A Specialized Session</button>
             </div>
         </section>
 
         <!-- Core Standards -->
         <section class="pricing-section alt">
-            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+            <div style="text-align: center; max-width: 700px; margin: 0 auto;">
                 <span class="section-subtitle">Clinical Baseline</span>
                 <h2>Core Clinic Standards</h2>
                 <p style="color: #666;">Foundational care for standard referrals and ongoing maintenance.</p>
@@ -510,24 +515,24 @@
 
     <!-- ================= SCREEN 2: ABOUT CLARE ================= -->
     <div id="screen-about" class="page-screen">
-        <div style="background-color: white; padding: 4rem 5%; border-bottom: 1px solid var(--secondary-sand);">
-            <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
-                <h1 style="font-size: 2.5rem; font-weight: 300; color: var(--text-main);">About The Practitioner</h1>
+        <div style="background-color: white; padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand);">
+            <div style="max-width: 1300px; margin: 0 auto; text-align: center;">
+                <h1 style="font-size: 3rem; font-weight: 300; color: var(--text-main);">About The Practitioner</h1>
             </div>
         </div>
 
-        <section class="section" style="padding-top: 4rem;">
+        <section class="section" style="padding-top: 5rem;">
             <div class="section-image-wrapper">
                 <img src="./clare-profile.avif" alt="Clare Kelly - The Natural Healing Clinic" class="portrait-img">
             </div>
 
             <div class="section-text">
                 <span class="section-subtitle">Meet Clare Kelly</span>
-                <h2 style="font-size: 2.2rem;">Clinical Expertise with a Holistic Touch</h2>
-                <p style="margin-bottom: 1.5rem; color: #555; line-height: 1.8;">
+                <h2 style="font-size: 2.5rem;">Clinical Expertise with a Holistic Touch</h2>
+                <p style="margin-bottom: 1.8rem; color: #555; line-height: 1.9;">
                     Clare Kelly is a dedicated functional health and soft-tissue specialist, committed to resolving chronic pain, systemic inflammation, and structural imbalances. With a deep understanding that the body’s systems are intricately connected, Clare bridges the gap between complementary therapies and mainstream medical protocols.
                 </p>
-                <p style="color: #555; margin-bottom: 2.5rem; line-height: 1.8;">
+                <p style="color: #555; margin-bottom: 3rem; line-height: 1.9;">
                     Specializing in Advanced Lymphatic Drainage, Bowen Therapy, and Functional Medicine, her clinical approach is strictly evidence-informed yet deeply personalized to deliver sustainable results.
                 </p>
                 <button type="button" class="btn" onclick="openScreen('screen-register')">Book Your Consultation</button>
@@ -537,15 +542,15 @@
 
     <!-- ================= SCREEN 3: JOURNAL & RESEARCH ================= -->
     <div id="screen-news" class="page-screen">
-        <div style="background-color: white; padding: 4rem 5%; border-bottom: 1px solid var(--secondary-sand);">
-            <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+        <div style="background-color: white; padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand);">
+            <div style="max-width: 1300px; margin: 0 auto; text-align: center;">
                 <span class="section-subtitle">Clinical Journal</span>
-                <h1 style="font-size: 2.5rem; font-weight: 300; color: var(--text-main); margin-top: 0.5rem;">Latest News & Research</h1>
-                <p style="color: #666; margin-top: 1rem; max-width: 650px; margin-left: auto; margin-right: auto; line-height: 1.7;">Explore the latest evidence-based functional medicine research and clinical insights.</p>
+                <h1 style="font-size: 3rem; font-weight: 300; color: var(--text-main); margin-top: 0.5rem;">Latest News & Research</h1>
+                <p style="color: #666; margin-top: 1.2rem; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.8;">Explore the latest evidence-based functional medicine research and clinical insights.</p>
             </div>
         </div>
 
-        <section style="padding: 6rem 5%; background-color: var(--bg-color);">
+        <section style="padding: 7rem 6%; background-color: var(--bg-color);">
             <div class="news-grid">
                 <div class="news-card">
                     <div>
@@ -583,17 +588,17 @@
             <form onsubmit="return window.processClientLogin(event)">
                 <label>Email Address</label><input type="email" id="login-email" required>
                 <label>Password</label><input type="password" id="login-password" required>
-                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Sign In to Portal</button>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Sign In to Portal</button>
             </form>
-            <div style="margin-top: 1.5rem; text-align: center;">
-                <a href="#" onclick="window.processPasswordReset(event)" style="font-size: 0.85rem; color: var(--primary-sage); text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 600;">Forgot your password?</a>
+            <div style="margin-top: 2rem; text-align: center;">
+                <a href="#" onclick="window.processPasswordReset(event)" style="font-size: 0.8rem; color: var(--primary-sage); text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Forgot your password?</a>
             </div>
         </div>
     </div>
 
     <!-- ================= SCREEN 5: CLEAN REGISTRATION ================= -->
     <div id="screen-register" class="page-screen">
-        <div class="form-container" style="max-width: 550px;">
+        <div class="form-container" style="max-width: 580px;">
             <h2>Client Registration</h2>
             <p class="subtitle">Create your secure patient account and select your first booking.</p>
             
@@ -617,18 +622,18 @@
                 <label>Preferred First Session Date & Time</label>
                 <input type="datetime-local" id="reg-date" required>
 
-                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Secure Booking & Register</button>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Secure Booking & Register</button>
             </form>
         </div>
     </div>
 
     <!-- ================= SCREEN 6: SECURE CLIENT DASHBOARD ================= -->
     <div id="screen-dashboard" class="page-screen">
-        <div style="background-color: white; padding: 3rem 5%; border-bottom: 1px solid var(--secondary-sand);">
-            <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+        <div style="background-color: white; padding: 3.5rem 6%; border-bottom: 1px solid var(--secondary-sand);">
+            <div style="max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <h1 id="portal-welcome-title" style="font-size: 2.2rem; font-weight: 300;">Welcome to Your Patient Portal</h1>
-                    <p style="color: #666;">Manage appointments, complete your medical file, and message Clare.</p>
+                    <h1 id="portal-welcome-title" style="font-size: 2.4rem; font-weight: 300;">Welcome to Your Patient Portal</h1>
+                    <p style="color: #666; font-style: italic;">Manage appointments, complete your medical file, and message Clare.</p>
                 </div>
                 <button type="button" class="btn" onclick="document.getElementById('new-booking-card').scrollIntoView({behavior: 'smooth'})">+ Book New Session</button>
             </div>
@@ -644,7 +649,7 @@
                 <!-- PRIVATE INTAKE & GDPR QUESTIONNAIRE CARD -->
                 <div class="dash-card" style="border-left: 4px solid var(--primary-sage);">
                     <h3>Medical & GDPR Intake File</h3>
-                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.5rem;">Mandatory: Please complete your confidential questionnaire prior to your first consultation.</p>
+                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">Mandatory: Please complete your confidential questionnaire prior to your first consultation.</p>
                     
                     <form onsubmit="return window.submitMedicalIntake(event)">
                         <div class="form-row three">
@@ -728,19 +733,19 @@
             <div>
                 <div class="dash-card">
                     <h3>Secure Messaging</h3>
-                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Ask Clare questions about your protocol.</p>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.2rem;">Ask Clare questions about your protocol.</p>
                     <div class="chat-box" id="client-chat-box">
                         <div class="msg admin">Hi! Welcome to your patient portal. Let me know if you need anything before your session. - Clare</div>
                     </div>
-                    <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.5rem;">
+                    <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.8rem;">
                         <input type="text" id="client-msg-input" placeholder="Type a message..." style="margin-bottom: 0; flex: 1;" required>
-                        <button type="submit" class="btn" style="padding: 0 1rem;">Send</button>
+                        <button type="submit" class="btn" style="padding: 0 1.5rem;">Send</button>
                     </form>
                 </div>
 
                 <div class="dash-card">
                     <h3>Account Settings</h3>
-                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Update your login credentials securely.</p>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.2rem;">Update your login credentials securely.</p>
                     <form onsubmit="return window.updateClientCredentials(event)">
                         <label>New Email Address</label>
                         <input type="email" id="update-email" placeholder="New email...">
@@ -865,17 +870,19 @@
 
             const intakeSummary = `Age: ${age} | Sex: ${sex} | Gender: ${gender} | Height: ${height} | Weight: ${weight}\nKnown Conditions: ${conditions}\nTreatment Aims: ${aims}`;
 
-            await db.auth.updateUser({ data: { intake_summary: intakeSummary } });
-            
-            const { error } = await db.from('appointments')
-                .update({ intake_details: intakeSummary })
-                .eq('client_id', user.id);
+            // Save directly into the 'medical_files' table so Clare's admin panel pulls it correctly
+            const { error: medError } = await db.from('medical_files').upsert([{
+                client_id: user.id,
+                session_date: new Date().toISOString(),
+                intake_details: intakeSummary
+            }], { onConflict: 'client_id' });
 
-            if(error) {
-                alert("Error saving intake file: " + error.message);
-            } else {
-                alert("Medical intake questionnaire successfully saved and updated in your patient file!");
+            if(medError) {
+                // Fallback to appointments table update if medical_files schema differs
+                await db.from('appointments').update({ intake_details: intakeSummary }).eq('client_id', user.id);
             }
+
+            alert("Medical intake questionnaire successfully saved and added to your patient file!");
             return false;
         };
 
@@ -987,10 +994,10 @@
                         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit' 
                     });
                     return `
-                        <div style="padding: 1rem 0; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="padding: 1.2rem 0; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center;">
                             <div>
                                 <div style="font-weight: 600; color: var(--primary-sage);">${formattedDate}</div>
-                                <div style="font-size: 0.95rem; color: #555;">${appt.service_name}</div>
+                                <div style="font-size: 1rem; color: #555;">${appt.service_name}</div>
                             </div>
                             <button class="btn btn-danger" onclick="window.cancelAppointment('${appt.id}')">Cancel</button>
                         </div>
@@ -1011,11 +1018,11 @@
                     broadcastList.innerHTML = '<p style="color: #555;">No current announcements or targeted advice.</p>';
                 } else {
                     broadcastList.innerHTML = filteredBroadcasts.map(b => `
-                        <div class="broadcast-item" style="${b.recipient_email !== 'all' ? 'border-left: 4px solid var(--primary-sage); padding-left: 1rem; background: #FAF9F5;' : ''}">
+                        <div class="broadcast-item" style="${b.recipient_email !== 'all' ? 'border-left: 4px solid var(--primary-sage); padding-left: 1.2rem; background: #FAF9F5;' : ''}">
                             <span class="broadcast-date">${b.recipient_email !== 'all' ? '🔒 Private Protocol / Advice • ' : ''}${new Date(b.created_at).toLocaleDateString()}</span>
                             <h4>${b.title}</h4>
                             <p>${b.content}</p>
-                            ${b.file_url ? `<div style="margin-top: 1rem;"><a href="${b.file_url}" target="_blank" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.5rem 1rem;">Download Attached Protocol / File 📄</a></div>` : ''}
+                            ${b.file_url ? `<div style="margin-top: 1.2rem;"><a href="${b.file_url}" target="_blank" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.6rem 1.2rem;">Download Attached Protocol / File 📄</a></div>` : ''}
                         </div>
                     `).join('');
                 }
