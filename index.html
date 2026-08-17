@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lymphatic Wellness | Isle of Man</title>
+    <title>The Natural Healing Clinic | Isle of Man</title>
     
     <!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -39,7 +39,7 @@
             z-index: 100;
             border-bottom: 1px solid var(--secondary-sand);
         }
-        .nav-logo { font-size: 1.2rem; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; }
+        .nav-logo { font-size: 1.1rem; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; }
         .btn {
             display: inline-block;
             padding: 0.8rem 2rem;
@@ -53,6 +53,7 @@
             border: 1px solid transparent;
             background-color: var(--primary-sage);
             color: white;
+            transition: background 0.3s ease;
         }
         .btn:hover { background-color: #4A594D; }
         .btn-outline { border-color: var(--primary-sage); color: var(--primary-sage); background: transparent; }
@@ -110,22 +111,22 @@
 <body>
 
     <nav>
-        <div class="nav-logo">Manx Lymphatic Wellness</div>
+        <div class="nav-logo">The Natural Healing Clinic</div>
         <button onclick="togglePortal()" class="btn btn-outline">Client Portal</button>
     </nav>
 
     <section class="hero">
-        <h1>Restore Your Body's Natural Flow</h1>
-        <p>Root-cause healing and specialized lymphatic drainage in the heart of the Isle of Man. Experience a functional medicine approach to cellular health, detoxification, and vitality.</p>
+        <h1>Healing From The Inside Out</h1>
+        <p>Specialized lymphatic drainage, root-cause functional health, and expert soft-tissue therapy located in Castletown, Isle of Man.</p>
         <button onclick="togglePortal()" class="btn">Book a Consultation</button>
     </section>
 
     <section class="section">
         <div class="section-image"></div>
         <div class="section-text">
-            <h2>A Functional Approach to Healing</h2>
-            <p>Your lymphatic system is the body's master drainage network. When compromised by modern lifestyles, stress, or illness, it leads to inflammation, fatigue, and chronic conditions.</p>
-            <p>Using advanced manual lymphatic drainage techniques grounded in functional medicine, we help your body clear toxins, reduce stagnation, and optimize health.</p>
+            <h2>Meet Clare Kelly</h2>
+            <p>At the heart of The Natural Healing Clinic is Clare Kelly, a specialist practitioner dedicated to unlocking the body's innate ability to reset and restore itself. Blending advanced targeted lymphatic drainage methods with precision soft-tissue therapy, Clare focuses on getting sustainable results in a realistic timeframe.</p>
+            <p>Whether you are addressing sluggish lymphatics, recovering from chronic fatigue, or seeking true structural balance, Clare provides a sophisticated, complementary approach designed to help you move freely and live vibrantly.</p>
         </div>
     </section>
 
@@ -134,7 +135,7 @@
         <p>Access your secure client portal to view your treatment sessions, track your wellness progress, and manage your bookings.</p>
         <button onclick="togglePortal()" class="btn" style="background: var(--bg-color); color: var(--primary-sage);">Open Portal Login</button>
         
-        <!-- Hidden Login Form that expands when clicked -->
+        <!-- Hidden Login Form -->
         <div id="auth-container">
             <h3 style="margin-bottom: 1rem; color: var(--text-main);">Client Sign In</h3>
             <label style="font-size: 0.85rem; color: #666;">Email Address</label>
@@ -146,23 +147,21 @@
     </section>
 
     <footer>
-        <p>&copy; 2026 Manx Lymphatic Wellness. Based in the Isle of Man.</p>
+        <p>&copy; 2026 The Natural Healing Clinic. 8 Malew Street, Castletown, Isle of Man.</p>
     </footer>
 
     <script>
         // Supabase Connection Setup
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
-        const SUPABASE_KEY = 'YOUR_NEW_SECURE_API_KEY_HERE'; // Replace with your clean key
+        const SUPABASE_KEY = 'YOUR_NEW_SECURE_API_KEY_HERE'; 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Toggle visibility of the login box
         function togglePortal() {
             const portalDiv = document.getElementById('auth-container');
             portalDiv.style.display = portalDiv.style.display === 'block' ? 'none' : 'block';
             portalDiv.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Login Handler
         document.getElementById('login-btn').onclick = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -172,7 +171,6 @@
                 alert('Login failed: ' + error.message);
             } else {
                 alert('Successfully logged in!');
-                // Future step: Redirect to client medical file dashboard
             }
         };
     </script>
