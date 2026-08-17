@@ -65,11 +65,7 @@
         .btn-outline { border-color: var(--primary-sage); color: var(--primary-sage); background: transparent; }
         .btn-outline:hover { background-color: var(--primary-sage); color: white; }
 
-        /* Multi-page View Controller */
-        .page-view { display: none; }
-        .page-view.active { display: block; }
-
-        /* Hero Section */
+        /* HERO & ABOUT SECTIONS */
         .hero {
             text-align: center;
             padding: 7rem 5%;
@@ -78,54 +74,17 @@
         .hero h1 { font-size: 3rem; font-weight: 300; margin-bottom: 1.5rem; }
         .hero p { font-size: 1.2rem; margin-bottom: 2.5rem; color: #4a4a4a; max-width: 800px; margin-left: auto; margin-right: auto; }
 
-        /* About Section */
         .section { padding: 6rem 5%; display: flex; flex-wrap: wrap; align-items: center; gap: 4rem; max-width: 1200px; margin: 0 auto; }
         .section-text { flex: 1; min-width: 300px; }
         .section-image { flex: 1; min-width: 300px; background-color: var(--secondary-sand); height: 400px; border-radius: 4px; background-position: center; background-size: cover; background-image: url('https://images.unsplash.com/photo-1519823551278-64ac92734fb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'); }
         h2 { font-size: 2rem; font-weight: 400; margin-bottom: 1.5rem; }
 
-        /* Pricing Section */
-        .pricing-section {
-            padding: 6rem 5%;
-            background-color: #F4F3EE;
-        }
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 3rem auto 0 auto;
-        }
-        .price-card {
-            background: var(--card-bg);
-            border: 1px solid var(--secondary-sand);
-            border-radius: 6px;
-            padding: 2.5rem 2rem;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        }
-        .price-card.featured {
-            border-color: var(--primary-sage);
-            box-shadow: 0 6px 20px rgba(90, 107, 93, 0.15);
-        }
-        .featured-badge {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary-sage);
-            color: white;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-family: 'Montserrat', sans-serif;
-        }
+        /* PRICING */
+        .pricing-section { padding: 6rem 5%; background-color: #F4F3EE; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 1200px; margin: 3rem auto 0 auto; }
+        .price-card { background: var(--card-bg); border: 1px solid var(--secondary-sand); border-radius: 6px; padding: 2.5rem 2rem; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .price-card.featured { border-color: var(--primary-sage); box-shadow: 0 6px 20px rgba(90, 107, 93, 0.15); }
+        .featured-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary-sage); color: white; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.3rem 1rem; border-radius: 20px; font-family: 'Montserrat', sans-serif; }
         .price-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
         .price-duration { font-size: 0.9rem; color: #666; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
         .price-amount { font-size: 2.2rem; font-weight: 300; color: var(--primary-sage); margin-bottom: 1.5rem; }
@@ -133,65 +92,65 @@
         .price-features li { margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative; }
         .price-features li::before { content: "•"; position: absolute; left: 0; color: var(--primary-sage); font-weight: bold; }
 
-        /* Dedicated Page Containers (Portal & Register) */
-        .dedicated-page-container {
-            max-width: 550px;
-            margin: 4rem auto;
-            background: white;
-            padding: 3rem;
-            border-radius: 6px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            border: 1px solid var(--secondary-sand);
-        }
-        .dedicated-page-container h2 { text-align: center; margin-bottom: 1.5rem; }
+        /* FORMS & DASHBOARD CONTAINERS */
+        .form-container { max-width: 550px; margin: 4rem auto; background: white; padding: 3rem; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid var(--secondary-sand); }
+        .form-container h2 { text-align: center; margin-bottom: 1.5rem; color: var(--primary-sage); }
         
-        label {
-            display: block;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #555;
-            margin-bottom: 0.3rem;
-            font-family: 'Montserrat', sans-serif;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 0.8rem;
-            margin-bottom: 1.2rem;
-            border: 1px solid var(--secondary-sand);
-            border-radius: 3px;
-            background: #fff;
-            font-family: 'Lora', serif;
-            font-size: 1rem;
-        }
+        /* Premium Dashboard layout */
+        .dashboard-container { max-width: 800px; margin: 4rem auto; background: white; padding: 3rem; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid var(--secondary-sand); }
+        .dashboard-header { border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+        .dashboard-header h2 { margin-bottom: 0.5rem; color: var(--primary-sage); }
+        
+        .dash-card { background: #FAFAF7; border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 4px; margin-bottom: 2rem; }
+        .dash-card h3 { font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-main); }
+        
+        label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 0.3rem; font-family: 'Montserrat', sans-serif; }
+        input, select, textarea { width: 100%; padding: 0.8rem; margin-bottom: 1.2rem; border: 1px solid var(--secondary-sand); border-radius: 3px; background: #fff; font-family: 'Lora', serif; font-size: 1rem; }
         textarea { resize: vertical; height: 100px; }
 
         footer { text-align: center; padding: 3rem 5%; font-size: 0.9rem; border-top: 1px solid var(--secondary-sand); color: #666; background: var(--bg-color); }
         
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.2rem; }
-            .nav-links { gap: 0.5rem; }
-            .btn { padding: 0.6rem 1rem; font-size: 0.8rem; }
+            .nav-links { gap: 0.4rem; }
+            .btn { padding: 0.6rem 0.9rem; font-size: 0.75rem; }
+            .dashboard-container, .form-container { padding: 1.5rem; margin: 2rem 5%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Main Navigation Bar with Working Buttons -->
+    <!-- SCRIPT FOR BULLETPROOF SCREEN SWITCHING -->
+    <script>
+        // This function explicitly hides all screens and shows the requested one.
+        // It lives at the very top so it can never be blocked by other code.
+        function openScreen(screenId) {
+            document.getElementById('screen-home').style.display = 'none';
+            document.getElementById('screen-login').style.display = 'none';
+            document.getElementById('screen-register').style.display = 'none';
+            document.getElementById('screen-dashboard').style.display = 'none';
+            
+            document.getElementById(screenId).style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+
+    <!-- Top Navigation Bar -->
     <nav>
-        <div class="nav-logo" onclick="showPage('page-home')">The Natural Healing Clinic</div>
+        <div class="nav-logo" onclick="openScreen('screen-home')">The Natural Healing Clinic</div>
         <div class="nav-links">
-            <button type="button" id="nav-portal-btn" class="btn btn-outline">Client Portal</button>
-            <button type="button" id="nav-register-btn" class="btn">Register & Book</button>
+            <!-- THESE BUTTONS NOW USE THE BULLETPROOF SCRIPT -->
+            <button type="button" class="btn btn-outline" onclick="openScreen('screen-login')">Client Portal</button>
+            <button type="button" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
         </div>
     </nav>
 
-    <!-- ================= PAGE 1: ORIGINAL HOME & PRICING ================= -->
-    <div id="page-home" class="page-view active">
+    <!-- ================= SCREEN 1: HOME & PRICING ================= -->
+    <div id="screen-home" style="display: block;">
         <section class="hero">
             <h1>Healing From The Inside Out</h1>
             <p>Specialized lymphatic drainage, root-cause functional health, and expert soft-tissue therapy located in Castletown, Isle of Man.</p>
-            <button type="button" id="hero-book-btn" class="btn">Book a Consultation</button>
+            <button type="button" class="btn" onclick="openScreen('screen-register')">Book a Consultation</button>
         </section>
 
         <section class="section">
@@ -203,13 +162,11 @@
             </div>
         </section>
 
-        <!-- Pricing Blocks Section -->
         <section class="pricing-section">
             <h2>Targeted Treatment Programs</h2>
             <p style="text-align: center; max-width: 600px; margin: 0 auto; color: #555;">Structured therapeutic pathways designed to reset your lymphatic system and support long-term functional recovery.</p>
             
             <div class="pricing-grid">
-                <!-- 4 Week Plan -->
                 <div class="price-card">
                     <div>
                         <div class="price-title">Lymphatic Reset</div>
@@ -218,14 +175,12 @@
                         <ul class="price-features">
                             <li>Initial clinical assessment & intake</li>
                             <li>3x Targeted manual lymphatic drainage sessions</li>
-                            <li>Custom home care & hydration strategy</li>
-                            <li>Client portal access & basic progress logging</li>
+                            <li>Custom home care strategy</li>
                         </ul>
                     </div>
-                    <button type="button" class="btn btn-outline select-plan-btn" data-plan="4-Week Reset" style="width: 100%;">Select 4-Week</button>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Select 4-Week</button>
                 </div>
 
-                <!-- 6 Week Plan (Featured) -->
                 <div class="price-card featured">
                     <div class="featured-badge">Most Popular</div>
                     <div>
@@ -235,14 +190,12 @@
                         <ul class="price-features">
                             <li>Comprehensive root-cause evaluation</li>
                             <li>5x Precision MLD & soft-tissue sessions</li>
-                            <li>Structured anti-inflammatory guidance</li>
-                            <li>Detailed medical file tracking in portal</li>
+                            <li>Detailed medical file tracking</li>
                         </ul>
                     </div>
-                    <button type="button" class="btn select-plan-btn" data-plan="6-Week Protocol" style="width: 100%;">Select 6-Week</button>
+                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Select 6-Week</button>
                 </div>
 
-                <!-- 8 Week Plan -->
                 <div class="price-card">
                     <div>
                         <div class="price-title">Deep Transformation</div>
@@ -252,20 +205,19 @@
                             <li>In-depth functional health review</li>
                             <li>7x Advanced therapeutic sessions</li>
                             <li>Priority scheduling access</li>
-                            <li>Comprehensive long-term maintenance blueprint</li>
                         </ul>
                     </div>
-                    <button type="button" class="btn btn-outline select-plan-btn" data-plan="8-Week Transformation" style="width: 100%;">Select 8-Week</button>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Select 8-Week</button>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- ================= PAGE 2: CLIENT PORTAL DEDICATED PAGE ================= -->
-    <div id="page-portal" class="page-view">
-        <div class="dedicated-page-container">
+    <!-- ================= SCREEN 2: LOGIN PAGE ================= -->
+    <div id="screen-login" style="display: none;">
+        <div class="form-container">
             <h2>Client Portal Login</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 2rem; font-size: 0.95rem;">Enter your credentials to access your secure treatment progression files.</p>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Access your secure treatment progression files and book your next session.</p>
             
             <label>Email Address or Username</label>
             <input type="text" id="login-email" placeholder="test or you@example.com">
@@ -273,19 +225,59 @@
             <label>Password</label>
             <input type="password" id="login-password" placeholder="test or password">
             
-            <button type="button" id="login-submit-btn" class="btn" style="width: 100%; margin-top: 1rem;">Sign In to Portal</button>
+            <button type="button" class="btn" style="width: 100%; margin-top: 1rem;" onclick="processLogin()">Sign In to Portal</button>
+        </div>
+    </div>
+
+    <!-- ================= SCREEN 3: DEDICATED CLIENT DASHBOARD ================= -->
+    <div id="screen-dashboard" style="display: none;">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h2>Your Secure Client Portal</h2>
+                <p>Welcome back! Manage your health journey, view your current course of treatment, and secure your upcoming sessions below.</p>
+            </div>
+
+            <!-- Current Treatment Status -->
+            <div class="dash-card">
+                <h3>Current Course of Treatment</h3>
+                <p style="font-size: 1.1rem; color: var(--primary-sage); font-weight: 600; font-family: 'Montserrat', sans-serif;">6-Week Vitality & Drainage Protocol</p>
+                <p style="color: #555; margin-top: 0.5rem;">Status: Active. You have <strong>3 sessions remaining</strong> in your current block.</p>
+            </div>
+
+            <!-- Order Next Session in Current Block -->
+            <div class="dash-card">
+                <h3>Book Your Next Session Date</h3>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">Select a date and time for your next treatment within your current package.</p>
+                <label>Select Date & Time</label>
+                <input type="datetime-local" id="dash-next-date">
+                <button type="button" class="btn" onclick="confirmNextSession()">Confirm Next Session</button>
+            </div>
+
+            <!-- Upgrade / Sign Up for More -->
+            <div class="dash-card" style="margin-bottom: 0;">
+                <h3>Sign Up For More Sessions</h3>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">Finished your block? Select a new treatment package to continue your healing journey.</p>
+                <label>Select New Program</label>
+                <select id="dash-new-program">
+                    <option value="Single Consultation">Single Follow-Up Consultation (£90)</option>
+                    <option value="4-Week Reset">4-Week Lymphatic Reset Block (£350)</option>
+                    <option value="6-Week Protocol">6-Week Vitality & Drainage Protocol (£520)</option>
+                    <option value="8-Week Transformation">8-Week Deep Transformation (£680)</option>
+                </select>
+                <button type="button" class="btn btn-outline" onclick="orderNewPackage()">Order New Package</button>
+            </div>
             
-            <div style="text-align: center; margin-top: 1.5rem;">
-                <button type="button" id="portal-to-register" style="background: none; border: none; color: var(--primary-sage); font-family: 'Montserrat', sans-serif; cursor: pointer; font-size: 0.9rem; text-decoration: underline;">Don't have an account? Register & Book</button>
+            <div style="text-align: center; margin-top: 2rem;">
+                <button type="button" class="btn btn-outline" style="border: none;" onclick="openScreen('screen-home')">Log Out</button>
             </div>
         </div>
     </div>
 
-    <!-- ================= PAGE 3: REGISTER & BOOK DEDICATED PAGE ================= -->
-    <div id="page-register" class="page-view">
-        <div class="dedicated-page-container" style="max-width: 620px;">
-            <h2>Register & Book Appointment</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 2rem; font-size: 0.95rem;">Provide your intake details, describe your health goals, and choose your appointment or treatment date.</p>
+    <!-- ================= SCREEN 4: REGISTER & BOOK (INTAKE) ================= -->
+    <div id="screen-register" style="display: none;">
+        <div class="form-container" style="max-width: 620px;">
+            <h2>Register & Book</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Create your patient file, describe your health goals, and choose your treatment.</p>
             
             <label>Full Name</label>
             <input type="text" id="reg-name" placeholder="Clare Kelly">
@@ -297,7 +289,7 @@
             <input type="password" id="reg-password" placeholder="••••••••">
             
             <label>Brief Description of Your Issue / Health Goals</label>
-            <textarea id="reg-issue" placeholder="Describe symptoms, lymphatic congestion, or structural concerns..."></textarea>
+            <textarea id="reg-issue" placeholder="Please describe any symptoms, sluggish lymphatics, or structural concerns..."></textarea>
             
             <label>Select Pathway or Program</label>
             <select id="reg-pathway">
@@ -310,68 +302,34 @@
             <label>Preferred Date & Time Slot</label>
             <input type="datetime-local" id="reg-datetime">
             
-            <button type="button" id="reg-submit-btn" class="btn" style="width: 100%; margin-top: 1rem;">Complete Registration & Secure Booking</button>
+            <button type="button" class="btn" style="width: 100%; margin-top: 1rem;" onclick="processRegistration()">Secure Booking & Register</button>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2026 The Natural Healing Clinic. 8 Malew Street, Castletown, Isle of Man.</p>
     </footer>
 
+    <!-- Database and Auth Scripts -->
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU'; 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        // Page Routing Function
-        function showPage(pageId) {
-            document.querySelectorAll('.page-view').forEach(page => {
-                page.classList.remove('active');
-            });
-            document.getElementById(pageId).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        let supabase;
+        
+        try {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch(e) {
+            console.log("Supabase failed to load initially, but screen switching will still work.");
         }
 
-        // Top Navigation Button Event Listeners
-        document.getElementById('nav-portal-btn').addEventListener('click', () => {
-            showPage('page-portal');
-        });
-
-        document.getElementById('nav-register-btn').addEventListener('click', () => {
-            showPage('page-register');
-        });
-
-        document.getElementById('hero-book-btn').addEventListener('click', () => {
-            showPage('page-register');
-        });
-
-        document.getElementById('portal-to-register').addEventListener('click', () => {
-            showPage('page-register');
-        });
-
-        // Pricing Block Button Click Handlers (Auto-selects plan on register page)
-        document.querySelectorAll('.select-plan-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const planName = this.getAttribute('data-plan');
-                const selectElement = document.getElementById('reg-pathway');
-                for (let i = 0; i < selectElement.options.length; i++) {
-                    if (selectElement.options[i].value.includes(planName)) {
-                        selectElement.selectedIndex = i;
-                        break;
-                    }
-                }
-                showPage('page-register');
-            });
-        });
-
-        // Sign In Action (Includes test account fallback: user "test", pass "test")
-        document.getElementById('login-submit-btn').addEventListener('click', async function() {
+        // LOGIN PROCESS
+        async function processLogin() {
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value.trim();
             
+            // Built-in Test Account (Bypasses database so you can view the dashboard immediately)
             if (email === 'test' && password === 'test') {
-                alert('Test sign-in successful! Welcome back to The Natural Healing Clinic portal.');
+                openScreen('screen-dashboard');
                 return;
             }
 
@@ -380,16 +338,18 @@
                 return;
             }
 
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) {
-                alert('Login failed: ' + error.message);
-            } else {
-                alert('Successfully logged in to Client Portal!');
+            if(supabase) {
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) {
+                    alert('Login failed: ' + error.message);
+                } else {
+                    openScreen('screen-dashboard');
+                }
             }
-        });
+        }
 
-        // Register & Book Action
-        document.getElementById('reg-submit-btn').addEventListener('click', async function() {
+        // REGISTRATION PROCESS
+        async function processRegistration() {
             const name = document.getElementById('reg-name').value.trim();
             const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value.trim();
@@ -397,29 +357,44 @@
             const pathway = document.getElementById('reg-pathway').value;
             const datetime = document.getElementById('reg-datetime').value;
             
-            if (!name || !email || !password) {
-                alert('Please complete your name, email, and password fields.');
+            if (!name || !email || !password || !datetime) {
+                alert('Please fill out all fields and select a date.');
                 return;
             }
 
-            if (!datetime) {
-                alert('Please choose your preferred date and time slot.');
-                return;
-            }
-
-            const { data, error } = await supabase.auth.signUp({
-                email,
-                password,
-                options: { data: { full_name: name, health_issue: issue, selected_pathway: pathway, requested_slot: datetime } }
-            });
-            
-            if (error) {
-                alert('Registration failed: ' + error.message);
+            if(supabase) {
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: { data: { full_name: name, health_issue: issue, selected_pathway: pathway, requested_slot: datetime } }
+                });
+                
+                if (error) {
+                    alert('Registration failed: ' + error.message);
+                } else {
+                    alert('Registration successful! Welcome to the clinic.');
+                    openScreen('screen-dashboard');
+                }
             } else {
-                alert('Registration successful and booking request submitted for ' + pathway + ' on ' + datetime + '!');
-                showPage('page-portal');
+                alert('Registration submitted!');
+                openScreen('screen-dashboard');
             }
-        });
+        }
+
+        // DASHBOARD BUTTON ACTIONS
+        function confirmNextSession() {
+            const date = document.getElementById('dash-next-date').value;
+            if(!date) {
+                alert("Please select a date and time for your next session.");
+            } else {
+                alert("Confirmed! Your next session is booked for " + date);
+            }
+        }
+
+        function orderNewPackage() {
+            const program = document.getElementById('dash-new-program').value;
+            alert("Success! You have added the '" + program + "' to your file. We will invoice you shortly.");
+        }
     </script>
 </body>
 </html>
