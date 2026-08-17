@@ -123,50 +123,39 @@
         .price-features li { margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative; }
         .price-features li::before { content: "•"; position: absolute; left: 0; color: var(--primary-sage); font-weight: bold; }
 
-        /* Portal Banner */
-        .portal-banner {
+        /* Portal Section - Direct Display Containers */
+        .portal-section {
             background-color: var(--primary-sage);
             color: white;
+            padding: 6rem 5%;
             text-align: center;
-            padding: 5rem 5%;
         }
-        .portal-banner h2 { color: white; }
-        .portal-banner p { max-width: 600px; margin: 0 auto 2rem auto; font-size: 1.1rem; }
-        
-        #auth-container {
-            background: white;
-            color: var(--text-main);
-            max-width: 440px;
-            margin: 2rem auto;
-            padding: 2.5rem;
-            border-radius: 6px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        .portal-section h2 { color: white; }
+        .portal-section p { max-width: 650px; margin: 0 auto 3rem auto; font-size: 1.1rem; }
+
+        .portal-container-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            max-width: 900px;
+            margin: 0 auto;
             text-align: left;
         }
-        .auth-tabs {
-            display: flex;
+        .portal-card {
+            background: white;
+            color: var(--text-main);
+            padding: 2.5rem;
+            border-radius: 6px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .portal-card h3 {
+            font-size: 1.3rem;
             margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--secondary-sand);
-        }
-        .auth-tab {
-            flex: 1;
-            text-align: center;
-            padding: 0.75rem;
-            cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #666;
-            transition: color 0.3s ease;
-        }
-        .auth-tab.active {
             color: var(--primary-sage);
-            border-bottom: 2px solid var(--primary-sage);
+            border-bottom: 1px solid var(--secondary-sand);
+            padding-bottom: 0.5rem;
         }
-        .form-panel { display: none; }
-        .form-panel.active { display: block; }
-        
-        #auth-container label {
+        .portal-card label {
             display: block;
             font-size: 0.8rem;
             text-transform: uppercase;
@@ -175,7 +164,7 @@
             margin-bottom: 0.3rem;
             font-family: 'Montserrat', sans-serif;
         }
-        #auth-container input, #auth-container select {
+        .portal-card input, .portal-card select {
             width: 100%;
             padding: 0.8rem;
             margin-bottom: 1.2rem;
@@ -185,7 +174,7 @@
             font-family: 'Lora', serif;
             font-size: 1rem;
         }
-        
+
         footer { text-align: center; padding: 3rem 5%; font-size: 0.9rem; border-top: 1px solid var(--secondary-sand); color: #666; }
         
         @media (max-width: 768px) {
@@ -234,7 +223,7 @@
                         <li>Client portal access & basic progress logging</li>
                     </ul>
                 </div>
-                <a href="#portal" class="btn btn-outline" style="width: 100%;" onclick="selectProgram('4-Week Reset')">Select 4-Week</a>
+                <a href="#portal" class="btn btn-outline" style="width: 100%;" onclick="autoselectProgram('4-Week Reset')">Select & Book</a>
             </div>
 
             <!-- 6 Week Plan (Featured) -->
@@ -251,7 +240,7 @@
                         <li>Detailed medical file tracking in portal</li>
                     </ul>
                 </div>
-                <a href="#portal" class="btn" style="width: 100%;" onclick="selectProgram('6-Week Protocol')">Select 6-Week</a>
+                <a href="#portal" class="btn" style="width: 100%;" onclick="autoselectProgram('6-Week Protocol')">Select & Book</a>
             </div>
 
             <!-- 8 Week Plan -->
@@ -267,33 +256,30 @@
                         <li>Comprehensive long-term maintenance blueprint</li>
                     </ul>
                 </div>
-                <a href="#portal" class="btn btn-outline" style="width: 100%;" onclick="selectProgram('8-Week Transformation')">Select 8-Week</a>
+                <a href="#portal" class="btn btn-outline" style="width: 100%;" onclick="autoselectProgram('8-Week Transformation')">Select & Book</a>
             </div>
         </div>
     </section>
 
-    <!-- Portal Section -->
-    <section id="portal" class="portal-banner">
-        <h2>Client Portal & Booking</h2>
-        <p>Sign in to manage your appointments, or create a new profile, choose your treatment program, and select your preferred date to begin.</p>
+    <!-- Portal Section - Always Fully Visible Side-by-Side Cards -->
+    <section id="portal" class="portal-section">
+        <h2>Client Portal & Direct Booking</h2>
+        <p>Access your existing account, or register your details, select your treatment plan, and choose your preferred date instantly.</p>
         
-        <div id="auth-container">
-            <div class="auth-tabs">
-                <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</div>
-                <div class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Register & Book</div>
-            </div>
-
-            <!-- Login Form -->
-            <div id="login-panel" class="form-panel active">
-                <label>Email Address or Username</label>
+        <div class="portal-container-grid">
+            <!-- Sign In Card -->
+            <div class="portal-card">
+                <h3>Client Sign In</h3>
+                <label>Email or Username</label>
                 <input type="text" id="login-email" placeholder="test or you@example.com">
                 <label>Password</label>
                 <input type="password" id="login-password" placeholder="test or password">
                 <button type="button" id="login-submit-btn" class="btn" style="width: 100%; margin-top: 0.5rem;">Sign In</button>
             </div>
 
-            <!-- Registration & Booking Form -->
-            <div id="signup-panel" class="form-panel">
+            <!-- Register & Book Card -->
+            <div class="portal-card">
+                <h3>Register & Book</h3>
                 <label>Full Name</label>
                 <input type="text" id="signup-name" placeholder="Clare Kelly">
                 <label>Email Address</label>
@@ -308,7 +294,7 @@
                 </select>
                 <label>Preferred Treatment Date</label>
                 <input type="date" id="signup-date">
-                <button type="button" id="signup-submit-btn" class="btn" style="width: 100%; margin-top: 0.5rem;">Create Account & Book</button>
+                <button type="button" id="signup-submit-btn" class="btn" style="width: 100%; margin-top: 0.5rem;">Create Profile & Book</button>
             </div>
         </div>
     </section>
@@ -322,29 +308,8 @@
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU'; 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Global Tab Switching Function
-        window.switchTab = function(tab) {
-            const tabLogin = document.getElementById('tab-login');
-            const tabSignup = document.getElementById('tab-signup');
-            const loginPanel = document.getElementById('login-panel');
-            const signupPanel = document.getElementById('signup-panel');
-
-            if (tab === 'login') {
-                tabLogin.classList.add('active');
-                tabSignup.classList.remove('active');
-                loginPanel.classList.add('active');
-                signupPanel.classList.remove('active');
-            } else {
-                tabSignup.classList.add('active');
-                tabLogin.classList.remove('active');
-                signupPanel.classList.add('active');
-                loginPanel.classList.remove('active');
-            }
-        };
-
         // Package selection helper
-        window.selectProgram = function(programName) {
-            window.switchTab('signup');
+        window.autoselectProgram = function(programName) {
             const selectElement = document.getElementById('signup-program');
             for (let i = 0; i < selectElement.options.length; i++) {
                 if (selectElement.options[i].value.includes(programName)) {
@@ -355,7 +320,7 @@
         };
 
         // Sign In Action (Includes test account: user "test", pass "test")
-        document.getElementById('login-submit-btn').onclick = async function() {
+        document.getElementById('login-submit-btn').addEventListener('click', async function() {
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value.trim();
             
@@ -375,10 +340,10 @@
             } else {
                 alert('Successfully logged in!');
             }
-        };
+        });
 
         // Registration & Booking Action
-        document.getElementById('signup-submit-btn').onclick = async function() {
+        document.getElementById('signup-submit-btn').addEventListener('click', async function() {
             const name = document.getElementById('signup-name').value.trim();
             const email = document.getElementById('signup-email').value.trim();
             const password = document.getElementById('signup-password').value.trim();
@@ -404,10 +369,9 @@
             if (error) {
                 alert('Registration failed: ' + error.message);
             } else {
-                alert('Account created and booking request submitted for ' + program + ' on ' + preferredDate + '!');
-                window.switchTab('login');
+                alert('Profile created and booking request submitted for ' + program + ' on ' + preferredDate + '!');
             }
-        };
+        });
     </script>
 </body>
 </html>
