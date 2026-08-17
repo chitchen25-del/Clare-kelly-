@@ -63,6 +63,9 @@
         .btn-outline { border-color: var(--primary-sage); color: var(--primary-sage); background: transparent; border: 1px solid var(--primary-sage); }
         .btn-outline:hover { background-color: var(--primary-sage); color: white; }
 
+        .btn-danger { background-color: #a94442; color: white; padding: 0.4rem 0.8rem; font-size: 0.75rem; }
+        .btn-danger:hover { background-color: #843534; }
+
         /* Screen Controller */
         .page-screen { display: none; animation: fadeIn 0.4s ease; }
         .page-screen.visible { display: block; }
@@ -253,7 +256,7 @@
 
         <section class="section">
             <div class="section-image-wrapper">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Apothecary_jars_at_National_Museum_of_Scotland.jpg/800px-Apothecary_jars_at_National_Museum_of_Scotland.jpg" alt="Clinical botanical natural medicine and functional healing" class="image-arch">
+                <img src="./clinical-herb.jpeg" alt="Clinical botanical natural medicine and functional healing" class="image-arch">
             </div>
 
             <div class="section-text">
@@ -564,9 +567,12 @@
     <!-- ================= SCREEN 6: SECURE CLIENT DASHBOARD ================= -->
     <div id="screen-dashboard" class="page-screen">
         <div style="background-color: white; padding: 3rem 5%; border-bottom: 1px solid var(--secondary-sand);">
-            <div style="max-width: 1200px; margin: 0 auto;">
-                <h1 style="font-size: 2.2rem; font-weight: 300;">Your Patient Portal</h1>
-                <p style="color: #666;">Manage your appointments, message Clare, and read clinic updates.</p>
+            <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 style="font-size: 2.2rem; font-weight: 300;">Your Patient Portal</h1>
+                    <p style="color: #666;">Manage appointments, message Clare, and book new sessions.</p>
+                </div>
+                <button type="button" class="btn" onclick="document.getElementById('new-booking-card').scrollIntoView({behavior: 'smooth'})">+ Book New Session</button>
             </div>
         </div>
 
@@ -575,6 +581,27 @@
                 <div class="dash-card">
                     <h3>Your Appointments</h3>
                     <div id="client-appointments-list"><p style="color: #888;">Loading your secure schedule...</p></div>
+                </div>
+
+                <!-- NEW BOOKING PANEL INSIDE PORTAL -->
+                <div class="dash-card" id="new-booking-card">
+                    <h3>Book Another Session</h3>
+                    <form onsubmit="return window.bookNewSession(event)">
+                        <label>Select Treatment Pathway</label>
+                        <select id="portal-service">
+                            <option value="Initial Consultation (£85)">Initial Consultation (£85)</option>
+                            <option value="Post-Op Lymphatic Recovery (£95)">Post-Op Lymphatic Recovery (£95)</option>
+                            <option value="The Sculpt & Flush (£85)">The Sculpt & Flush (£85)</option>
+                            <option value="The Vagal Reset (£85)">The Vagal Reset (£85)</option>
+                            <option value="Elite Athletic Optimization (£90)">Elite Athletic Optimization (£90)</option>
+                            <option value="Performance Health Audit (£175)">Performance Health Audit (£175)</option>
+                            <option value="The Gut Reset (£297)">The Gut Reset (£297)</option>
+                            <option value="360 Burnout Protocol (£1,450)">360° Burnout Protocol (£1,450)</option>
+                        </select>
+                        <label>Session Date & Time</label>
+                        <input type="datetime-local" id="portal-date" required>
+                        <button type="submit" class="btn" style="width: 100%;">Confirm Booking</button>
+                    </form>
                 </div>
 
                 <div class="dash-card">
@@ -695,17 +722,13 @@
 
             const userId = authData.user?.id;
             if(userId) {
-                const { error: apptError } = await db.from('appointments').insert([{
+                await db.from('appointments').insert([{
                     client_id: userId,
                     client_name: name,
                     service_name: service,
                     appointment_time: date,
                     status: 'confirmed'
                 }]);
-
-                if(apptError) {
-                    console.warn("Appointment insert warning: ", apptError.message);
-                }
             }
 
             alert('Registration complete! Welcome to your patient portal.');
@@ -716,6 +739,53 @@
             return false;
         };
 
+        window.bookNewSession = async function(e) {
+            if(e) e.preventDefault();
+            const db = getSupabase();
+            if(!db) return false;
+
+            const { data: { user } } = await db.auth.getUser();
+            if(!user) {
+                alert("Please log in again.");
+                return false;
+            }
+
+            const service = document.getElementById('portal-service').value;
+            const date = document.getElementById('portal-date').value;
+            const name = user.user_metadata?.full_name || 'Client';
+
+            const { error } = await db.from('appointments').insert([{
+                client_id: user.id,
+                client_name: name,
+                service_name: service,
+                appointment_time: date,
+                status: 'confirmed'
+            }]);
+
+            if(error) {
+                alert("Booking failed: " + error.message);
+            } else {
+                alert("New appointment successfully booked!");
+                loadClientDashboard(db, user.id);
+            }
+            return false;
+        };
+
+        window.cancelAppointment = async function(apptId) {
+            if(!confirm("Are you sure you want to cancel this appointment?")) return;
+            const db = getSupabase();
+            if(!db) return;
+
+            const { error } = await db.from('appointments').delete().eq('id', apptId);
+            if(error) {
+                alert("Cancellation failed: " + error.message);
+            } else {
+                alert("Appointment cancelled successfully.");
+                const { data: { user } } = await db.auth.getUser();
+                if(user) loadClientDashboard(db, user.id);
+            }
+        };
+
         window.processPasswordReset = async function(e) {
             if(e) e.preventDefault();
             const db = getSupabase();
@@ -723,18 +793,15 @@
 
             const email = document.getElementById('login-email').value.trim();
             if(!email) {
-                alert("Please enter your email address above first, then click 'Forgot your password?'");
+                alert("Please enter your email address above first.");
                 return false;
             }
 
-            const { error } = await db.auth.resetPasswordForEmail(email, {
-                redirectTo: window.location.href,
-            });
-
+            const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.href });
             if(error) {
                 alert("Password reset error: " + error.message);
             } else {
-                alert("Password recovery email sent! Please check your inbox for the reset link.");
+                alert("Password recovery email sent! Check your inbox.");
             }
             return false;
         };
@@ -746,7 +813,6 @@
 
             const newEmail = document.getElementById('update-email').value.trim();
             const newPass = document.getElementById('update-password').value.trim();
-
             let updateData = {};
             if(newEmail) updateData.email = newEmail;
             if(newPass) updateData.password = newPass;
@@ -757,7 +823,6 @@
             }
 
             const { error } = await db.auth.updateUser(updateData);
-
             if(error) {
                 alert("Update failed: " + error.message);
             } else {
@@ -775,7 +840,6 @@
             
             listElement.innerHTML = '<p style="color: #888;">Fetching records...</p>';
 
-            // Load Appointments
             const { data: apptData } = await db.from('appointments').select('*').eq('client_id', userId).order('appointment_time', { ascending: true });
             if(!apptData || apptData.length === 0) {
                 listElement.innerHTML = '<p style="color: #555;">You have no upcoming appointments booked.</p>';
@@ -785,23 +849,22 @@
                         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit' 
                     });
                     return `
-                        <div style="padding: 1rem 0; border-bottom: 1px solid #f0f0f0;">
-                            <div style="font-weight: 600; color: var(--primary-sage);">${formattedDate}</div>
-                            <div style="font-size: 0.95rem; color: #555;">${appt.service_name}</div>
+                        <div style="padding: 1rem 0; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; color: var(--primary-sage);">${formattedDate}</div>
+                                <div style="font-size: 0.95rem; color: #555;">${appt.service_name}</div>
+                            </div>
+                            <button class="btn btn-danger" onclick="window.cancelAppointment('${appt.id}')">Cancel</button>
                         </div>
                     `;
                 }).join('');
             }
 
-            // Load Messages
             const { data: msgData } = await db.from('messages').select('*').eq('client_id', userId).order('created_at', { ascending: true });
             if(msgData && msgData.length > 0) {
-                chatBox.innerHTML = msgData.map(m => `
-                    <div class="msg ${m.sender}">${m.content}</div>
-                `).join('');
+                chatBox.innerHTML = msgData.map(m => `<div class="msg ${m.sender}">${m.content}</div>`).join('');
             }
 
-            // Load Broadcasts
             const { data: bData } = await db.from('broadcasts').select('*').order('created_at', { ascending: false });
             if(bData && bData.length > 0) {
                 broadcastList.innerHTML = bData.map(b => `
@@ -825,17 +888,9 @@
             if(!text) return false;
 
             const { data: { user } } = await db.auth.getUser();
-            if(!user) {
-                alert("Please log in to send messages.");
-                return false;
-            }
+            if(!user) { alert("Please log in to send messages."); return false; }
 
-            const { error } = await db.from('messages').insert([{
-                client_id: user.id,
-                sender: 'client',
-                content: text
-            }]);
-
+            const { error } = await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: text }]);
             if(error) {
                 alert("Failed to send message: " + error.message);
             } else {
@@ -864,13 +919,11 @@
             const input = document.getElementById('ai-input-text');
             const chatBody = document.getElementById('ai-chat-body');
             const question = input.value;
-            
             chatBody.innerHTML += `<div class="msg client">${question}</div>`;
             input.value = '';
             chatBody.scrollTop = chatBody.scrollHeight;
-
             setTimeout(() => {
-                chatBody.innerHTML += `<div class="msg admin">That's a wonderful question. In Functional Medicine, we look at root causes to build a personalized protocol. Would you like to book an initial consultation or Health Audit?</div>`;
+                chatBody.innerHTML += `<div class="msg admin">That's a wonderful question. In Functional Medicine, we look at root causes. Would you like to book an initial consultation?</div>`;
                 chatBody.scrollTop = chatBody.scrollHeight;
             }, 1000);
             return false;
