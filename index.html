@@ -185,7 +185,7 @@
         .news-link:hover { border-bottom-color: var(--primary-sage); }
 
         /* Forms Container */
-        .form-container { max-width: 650px; margin: 5rem auto; background: white; padding: 3.5rem; border-radius: 4px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 1px solid var(--secondary-sand); }
+        .form-container { max-width: 550px; margin: 5rem auto; background: white; padding: 3.5rem; border-radius: 4px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 1px solid var(--secondary-sand); }
         .form-container h2 { text-align: center; margin-bottom: 1rem; font-size: 1.8rem; }
         .form-container p.subtitle { text-align: center; color: #666; margin-bottom: 2rem; }
         
@@ -591,59 +591,18 @@
         </div>
     </div>
 
-    <!-- ================= SCREEN 5: REGISTER & MEDICAL INTAKE ================= -->
+    <!-- ================= SCREEN 5: CLEAN REGISTRATION (NO INTAKE CLUTTER) ================= -->
     <div id="screen-register" class="page-screen">
-        <div class="form-container" style="max-width: 680px;">
-            <h2>Client Registration & Intake</h2>
-            <p class="subtitle">Please complete your confidential patient file before your first consultation.</p>
+        <div class="form-container" style="max-width: 550px;">
+            <h2>Client Registration</h2>
+            <p class="subtitle">Create your secure patient account and select your first booking.</p>
             
             <form onsubmit="return window.processRegistration(event)">
-                
-                <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Account Credentials</h3>
                 <label>Full Name</label><input type="text" id="reg-name" placeholder="e.g. Jane Smith" required>
                 <label>Email Address</label><input type="email" id="reg-email" placeholder="you@example.com" required>
                 <label>Create Secure Password</label><input type="password" id="reg-password" placeholder="••••••••" required>
-
-                <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin: 2rem 0 1rem 0; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Medical Questionnaire</h3>
                 
-                <div class="form-row three">
-                    <div>
-                        <label>Age</label>
-                        <input type="number" id="reg-age" placeholder="e.g. 42" required>
-                    </div>
-                    <div>
-                        <label>Sex</label>
-                        <select id="reg-sex" required>
-                            <option value="">Select...</option>
-                            <option value="Female">Female</option>
-                            <option value="Male">Male</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Gender Identity</label>
-                        <input type="text" id="reg-gender" placeholder="e.g. Woman" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div>
-                        <label>Height</label>
-                        <input type="text" id="reg-height" placeholder="e.g. 5'8'' or 173cm" required>
-                    </div>
-                    <div>
-                        <label>Weight</label>
-                        <input type="text" id="reg-weight" placeholder="e.g. 11.5 st or 73 kg" required>
-                    </div>
-                </div>
-
-                <label>Known Medical Conditions / Previous Diagnoses</label>
-                <textarea id="reg-conditions" placeholder="List any chronic conditions, past surgeries, or ongoing diagnoses..." required></textarea>
-
-                <label>Primary Treatment Aim (What do you wish to get out of this?)</label>
-                <textarea id="reg-aims" placeholder="Describe your health goals and expected outcomes..." required></textarea>
-
-                <label>Select Treatment Pathway for First Consultation</label>
+                <label>Select Treatment Pathway</label>
                 <select id="reg-service">
                     <option value="Initial Consultation (£85)">Initial Consultation (£85)</option>
                     <option value="Post-Op Lymphatic Recovery (£95)">Post-Op Lymphatic Recovery (£95)</option>
@@ -658,13 +617,7 @@
                 <label>Preferred First Session Date & Time</label>
                 <input type="datetime-local" id="reg-date" required>
 
-                <!-- GDPR NOTICE -->
-                <div class="gdpr-box">
-                    <h4>GDPR Confidentiality & Data Protection Notice</h4>
-                    <p>In accordance with the General Data Protection Regulation (GDPR) and medical confidentiality standards, all medical history and personal data provided above will be held in the strictest confidence. Your records are securely encrypted and accessed solely by your practitioner for clinical care. You retain the absolute legal right to request a complete copy of your records at any time, or to instruct the clinic to permanently destroy and erase your data from our systems.</p>
-                </div>
-
-                <button type="submit" class="btn" style="width: 100%;">Complete Intake & Secure Booking</button>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Secure Booking & Register</button>
             </form>
         </div>
     </div>
@@ -675,7 +628,7 @@
             <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <h1 id="portal-welcome-title" style="font-size: 2.2rem; font-weight: 300;">Welcome to Your Patient Portal</h1>
-                    <p style="color: #666;">Manage appointments, message Clare, and book new sessions.</p>
+                    <p style="color: #666;">Manage appointments, complete your medical file, and message Clare.</p>
                 </div>
                 <button type="button" class="btn" onclick="document.getElementById('new-booking-card').scrollIntoView({behavior: 'smooth'})">+ Book New Session</button>
             </div>
@@ -686,6 +639,58 @@
                 <div class="dash-card">
                     <h3>Your Appointments</h3>
                     <div id="client-appointments-list"><p style="color: #888;">Loading your secure schedule...</p></div>
+                </div>
+
+                <!-- PRIVATE INTAKE & GDPR QUESTIONNAIRE CARD (INSIDE PORTAL) -->
+                <div class="dash-card" style="border-left: 4px solid var(--primary-sage);">
+                    <h3>Medical & GDPR Intake File</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.5rem;">Mandatory: Please complete your confidential questionnaire prior to your first consultation.</p>
+                    
+                    <form onsubmit="return window.submitMedicalIntake(event)">
+                        <div class="form-row three">
+                            <div>
+                                <label>Age</label>
+                                <input type="number" id="intake-age" placeholder="e.g. 42" required>
+                            </div>
+                            <div>
+                                <label>Sex</label>
+                                <select id="intake-sex" required>
+                                    <option value="">Select...</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Gender Identity</label>
+                                <input type="text" id="intake-gender" placeholder="e.g. Woman" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div>
+                                <label>Height</label>
+                                <input type="text" id="intake-height" placeholder="e.g. 5'8'' or 173cm" required>
+                            </div>
+                            <div>
+                                <label>Weight</label>
+                                <input type="text" id="intake-weight" placeholder="e.g. 11.5 st or 73 kg" required>
+                            </div>
+                        </div>
+
+                        <label>Known Medical Conditions / Previous Diagnoses</label>
+                        <textarea id="intake-conditions" placeholder="List any chronic conditions, past surgeries, or ongoing diagnoses..." required></textarea>
+
+                        <label>Primary Treatment Aim (What do you wish to get out of this?)</label>
+                        <textarea id="intake-aims" placeholder="Describe your health goals and expected outcomes..." required></textarea>
+
+                        <div class="gdpr-box">
+                            <h4>GDPR Confidentiality & Data Protection Notice</h4>
+                            <p>In accordance with the General Data Protection Regulation (GDPR) and medical confidentiality standards, all medical history and personal data provided above will be held in the strictest confidence. Your records are securely encrypted and accessed solely by your practitioner for clinical care. You retain the absolute legal right to request a complete copy of your records at any time, or to instruct the clinic to permanently destroy and erase your data from our systems.</p>
+                        </div>
+
+                        <button type="submit" class="btn" style="width: 100%;">Save & Populate Client File</button>
+                    </form>
                 </div>
 
                 <div class="dash-card" id="new-booking-card">
@@ -809,24 +814,13 @@
             const name = document.getElementById('reg-name').value.trim();
             const email = document.getElementById('reg-email').value.trim();
             const pass = document.getElementById('reg-password').value.trim();
-            
-            const age = document.getElementById('reg-age').value.trim();
-            const sex = document.getElementById('reg-sex').value;
-            const gender = document.getElementById('reg-gender').value.trim();
-            const height = document.getElementById('reg-height').value.trim();
-            const weight = document.getElementById('reg-weight').value.trim();
-            const conditions = document.getElementById('reg-conditions').value.trim();
-            const aims = document.getElementById('reg-aims').value.trim();
-
             const service = document.getElementById('reg-service').value;
             const date = document.getElementById('reg-date').value;
-
-            const intakeSummary = `Age: ${age} | Sex: ${sex} | Gender: ${gender} | Height: ${height} | Weight: ${weight} | Conditions: ${conditions} | Treatment Aims: ${aims}`;
 
             const { data: authData, error: authError } = await db.auth.signUp({
                 email: email,
                 password: pass,
-                options: { data: { full_name: name, intake_summary: intakeSummary } }
+                options: { data: { full_name: name } }
             });
 
             if (authError) {
@@ -845,11 +839,42 @@
                 }]);
             }
 
-            alert('Registration complete! Welcome to your patient portal.');
+            alert('Registration complete! Welcome to your patient portal. Please complete your medical intake file.');
             updateNavState(true);
             openScreen('screen-dashboard');
             loadClientDashboard(db, authData.user);
             
+            return false;
+        };
+
+        window.submitMedicalIntake = async function(e) {
+            if(e) e.preventDefault();
+            const db = getSupabase();
+            if(!db) return false;
+
+            const { data: { user } } = await db.auth.getUser();
+            if(!user) { alert("Please log in again."); return false; }
+
+            const age = document.getElementById('intake-age').value.trim();
+            const sex = document.getElementById('intake-sex').value;
+            const gender = document.getElementById('intake-gender').value.trim();
+            const height = document.getElementById('intake-height').value.trim();
+            const weight = document.getElementById('intake-weight').value.trim();
+            const conditions = document.getElementById('intake-conditions').value.trim();
+            const aims = document.getElementById('intake-aims').value.trim();
+
+            const intakeSummary = `Age: ${age} | Sex: ${sex} | Gender: ${gender} | Height: ${height} | Weight: ${weight} | Conditions: ${conditions} | Treatment Aims: ${aims}`;
+
+            // Populate user metadata so it updates Clare's view
+            const { error } = await db.auth.updateUser({
+                data: { intake_summary: intakeSummary }
+            });
+
+            if(error) {
+                alert("Error saving intake file: " + error.message);
+            } else {
+                alert("Medical intake questionnaire successfully saved and added to your patient file!");
+            }
             return false;
         };
 
@@ -949,6 +974,11 @@
             
             const clientName = user.user_metadata?.full_name || user.email;
             welcomeTitle.innerText = `Welcome back, ${clientName}`;
+
+            // Pre-fill intake form if already saved
+            if(user.user_metadata?.intake_summary) {
+                // Optional: parses saved data back into form if needed
+            }
 
             listElement.innerHTML = '<p style="color: #888;">Fetching records...</p>';
 
