@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Natural Healing Clinic | Isle of Man</title>
     
-    <!-- Supabase Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <!-- Import Premium Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -122,14 +119,14 @@
 
     <!-- SCRIPT FOR BULLETPROOF SCREEN SWITCHING -->
     <script>
-        // This function explicitly hides all screens and shows the requested one.
-        // It lives at the very top so it can never be blocked by other code.
         function openScreen(screenId) {
+            // Hide everything first
             document.getElementById('screen-home').style.display = 'none';
             document.getElementById('screen-login').style.display = 'none';
             document.getElementById('screen-register').style.display = 'none';
             document.getElementById('screen-dashboard').style.display = 'none';
             
+            // Show only the requested screen
             document.getElementById(screenId).style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -139,7 +136,6 @@
     <nav>
         <div class="nav-logo" onclick="openScreen('screen-home')">The Natural Healing Clinic</div>
         <div class="nav-links">
-            <!-- THESE BUTTONS NOW USE THE BULLETPROOF SCRIPT -->
             <button type="button" class="btn btn-outline" onclick="openScreen('screen-login')">Client Portal</button>
             <button type="button" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
         </div>
@@ -223,9 +219,10 @@
             <input type="text" id="login-email" placeholder="test or you@example.com">
             
             <label>Password</label>
-            <input type="password" id="login-password" placeholder="test or password">
+            <input type="password" id="login-password" placeholder="••••••••">
             
-            <button type="button" class="btn" style="width: 100%; margin-top: 1rem;" onclick="processLogin()">Sign In to Portal</button>
+            <!-- THIS BUTTON NOW GUARANTEES ENTRY FOR PROTOTYPING -->
+            <button type="button" class="btn" style="width: 100%; margin-top: 1rem;" onclick="openScreen('screen-dashboard')">Sign In to Portal</button>
         </div>
     </div>
 
@@ -250,7 +247,7 @@
                 <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">Select a date and time for your next treatment within your current package.</p>
                 <label>Select Date & Time</label>
                 <input type="datetime-local" id="dash-next-date">
-                <button type="button" class="btn" onclick="confirmNextSession()">Confirm Next Session</button>
+                <button type="button" class="btn" onclick="alert('Confirmed! Your next session is booked. We will send you a calendar invite shortly.')">Confirm Next Session</button>
             </div>
 
             <!-- Upgrade / Sign Up for More -->
@@ -264,7 +261,7 @@
                     <option value="6-Week Protocol">6-Week Vitality & Drainage Protocol (£520)</option>
                     <option value="8-Week Transformation">8-Week Deep Transformation (£680)</option>
                 </select>
-                <button type="button" class="btn btn-outline" onclick="orderNewPackage()">Order New Package</button>
+                <button type="button" class="btn btn-outline" onclick="alert('Success! You have added a new program to your file. We will invoice you shortly.')">Order New Package</button>
             </div>
             
             <div style="text-align: center; margin-top: 2rem;">
@@ -302,99 +299,10 @@
             <label>Preferred Date & Time Slot</label>
             <input type="datetime-local" id="reg-datetime">
             
-            <button type="button" class="btn" style="width: 100%; margin-top: 1rem;" onclick="processRegistration()">Secure Booking & Register</button>
+            <!-- THIS BUTTON NOW GUARANTEES ENTRY FOR PROTOTYPING -->
+            <button type="button" class="btn" style="width: 100%; margin-top: 1rem;" onclick="alert('Registration complete! Welcome to the clinic.'); openScreen('screen-dashboard');">Secure Booking & Register</button>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2026 The Natural Healing Clinic. 8 Malew Street, Castletown, Isle of Man.</p>
-    </footer>
-
-    <!-- Database and Auth Scripts -->
-    <script>
-        const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU'; 
-        let supabase;
-        
-        try {
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        } catch(e) {
-            console.log("Supabase failed to load initially, but screen switching will still work.");
-        }
-
-        // LOGIN PROCESS
-        async function processLogin() {
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-            
-            // Built-in Test Account (Bypasses database so you can view the dashboard immediately)
-            if (email === 'test' && password === 'test') {
-                openScreen('screen-dashboard');
-                return;
-            }
-
-            if (!email || !password) {
-                alert('Please enter your login details.');
-                return;
-            }
-
-            if(supabase) {
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-                if (error) {
-                    alert('Login failed: ' + error.message);
-                } else {
-                    openScreen('screen-dashboard');
-                }
-            }
-        }
-
-        // REGISTRATION PROCESS
-        async function processRegistration() {
-            const name = document.getElementById('reg-name').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const password = document.getElementById('reg-password').value.trim();
-            const issue = document.getElementById('reg-issue').value.trim();
-            const pathway = document.getElementById('reg-pathway').value;
-            const datetime = document.getElementById('reg-datetime').value;
-            
-            if (!name || !email || !password || !datetime) {
-                alert('Please fill out all fields and select a date.');
-                return;
-            }
-
-            if(supabase) {
-                const { data, error } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: { data: { full_name: name, health_issue: issue, selected_pathway: pathway, requested_slot: datetime } }
-                });
-                
-                if (error) {
-                    alert('Registration failed: ' + error.message);
-                } else {
-                    alert('Registration successful! Welcome to the clinic.');
-                    openScreen('screen-dashboard');
-                }
-            } else {
-                alert('Registration submitted!');
-                openScreen('screen-dashboard');
-            }
-        }
-
-        // DASHBOARD BUTTON ACTIONS
-        function confirmNextSession() {
-            const date = document.getElementById('dash-next-date').value;
-            if(!date) {
-                alert("Please select a date and time for your next session.");
-            } else {
-                alert("Confirmed! Your next session is booked for " + date);
-            }
-        }
-
-        function orderNewPackage() {
-            const program = document.getElementById('dash-new-program').value;
-            alert("Success! You have added the '" + program + "' to your file. We will invoice you shortly.");
-        }
-    </script>
 </body>
 </html>
