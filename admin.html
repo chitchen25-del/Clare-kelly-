@@ -39,7 +39,7 @@
         <div class="form-container">
             <h2>Authorized Access</h2>
             <form onsubmit="return processAdminLogin(event)">
-                <label>Admin Email</label><input type="text" id="admin-email" required>
+                <label>Admin Email</label><input type="email" id="admin-email" required>
                 <label>Password</label><input type="password" id="admin-password" required>
                 <button type="submit" class="btn" style="width: 100%;">Secure Login</button>
             </form>
@@ -54,23 +54,17 @@
         <div class="dashboard-grid">
             <!-- INBOX PANEL -->
             <div class="panel">
-                <h3>Patient Inbox</h3>
-                <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Reply directly to client portal inquiries.</p>
+                <h3>Live Patient Inbox</h3>
+                <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Messages sent from active client portals.</p>
                 <div class="chat-box" id="admin-chat-box">
-                    <div class="msg client"><strong>Jane S:</strong> Hi Clare, should I take the magnesium with food today?</div>
-                    <div class="msg admin">Yes, right after dinner is perfect!</div>
-                    <div class="msg client"><strong>David O:</strong> Do you have any slots open earlier on Thursday?</div>
-                </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="admin-reply" placeholder="Type your reply..." style="margin-bottom: 0;">
-                    <button class="btn" onclick="alert('Message sent securely to client portal.')">Send</button>
+                    <p style="color: #888;">Loading messages from database...</p>
                 </div>
             </div>
 
             <!-- BROADCAST PANEL -->
             <div class="panel">
                 <h3>Publish Health Article / Broadcast</h3>
-                <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Publish an article or update. This instantly appears on every client's dashboard.</p>
+                <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Publish an article or update directly to all client portals.</p>
                 <form onsubmit="return publishBroadcast(event)">
                     <label>Article Title / Subject</label>
                     <input type="text" id="broadcast-title" placeholder="e.g. Navigating Seasonal Allergies" required>
@@ -83,25 +77,78 @@
     </div>
 
     <script>
-        function processAdminLogin(e) {
+        const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
+
+        function getSupabase() {
+            if(!window.supabase) {
+                alert("Establishing secure connection. Please try again in 1 second.");
+                return null;
+            }
+            return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
+
+        async function processAdminLogin(e) {
             e.preventDefault();
-            const email = document.getElementById('admin-email').value;
-            const pass = document.getElementById('admin-password').value;
-            if (email === 'test' && pass === 'test') {
+            const db = getSupabase();
+            if(!db) return false;
+
+            const email = document.getElementById('admin-email').value.trim();
+            const pass = document.getElementById('admin-password').value.trim();
+
+            const { data, error } = await db.auth.signInWithPassword({ email: email, password: pass });
+            
+            if (error) {
+                alert('Admin Login failed: ' + error.message);
+            } else {
                 document.getElementById('admin-login').style.display = 'none';
                 document.getElementById('admin-dashboard').style.display = 'block';
                 document.getElementById('btn-logout').style.display = 'inline-block';
-            } else { alert("Use test / test for prototype."); }
+                loadAdminInbox(db);
+            }
             return false;
         }
 
-        function publishBroadcast(e) {
+        async function loadAdminInbox(db) {
+            const chatBox = document.getElementById('admin-chat-box');
+            const { data, error } = await db.from('messages').select('*').order('created_at', { ascending: true });
+
+            if(error) {
+                chatBox.innerHTML = '<p style="color: red;">Error loading inbox messages.</p>';
+                return;
+            }
+
+            if(!data || data.length === 0) {
+                chatBox.innerHTML = '<p style="color: #888;">No incoming messages from clients yet.</p>';
+            } else {
+                chatBox.innerHTML = data.map(m => `
+                    <div class="msg ${m.sender}">
+                        <strong>${m.sender === 'client' ? 'Patient' : 'Clare'}:</strong> ${m.content}
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function publishBroadcast(e) {
             e.preventDefault();
-            alert("Broadcast published! All clients will now see this on their dashboard.");
-            document.getElementById('broadcast-title').value = '';
-            document.getElementById('broadcast-content').value = '';
+            const db = getSupabase();
+            if(!db) return false;
+
+            const title = document.getElementById('broadcast-title').value.trim();
+            const content = document.getElementById('broadcast-content').value.trim();
+
+            const { error } = await db.from('broadcasts').insert([{ title: title, content: content }]);
+
+            if(error) {
+                alert('Error publishing broadcast: ' + error.message);
+            } else {
+                alert("Broadcast successfully published to all client dashboards!");
+                document.getElementById('broadcast-title').value = '';
+                document.getElementById('broadcast-content').value = '';
+            }
             return false;
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
 </body>
 </html>
