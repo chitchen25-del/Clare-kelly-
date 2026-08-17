@@ -85,8 +85,19 @@
         .section { padding: 8rem 5%; display: flex; flex-wrap: wrap; align-items: center; gap: 6rem; max-width: 1200px; margin: 0 auto; }
         .section-text { flex: 1.2; min-width: 320px; }
         .section-image-wrapper { flex: 1; min-width: 320px; position: relative; }
-        .section-image-wrapper img { width: 100%; height: auto; border-radius: 6px; box-shadow: 0 25px 50px rgba(90, 107, 93, 0.15); object-fit: cover; max-height: 650px; }
-        .section-image { flex: 1; min-width: 320px; height: 500px; border-radius: 4px; background-position: center; background-size: cover; box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
+        
+        /* Standard Portrait Image (Used for Clare's AVIF) */
+        .portrait-img { width: 100%; height: auto; border-radius: 6px; box-shadow: 0 25px 50px rgba(90, 107, 93, 0.15); object-fit: cover; max-height: 650px; }
+        
+        /* NEW: Stylized Architectural Arch Image (Used for the Tranquil Photo) */
+        .image-arch {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+            border-radius: 200px 200px 10px 10px; /* Creates the elegant arched top */
+            box-shadow: 0 30px 60px rgba(90, 107, 93, 0.15); /* Sage-tinted premium shadow */
+            border: 1px solid var(--secondary-sand);
+        }
         
         .section-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); margin-bottom: 1rem; display: block; }
         h2 { font-size: 2.4rem; font-weight: 300; margin-bottom: 1.5rem; line-height: 1.2; }
@@ -135,15 +146,6 @@
         .news-link { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); text-decoration: none; display: inline-block; border-bottom: 1px solid transparent; transition: border-color 0.3s; }
         .news-link:hover { border-bottom-color: var(--primary-sage); }
 
-        /* Interactive FAQ Section */
-        .faq-section { padding: 7rem 5%; max-width: 900px; margin: 0 auto; }
-        details { border-bottom: 1px solid var(--secondary-sand); padding: 1.5rem 0; cursor: pointer; }
-        summary { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 500; list-style: none; outline: none; position: relative; padding-right: 2rem; }
-        summary::-webkit-details-marker { display: none; }
-        summary::after { content: '+'; position: absolute; right: 0; top: 0; font-size: 1.5rem; color: var(--primary-sage); font-weight: 300; }
-        details[open] summary::after { content: '−'; }
-        details p { padding-top: 1rem; color: #666; font-size: 0.95rem; line-height: 1.8; }
-
         /* Forms Container */
         .form-container { max-width: 550px; margin: 5rem auto; background: white; padding: 3.5rem; border-radius: 4px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 1px solid var(--secondary-sand); }
         .form-container h2 { text-align: center; margin-bottom: 1rem; font-size: 1.8rem; }
@@ -177,6 +179,7 @@
             .btn { padding: 0.7rem 1rem; font-size: 0.75rem; }
             .price-card.featured { transform: none; }
             .help-list { column-count: 1; }
+            .image-arch { height: 400px; border-radius: 150px 150px 10px 10px; }
             footer { flex-direction: column; text-align: center; }
             .appt-item { flex-direction: column; align-items: flex-start; gap: 1rem; }
         }
@@ -216,7 +219,11 @@
 
         <!-- Philosophy Section -->
         <section class="section">
-            <div class="section-image" style="background-image: url('https://images.unsplash.com/photo-1544161513-37651a511674?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');"></div>
+            <div class="section-image-wrapper">
+                <!-- NEW: Native Image Tag with Architectural Arch Styling -->
+                <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Tranquil spa stones and natural healing" class="image-arch">
+            </div>
+
             <div class="section-text">
                 <span class="section-subtitle">Our Philosophy</span>
                 <h2>Results in a Realistic Timeframe</h2>
@@ -426,7 +433,8 @@
         <section class="section" style="padding-top: 4rem;">
             
             <div class="section-image-wrapper">
-                <img src="./clare-profile.avif" alt="Clare Kelly - The Natural Healing Clinic">
+                <!-- Clare's AVIF image remains styled neatly here -->
+                <img src="./clare-profile.avif" alt="Clare Kelly - The Natural Healing Clinic" class="portrait-img">
             </div>
 
             <div class="section-text">
@@ -533,7 +541,6 @@
                 
                 <label>Select Treatment Pathway</label>
                 <select id="reg-service">
-                    <!-- Dropdown Updated to match new premium services -->
                     <option value="Initial Consultation (£85)">Initial Consultation (£85)</option>
                     <option value="Post-Op Lymphatic Recovery (£95)">Post-Op Lymphatic Recovery (£95)</option>
                     <option value="The Sculpt & Flush (£85)">The Sculpt & Flush (£85)</option>
