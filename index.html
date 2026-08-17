@@ -83,7 +83,16 @@
         .section-text { flex: 1.2; min-width: 320px; }
         .section-image-wrapper { flex: 1; min-width: 320px; position: relative; }
         .portrait-img { width: 100%; height: auto; border-radius: 6px; box-shadow: 0 25px 50px rgba(90, 107, 93, 0.15); object-fit: cover; max-height: 650px; }
-        .image-arch { width: 100%; height: 600px; object-fit: cover; border-radius: 200px 200px 10px 10px; box-shadow: 0 30px 60px rgba(90, 107, 93, 0.15); border: 1px solid var(--secondary-sand); background-color: #f0f0e8; }
+        
+        .image-arch {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+            border-radius: 200px 200px 10px 10px;
+            box-shadow: 0 30px 60px rgba(90, 107, 93, 0.15);
+            border: 1px solid var(--secondary-sand);
+            background-color: #E3E0D8;
+        }
         
         .section-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); margin-bottom: 1rem; display: block; }
         h2 { font-size: 2.4rem; font-weight: 300; margin-bottom: 1.5rem; line-height: 1.2; }
@@ -244,7 +253,7 @@
 
         <section class="section">
             <div class="section-image-wrapper">
-                <img src="https://images.unsplash.com/photo-1512290900722-9a702082bdfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Clinical botanical natural medicine and functional healing" class="image-arch">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Apothecary_jars_at_National_Museum_of_Scotland.jpg/800px-Apothecary_jars_at_National_Museum_of_Scotland.jpg" alt="Clinical botanical natural medicine and functional healing" class="image-arch">
             </div>
 
             <div class="section-text">
@@ -519,6 +528,9 @@
                 <label>Password</label><input type="password" id="login-password" required>
                 <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Sign In to Portal</button>
             </form>
+            <div style="margin-top: 1.5rem; text-align: center;">
+                <a href="#" onclick="window.processPasswordReset(event)" style="font-size: 0.85rem; color: var(--primary-sage); text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 600;">Forgot your password?</a>
+            </div>
         </div>
     </div>
 
@@ -567,10 +579,12 @@
 
                 <div class="dash-card">
                     <h3>Clinic Announcements & Articles</h3>
-                    <div class="broadcast-item">
-                        <span class="broadcast-date">August 17, 2026</span>
-                        <h4>Navigating Seasonal Allergies</h4>
-                        <p>Remember to increase your Vitamin C and Quercetin intake to stabilize histamine levels during high pollen counts...</p>
+                    <div id="client-broadcasts-list">
+                        <div class="broadcast-item">
+                            <span class="broadcast-date">August 17, 2026</span>
+                            <h4>Navigating Seasonal Allergies</h4>
+                            <p>Remember to increase your Vitamin C and Quercetin intake to stabilize histamine levels during high pollen counts...</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -585,6 +599,18 @@
                     <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.5rem;">
                         <input type="text" id="client-msg-input" placeholder="Type a message..." style="margin-bottom: 0; flex: 1;" required>
                         <button type="submit" class="btn" style="padding: 0 1rem;">Send</button>
+                    </form>
+                </div>
+
+                <div class="dash-card">
+                    <h3>Account Settings</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Update your login credentials securely.</p>
+                    <form onsubmit="return window.updateClientCredentials(event)">
+                        <label>New Email Address</label>
+                        <input type="email" id="update-email" placeholder="New email...">
+                        <label>New Password</label>
+                        <input type="password" id="update-password" placeholder="New password...">
+                        <button type="submit" class="btn" style="width: 100%;">Update Credentials</button>
                     </form>
                 </div>
             </div>
@@ -679,7 +705,6 @@
 
                 if(apptError) {
                     console.warn("Appointment insert warning: ", apptError.message);
-                    // Account created successfully even if booking table needs a manual row sync
                 }
             }
 
@@ -691,24 +716,71 @@
             return false;
         };
 
-        async function loadClientDashboard(db, userId) {
-            const listElement = document.getElementById('client-appointments-list');
-            listElement.innerHTML = '<p style="color: #888;">Fetching your records...</p>';
+        window.processPasswordReset = async function(e) {
+            if(e) e.preventDefault();
+            const db = getSupabase();
+            if(!db) return false;
 
-            const { data, error } = await db.from('appointments')
-                                          .select('*')
-                                          .eq('client_id', userId)
-                                          .order('appointment_time', { ascending: true });
-
-            if(error) {
-                listElement.innerHTML = '<p style="color: #555;">Account active. No active appointment records found.</p>';
-                return;
+            const email = document.getElementById('login-email').value.trim();
+            if(!email) {
+                alert("Please enter your email address above first, then click 'Forgot your password?'");
+                return false;
             }
 
-            if(!data || data.length === 0) {
+            const { error } = await db.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.href,
+            });
+
+            if(error) {
+                alert("Password reset error: " + error.message);
+            } else {
+                alert("Password recovery email sent! Please check your inbox for the reset link.");
+            }
+            return false;
+        };
+
+        window.updateClientCredentials = async function(e) {
+            if(e) e.preventDefault();
+            const db = getSupabase();
+            if(!db) return false;
+
+            const newEmail = document.getElementById('update-email').value.trim();
+            const newPass = document.getElementById('update-password').value.trim();
+
+            let updateData = {};
+            if(newEmail) updateData.email = newEmail;
+            if(newPass) updateData.password = newPass;
+
+            if(Object.keys(updateData).length === 0) {
+                alert("Please enter a new email or password to update.");
+                return false;
+            }
+
+            const { error } = await db.auth.updateUser(updateData);
+
+            if(error) {
+                alert("Update failed: " + error.message);
+            } else {
+                alert("Your account credentials have been successfully updated!");
+                document.getElementById('update-email').value = '';
+                document.getElementById('update-password').value = '';
+            }
+            return false;
+        };
+
+        async function loadClientDashboard(db, userId) {
+            const listElement = document.getElementById('client-appointments-list');
+            const chatBox = document.getElementById('client-chat-box');
+            const broadcastList = document.getElementById('client-broadcasts-list');
+            
+            listElement.innerHTML = '<p style="color: #888;">Fetching records...</p>';
+
+            // Load Appointments
+            const { data: apptData } = await db.from('appointments').select('*').eq('client_id', userId).order('appointment_time', { ascending: true });
+            if(!apptData || apptData.length === 0) {
                 listElement.innerHTML = '<p style="color: #555;">You have no upcoming appointments booked.</p>';
             } else {
-                listElement.innerHTML = data.map(appt => {
+                listElement.innerHTML = apptData.map(appt => {
                     const formattedDate = new Date(appt.appointment_time).toLocaleString('en-GB', { 
                         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit' 
                     });
@@ -720,6 +792,58 @@
                     `;
                 }).join('');
             }
+
+            // Load Messages
+            const { data: msgData } = await db.from('messages').select('*').eq('client_id', userId).order('created_at', { ascending: true });
+            if(msgData && msgData.length > 0) {
+                chatBox.innerHTML = msgData.map(m => `
+                    <div class="msg ${m.sender}">${m.content}</div>
+                `).join('');
+            }
+
+            // Load Broadcasts
+            const { data: bData } = await db.from('broadcasts').select('*').order('created_at', { ascending: false });
+            if(bData && bData.length > 0) {
+                broadcastList.innerHTML = bData.map(b => `
+                    <div class="broadcast-item">
+                        <span class="broadcast-date">${new Date(b.created_at).toLocaleDateString()}</span>
+                        <h4>${b.title}</h4>
+                        <p>${b.content}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function handleClientMessage(e) {
+            e.preventDefault();
+            const db = getSupabase();
+            if(!db) return false;
+
+            const input = document.getElementById('client-msg-input');
+            const chatBox = document.getElementById('client-chat-box');
+            const text = input.value.trim();
+            if(!text) return false;
+
+            const { data: { user } } = await db.auth.getUser();
+            if(!user) {
+                alert("Please log in to send messages.");
+                return false;
+            }
+
+            const { error } = await db.from('messages').insert([{
+                client_id: user.id,
+                sender: 'client',
+                content: text
+            }]);
+
+            if(error) {
+                alert("Failed to send message: " + error.message);
+            } else {
+                chatBox.innerHTML += `<div class="msg client">${text}</div>`;
+                input.value = '';
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+            return false;
         }
 
         window.processLogout = async function() {
@@ -749,17 +873,6 @@
                 chatBody.innerHTML += `<div class="msg admin">That's a wonderful question. In Functional Medicine, we look at root causes to build a personalized protocol. Would you like to book an initial consultation or Health Audit?</div>`;
                 chatBody.scrollTop = chatBody.scrollHeight;
             }, 1000);
-            return false;
-        }
-
-        function handleClientMessage(e) {
-            e.preventDefault();
-            const input = document.getElementById('client-msg-input');
-            const chatBox = document.getElementById('client-chat-box');
-            
-            chatBox.innerHTML += `<div class="msg client">${input.value}</div>`;
-            input.value = '';
-            chatBox.scrollTop = chatBox.scrollHeight;
             return false;
         }
     </script>
