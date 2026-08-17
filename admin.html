@@ -18,7 +18,7 @@
         .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 1rem; }
         .form-container { width: 100%; max-width: 400px; background: white; padding: 3rem 2.5rem; border-radius: 6px; border: 1px solid var(--secondary-sand); text-align: center; }
         label { display: block; font-size: 0.75rem; text-transform: uppercase; color: #555; margin-bottom: 0.4rem; text-align: left; font-weight: 600;}
-        input, textarea { width: 100%; padding: 0.8rem; margin-bottom: 1.2rem; border: 1px solid var(--secondary-sand); border-radius: 3px; font-family: 'Lora', serif; }
+        input, select, textarea { width: 100%; padding: 0.8rem; margin-bottom: 1.2rem; border: 1px solid var(--secondary-sand); border-radius: 3px; font-family: 'Lora', serif; background: #fff; }
         .dashboard-wrapper { display: none; max-width: 1400px; margin: 3rem auto; padding: 0 2%; }
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
         .panel { background: white; padding: 1.5rem; border-radius: 6px; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem; }
@@ -61,16 +61,27 @@
                 </div>
             </div>
 
-            <!-- BROADCAST PANEL -->
+            <!-- ENHANCED BROADCAST / ADVICE PANEL -->
             <div class="panel">
-                <h3>Publish Health Article / Broadcast</h3>
-                <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Publish an article or update directly to all client portals.</p>
+                <h3>Send Advice, Articles & Files</h3>
+                <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Broadcast to all clients or send targeted advice to a specific patient.</p>
                 <form onsubmit="return publishBroadcast(event)">
-                    <label>Article Title / Subject</label>
-                    <input type="text" id="broadcast-title" placeholder="e.g. Navigating Seasonal Allergies" required>
-                    <label>Content</label>
-                    <textarea id="broadcast-content" style="height: 150px;" placeholder="Write your advice or announcement here..." required></textarea>
-                    <button type="submit" class="btn" style="width: 100%;">Publish to All Clients</button>
+                    <label>Send To</label>
+                    <select id="broadcast-recipient">
+                        <option value="all">Publish to All Clients (Mass Broadcast)</option>
+                        <!-- Client options populated dynamically -->
+                    </select>
+
+                    <label>Subject / Article Title</label>
+                    <input type="text" id="broadcast-title" placeholder="e.g. Personal Protocol Adjustment / Seasonal Article" required>
+                    
+                    <label>Detailed Advice / Content</label>
+                    <textarea id="broadcast-content" style="height: 120px;" placeholder="Write comprehensive advice or article here..." required></textarea>
+                    
+                    <label>Attach Protocol / Document (PDF, Image)</label>
+                    <input type="file" id="broadcast-file">
+
+                    <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Send Advice & Files</button>
                 </form>
             </div>
         </div>
@@ -93,13 +104,15 @@
             const email = document.getElementById('admin-email').value.trim();
             const pass = document.getElementById('admin-password').value.trim();
 
-            // Quick testing backdoor override for instant admin access
             if (email === 'test' && pass === 'test') {
                 document.getElementById('admin-login').style.display = 'none';
                 document.getElementById('admin-dashboard').style.display = 'block';
                 document.getElementById('btn-logout').style.display = 'inline-block';
                 const db = getSupabase();
-                if(db) loadAdminInbox(db);
+                if(db) {
+                    loadAdminInbox(db);
+                    loadClientDropdown(db);
+                }
                 return false;
             }
 
@@ -107,7 +120,6 @@
             if(!db) return false;
 
             const { data, error } = await db.auth.signInWithPassword({ email: email, password: pass });
-            
             if (error) {
                 alert('Admin Login failed: ' + error.message);
             } else {
@@ -115,8 +127,26 @@
                 document.getElementById('admin-dashboard').style.display = 'block';
                 document.getElementById('btn-logout').style.display = 'inline-block';
                 loadAdminInbox(db);
+                loadClientDropdown(db);
             }
             return false;
+        }
+
+        async function loadClientDropdown(db) {
+            const select = document.getElementById('broadcast-recipient');
+            const { data } = await db.from('appointments').select('client_name, client_id');
+            if(data && data.length > 0) {
+                // Deduplicate clients by ID
+                const uniqueClients = Array.from(new Set(data.map(a => a.client_id)))
+                    .map(id => data.find(a => a.client_id === id));
+
+                uniqueClients.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.client_id;
+                    opt.textContent = `Specific Client: ${c.client_name}`;
+                    select.appendChild(opt);
+                });
+            }
         }
 
         async function loadAdminInbox(db) {
@@ -144,17 +174,41 @@
             const db = getSupabase();
             if(!db) return false;
 
+            const recipient = document.getElementById('broadcast-recipient').value;
             const title = document.getElementById('broadcast-title').value.trim();
             const content = document.getElementById('broadcast-content').value.trim();
+            const fileInput = document.getElementById('broadcast-file');
 
-            const { error } = await db.from('broadcasts').insert([{ title: title, content: content }]);
+            let fileUrl = null;
+
+            // Handle file upload if attached
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const filePath = `protocols/${Date.now()}_${file.name}`;
+                const { data: uploadData, error: uploadError } = await db.storage.from('client-files').upload(filePath, file);
+                
+                if (uploadError) {
+                    alert("File upload warning: Make sure a 'client-files' bucket exists in your Supabase storage. Sending text advice without file.");
+                } else {
+                    const { data: { publicUrl } } = db.storage.from('client-files').getPublicUrl(filePath);
+                    fileUrl = publicUrl;
+                }
+            }
+
+            const { error } = await db.from('broadcasts').insert([{ 
+                title: title, 
+                content: content, 
+                recipient_email: recipient,
+                file_url: fileUrl 
+            }]);
 
             if(error) {
-                alert('Error publishing broadcast: ' + error.message);
+                alert('Error sending advice: ' + error.message);
             } else {
-                alert("Broadcast successfully published to all client dashboards!");
+                alert("Advice and documents successfully dispatched!");
                 document.getElementById('broadcast-title').value = '';
                 document.getElementById('broadcast-content').value = '';
+                fileInput.value = '';
             }
             return false;
         }
