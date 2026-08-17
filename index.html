@@ -19,6 +19,7 @@
             --text-main: #2C352D;
             --primary-sage: #5A6B5D;
             --secondary-sand: #E3E0D8;
+            --card-bg: #FFFFFF;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -28,7 +29,7 @@
             line-height: 1.7;
             scroll-behavior: smooth;
         }
-        h1, h2, h3, .nav-logo, .btn { font-family: 'Montserrat', sans-serif; }
+        h1, h2, h3, .nav-logo, .btn, .price-amount { font-family: 'Montserrat', sans-serif; }
         nav {
             display: flex;
             justify-content: space-between;
@@ -62,16 +63,65 @@
 
         .hero {
             text-align: center;
-            padding: 8rem 5%;
+            padding: 7rem 5%;
             background: linear-gradient(rgba(250, 250, 247, 0.9), rgba(250, 250, 247, 0.9)), url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover;
         }
         .hero h1 { font-size: 3rem; font-weight: 300; margin-bottom: 1.5rem; }
         .hero p { font-size: 1.2rem; margin-bottom: 2.5rem; color: #4a4a4a; max-width: 800px; margin-left: auto; margin-right: auto; }
 
-        .section { padding: 6rem 5%; display: flex; flex-wrap: wrap; align-items: center; gap: 4rem; }
+        .section { padding: 5rem 5%; display: flex; flex-wrap: wrap; align-items: center; gap: 4rem; }
         .section-text { flex: 1; min-width: 300px; }
         .section-image { flex: 1; min-width: 300px; background-color: var(--secondary-sand); height: 400px; border-radius: 4px; background-position: center; background-size: cover; background-image: url('https://images.unsplash.com/photo-1519823551278-64ac92734fb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'); }
-        h2 { font-size: 2rem; font-weight: 400; margin-bottom: 1.5rem; }
+        h2 { font-size: 2rem; font-weight: 400; margin-bottom: 1.5rem; text-align: center; }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 6rem 5%;
+            background-color: #F4F3EE;
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 3rem auto 0 auto;
+        }
+        .price-card {
+            background: var(--card-bg);
+            border: 1px solid var(--secondary-sand);
+            border-radius: 6px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .price-card.featured {
+            border-color: var(--primary-sage);
+            box-shadow: 0 6px 20px rgba(90, 107, 93, 0.15);
+        }
+        .featured-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-sage);
+            color: white;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .price-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .price-duration { font-size: 0.9rem; color: #666; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+        .price-amount { font-size: 2.2rem; font-weight: 300; color: var(--primary-sage); margin-bottom: 1.5rem; }
+        .price-features { list-style: none; text-align: left; margin-bottom: 2rem; font-size: 0.95rem; }
+        .price-features li { margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative; }
+        .price-features li::before { content: "•"; position: absolute; left: 0; color: var(--primary-sage); font-weight: bold; }
 
         /* Portal Banner */
         .portal-banner {
@@ -83,7 +133,6 @@
         .portal-banner h2 { color: white; }
         .portal-banner p { max-width: 600px; margin: 0 auto 2rem auto; font-size: 1.1rem; }
         
-        /* Always Visible or Target-Revealed Auth Container */
         #auth-container {
             background: white;
             color: var(--text-main);
@@ -116,12 +165,14 @@
         .form-panel { display: none; }
         .form-panel.active { display: block; }
         
-        #auth-container input {
+        #auth-container input, #auth-container select {
             width: 100%;
             padding: 0.8rem;
             margin-bottom: 1rem;
             border: 1px solid var(--secondary-sand);
             border-radius: 3px;
+            background: #fff;
+            font-family: 'Lora', serif;
         }
         
         footer { text-align: center; padding: 3rem 5%; font-size: 0.9rem; border-top: 1px solid var(--secondary-sand); color: #666; }
@@ -153,10 +204,67 @@
         </div>
     </section>
 
-    <!-- Portal Section: Always open and visible so it can never fail to load -->
+    <!-- Pricing Blocks Section -->
+    <section class="pricing-section">
+        <h2>Targeted Treatment Programs</h2>
+        <p style="text-align: center; max-width: 600px; margin: 0 auto; color: #555;">Structured therapeutic pathways designed to reset your lymphatic system and support long-term functional recovery.</p>
+        
+        <div class="pricing-grid">
+            <!-- 4 Week Plan -->
+            <div class="price-card">
+                <div>
+                    <div class="price-title">Lymphatic Reset</div>
+                    <div class="price-duration">4-Week Program</div>
+                    <div class="price-amount">£350</div>
+                    <ul class="price-features">
+                        <li>Initial clinical assessment & intake</li>
+                        <li>3x Targeted manual lymphatic drainage sessions</li>
+                        <li>Custom home care & hydration strategy</li>
+                        <li>Client portal access & basic progress logging</li>
+                    </ul>
+                </div>
+                <a href="#portal" class="btn btn-outline" style="width: 100%;">Select 4-Week</a>
+            </div>
+
+            <!-- 6 Week Plan (Featured) -->
+            <div class="price-card featured">
+                <div class="featured-badge">Most Popular</div>
+                <div>
+                    <div class="price-title">Vitality & Drainage Protocol</div>
+                    <div class="price-duration">6-Week Program</div>
+                    <div class="price-amount">£520</div>
+                    <ul class="price-features">
+                        <li>Comprehensive root-cause evaluation</li>
+                        <li>5x Precision MLD & soft-tissue sessions</li>
+                        <li>Structured anti-inflammatory guidance</li>
+                        <li>Detailed medical file tracking in portal</li>
+                    </ul>
+                </div>
+                <a href="#portal" class="btn" style="width: 100%;">Select 6-Week</a>
+            </div>
+
+            <!-- 8 Week Plan -->
+            <div class="price-card">
+                <div>
+                    <div class="price-title">Deep Transformation</div>
+                    <div class="price-duration">8-Week Program</div>
+                    <div class="price-amount">£680</div>
+                    <ul class="price-features">
+                        <li>In-depth functional health review</li>
+                        <li>7x Advanced therapeutic sessions</li>
+                        <li>Priority scheduling access</li>
+                        <li>Comprehensive long-term maintenance blueprint</li>
+                    </ul>
+                </div>
+                <a href="#portal" class="btn btn-outline" style="width: 100%;">Select 8-Week</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portal Section -->
     <section id="portal" class="portal-banner">
         <h2>Client Portal & Booking</h2>
-        <p>Sign in to manage your appointments, or create a new profile and select your preferred treatment date to begin your healing journey.</p>
+        <p>Sign in to manage your appointments, or create a new profile, choose your treatment program, and select your preferred date to begin.</p>
         
         <div id="auth-container">
             <div class="auth-tabs">
@@ -181,6 +289,12 @@
                 <input type="email" id="signup-email" placeholder="you@example.com">
                 <label style="font-size: 0.85rem; color: #666;">Create Password</label>
                 <input type="password" id="signup-password" placeholder="••••••••">
+                <label style="font-size: 0.85rem; color: #666;">Select Treatment Program</label>
+                <select id="signup-program">
+                    <option value="4-Week Reset">4-Week Lymphatic Reset (£350)</option>
+                    <option value="6-Week Protocol">6-Week Vitality & Drainage Protocol (£520)</option>
+                    <option value="8-Week Transformation">8-Week Deep Transformation (£680)</option>
+                </select>
                 <label style="font-size: 0.85rem; color: #666;">Preferred Treatment Date</label>
                 <input type="date" id="signup-date">
                 <button id="signup-submit-btn" class="btn" style="width: 100%; margin-top: 0.5rem;">Create Account & Book</button>
@@ -232,6 +346,7 @@
             const name = document.getElementById('signup-name').value;
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
+            const program = document.getElementById('signup-program').value;
             const preferredDate = document.getElementById('signup-date').value;
             
             if (!preferredDate) {
@@ -242,13 +357,13 @@
             const { data, error } = await supabase.auth.signUp({
                 email,
                 password,
-                options: { data: { full_name: name, requested_date: preferredDate } }
+                options: { data: { full_name: name, selected_program: program, requested_date: preferredDate } }
             });
             
             if (error) {
                 alert('Registration failed: ' + error.message);
             } else {
-                alert('Account created and booking request submitted for ' + preferredDate + '!');
+                alert('Account created and booking request submitted for ' + program + ' on ' + preferredDate + '!');
                 tabLogin.click();
             }
         });
