@@ -134,13 +134,13 @@
 
     <nav>
         <div class="nav-logo">The Natural Healing Clinic</div>
-        <button onclick="togglePortal()" class="btn btn-outline">Client Portal</button>
+        <button id="nav-portal-btn" class="btn btn-outline">Client Portal</button>
     </nav>
 
     <section class="hero">
         <h1>Healing From The Inside Out</h1>
         <p>Specialized lymphatic drainage, root-cause functional health, and expert soft-tissue therapy located in Castletown, Isle of Man.</p>
-        <button onclick="togglePortal()" class="btn">Book a Consultation</button>
+        <button id="hero-portal-btn" class="btn">Book a Consultation</button>
     </section>
 
     <section class="section">
@@ -155,13 +155,13 @@
     <section id="portal" class="portal-banner">
         <h2>Your Personal Health Journey</h2>
         <p>Access your secure client portal to view your treatment sessions, track your wellness progress, and manage your bookings.</p>
-        <button onclick="togglePortal()" class="btn" style="background: var(--bg-color); color: var(--primary-sage);">Open Portal Login</button>
+        <button id="banner-portal-btn" class="btn" style="background: var(--bg-color); color: var(--primary-sage);">Open Portal Login</button>
         
         <!-- Interactive Auth Container -->
         <div id="auth-container">
             <div class="auth-tabs">
-                <div class="auth-tab active" onclick="switchTab('login')">Sign In</div>
-                <div class="auth-tab" onclick="switchTab('signup')">Register</div>
+                <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</div>
+                <div class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Register & Book</div>
             </div>
 
             <!-- Login Form -->
@@ -170,10 +170,10 @@
                 <input type="email" id="login-email" placeholder="you@example.com">
                 <label style="font-size: 0.85rem; color: #666;">Password</label>
                 <input type="password" id="login-password" placeholder="••••••••">
-                <button onclick="handleLogin()" class="btn" style="width: 100%; margin-top: 0.5rem;">Sign In</button>
+                <button id="login-submit-btn" class="btn" style="width: 100%; margin-top: 0.5rem;">Sign In</button>
             </div>
 
-            <!-- Registration Form -->
+            <!-- Registration & Booking Form -->
             <div id="signup-panel" class="form-panel">
                 <label style="font-size: 0.85rem; color: #666;">Full Name</label>
                 <input type="text" id="signup-name" placeholder="Clare Kelly">
@@ -181,7 +181,9 @@
                 <input type="email" id="signup-email" placeholder="you@example.com">
                 <label style="font-size: 0.85rem; color: #666;">Create Password</label>
                 <input type="password" id="signup-password" placeholder="••••••••">
-                <button onclick="handleSignup()" class="btn" style="width: 100%; margin-top: 0.5rem;">Create Account</button>
+                <label style="font-size: 0.85rem; color: #666;">Preferred Treatment Date</label>
+                <input type="date" id="signup-date">
+                <button id="signup-submit-btn" class="btn" style="width: 100%; margin-top: 0.5rem;">Create Account & Book</button>
             </div>
         </div>
     </section>
@@ -196,26 +198,38 @@
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU'; 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // Safe Element Selectors & Click Triggers
+        const authContainer = document.getElementById('auth-container');
+        
         function togglePortal() {
-            const portalDiv = document.getElementById('auth-container');
-            portalDiv.style.display = portalDiv.style.display === 'block' ? 'none' : 'block';
-            portalDiv.scrollIntoView({ behavior: 'smooth' });
+            if (authContainer.style.display === 'block') {
+                authContainer.style.display = 'none';
+            } else {
+                authContainer.style.display = 'block';
+                authContainer.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
+        document.getElementById('nav-portal-btn').onclick = togglePortal;
+        document.getElementById('hero-portal-btn').onclick = togglePortal;
+        document.getElementById('banner-portal-btn').onclick = togglePortal;
+
         function switchTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('tab-login').classList.remove('active');
+            document.getElementById('tab-signup').classList.remove('active');
+            document.getElementById('login-panel').classList.remove('active');
+            document.getElementById('signup-panel').classList.remove('active');
             
             if (tab === 'login') {
-                document.querySelectorAll('.auth-tab')[0].classList.add('active');
+                document.getElementById('tab-login').classList.add('active');
                 document.getElementById('login-panel').classList.add('active');
             } else {
-                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('tab-signup').classList.add('active');
                 document.getElementById('signup-panel').classList.add('active');
             }
         }
 
-        async function handleLogin() {
+        document.getElementById('login-submit-btn').onclick = async () => {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             
@@ -225,26 +239,32 @@
             } else {
                 alert('Successfully logged in!');
             }
-        }
+        };
 
-        async function handleSignup() {
+        document.getElementById('signup-submit-btn').onclick = async () => {
             const name = document.getElementById('signup-name').value;
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
+            const preferredDate = document.getElementById('signup-date').value;
             
+            if (!preferredDate) {
+                alert('Please select a preferred treatment date.');
+                return;
+            }
+
             const { data, error } = await supabase.auth.signUp({
                 email,
                 password,
-                options: { data: { full_name: name } }
+                options: { data: { full_name: name, requested_date: preferredDate } }
             });
             
             if (error) {
                 alert('Registration failed: ' + error.message);
             } else {
-                alert('Account created successfully! You can now sign in.');
+                alert('Account created and booking request submitted for ' + preferredDate + '! You can now sign in.');
                 switchTab('login');
             }
-        }
+        };
     </script>
 </body>
 </html>
