@@ -86,13 +86,35 @@
             display: none;
             background: white;
             color: var(--text-main);
-            max-width: 400px;
+            max-width: 420px;
             margin: 2rem auto;
             padding: 2.5rem;
             border-radius: 4px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             text-align: left;
         }
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--secondary-sand);
+        }
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #666;
+        }
+        .auth-tab.active {
+            color: var(--primary-sage);
+            border-bottom: 2px solid var(--primary-sage);
+        }
+        .form-panel { display: none; }
+        .form-panel.active { display: block; }
+        
         #auth-container input {
             width: 100%;
             padding: 0.8rem;
@@ -135,14 +157,32 @@
         <p>Access your secure client portal to view your treatment sessions, track your wellness progress, and manage your bookings.</p>
         <button onclick="togglePortal()" class="btn" style="background: var(--bg-color); color: var(--primary-sage);">Open Portal Login</button>
         
-        <!-- Hidden Login Form -->
+        <!-- Interactive Auth Container -->
         <div id="auth-container">
-            <h3 style="margin-bottom: 1rem; color: var(--text-main);">Client Sign In</h3>
-            <label style="font-size: 0.85rem; color: #666;">Email Address</label>
-            <input type="email" id="email" placeholder="you@example.com">
-            <label style="font-size: 0.85rem; color: #666;">Password</label>
-            <input type="password" id="password" placeholder="••••••••">
-            <button id="login-btn" class="btn" style="width: 100%; margin-top: 0.5rem;">Sign In</button>
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchTab('login')">Sign In</div>
+                <div class="auth-tab" onclick="switchTab('signup')">Register</div>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-panel" class="form-panel active">
+                <label style="font-size: 0.85rem; color: #666;">Email Address</label>
+                <input type="email" id="login-email" placeholder="you@example.com">
+                <label style="font-size: 0.85rem; color: #666;">Password</label>
+                <input type="password" id="login-password" placeholder="••••••••">
+                <button onclick="handleLogin()" class="btn" style="width: 100%; margin-top: 0.5rem;">Sign In</button>
+            </div>
+
+            <!-- Registration Form -->
+            <div id="signup-panel" class="form-panel">
+                <label style="font-size: 0.85rem; color: #666;">Full Name</label>
+                <input type="text" id="signup-name" placeholder="Clare Kelly">
+                <label style="font-size: 0.85rem; color: #666;">Email Address</label>
+                <input type="email" id="signup-email" placeholder="you@example.com">
+                <label style="font-size: 0.85rem; color: #666;">Create Password</label>
+                <input type="password" id="signup-password" placeholder="••••••••">
+                <button onclick="handleSignup()" class="btn" style="width: 100%; margin-top: 0.5rem;">Create Account</button>
+            </div>
         </div>
     </section>
 
@@ -153,7 +193,7 @@
     <script>
         // Supabase Connection Setup
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
-        const SUPABASE_KEY = 'YOUR_NEW_SECURE_API_KEY_HERE'; 
+        const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU'; 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         function togglePortal() {
@@ -162,9 +202,22 @@
             portalDiv.scrollIntoView({ behavior: 'smooth' });
         }
 
-        document.getElementById('login-btn').onclick = async () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelectorAll('.auth-tab')[0].classList.add('active');
+                document.getElementById('login-panel').classList.add('active');
+            } else {
+                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('signup-panel').classList.add('active');
+            }
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
             
             const { data, error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) {
@@ -172,7 +225,26 @@
             } else {
                 alert('Successfully logged in!');
             }
-        };
+        }
+
+        async function handleSignup() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: { data: { full_name: name } }
+            });
+            
+            if (error) {
+                alert('Registration failed: ' + error.message);
+            } else {
+                alert('Account created successfully! You can now sign in.');
+                switchTab('login');
+            }
+        }
     </script>
 </body>
 </html>
