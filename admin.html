@@ -1,0 +1,6 @@
+-- Give Clare full Admin access to view all appointments and manage the schedule
+create policy "Admin view all appointments" on public.appointments for all 
+using (auth.jwt() ->> 'email' in ('clare@thenaturalhealingclinic.co.im', 'test@test.com', 'test'));
+
+create policy "Admin manage blocked dates" on public.blocked_dates for all 
+using (auth.jwt() ->> 'email' in ('clare@thenaturalhealingclinic.co.im', 'test@test.com', 'test'));
