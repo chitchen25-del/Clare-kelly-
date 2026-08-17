@@ -87,7 +87,6 @@
         .section-image-wrapper { flex: 1; min-width: 320px; position: relative; }
         .portrait-img { width: 100%; height: auto; border-radius: 6px; box-shadow: 0 25px 50px rgba(90, 107, 93, 0.15); object-fit: cover; max-height: 650px; }
         
-        /* ULTRA-PREMIUM ARCH IMAGE STYLING */
         .image-arch-container {
             position: relative;
             border-radius: 200px 200px 12px 12px;
@@ -108,7 +107,6 @@
             transform: scale(1.03);
             filter: saturate(1.05) contrast(1.1);
         }
-        /* Floating Glassmorphism Badge on the Photo */
         .image-floating-badge {
             position: absolute;
             bottom: 25px;
@@ -299,7 +297,6 @@
 
         <section class="section">
             <div class="section-image-wrapper">
-                <!-- Premium Styled Arch Container with Floating Glass Badge -->
                 <div class="image-arch-container">
                     <img src="./clinical-herb.jpeg" alt="Clinical botanical natural medicine and functional healing" class="image-arch">
                     <div class="image-floating-badge">
@@ -619,7 +616,8 @@
         <div style="background-color: white; padding: 3rem 5%; border-bottom: 1px solid var(--secondary-sand);">
             <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <h1 style="font-size: 2.2rem; font-weight: 300;">Your Patient Portal</h1>
+                    <!-- Personalized Welcome Heading -->
+                    <h1 id="portal-welcome-title" style="font-size: 2.2rem; font-weight: 300;">Welcome to Your Patient Portal</h1>
                     <p style="color: #666;">Manage appointments, message Clare, and book new sessions.</p>
                 </div>
                 <button type="button" class="btn" onclick="document.getElementById('new-booking-card').scrollIntoView({behavior: 'smooth'})">+ Book New Session</button>
@@ -633,7 +631,6 @@
                     <div id="client-appointments-list"><p style="color: #888;">Loading your secure schedule...</p></div>
                 </div>
 
-                <!-- NEW BOOKING PANEL INSIDE PORTAL -->
                 <div class="dash-card" id="new-booking-card">
                     <h3>Book Another Session</h3>
                     <form onsubmit="return window.bookNewSession(event)">
@@ -742,7 +739,7 @@
             } else {
                 updateNavState(true);
                 openScreen('screen-dashboard');
-                loadClientDashboard(db, data.user.id);
+                loadClientDashboard(db, data.user);
             }
             return false;
         };
@@ -784,7 +781,7 @@
             alert('Registration complete! Welcome to your patient portal.');
             updateNavState(true);
             openScreen('screen-dashboard');
-            loadClientDashboard(db, userId);
+            loadClientDashboard(db, authData.user);
             
             return false;
         };
@@ -795,14 +792,11 @@
             if(!db) return false;
 
             const { data: { user } } = await db.auth.getUser();
-            if(!user) {
-                alert("Please log in again.");
-                return false;
-            }
+            if(!user) { alert("Please log in again."); return false; }
 
             const service = document.getElementById('portal-service').value;
             const date = document.getElementById('portal-date').value;
-            const name = user.user_metadata?.full_name || 'Client';
+            const name = user.user_metadata?.full_name || user.email;
 
             const { error } = await db.from('appointments').insert([{
                 client_id: user.id,
@@ -816,7 +810,7 @@
                 alert("Booking failed: " + error.message);
             } else {
                 alert("New appointment successfully booked!");
-                loadClientDashboard(db, user.id);
+                loadClientDashboard(db, user);
             }
             return false;
         };
@@ -832,7 +826,7 @@
             } else {
                 alert("Appointment cancelled successfully.");
                 const { data: { user } } = await db.auth.getUser();
-                if(user) loadClientDashboard(db, user.id);
+                if(user) loadClientDashboard(db, user);
             }
         };
 
@@ -842,10 +836,7 @@
             if(!db) return false;
 
             const email = document.getElementById('login-email').value.trim();
-            if(!email) {
-                alert("Please enter your email address above first.");
-                return false;
-            }
+            if(!email) { alert("Please enter your email address above first."); return false; }
 
             const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.href });
             if(error) {
@@ -883,14 +874,19 @@
             return false;
         };
 
-        async function loadClientDashboard(db, userId) {
+        async function loadClientDashboard(db, user) {
             const listElement = document.getElementById('client-appointments-list');
             const chatBox = document.getElementById('client-chat-box');
             const broadcastList = document.getElementById('client-broadcasts-list');
+            const welcomeTitle = document.getElementById('portal-welcome-title');
             
+            // Personalized Greeting
+            const clientName = user.user_metadata?.full_name || user.email;
+            welcomeTitle.innerText = `Welcome back, ${clientName}`;
+
             listElement.innerHTML = '<p style="color: #888;">Fetching records...</p>';
 
-            const { data: apptData } = await db.from('appointments').select('*').eq('client_id', userId).order('appointment_time', { ascending: true });
+            const { data: apptData } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
             if(!apptData || apptData.length === 0) {
                 listElement.innerHTML = '<p style="color: #555;">You have no upcoming appointments booked.</p>';
             } else {
@@ -910,7 +906,7 @@
                 }).join('');
             }
 
-            const { data: msgData } = await db.from('messages').select('*').eq('client_id', userId).order('created_at', { ascending: true });
+            const { data: msgData } = await db.from('messages').select('*').eq('client_id', user.id).order('created_at', { ascending: true });
             if(msgData && msgData.length > 0) {
                 chatBox.innerHTML = msgData.map(m => `<div class="msg ${m.sender}">${m.content}</div>`).join('');
             }
@@ -940,7 +936,16 @@
             const { data: { user } } = await db.auth.getUser();
             if(!user) { alert("Please log in to send messages."); return false; }
 
-            const { error } = await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: text }]);
+            const clientName = user.user_metadata?.full_name || user.email;
+            // Include the client's name directly in the message tag so Clare sees who sent it
+            const formattedContent = `[${clientName}]: ${text}`;
+
+            const { error } = await db.from('messages').insert([{ 
+                client_id: user.id, 
+                sender: 'client', 
+                content: formattedContent 
+            }]);
+
             if(error) {
                 alert("Failed to send message: " + error.message);
             } else {
