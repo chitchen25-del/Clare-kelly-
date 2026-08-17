@@ -8,37 +8,151 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        /* [PREVIOUS CORE STYLES RETAINED] */
-        :root { --bg-color: #FAFAF7; --text-main: #2C352D; --primary-sage: #5A6B5D; --secondary-sand: #E3E0D8; --card-bg: #FFFFFF; }
+        :root {
+            --bg-color: #FAFAF7;
+            --text-main: #2C352D;
+            --primary-sage: #5A6B5D;
+            --secondary-sand: #E3E0D8;
+            --card-bg: #FFFFFF;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Lora', serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; }
-        h1, h2, h3, h4, .nav-logo, .btn { font-family: 'Montserrat', sans-serif; }
-        nav { display: flex; justify-content: space-between; padding: 1.5rem 5%; background: var(--bg-color); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--secondary-sand); }
+        body {
+            font-family: 'Lora', serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+        h1, h2, h3, h4, .nav-logo, .btn, .price-amount { font-family: 'Montserrat', sans-serif; }
+        
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background-color: var(--bg-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--secondary-sand);
+        }
         .nav-logo { font-size: 1.1rem; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; color: var(--primary-sage); }
         .nav-links { display: flex; gap: 1rem; align-items: center; }
-        .nav-link-text { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); cursor: pointer; margin-right: 1rem; }
-        .btn { padding: 0.8rem 2rem; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; border-radius: 3px; cursor: pointer; border: none; background: var(--primary-sage); color: white; }
-        .btn-outline { background: transparent; border: 1px solid var(--primary-sage); color: var(--primary-sage); }
+
+        .nav-link-text { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); cursor: pointer; margin-right: 1rem; transition: color 0.3s ease; }
+        .nav-link-text:hover { color: var(--text-main); }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 3px;
+            cursor: pointer;
+            border: none;
+            background-color: var(--primary-sage);
+            color: white;
+            transition: background 0.3s ease;
+            text-align: center;
+            appearance: none;
+        }
+        .btn:hover, .btn:active { background-color: #4A594D; }
+        .btn-outline { border-color: var(--primary-sage); color: var(--primary-sage); background: transparent; border: 1px solid var(--primary-sage); }
+        .btn-outline:hover { background-color: var(--primary-sage); color: white; }
+
+        /* Screen Controller */
         .page-screen { display: none; animation: fadeIn 0.4s ease; }
         .page-screen.visible { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HERO & BASIC STYLES */
-        .hero { text-align: center; padding: 9rem 5%; background: linear-gradient(rgba(250, 250, 247, 0.85), rgba(250, 250, 247, 0.95)), url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover; border-bottom: 1px solid var(--secondary-sand); }
+        /* Premium Hero Section */
+        .hero {
+            text-align: center;
+            padding: 9rem 5%;
+            background: linear-gradient(rgba(250, 250, 247, 0.85), rgba(250, 250, 247, 0.95)), url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover;
+            border-bottom: 1px solid var(--secondary-sand);
+        }
         .hero h1 { font-size: 3.5rem; font-weight: 300; margin-bottom: 1.5rem; letter-spacing: -1px; }
+        .hero p { font-size: 1.25rem; margin-bottom: 2.5rem; color: #555; max-width: 700px; margin-left: auto; margin-right: auto; font-style: italic; }
 
-        /* DASHBOARD LAYOUT (New features) */
+        /* Elegant Two-Column Layouts */
+        .section { padding: 8rem 5%; display: flex; flex-wrap: wrap; align-items: center; gap: 6rem; max-width: 1200px; margin: 0 auto; }
+        .section-text { flex: 1.2; min-width: 320px; }
+        .section-image-wrapper { flex: 1; min-width: 320px; position: relative; }
+        .portrait-img { width: 100%; height: auto; border-radius: 6px; box-shadow: 0 25px 50px rgba(90, 107, 93, 0.15); object-fit: cover; max-height: 650px; }
+        .image-arch { width: 100%; height: 600px; object-fit: cover; border-radius: 200px 200px 10px 10px; box-shadow: 0 30px 60px rgba(90, 107, 93, 0.15); border: 1px solid var(--secondary-sand); }
+        
+        .section-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); margin-bottom: 1rem; display: block; }
+        h2 { font-size: 2.4rem; font-weight: 300; margin-bottom: 1.5rem; line-height: 1.2; }
+        
+        .help-list { column-count: 2; column-gap: 2rem; list-style: none; color: #555; font-size: 0.95rem; margin-top: 1.5rem; }
+        .help-list li { margin-bottom: 0.8rem; position: relative; padding-left: 1.2rem; }
+        .help-list li::before { content: "✓"; position: absolute; left: 0; color: var(--primary-sage); font-weight: bold; }
+
+        /* Pricing Section */
+        .pricing-section { padding: 7rem 5%; background-color: #FAFAF7; border-top: 1px solid var(--secondary-sand); }
+        .pricing-section.alt { background-color: white; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; max-width: 1200px; margin: 4rem auto 0 auto; }
+        
+        .price-card { background: var(--card-bg); border: 1px solid var(--secondary-sand); border-radius: 4px; padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+        .price-card.featured { border-color: var(--primary-sage); box-shadow: 0 15px 35px rgba(90, 107, 93, 0.1); transform: translateY(-10px); }
+        
+        .featured-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary-sage); color: white; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.4rem 1.2rem; border-radius: 20px; font-family: 'Montserrat', sans-serif; white-space: nowrap; }
+        .guarantee-badge { display: block; margin: 1.5rem auto; padding: 0.8rem; background: #F4F3EE; border: 1px dashed var(--primary-sage); font-size: 0.85rem; color: var(--text-main); font-weight: 500; }
+        
+        .price-title { font-size: 1.3rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .price-duration { font-size: 0.85rem; color: #888; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+        .price-amount { font-size: 2.5rem; font-weight: 300; color: var(--text-main); margin-bottom: 1.5rem; }
+        .price-amount span { font-size: 1rem; color: #888; text-decoration: line-through; margin-left: 0.5rem; }
+        
+        .price-features { list-style: none; text-align: left; margin-bottom: 2.5rem; font-size: 0.95rem; color: #555; }
+        .price-features li { margin-bottom: 1rem; padding-left: 1.5rem; position: relative; line-height: 1.5; }
+        .price-features li::before { content: "—"; position: absolute; left: 0; color: var(--primary-sage); }
+
+        /* Clinical Service Menu */
+        .service-menu-section { padding: 7rem 5%; background-color: white; border-top: 1px solid var(--secondary-sand); }
+        .menu-category-title { font-size: 1.8rem; font-weight: 300; margin-bottom: 3rem; color: var(--text-main); text-align: center; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 3rem; max-width: 1000px; margin: 0 auto 5rem auto; }
+        .menu-item { border-bottom: 1px solid #f0f0f0; padding-bottom: 1.5rem; }
+        .menu-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.8rem; }
+        .menu-header h4 { font-size: 1.1rem; font-weight: 600; color: var(--text-main); font-family: 'Montserrat', sans-serif; }
+        .menu-price { font-family: 'Montserrat', sans-serif; font-weight: 500; color: var(--primary-sage); font-size: 1.1rem; white-space: nowrap; margin-left: 1rem; }
+        .menu-item p { color: #666; font-size: 0.9rem; line-height: 1.6; }
+
+        /* News & Research Grid */
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; max-width: 1200px; margin: 0 auto; }
+        .news-card { background: white; border: 1px solid var(--secondary-sand); border-radius: 4px; padding: 3rem 2.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease; }
+        .news-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(90, 107, 93, 0.08); border-color: var(--primary-sage); }
+        .news-meta { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 1.2rem; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+        .news-title { font-size: 1.4rem; font-weight: 400; margin-bottom: 1rem; line-height: 1.4; color: var(--text-main); }
+        .news-excerpt { font-size: 0.95rem; color: #666; margin-bottom: 2.5rem; line-height: 1.6; }
+        .news-link { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); text-decoration: none; display: inline-block; border-bottom: 1px solid transparent; transition: border-color 0.3s; }
+        .news-link:hover { border-bottom-color: var(--primary-sage); }
+
+        /* Forms Container */
+        .form-container { max-width: 550px; margin: 5rem auto; background: white; padding: 3.5rem; border-radius: 4px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 1px solid var(--secondary-sand); }
+        .form-container h2 { text-align: center; margin-bottom: 1rem; font-size: 1.8rem; }
+        .form-container p.subtitle { text-align: center; color: #666; margin-bottom: 2rem; }
+        
+        label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif; font-weight: 600;}
+        input, select, textarea { width: 100%; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 3px; background: #fff; font-family: 'Lora', serif; font-size: 1rem; appearance: none; transition: border-color 0.3s; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-sage); }
+        textarea { resize: vertical; height: 120px; }
+
+        /* Client Dashboard & Messaging */
         .dashboard-container { max-width: 1200px; margin: 4rem auto; padding: 0 5%; display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+        .dash-header { border-bottom: 2px solid var(--secondary-sand); padding-bottom: 1.5rem; margin-bottom: 2rem; }
         .dash-card { background: white; padding: 2rem; border-radius: 4px; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 1.5rem; }
         .dash-card h3 { color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem; }
         
-        /* CHAT STYLES */
         .chat-box { height: 250px; overflow-y: auto; background: #F4F3EE; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
         .msg { padding: 0.8rem; border-radius: 6px; max-width: 85%; font-size: 0.9rem; }
         .msg.client { background: var(--primary-sage); color: white; align-self: flex-end; }
         .msg.admin { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; }
 
-        /* BROADCAST FEED */
         .broadcast-item { padding-bottom: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid #f0f0f0; }
         .broadcast-item h4 { font-size: 1.1rem; margin-bottom: 0.5rem; }
         .broadcast-item p { font-size: 0.9rem; color: #555; }
@@ -54,20 +168,30 @@
         .ai-input input { border: none; padding: 1rem; width: 100%; border-radius: 0; margin: 0; }
         .ai-input button { background: var(--primary-sage); color: white; border: none; padding: 0 1.5rem; cursor: pointer; font-family: 'Montserrat'; font-weight: bold;}
 
-        /* FORMS */
-        .form-container { max-width: 500px; margin: 5rem auto; background: white; padding: 3rem; border: 1px solid var(--secondary-sand); }
-        input, select, textarea { width: 100%; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); background: #fff; font-family: 'Lora', serif; }
+        /* Footer */
+        footer { padding: 4rem 5%; border-top: 1px solid var(--secondary-sand); color: #666; background: white; display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1200px; margin: 0 auto; gap: 2rem; }
+        .footer-col h4 { color: var(--primary-sage); margin-bottom: 1rem; font-size: 1rem; }
+        .footer-col p { font-size: 0.9rem; margin-bottom: 0.5rem; }
         
         @media (max-width: 768px) {
+            .hero h1 { font-size: 2.4rem; }
+            .section { padding: 4rem 5%; gap: 3rem; }
+            .nav-links { gap: 0.5rem; }
+            .nav-link-text { display: none; }
+            .btn { padding: 0.7rem 1rem; font-size: 0.75rem; }
+            .price-card.featured { transform: none; }
+            .help-list { column-count: 1; }
+            .image-arch { height: 400px; border-radius: 150px 150px 10px 10px; }
             .dashboard-container { grid-template-columns: 1fr; }
             .ai-window { width: 90%; right: 5%; bottom: 90px; }
+            footer { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
 
     <script>
-        function openScreen(screenId) {
+        window.openScreen = function(screenId) {
             document.querySelectorAll('.page-screen').forEach(el => el.classList.remove('visible'));
             document.getElementById(screenId).classList.add('visible');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -82,14 +206,16 @@
     <nav>
         <div class="nav-logo" onclick="openScreen('screen-home')">The Natural Healing Clinic</div>
         <div class="nav-links">
+            <span class="nav-link-text" onclick="openScreen('screen-about')">About Clare</span>
+            <span class="nav-link-text" onclick="openScreen('screen-news')">Journal & Research</span>
             <button type="button" id="nav-portal-btn" class="btn btn-outline" onclick="openScreen('screen-login')">Client Portal</button>
             <button type="button" id="nav-book-btn" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
+            <button type="button" id="nav-logout-btn" class="btn btn-outline" style="display: none;" onclick="window.processLogout()">Sign Out</button>
         </div>
     </nav>
 
-    <!-- AI AGENT WIDGET (Visible on all public pages) -->
+    <!-- AI AGENT WIDGET -->
     <div class="ai-fab" onclick="toggleAI()">
-        <!-- Simple chat icon SVG -->
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
     </div>
 
@@ -99,7 +225,7 @@
             <span style="cursor: pointer;" onclick="toggleAI()">✖</span>
         </div>
         <div class="ai-body" id="ai-chat-body">
-            <div class="msg admin">Hi there! I'm the Natural Healing Clinic's AI Assistant. I can help answer questions about our Functional Medicine protocols or guide you to booking. How can I help?</div>
+            <div class="msg admin">Hi there! I'm the Natural Healing Clinic's AI Assistant. How can I help you today?</div>
         </div>
         <form class="ai-input" onsubmit="return handleAIQuery(event)">
             <input type="text" id="ai-input-text" placeholder="Type your question..." required>
@@ -107,45 +233,323 @@
         </form>
     </div>
 
-    <!-- ================= SCREEN 1: THE HOME PAGE (Truncated for brevity, functions normally) ================= -->
+    <!-- ================= SCREEN 1: THE HOME PAGE ================= -->
     <div id="screen-home" class="page-screen visible">
+        
         <section class="hero">
             <h1>Healing From The Inside Out</h1>
             <p>"Imagine Life Without Pain."</p>
             <button type="button" class="btn" onclick="openScreen('screen-register')">Make An Appointment</button>
         </section>
-        <div style="text-align: center; padding: 5rem;">
-            <h2>Premium Clinic Layout Loaded</h2>
-            <p>Your full service menu, about page, and articles live here in the full version.</p>
-        </div>
+
+        <section class="section">
+            <div class="section-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1611077544689-8eb46f7f6fbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Clinical botanical natural medicine and functional healing" class="image-arch">
+            </div>
+
+            <div class="section-text">
+                <span class="section-subtitle">Our Philosophy</span>
+                <h2>Results in a Realistic Timeframe</h2>
+                <p style="margin-bottom: 1.5rem; color: #555;">The main aim of my clinic is to get results, in a quick and realistic timeframe. If you suffer from pain or discomfort, then I am here to help.</p>
+                <p style="color: #555; margin-bottom: 2rem;">I offer a holistic approach to modern-day aches and pains. The Natural Healing Clinic is complementary to the mainstream medical protocol. My treatment plan is focused on two areas: the individual needs of the patient and the best method to obtain results in an ideal timeframe.</p>
+                
+                <h4 style="margin-bottom: 1rem; color: var(--primary-sage);">Do You Need Help With:</h4>
+                <ul class="help-list">
+                    <li>Pain Management</li>
+                    <li>Acute & Chronic Muscular Pain</li>
+                    <li>Neck, Shoulder or Back Pain</li>
+                    <li>Chronic Fatigue & Long Covid</li>
+                    <li>Fibromyalgia</li>
+                    <li>Whiplash & Jaw Complaints (TMD)</li>
+                    <li>Migraines & Sinus Issues</li>
+                    <li>Sports Injuries & Muscle Tears</li>
+                    <li>Digestive Complaints</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Functional Medicine Pricing -->
+        <section class="pricing-section">
+            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                <span class="section-subtitle">Pillar 1: Deep Transformation</span>
+                <h2>Functional Medicine</h2>
+                <p style="color: #666;">Comprehensive, root-cause investigation and structured restorative pathways.</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div>
+                        <div class="price-title">Performance Health Audit</div>
+                        <div class="price-duration">Functional Kickstart</div>
+                        <div class="price-amount">£175</div>
+                        <ul class="price-features">
+                            <li>90-minute deep-dive functional consultation</li>
+                            <li>Full symptom timeline review</li>
+                            <li>Top 3 root-cause priorities identified</li>
+                            <li>Personalised action plan (diet, lifestyle, testing)</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Health Audit</button>
+                </div>
+
+                <div class="price-card featured">
+                    <div class="featured-badge">Comprehensive Protocol</div>
+                    <div>
+                        <div class="price-title">360° Burnout & Adrenal Protocol</div>
+                        <div class="price-duration">12-Week Executive Program</div>
+                        <div class="price-amount">£1,450</div>
+                        <ul class="price-features">
+                            <li>Complete root-cause functional health investigation</li>
+                            <li>Bi-weekly hands-on Vagal/Bowen resets</li>
+                            <li>Curated functional supplementation blueprint</li>
+                            <li>Ongoing clinical timeline tracking & support</li>
+                        </ul>
+                        <div class="guarantee-badge">Designed for severe chronic fatigue and executive burnout.</div>
+                    </div>
+                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Apply For Protocol</button>
+                </div>
+
+                <div class="price-card">
+                    <div>
+                        <div class="price-title">The Gut Reset</div>
+                        <div class="price-duration">21-Day Programme</div>
+                        <div class="price-amount">£297 <span>£500</span></div>
+                        <ul class="price-features">
+                            <li>60-min functional gut assessment (worth £150)</li>
+                            <li>Personalised 21-day protocol</li>
+                            <li>Curated supplement guidance</li>
+                            <li>2x clinical check-in calls</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Gut Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Specialized Clinical Therapy Menu -->
+        <section class="service-menu-section">
+            <div style="text-align: center; max-width: 600px; margin: 0 auto 4rem auto;">
+                <span class="section-subtitle">Targeted Interventions</span>
+                <h2>Specialized Clinical Therapy</h2>
+                <p style="color: #666;">Expert, evidence-informed hands-on protocols tailored to specific systemic needs.</p>
+            </div>
+
+            <h3 class="menu-category-title">Advanced Lymphatic & Fluid Dynamics</h3>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="menu-header">
+                        <h4>Post-Operative Lymphatic Recovery</h4>
+                        <span class="menu-price">£95 / £450 (Course of 5)</span>
+                    </div>
+                    <p>Specialized, ultra-gentle drainage vital for clients recovering from surgeries or cosmetic procedures to accelerate cellular healing and reduce edema.</p>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-header">
+                        <h4>The Sculpt & Flush (Facial/TMJ)</h4>
+                        <span class="menu-price">£85</span>
+                    </div>
+                    <p>Focuses on cranium, face, and neck. Relieves jaw tension (TMJ), clears sinus congestion, and sculpts facial tissues.</p>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-header">
+                        <h4>Maternal Wellness: Fluid Release</h4>
+                        <span class="menu-price">£80</span>
+                    </div>
+                    <p>Safe lymphatic support for expectant mothers suffering from heavy legs and fluid retention during the 2nd and 3rd trimesters.</p>
+                </div>
+            </div>
+
+            <h3 class="menu-category-title">Nervous System & Soft-Tissue Reset</h3>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="menu-header">
+                        <h4>The Vagal Reset (Autonomic Therapy)</h4>
+                        <span class="menu-price">£85</span>
+                    </div>
+                    <p>Targeted somatic session stimulating the Vagus nerve to pull the body out of chronic 'fight or flight' stress responses.</p>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-header">
+                        <h4>Elite Athletic Optimization & Recovery</h4>
+                        <span class="menu-price">£90</span>
+                    </div>
+                    <p>Tailored for cyclists and endurance athletes, combining deep fascial release with structural realignment.</p>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-header">
+                        <h4>Pediatric & Infant Rebalance</h4>
+                        <span class="menu-price">£55</span>
+                    </div>
+                    <p>Gentle Bowen and fascial work for babies experiencing colic, reflux, or sleep disturbances.</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button type="button" class="btn" onclick="openScreen('screen-register')">Book A Specialized Session</button>
+            </div>
+        </section>
+
+        <!-- Core Standards -->
+        <section class="pricing-section alt">
+            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                <span class="section-subtitle">Clinical Baseline</span>
+                <h2>Core Clinic Standards</h2>
+                <p style="color: #666;">Foundational care for standard referrals and ongoing maintenance.</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div>
+                        <div class="price-title">Initial Consultation</div>
+                        <div class="price-duration">60 Minutes</div>
+                        <div class="price-amount">£85</div>
+                        <ul class="price-features">
+                            <li>Comprehensive medical case history & postural assessment</li>
+                            <li>Introductory treatment session</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Consultation</button>
+                </div>
+
+                <div class="price-card featured">
+                    <div>
+                        <div class="price-title">The Reset Series</div>
+                        <div class="price-duration">3-Week Series</div>
+                        <div class="price-amount">£210</div>
+                        <ul class="price-features">
+                            <li>3x Bowen Therapy sessions over 3 weeks</li>
+                            <li>Pre-session intake form & home care guide</li>
+                            <li>Priority booking slot secured</li>
+                        </ul>
+                        <div class="guarantee-badge">Complete all 3 sessions with no improvement? Your 4th is on me.</div>
+                    </div>
+                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Book The Reset Series</button>
+                </div>
+
+                <div class="price-card">
+                    <div>
+                        <div class="price-title">Standard Care & Maintenance</div>
+                        <div class="price-duration">Flexible Booking</div>
+                        <div class="price-amount">£75 <span style="text-decoration:none; font-size:1rem;">/ session</span></div>
+                        <ul class="price-features">
+                            <li>Standard Follow-Up Session: £75</li>
+                            <li>Maintenance Block (6 Sessions): £420</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book a Session</button>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <!-- ================= SCREEN 2: LOGIN PAGE ================= -->
+    <!-- ================= SCREEN 2: ABOUT CLARE ================= -->
+    <div id="screen-about" class="page-screen">
+        <div style="background-color: white; padding: 4rem 5%; border-bottom: 1px solid var(--secondary-sand);">
+            <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+                <h1 style="font-size: 2.5rem; font-weight: 300; color: var(--text-main);">About The Practitioner</h1>
+            </div>
+        </div>
+
+        <section class="section" style="padding-top: 4rem;">
+            <div class="section-image-wrapper">
+                <img src="./clare-profile.avif" alt="Clare Kelly - The Natural Healing Clinic" class="portrait-img">
+            </div>
+
+            <div class="section-text">
+                <span class="section-subtitle">Meet Clare Kelly</span>
+                <h2 style="font-size: 2.2rem;">Clinical Expertise with a Holistic Touch</h2>
+                <p style="margin-bottom: 1.5rem; color: #555; line-height: 1.8;">
+                    Clare Kelly is a dedicated functional health and soft-tissue specialist, committed to resolving chronic pain, systemic inflammation, and structural imbalances. With a deep understanding that the body’s systems are intricately connected, Clare bridges the gap between complementary therapies and mainstream medical protocols.
+                </p>
+                <p style="color: #555; margin-bottom: 2.5rem; line-height: 1.8;">
+                    Specializing in Advanced Lymphatic Drainage, Bowen Therapy, and Functional Medicine, her clinical approach is strictly evidence-informed yet deeply personalized to deliver sustainable results.
+                </p>
+                <button type="button" class="btn" onclick="openScreen('screen-register')">Book Your Consultation</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= SCREEN 3: JOURNAL & RESEARCH ================= -->
+    <div id="screen-news" class="page-screen">
+        <div style="background-color: white; padding: 4rem 5%; border-bottom: 1px solid var(--secondary-sand);">
+            <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+                <span class="section-subtitle">Clinical Journal</span>
+                <h1 style="font-size: 2.5rem; font-weight: 300; color: var(--text-main); margin-top: 0.5rem;">Latest News & Research</h1>
+                <p style="color: #666; margin-top: 1rem; max-width: 650px; margin-left: auto; margin-right: auto; line-height: 1.7;">Explore the latest evidence-based functional medicine research and clinical insights.</p>
+            </div>
+        </div>
+
+        <section style="padding: 6rem 5%; background-color: var(--bg-color);">
+            <div class="news-grid">
+                <div class="news-card">
+                    <div>
+                        <div class="news-meta">Gut Microbiome • Functional Medicine</div>
+                        <h3 class="news-title">The Role of the Gut Microbiome in Systemic Inflammation</h3>
+                        <p class="news-excerpt">Recent clinical studies highlight how gut dysbiosis directly contributes to chronic inflammatory conditions.</p>
+                    </div>
+                    <a href="https://www.ifm.org/news-insights/the-functional-medicine-approach-to-the-microbiome/" target="_blank" class="news-link">Read Research Outline &rarr;</a>
+                </div>
+                <div class="news-card">
+                    <div>
+                        <div class="news-meta">Manual Lymphatic Drainage • Physiology</div>
+                        <h3 class="news-title">Efficacy of MLD on Chronic Fatigue and Edema</h3>
+                        <p class="news-excerpt">Research indicates that stimulating the lymphatic system through specialized manual drainage lowers systemic inflammatory markers.</p>
+                    </div>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/25655383/" target="_blank" class="news-link">View Clinical Study &rarr;</a>
+                </div>
+                <div class="news-card">
+                    <div>
+                        <div class="news-meta">Vagus Nerve • Nervous System</div>
+                        <h3 class="news-title">Autonomic Regulation via Vagal Stimulation</h3>
+                        <p class="news-excerpt">Discover how somatic touch therapies stimulate the Vagus nerve to shift the body out of 'fight or flight'.</p>
+                    </div>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/29563853/" target="_blank" class="news-link">Read Peer-Reviewed Paper &rarr;</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= SCREEN 4: LOGIN PAGE ================= -->
     <div id="screen-login" class="page-screen">
         <div class="form-container">
             <h2>Client Portal Login</h2>
+            <p class="subtitle">Access your secure treatment progression files and messages.</p>
             <form onsubmit="return window.processClientLogin(event)">
                 <label>Email Address</label><input type="email" id="login-email" required>
                 <label>Password</label><input type="password" id="login-password" required>
-                <button type="submit" class="btn" style="width: 100%;">Sign In</button>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Sign In to Portal</button>
             </form>
         </div>
     </div>
 
-    <!-- ================= SCREEN 3: REGISTER ================= -->
+    <!-- ================= SCREEN 5: REGISTER & BOOK ================= -->
     <div id="screen-register" class="page-screen">
-        <div class="form-container">
-            <h2>Register & Book</h2>
+        <div class="form-container" style="max-width: 620px;">
+            <h2>Client Registration</h2>
+            <p class="subtitle">Create your patient file and request your initial booking.</p>
             <form onsubmit="return window.processRegistration(event)">
                 <label>Full Name</label><input type="text" id="reg-name" required>
                 <label>Email Address</label><input type="email" id="reg-email" required>
-                <label>Password</label><input type="password" id="reg-password" required>
-                <button type="submit" class="btn" style="width: 100%;">Secure Booking & Register</button>
+                <label>Create Secure Password</label><input type="password" id="reg-password" required>
+                <label>Primary Health Goals / Symptoms</label><textarea id="reg-notes" placeholder="Describe pain points..."></textarea>
+                <label>Select Treatment Pathway</label>
+                <select id="reg-service">
+                    <option value="Initial Consultation (£85)">Initial Consultation (£85)</option>
+                    <option value="Post-Op Lymphatic Recovery (£95)">Post-Op Lymphatic Recovery (£95)</option>
+                    <option value="The Sculpt & Flush (£85)">The Sculpt & Flush (£85)</option>
+                    <option value="The Vagal Reset (£85)">The Vagal Reset (£85)</option>
+                    <option value="Elite Athletic Optimization (£90)">Elite Athletic Optimization (£90)</option>
+                    <option value="Performance Health Audit (£175)">Performance Health Audit (£175)</option>
+                    <option value="The Gut Reset (£297)">The Gut Reset (£297)</option>
+                    <option value="360 Burnout Protocol (£1,450)">360° Burnout Protocol (£1,450)</option>
+                </select>
+                <label>Preferred First Session Date</label><input type="datetime-local" id="reg-date" required>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Secure Booking & Register</button>
             </form>
         </div>
     </div>
 
-    <!-- ================= SCREEN 4: SECURE CLIENT DASHBOARD ================= -->
+    <!-- ================= SCREEN 6: SECURE CLIENT DASHBOARD ================= -->
     <div id="screen-dashboard" class="page-screen">
         <div style="background-color: white; padding: 3rem 5%; border-bottom: 1px solid var(--secondary-sand);">
             <div style="max-width: 1200px; margin: 0 auto;">
@@ -155,43 +559,31 @@
         </div>
 
         <div class="dashboard-container">
-            <!-- LEFT COLUMN: Articles & Appointments -->
             <div>
                 <div class="dash-card">
                     <h3>Your Appointments</h3>
-                    <p style="color: #555;">Oct 12, 2026 - 6-Week Vitality Protocol</p>
+                    <div id="client-appointments-list"><p style="color: #888;">Loading your secure schedule...</p></div>
                 </div>
 
-                <!-- NEW: BROADCAST FEED -->
                 <div class="dash-card">
                     <h3>Clinic Announcements & Articles</h3>
-                    
                     <div class="broadcast-item">
                         <span class="broadcast-date">August 17, 2026</span>
                         <h4>Navigating Seasonal Allergies</h4>
-                        <p>With the pollen count high across the Isle of Man this week, remember to increase your Vitamin C and Quercetin intake to stabilize histamine levels...</p>
-                    </div>
-                    
-                    <div class="broadcast-item" style="border: none; padding-bottom: 0; margin-bottom: 0;">
-                        <span class="broadcast-date">July 30, 2026</span>
-                        <h4>Clinic Closed on Bank Holiday</h4>
-                        <p>A quick reminder that the clinic will be closed for the upcoming bank holiday. Portal messaging will be checked intermittently.</p>
+                        <p>Remember to increase your Vitamin C and Quercetin intake to stabilize histamine levels during high pollen counts...</p>
                     </div>
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: Secure Messaging -->
             <div>
                 <div class="dash-card">
                     <h3>Secure Messaging</h3>
                     <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Ask Clare questions about your protocol.</p>
-                    
                     <div class="chat-box" id="client-chat-box">
-                        <div class="msg admin">Hi! Welcome to your patient portal. Let me know if you need anything before your first session. - Clare</div>
+                        <div class="msg admin">Hi! Welcome to your patient portal. Let me know if you need anything before your session. - Clare</div>
                     </div>
-                    
                     <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.5rem;">
-                        <input type="text" id="client-msg-input" placeholder="Type a message..." style="margin-bottom: 0; flex: 1;">
+                        <input type="text" id="client-msg-input" placeholder="Type a message..." style="margin-bottom: 0; flex: 1;" required>
                         <button type="submit" class="btn" style="padding: 0 1rem;">Send</button>
                     </form>
                 </div>
@@ -199,30 +591,171 @@
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer>
+        <div class="footer-col">
+            <h4>The Natural Healing Clinic</h4>
+            <p>1st Floor, 8-10 Malew Street</p>
+            <p>Castletown, Isle of Man</p>
+            <p>IM9 1AB</p>
+        </div>
+        <div class="footer-col">
+            <h4>Contact</h4>
+            <p>Tel: 07624 202 121</p>
+            <p>Email: clare@claretownsend.co.uk</p>
+        </div>
+        <div class="footer-col">
+            <h4>Opening Hours</h4>
+            <p>Monday & Friday: 10:00 - 15:00</p>
+            <p>Wednesday: 10:00 - 12:00</p>
+            <p>Saturday: 09:00 - 18:00</p>
+        </div>
+    </footer>
+
     <!-- INLINE JAVASCRIPT LOGIC -->
     <script>
-        // AI AGENT SIMULATOR LOGIC
+        const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
+
+        function getSupabase() {
+            if(!window.supabase) {
+                alert("Establishing secure connection. Please try again in 1 second.");
+                return null;
+            }
+            return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
+
+        window.processClientLogin = async function(e) {
+            if(e) e.preventDefault();
+            const db = getSupabase();
+            if(!db) return false;
+
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-password').value.trim();
+
+            const { data, error } = await db.auth.signInWithPassword({ email: email, password: pass });
+            if (error) {
+                alert('Login failed: ' + error.message);
+            } else {
+                updateNavState(true);
+                openScreen('screen-dashboard');
+                loadClientDashboard(db, data.user.id);
+            }
+            return false;
+        };
+
+        window.processRegistration = async function(e) {
+            if(e) e.preventDefault();
+            const db = getSupabase();
+            if(!db) return false;
+
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass = document.getElementById('reg-password').value.trim();
+            const notes = document.getElementById('reg-notes').value.trim();
+            const service = document.getElementById('reg-service').value;
+            const date = document.getElementById('reg-date').value;
+
+            const { data: authData, error: authError } = await db.auth.signUp({
+                email: email,
+                password: pass,
+                options: { data: { full_name: name, intake_notes: notes } }
+            });
+
+            if (authError) {
+                alert('Registration Error: ' + authError.message);
+                return false;
+            }
+
+            const userId = authData.user?.id;
+            if(userId) {
+                const { error: apptError } = await db.from('appointments').insert([{
+                    client_id: userId,
+                    client_name: name,
+                    service_name: service,
+                    appointment_time: date,
+                    status: 'confirmed'
+                }]);
+
+                if(apptError) {
+                    if(apptError.code === '23505') {
+                        alert("We're sorry, but another client just booked that exact time slot! Please choose another time.");
+                    } else {
+                        alert("Account created, but booking failed: " + apptError.message);
+                    }
+                    return false;
+                }
+            }
+
+            alert('Registration complete! Your appointment is securely locked in.');
+            updateNavState(true);
+            openScreen('screen-dashboard');
+            loadClientDashboard(db, userId);
+            
+            return false;
+        };
+
+        async function loadClientDashboard(db, userId) {
+            const listElement = document.getElementById('client-appointments-list');
+            listElement.innerHTML = '<p style="color: #888;">Fetching your records...</p>';
+
+            const { data, error } = await db.from('appointments')
+                                          .select('*')
+                                          .eq('client_id', userId)
+                                          .order('appointment_time', { ascending: true });
+
+            if(error) {
+                listElement.innerHTML = '<p style="color: red;">Could not load appointments.</p>';
+                return;
+            }
+
+            if(!data || data.length === 0) {
+                listElement.innerHTML = '<p style="color: #555;">You have no upcoming appointments booked.</p>';
+            } else {
+                listElement.innerHTML = data.map(appt => {
+                    const formattedDate = new Date(appt.appointment_time).toLocaleString('en-GB', { 
+                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit' 
+                    });
+                    return `
+                        <div style="padding: 1rem 0; border-bottom: 1px solid #f0f0f0;">
+                            <div style="font-weight: 600; color: var(--primary-sage);">${formattedDate}</div>
+                            <div style="font-size: 0.95rem; color: #555;">${appt.service_name}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        window.processLogout = async function() {
+            const db = getSupabase();
+            if(db) await db.auth.signOut();
+            updateNavState(false);
+            openScreen('screen-home');
+        };
+
+        function updateNavState(isLoggedIn) {
+            document.getElementById('nav-portal-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+            document.getElementById('nav-book-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+            document.getElementById('nav-logout-btn').style.display = isLoggedIn ? 'inline-block' : 'none';
+        }
+
         function handleAIQuery(e) {
             e.preventDefault();
             const input = document.getElementById('ai-input-text');
             const chatBody = document.getElementById('ai-chat-body');
             const question = input.value;
             
-            // Append User Question
             chatBody.innerHTML += `<div class="msg client">${question}</div>`;
             input.value = '';
             chatBody.scrollTop = chatBody.scrollHeight;
 
-            // Simulate Agentic "Thinking" delay, then answer
             setTimeout(() => {
-                chatBody.innerHTML += `<div class="msg admin">That's a great question. In Functional Medicine, we look at root causes rather than just symptoms. Would you like me to direct you to our 90-Minute Health Audit so Clare can investigate this for you?</div>`;
+                chatBody.innerHTML += `<div class="msg admin">That's a wonderful question. In Functional Medicine, we look at root causes to build a personalized protocol. Would you like to book an initial consultation or Health Audit?</div>`;
                 chatBody.scrollTop = chatBody.scrollHeight;
             }, 1000);
-            
             return false;
         }
 
-        // CLIENT CHAT SIMULATOR LOGIC
         function handleClientMessage(e) {
             e.preventDefault();
             const input = document.getElementById('client-msg-input');
@@ -233,10 +766,8 @@
             chatBox.scrollTop = chatBox.scrollHeight;
             return false;
         }
-
-        // BASIC NAVIGATION (Prototypes)
-        window.processClientLogin = function(e) { e.preventDefault(); openScreen('screen-dashboard'); return false; };
-        window.processRegistration = function(e) { e.preventDefault(); openScreen('screen-dashboard'); return false; };
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
 </body>
 </html>
