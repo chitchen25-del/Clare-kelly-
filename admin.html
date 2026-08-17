@@ -149,7 +149,7 @@
             const container = document.getElementById('admin-client-files-list');
             try {
                 const { data: appointments } = await db.from('appointments').select('*');
-                const { data: medicalFiles } = await db.from('medical_files').select('*');
+                const { data: messages } = await db.from('messages').select('*');
 
                 if(!appointments || appointments.length === 0) {
                     container.innerHTML = '<p style="color: #666;">No registered clients found yet.</p>';
@@ -160,16 +160,13 @@
                     .map(id => appointments.find(a => a.client_id === id));
 
                 container.innerHTML = uniqueClients.map(client => {
-                    const clientAppts = appointments.filter(a => a.client_id === client.client_id);
-                    const medFile = medicalFiles ? medicalFiles.find(m => m.client_id === client.client_id) : null;
+                    // Find any message from this client that contains the medical intake submission
+                    const clientMsgs = messages ? messages.filter(m => m.client_id === client.client_id) : [];
+                    const intakeMsg = clientMsgs.find(m => m.content && m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
                     
                     let intakeDisplay = 'Questionnaire not yet completed by client.';
-                    
-                    const foundApptWithIntake = clientAppts.find(a => a.intake_details);
-                    if (foundApptWithIntake && foundApptWithIntake.intake_details) {
-                        intakeDisplay = foundApptWithIntake.intake_details;
-                    } else if (medFile && medFile.intake_details) {
-                        intakeDisplay = medFile.intake_details;
+                    if (intakeMsg) {
+                        intakeDisplay = intakeMsg.content.replace('[MEDICAL INTAKE SUBMISSION]', '').trim();
                     }
 
                     return `
