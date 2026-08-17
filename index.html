@@ -91,19 +91,11 @@
         .hero p { font-size: 1.25rem; margin-bottom: 2.5rem; color: #555; max-width: 700px; margin-left: auto; margin-right: auto; font-style: italic; }
 
         /* Elegant Two-Column Layouts */
-        .section { padding: 7rem 5%; display: flex; flex-wrap: wrap; align-items: center; gap: 5rem; max-width: 1200px; margin: 0 auto; }
+        .section { padding: 8rem 5%; display: flex; flex-wrap: wrap; align-items: center; gap: 6rem; max-width: 1200px; margin: 0 auto; }
         .section-text { flex: 1.2; min-width: 320px; }
         
         .section-image-wrapper { flex: 1; min-width: 320px; position: relative; }
-        .section-image-wrapper img {
-            width: 100%;
-            height: auto;
-            border-radius: 6px;
-            box-shadow: 0 25px 50px rgba(90, 107, 93, 0.15); 
-            object-fit: cover;
-            max-height: 650px;
-        }
-
+        .section-image-wrapper img { width: 100%; height: auto; border-radius: 6px; box-shadow: 0 25px 50px rgba(90, 107, 93, 0.15); object-fit: cover; max-height: 650px; }
         .section-image { flex: 1; min-width: 320px; height: 500px; border-radius: 4px; background-position: center; background-size: cover; box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
         
         .section-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); margin-bottom: 1rem; display: block; }
@@ -132,6 +124,16 @@
         .price-features { list-style: none; text-align: left; margin-bottom: 2.5rem; font-size: 0.95rem; color: #555; }
         .price-features li { margin-bottom: 1rem; padding-left: 1.5rem; position: relative; line-height: 1.5; }
         .price-features li::before { content: "—"; position: absolute; left: 0; color: var(--primary-sage); }
+
+        /* News & Research Grid */
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; max-width: 1200px; margin: 0 auto; }
+        .news-card { background: white; border: 1px solid var(--secondary-sand); border-radius: 4px; padding: 3rem 2.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease; }
+        .news-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(90, 107, 93, 0.08); border-color: var(--primary-sage); }
+        .news-meta { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 1.2rem; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+        .news-title { font-size: 1.4rem; font-weight: 400; margin-bottom: 1rem; line-height: 1.4; color: var(--text-main); }
+        .news-excerpt { font-size: 0.95rem; color: #666; margin-bottom: 2.5rem; line-height: 1.6; }
+        .news-link { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); text-decoration: none; display: inline-block; border-bottom: 1px solid transparent; transition: border-color 0.3s; }
+        .news-link:hover { border-bottom-color: var(--primary-sage); }
 
         /* Interactive FAQ Section */
         .faq-section { padding: 7rem 5%; max-width: 900px; margin: 0 auto; }
@@ -171,7 +173,7 @@
             .hero h1 { font-size: 2.4rem; }
             .section { padding: 4rem 5%; gap: 3rem; }
             .nav-links { gap: 0.5rem; }
-            .nav-link-text { display: none; } /* Hides text link on small phones to save space */
+            .nav-link-text { display: none; }
             .btn { padding: 0.7rem 1rem; font-size: 0.75rem; }
             .price-card.featured { transform: none; }
             .help-list { column-count: 1; }
@@ -196,6 +198,7 @@
         <div class="nav-logo" onclick="openScreen('screen-home')">The Natural Healing Clinic</div>
         <div class="nav-links">
             <span class="nav-link-text" onclick="openScreen('screen-about')">About Clare</span>
+            <span class="nav-link-text" onclick="openScreen('screen-news')">Journal & Research</span>
             <button type="button" id="nav-portal-btn" class="btn btn-outline" onclick="openScreen('screen-login')">Client Portal</button>
             <button type="button" id="nav-book-btn" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
             <button type="button" id="nav-logout-btn" class="btn btn-outline" style="display: none;" onclick="window.processLogout()">Sign Out</button>
@@ -211,17 +214,12 @@
             <button type="button" class="btn" onclick="openScreen('screen-register')">Make An Appointment</button>
         </section>
 
-        <!-- Restored Philosophy Section -->
         <section class="section">
-            
-            <!-- Upgraded Tranquil Background Image -->
             <div class="section-image" style="background-image: url('https://images.unsplash.com/photo-1544161513-37651a511674?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');"></div>
 
             <div class="section-text">
                 <span class="section-subtitle">Our Philosophy</span>
-                
                 <h2>Results in a Realistic Timeframe</h2>
-                
                 <p style="margin-bottom: 1.5rem; color: #555;">The main aim of my clinic is to get results, in a quick and realistic timeframe. If you suffer from pain or discomfort, then I am here to help.</p>
                 <p style="color: #555; margin-bottom: 2rem;">I offer a holistic approach to modern-day aches and pains. The Natural Healing Clinic is complementary to the mainstream medical protocol. My treatment plan is focused on two areas: the individual needs of the patient and the best method to obtain results in an ideal timeframe.</p>
                 
@@ -358,14 +356,12 @@
 
         <section class="section" style="padding-top: 4rem;">
             
-            <!-- Professional Photo Frame with .AVIF format -->
             <div class="section-image-wrapper">
                 <img src="./clare-profile.avif" alt="Clare Kelly - The Natural Healing Clinic">
             </div>
 
             <div class="section-text">
                 <span class="section-subtitle">Meet Clare Kelly</span>
-                
                 <h2 style="font-size: 2.2rem;">Clinical Expertise with a Holistic Touch</h2>
                 
                 <p style="margin-bottom: 1.5rem; color: #555; line-height: 1.8;">
@@ -380,7 +376,64 @@
         </section>
     </div>
 
-    <!-- ================= SCREEN 3: LOGIN PAGE ================= -->
+    <!-- ================= SCREEN 3: JOURNAL & RESEARCH (NEW TAB) ================= -->
+    <div id="screen-news" class="page-screen">
+        <div style="background-color: white; padding: 4rem 5%; border-bottom: 1px solid var(--secondary-sand);">
+            <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+                <span class="section-subtitle">Clinical Journal</span>
+                <h1 style="font-size: 2.5rem; font-weight: 300; color: var(--text-main); margin-top: 0.5rem;">Latest News & Research</h1>
+                <p style="color: #666; margin-top: 1rem; max-width: 650px; margin-left: auto; margin-right: auto; line-height: 1.7;">Explore the latest evidence-based functional medicine research, clinical studies, and insights into how we approach root-cause healing.</p>
+            </div>
+        </div>
+
+        <section style="padding: 6rem 5%; background-color: var(--bg-color);">
+            <div class="news-grid">
+                
+                <!-- Article 1 -->
+                <div class="news-card">
+                    <div>
+                        <div class="news-meta">Gut Microbiome • Functional Medicine</div>
+                        <h3 class="news-title">The Role of the Gut Microbiome in Systemic Inflammation</h3>
+                        <p class="news-excerpt">Recent clinical studies highlight how gut dysbiosis directly contributes to chronic inflammatory conditions, reinforcing the necessity of targeted gut reset protocols in functional medicine rather than mere symptom management.</p>
+                    </div>
+                    <a href="https://www.ifm.org/news-insights/the-functional-medicine-approach-to-the-microbiome/" target="_blank" class="news-link">Read Research Outline &rarr;</a>
+                </div>
+
+                <!-- Article 2 -->
+                <div class="news-card">
+                    <div>
+                        <div class="news-meta">Manual Lymphatic Drainage • Physiology</div>
+                        <h3 class="news-title">Efficacy of MLD on Chronic Fatigue and Edema</h3>
+                        <p class="news-excerpt">Research indicates that stimulating the lymphatic system through specialized manual drainage not only reduces localized swelling but significantly lowers systemic inflammatory markers, aiding in chronic fatigue recovery.</p>
+                    </div>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/25655383/" target="_blank" class="news-link">View Clinical Study &rarr;</a>
+                </div>
+
+                <!-- Article 3 -->
+                <div class="news-card">
+                    <div>
+                        <div class="news-meta">Vagus Nerve • Nervous System</div>
+                        <h3 class="news-title">Autonomic Regulation via Vagal Stimulation</h3>
+                        <p class="news-excerpt">Discover how somatic touch therapies and specific breathing protocols stimulate the Vagus nerve, actively shifting the body from a 'fight or flight' stress response into a 'rest and digest' state essential for cellular healing.</p>
+                    </div>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/29563853/" target="_blank" class="news-link">Read Peer-Reviewed Paper &rarr;</a>
+                </div>
+
+                <!-- Article 4 -->
+                <div class="news-card">
+                    <div>
+                        <div class="news-meta">Bowen Therapy • Musculoskeletal</div>
+                        <h3 class="news-title">Fascial Release and Chronic Pain Mapping</h3>
+                        <p class="news-excerpt">How light-touch fascial manipulation (like Bowen Therapy) interrupts chronic pain signals to the brain, allowing the structural connective tissue to rehydrate and realign without aggressive force.</p>
+                    </div>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/32338270/" target="_blank" class="news-link">View Medical Journal &rarr;</a>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= SCREEN 4: LOGIN PAGE ================= -->
     <div id="screen-login" class="page-screen">
         <div class="form-container">
             <h2>Client Portal Login</h2>
@@ -398,7 +451,7 @@
         </div>
     </div>
 
-    <!-- ================= SCREEN 4: REGISTER & BOOK ================= -->
+    <!-- ================= SCREEN 5: REGISTER & BOOK ================= -->
     <div id="screen-register" class="page-screen">
         <div class="form-container" style="max-width: 620px;">
             <h2>Client Registration</h2>
@@ -433,7 +486,7 @@
         </div>
     </div>
 
-    <!-- ================= SCREEN 5: SECURE CLIENT DASHBOARD ================= -->
+    <!-- ================= SCREEN 6: SECURE CLIENT DASHBOARD ================= -->
     <div id="screen-dashboard" class="page-screen">
         <div class="dashboard-container">
             <div class="dash-header">
@@ -476,7 +529,7 @@
         </div>
     </footer>
 
-    <!-- INLINE JAVASCRIPT LOGIC (Runs securely on mobile) -->
+    <!-- INLINE JAVASCRIPT LOGIC -->
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
@@ -608,7 +661,6 @@
         }
     </script>
 
-    <!-- Supabase CDN loaded safely at the end -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
 </body>
 </html>
