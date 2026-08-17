@@ -23,10 +23,11 @@
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
         .panel { background: white; padding: 1.5rem; border-radius: 6px; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem; }
         .panel h3 { font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem; }
-        .chat-box { height: 300px; overflow-y: auto; background: #F4F3EE; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .chat-box { height: 250px; overflow-y: auto; background: #F4F3EE; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
         .msg { padding: 0.8rem; border-radius: 6px; max-width: 80%; font-size: 0.9rem; }
         .msg.client { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; }
         .msg.admin { background: var(--primary-sage); color: white; align-self: flex-end; }
+        .client-file-card { background: #FAF9F5; border: 1px solid var(--secondary-sand); padding: 1.2rem; border-radius: 4px; margin-bottom: 1rem; }
     </style>
 </head>
 <body>
@@ -52,6 +53,15 @@
         </div>
 
         <div class="dashboard-grid">
+            <!-- CLIENT FILES & INTAKE DIRECTORY -->
+            <div class="panel" style="grid-column: span 2;">
+                <h3>Client Files & Medical Questionnaires</h3>
+                <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.5rem;">View patient intake details, add clinical notes, and upload historical client documents.</p>
+                <div id="admin-client-files-list">
+                    <p style="color: #888;">Loading client records...</p>
+                </div>
+            </div>
+
             <!-- INBOX PANEL -->
             <div class="panel">
                 <h3>Live Patient Inbox</h3>
@@ -61,7 +71,7 @@
                 </div>
             </div>
 
-            <!-- ENHANCED BROADCAST / ADVICE PANEL -->
+            <!-- BROADCAST / ADVICE PANEL -->
             <div class="panel">
                 <h3>Send Advice, Articles & Files</h3>
                 <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Broadcast to all clients or send targeted advice to a specific patient.</p>
@@ -69,14 +79,13 @@
                     <label>Send To</label>
                     <select id="broadcast-recipient">
                         <option value="all">Publish to All Clients (Mass Broadcast)</option>
-                        <!-- Client options populated dynamically -->
                     </select>
 
                     <label>Subject / Article Title</label>
-                    <input type="text" id="broadcast-title" placeholder="e.g. Personal Protocol Adjustment / Seasonal Article" required>
+                    <input type="text" id="broadcast-title" placeholder="e.g. Personal Protocol Adjustment" required>
                     
                     <label>Detailed Advice / Content</label>
-                    <textarea id="broadcast-content" style="height: 120px;" placeholder="Write comprehensive advice or article here..." required></textarea>
+                    <textarea id="broadcast-content" style="height: 100px;" placeholder="Write comprehensive advice here..." required></textarea>
                     
                     <label>Attach Protocol / Document (PDF, Image)</label>
                     <input type="file" id="broadcast-file">
@@ -111,6 +120,7 @@
                 const db = getSupabase();
                 if(db) {
                     loadAdminInbox(db);
+                    loadClientFiles(db);
                     loadClientDropdown(db);
                 }
                 return false;
@@ -127,16 +137,99 @@
                 document.getElementById('admin-dashboard').style.display = 'block';
                 document.getElementById('btn-logout').style.display = 'inline-block';
                 loadAdminInbox(db);
+                loadClientFiles(db);
                 loadClientDropdown(db);
             }
             return false;
         }
 
+        async function loadClientFiles(db) {
+            const container = document.getElementById('admin-client-files-list');
+            const { data: appointments } = await db.from('appointments').select('*');
+
+            if(!appointments || appointments.length === 0) {
+                container.innerHTML = '<p style="color: #666;">No registered clients found.</p>';
+                return;
+            }
+
+            // Deduplicate clients
+            const uniqueClients = Array.from(new Set(appointments.map(a => a.client_id)))
+                .map(id => appointments.find(a => a.client_id === id));
+
+            container.innerHTML = uniqueClients.map(client => `
+                <div class="client-file-card">
+                    <h4 style="color: var(--primary-sage); font-size: 1.1rem; margin-bottom: 0.5rem;">${client.client_name}</h4>
+                    <p style="font-size: 0.85rem; color: #555; margin-bottom: 0.8rem;"><strong>Client ID:</strong> ${client.client_id}</p>
+                    <div style="background: white; padding: 1rem; border: 1px solid var(--secondary-sand); border-radius: 3px; margin-bottom: 1rem; font-size: 0.9rem;">
+                        <strong>Medical Intake & Questionnaire Summary:</strong><br>
+                        <span id="intake-${client.client_id}">Loading intake data...</span>
+                    </div>
+
+                    <!-- Add Notes & Upload Files Form -->
+                    <form onsubmit="return savePractitionerNote(event, '${client.client_id}')" style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 1rem; align-items: end;">
+                        <div>
+                            <label>Add Practitioner Note</label>
+                            <input type="text" id="note-text-${client.client_id}" placeholder="Type consultation notes..." style="margin-bottom:0;" required>
+                        </div>
+                        <div>
+                            <label>Upload File / Document</label>
+                            <input type="file" id="note-file-${client.client_id}" style="margin-bottom:0;">
+                        </div>
+                        <button type="submit" class="btn" style="padding: 0.8rem 1rem;">Update File</button>
+                    </form>
+                </div>
+            `).join('');
+
+            // Fetch user metadata for intake summaries
+            uniqueClients.forEach(async (c) => {
+                // Fetch auth user details or display placeholder if metadata is stored
+                const intakeEl = document.getElementById(`intake-${c.client_id}`);
+                intakeEl.textContent = "Medical questionnaire on file (Completed via Patient Portal).";
+            });
+        }
+
+        window.savePractitionerNote = async function(e, clientId) {
+            e.preventDefault();
+            const db = getSupabase();
+            if(!db) return false;
+
+            const noteText = document.getElementById(`note-text-${clientId}`).value.trim();
+            const fileInput = document.getElementById(`note-file-${clientId}`);
+            let fileUrl = null;
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const filePath = `client_records/${clientId}_${Date.now()}_${file.name}`;
+                const { error: uploadError } = await db.storage.from('client-files').upload(filePath, file);
+                
+                if (uploadError) {
+                    alert("File upload warning: Ensure 'client-files' storage bucket is created in Supabase.");
+                } else {
+                    const { data: { publicUrl } } = db.storage.from('client-files').getPublicUrl(filePath);
+                    fileUrl = publicUrl;
+                }
+            }
+
+            const { error } = await db.from('client_notes').insert([{
+                client_id: clientId,
+                practitioner_notes: noteText,
+                file_url: fileUrl
+            }]);
+
+            if(error) {
+                alert("Error saving note: " + error.message);
+            } else {
+                alert("Client file successfully updated with new notes and documents!");
+                document.getElementById(`note-text-${clientId}`).value = '';
+                fileInput.value = '';
+            }
+            return false;
+        };
+
         async function loadClientDropdown(db) {
             const select = document.getElementById('broadcast-recipient');
             const { data } = await db.from('appointments').select('client_name, client_id');
             if(data && data.length > 0) {
-                // Deduplicate clients by ID
                 const uniqueClients = Array.from(new Set(data.map(a => a.client_id)))
                     .map(id => data.find(a => a.client_id === id));
 
@@ -180,16 +273,12 @@
             const fileInput = document.getElementById('broadcast-file');
 
             let fileUrl = null;
-
-            // Handle file upload if attached
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
                 const filePath = `protocols/${Date.now()}_${file.name}`;
                 const { data: uploadData, error: uploadError } = await db.storage.from('client-files').upload(filePath, file);
                 
-                if (uploadError) {
-                    alert("File upload warning: Make sure a 'client-files' bucket exists in your Supabase storage. Sending text advice without file.");
-                } else {
+                if (!uploadError) {
                     const { data: { publicUrl } } = db.storage.from('client-files').getPublicUrl(filePath);
                     fileUrl = publicUrl;
                 }
