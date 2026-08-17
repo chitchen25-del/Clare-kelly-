@@ -16,6 +16,8 @@
             --text-main: #2C352D;
             --primary-sage: #5A6B5D;
             --secondary-sand: #E3E0D8;
+            --status-paid: #4CAF50;
+            --status-pending: #F57C00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
@@ -24,7 +26,7 @@
             color: var(--text-main);
             line-height: 1.7;
         }
-        h1, h2, h3, th, .nav-logo, .btn { font-family: 'Montserrat', sans-serif; }
+        h1, h2, h3, h4, th, .nav-logo, .btn { font-family: 'Montserrat', sans-serif; }
         
         nav {
             display: flex;
@@ -41,7 +43,7 @@
             display: inline-block;
             padding: 0.8rem 1.5rem;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -52,10 +54,11 @@
             color: white;
             transition: all 0.3s ease;
             text-align: center;
-            appearance: none; /* Strips native iOS button styling */
+            appearance: none; 
         }
         .btn:hover, .btn:active { background-color: #4A594D; }
         .btn-outline { border-color: var(--primary-sage); color: var(--primary-sage); background: transparent; border: 1px solid var(--primary-sage); }
+        .btn-small { padding: 0.4rem 0.8rem; font-size: 0.7rem; border-radius: 3px; }
 
         /* Login Container */
         .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 1rem; }
@@ -63,11 +66,12 @@
         .form-container h2 { margin-bottom: 0.5rem; color: var(--text-main); font-size: 1.5rem; }
         .form-container p { color: #666; font-size: 0.9rem; margin-bottom: 2rem; }
         
-        label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 0.4rem; text-align: left; }
-        input { width: 100%; padding: 0.8rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 3px; font-family: 'Lora', serif; font-size: 1rem; appearance: none; }
+        label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 0.4rem; text-align: left; font-weight: 600;}
+        input, select, textarea { width: 100%; padding: 0.8rem; margin-bottom: 1.2rem; border: 1px solid var(--secondary-sand); border-radius: 3px; font-family: 'Lora', serif; font-size: 1rem; appearance: none; background: white;}
+        textarea { resize: vertical; min-height: 120px; }
 
         /* Dashboard Layout */
-        .dashboard-wrapper { display: none; max-width: 1200px; margin: 3rem auto; padding: 0 5%; }
+        .dashboard-wrapper { display: none; max-width: 1400px; margin: 3rem auto; padding: 0 2%; }
         .dashboard-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; border-bottom: 2px solid var(--secondary-sand); padding-bottom: 1rem; }
         @media (max-width: 768px) {
             .dashboard-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
@@ -75,17 +79,33 @@
         }
         
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
-        @media (max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 1024px) { .dashboard-grid { grid-template-columns: 1fr; } }
         
-        .panel { background: white; padding: 2rem; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid var(--secondary-sand); }
-        .panel h3 { font-size: 1.2rem; color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem; }
+        .panel { background: white; padding: 1.5rem; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem; }
+        .panel h3 { font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem; }
 
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 500px; }
-        .table-responsive { overflow-x: auto; }
-        th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #888; padding-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); }
-        td { padding: 1rem 0; border-bottom: 1px solid #f0f0f0; font-size: 0.95rem; color: var(--text-main); }
-        .badge { background: #E3E0D8; color: var(--text-main); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-family: 'Montserrat', sans-serif; font-weight: 500; white-space: nowrap; }
-        .badge.new { background: var(--primary-sage); color: white; }
+        /* Enhanced Tables */
+        .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 800px; }
+        th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #888; padding-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); }
+        td { padding: 1rem 0.5rem; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; color: var(--text-main); vertical-align: middle; }
+        
+        /* Badges & Toggles */
+        .badge { background: #E3E0D8; color: var(--text-main); padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-family: 'Montserrat', sans-serif; font-weight: 600; white-space: nowrap; }
+        .badge-progression { background: #e8f0fe; color: #1a73e8; border: 1px solid #d2e3fc; }
+        
+        .pay-toggle { border: none; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.7rem; font-family: 'Montserrat', sans-serif; font-weight: 600; cursor: pointer; color: white; transition: all 0.2s; }
+        .pay-pending { background-color: var(--status-pending); }
+        .pay-paid { background-color: var(--status-paid); }
+
+        /* Modal (Digital File Cabinet) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 1rem; }
+        .modal-content { background: white; width: 100%; max-width: 600px; border-radius: 6px; padding: 2.5rem; position: relative; max-height: 90vh; overflow-y: auto; }
+        .close-btn { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.5rem; cursor: pointer; color: #888; border: none; background: none; }
+        .modal-content h2 { color: var(--primary-sage); font-size: 1.6rem; margin-bottom: 0.2rem; }
+        .modal-meta { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; color: #666; margin-bottom: 1.5rem; }
+        .modal-content h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 0.5rem; margin-top: 1.5rem; }
+        .intake-box { background: #F4F3EE; padding: 1rem; border-radius: 4px; font-size: 0.95rem; color: #444; margin-bottom: 1rem; border-left: 3px solid var(--primary-sage); }
 
         footer { text-align: center; padding: 2rem 5%; font-size: 0.85rem; color: #888; margin-top: 2rem; }
     </style>
@@ -97,7 +117,7 @@
         <button id="btn-logout" class="btn btn-outline" style="display: none; padding: 0.5rem 1rem; font-size: 0.8rem;" onclick="location.reload();">Sign Out</button>
     </nav>
 
-    <!-- ADMIN LOGIN SCREEN (Using a native form) -->
+    <!-- ADMIN LOGIN SCREEN -->
     <div id="admin-login" class="login-wrapper">
         <div class="form-container">
             <h2>Authorized Access</h2>
@@ -110,7 +130,6 @@
                 <label>Password</label>
                 <input type="password" id="admin-password" placeholder="••••••••" required>
                 
-                <!-- Explicit submit button natively triggers the form -->
                 <button type="submit" class="btn" style="width: 100%;">Secure Login</button>
             </form>
         </div>
@@ -121,120 +140,207 @@
         <div class="dashboard-header">
             <div>
                 <h1 style="font-size: 2.2rem; font-weight: 300;">Welcome, Clare</h1>
-                <p style="color: #666; font-size: 1.1rem;">Here is your upcoming schedule and clinic overview.</p>
+                <p style="color: #666; font-size: 1.1rem;">Clinic Management & Medical Files Overview.</p>
             </div>
-            <button class="btn btn-outline" onclick="alert('Export initiated.');">Export Patient Files</button>
+            <button class="btn btn-outline" onclick="alert('Exporting active client roster to CSV...');">Export Patient Files</button>
         </div>
 
         <div class="dashboard-grid">
             
+            <!-- LEFT COLUMN: Roster & Tracker -->
             <div class="panel">
-                <h3>Upcoming Appointments</h3>
+                <h3>Today & Upcoming Roster</h3>
                 <div class="table-responsive">
                     <table>
                         <thead>
                             <tr>
                                 <th>Date & Time</th>
                                 <th>Patient Name</th>
-                                <th>Treatment Plan</th>
-                                <th>Status</th>
+                                <th>Treatment & Progression</th>
+                                <th>Invoice Status</th>
+                                <th>Medical File</th>
                             </tr>
                         </thead>
                         <tbody id="appointment-list">
                             <tr>
-                                <td colspan="4" style="text-align: center; color: #888; padding: 2rem;">Loading your schedule...</td>
+                                <td colspan="5" style="text-align: center; color: #888; padding: 2rem;">Loading your schedule...</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- RIGHT COLUMN: Tools -->
             <div>
-                <div class="panel" style="margin-bottom: 2rem;">
-                    <h3>Block Time Off</h3>
-                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.5rem;">Select a date to close the clinic.</p>
+                <!-- FEATURE: Manual Booking Engine -->
+                <div class="panel">
+                    <h3>Manual Booking Override</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.5rem;">Book a client in manually (phone/in-person). This locks the slot on the main website.</p>
                     
-                    <form id="block-form" onsubmit="return blockDate(event)">
-                        <label>Select Date</label>
-                        <input type="date" id="block-date" required>
+                    <form onsubmit="return manualBook(event)">
+                        <label>Client Name</label>
+                        <input type="text" id="manual-name" placeholder="e.g. John Doe" required>
                         
-                        <label>Reason (e.g., Annual Leave)</label>
-                        <input type="text" id="block-reason" placeholder="Out of office...">
+                        <label>Service / Package</label>
+                        <select id="manual-service">
+                            <option value="Initial Consultation">Initial Consultation</option>
+                            <option value="4-Week Reset">4-Week Lymphatic Reset</option>
+                            <option value="6-Week Protocol">6-Week Vitality Protocol</option>
+                            <option value="8-Week Transformation">8-Week Transformation</option>
+                        </select>
                         
-                        <button type="submit" class="btn" style="width: 100%;">Close Clinic</button>
+                        <label>Select Date & Time</label>
+                        <input type="datetime-local" id="manual-date" required>
+                        
+                        <button type="submit" class="btn" style="width: 100%;">Lock in Appointment</button>
                     </form>
                 </div>
 
+                <!-- FEATURE: Block Holidays -->
                 <div class="panel">
-                    <h3>Currently Blocked Dates</h3>
-                    <ul id="blocked-dates-list" style="list-style: none; padding: 0; font-size: 0.9rem; color: #555;">
-                        <li style="padding: 1rem 0;">No upcoming blocked dates.</li>
-                    </ul>
+                    <h3>Block Time Off</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.5rem;">Close the clinic to online bookings.</p>
+                    
+                    <form onsubmit="return blockDate(event)">
+                        <label>Select Date</label>
+                        <input type="date" id="block-date" required>
+                        <button type="submit" class="btn btn-outline" style="width: 100%;">Close Clinic</button>
+                    </form>
                 </div>
             </div>
+
+        </div>
+    </div>
+
+    <!-- FEATURE: Digital Medical File Modal (SOAP Notes) -->
+    <div id="patient-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            
+            <h2 id="modal-name">Patient Name</h2>
+            <p class="modal-meta" id="modal-plan">Treatment Plan & Progression</p>
+            
+            <hr style="border: 0; border-top: 1px solid var(--secondary-sand); margin-bottom: 1.5rem;">
+            
+            <h4>Initial Intake / Patient Goals</h4>
+            <div class="intake-box" id="modal-intake">
+                Client intake notes will appear here.
+            </div>
+            
+            <h4>Practitioner Clinical Notes (SOAP)</h4>
+            <textarea id="modal-notes" placeholder="Type session notes, lymphatic observations, and homework assigned..."></textarea>
+            
+            <button type="button" class="btn" style="width: 100%;" onclick="saveNotes()">Update Secure Medical File</button>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 The Natural Healing Clinic. Admin Portal v3.0</p>
+        <p>&copy; 2026 The Natural Healing Clinic. Admin Portal v4.0</p>
     </footer>
 
-    <!-- INLINE SCRIPT: Executed immediately without waiting for external links -->
+    <!-- INLINE JAVASCRIPT APP LOGIC -->
     <script>
+        // MOCK DATABASE FOR PROTOTYPING
+        const mockAppointments = [
+            { id: 1, date: 'Oct 12, 2026', time: '10:00 AM', name: 'Jane Smith', plan: '6-Week Vitality Protocol', session: 'Session 3 of 6', status: 'paid', intake: 'Suffering from chronic fatigue post-viral infection. Extremely sluggish lymph nodes in the neck and underarms.', notes: 'Session 2 went well. Reduced swelling in cervical lymph nodes. Assigned daily deep breathing exercises.' },
+            { id: 2, date: 'Oct 14, 2026', time: '1:30 PM', name: 'David O\'Connor', plan: 'Initial Consultation', session: 'Session 1 of 1', status: 'pending', intake: 'Persistent lower back pain and feeling constantly inflamed. Interested in functional approach.', notes: '' },
+            { id: 3, date: 'Oct 15, 2026', time: '9:00 AM', name: 'Sarah Jenkins', plan: '4-Week Lymphatic Reset', session: 'Session 4 of 4', status: 'paid', intake: 'Pre-wedding detox and debloat request. General wellness.', notes: 'Final session. Client reports feeling lighter and digestion has significantly improved. Recommended maintenance check in 3 months.' }
+        ];
+
+        // 1. LOGIN LOGIC
         function processAdminLogin(e) {
-            // Prevent the native form from refreshing the page
             if(e) e.preventDefault();
-            
             const email = document.getElementById('admin-email').value.trim();
             const pass = document.getElementById('admin-password').value.trim();
             
             if (email === 'test' && pass === 'test') {
-                // Instantly Swap Views
                 document.getElementById('admin-login').style.display = 'none';
                 document.getElementById('admin-dashboard').style.display = 'block';
                 document.getElementById('btn-logout').style.display = 'inline-block';
-                
-                // Inject Mock Data
-                document.getElementById('appointment-list').innerHTML = `
-                    <tr>
-                        <td style="font-weight: 500; min-width: 140px;">Oct 12, 2026<br><span style="color: #666; font-size: 0.85rem;">10:00 AM</span></td>
-                        <td style="min-width: 120px;">Jane Smith</td>
-                        <td style="min-width: 160px;">6-Week Vitality Protocol</td>
-                        <td><span class="badge new">Confirmed</span></td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight: 500;">Oct 14, 2026<br><span style="color: #666; font-size: 0.85rem;">1:30 PM</span></td>
-                        <td>David O'Connor</td>
-                        <td>Initial Consultation</td>
-                        <td><span class="badge new">Confirmed</span></td>
-                    </tr>
-                `;
-
-                document.getElementById('blocked-dates-list').innerHTML = `
-                    <li style="padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;"><strong>Oct 31, 2026</strong> <br> <span style="color: #888; font-size: 0.85rem;">Bank Holiday</span></li>
-                `;
+                renderRoster();
             } else {
                 alert('Invalid credentials. Use "test" for both email and password.');
             }
             return false;
         }
 
+        // 2. RENDER TABLE WITH TRACKING & PAYMENT
+        function renderRoster() {
+            const tbody = document.getElementById('appointment-list');
+            tbody.innerHTML = mockAppointments.map((appt, index) => {
+                
+                // Payment Button UI Logic
+                let payBtn = appt.status === 'paid' 
+                    ? `<button class="pay-toggle pay-paid" onclick="togglePayment(${index}, this)">Paid ✓</button>`
+                    : `<button class="pay-toggle pay-pending" onclick="togglePayment(${index}, this)">Awaiting Payment</button>`;
+
+                return `
+                    <tr>
+                        <td style="font-weight: 600;">${appt.date}<br><span style="color: #666; font-size: 0.8rem; font-weight: 400;">${appt.time}</span></td>
+                        <td style="font-weight: 500;">${appt.name}</td>
+                        <td>${appt.plan}<br><span class="badge badge-progression" style="margin-top: 4px; display: inline-block;">${appt.session}</span></td>
+                        <td>${payBtn}</td>
+                        <td><button class="btn btn-outline btn-small" onclick="openFile(${index})">View File</button></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 3. PAYMENT TOGGLE LOGIC
+        window.togglePayment = function(index, btnElement) {
+            if (mockAppointments[index].status === 'pending') {
+                mockAppointments[index].status = 'paid';
+                btnElement.className = 'pay-toggle pay-paid';
+                btnElement.innerHTML = 'Paid ✓';
+            } else {
+                mockAppointments[index].status = 'pending';
+                btnElement.className = 'pay-toggle pay-pending';
+                btnElement.innerHTML = 'Awaiting Payment';
+            }
+        };
+
+        // 4. MANUAL BOOKING LOGIC
+        function manualBook(e) {
+            if(e) e.preventDefault();
+            const name = document.getElementById('manual-name').value;
+            const date = document.getElementById('manual-date').value;
+            alert(`Success! ${name} has been manually booked. Their time slot is now locked securely in the database.`);
+            document.getElementById('manual-name').value = '';
+            document.getElementById('manual-date').value = '';
+            return false;
+        }
+
+        // 5. BLOCK DATE LOGIC
         function blockDate(e) {
             if(e) e.preventDefault();
             const date = document.getElementById('block-date').value;
-            const reason = document.getElementById('block-reason').value || 'Unavailable';
-
-            alert(`Success! The clinic is now closed on ${date}.`);
-            const list = document.getElementById('blocked-dates-list');
-            list.innerHTML += `<li style="padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;"><strong>${date}</strong> <br> <span style="color: #888; font-size: 0.85rem;">${reason}</span></li>`;
-            
+            alert(`Clinic is now securely closed for online bookings on ${date}.`);
             document.getElementById('block-date').value = '';
-            document.getElementById('block-reason').value = '';
             return false;
         }
+
+        // 6. MEDICAL FILE MODAL LOGIC (SOAP Notes)
+        window.openFile = function(index) {
+            const appt = mockAppointments[index];
+            document.getElementById('modal-name').innerText = appt.name;
+            document.getElementById('modal-plan').innerText = `${appt.plan} — ${appt.session}`;
+            document.getElementById('modal-intake').innerText = appt.intake || "No intake notes provided.";
+            document.getElementById('modal-notes').value = appt.notes || "";
+            
+            document.getElementById('patient-modal').style.display = 'flex';
+        };
+
+        window.closeModal = function() {
+            document.getElementById('patient-modal').style.display = 'none';
+        };
+
+        window.saveNotes = function() {
+            alert("Clinical notes encrypted and saved to patient's secure file.");
+            closeModal();
+        };
     </script>
 
-    <!-- Supabase Library loaded last so it NEVER blocks the page -->
+    <!-- Supabase Library loaded last -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
 </body>
 </html>
