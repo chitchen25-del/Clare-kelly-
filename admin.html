@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Practitioner Dashboard | The Natural Healing Clinic</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root { --bg-color: #FAFAF7; --text-main: #2C352D; --primary-sage: #5A6B5D; --secondary-sand: #E3E0D8; }
@@ -101,8 +101,8 @@
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
 
         function getSupabase() {
-            if(!window.supabase) {
-                alert("Establishing secure connection. Please try again in 1 second.");
+            if(!window.supabase || !window.supabase.createClient) {
+                alert("Supabase library still initializing. Please try again in 1 second.");
                 return null;
             }
             return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -145,38 +145,41 @@
 
         async function loadClientFiles(db) {
             const container = document.getElementById('admin-client-files-list');
-            const { data: appointments } = await db.from('appointments').select('*');
+            try {
+                const { data: appointments, error } = await db.from('appointments').select('*');
+                if(error || !appointments || appointments.length === 0) {
+                    container.innerHTML = '<p style="color: #666;">No registered clients found yet.</p>';
+                    return;
+                }
 
-            if(!appointments || appointments.length === 0) {
-                container.innerHTML = '<p style="color: #666;">No registered clients found.</p>';
-                return;
-            }
+                const uniqueClients = Array.from(new Set(appointments.map(a => a.client_id)))
+                    .map(id => appointments.find(a => a.client_id === id));
 
-            const uniqueClients = Array.from(new Set(appointments.map(a => a.client_id)))
-                .map(id => appointments.find(a => a.client_id === id));
+                container.innerHTML = uniqueClients.map(client => `
+                    <div class="client-file-card">
+                        <h4 style="color: var(--primary-sage); font-size: 1.1rem; margin-bottom: 0.5rem;">${client.client_name}</h4>
+                        <p style="font-size: 0.85rem; color: #555; margin-bottom: 0.8rem;"><strong>Client ID:</strong> ${client.client_id}</p>
+                        <div style="background: white; padding: 1rem; border: 1px solid var(--secondary-sand); border-radius: 3px; margin-bottom: 1rem; font-size: 0.9rem;">
+                            <strong>Medical Intake & Questionnaire Summary:</strong><br>
+                            <p style="margin-top: 0.5rem; color: #333; white-space: pre-line; background: #FAFAF7; padding: 0.8rem; border-radius: 3px; border-left: 3px solid var(--primary-sage);">${client.intake_details || 'Questionnaire not yet completed by client.'}</p>
+                        </div>
 
-            container.innerHTML = uniqueClients.map(client => `
-                <div class="client-file-card">
-                    <h4 style="color: var(--primary-sage); font-size: 1.1rem; margin-bottom: 0.5rem;">${client.client_name}</h4>
-                    <p style="font-size: 0.85rem; color: #555; margin-bottom: 0.8rem;"><strong>Client ID:</strong> ${client.client_id}</p>
-                    <div style="background: white; padding: 1rem; border: 1px solid var(--secondary-sand); border-radius: 3px; margin-bottom: 1rem; font-size: 0.9rem;">
-                        <strong>Medical Intake & Questionnaire Status:</strong><br>
-                        <span>Questionnaire linked and active via Patient Portal.</span>
+                        <form onsubmit="return savePractitionerNote(event, '${client.client_id}')" style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 1rem; align-items: end;">
+                            <div>
+                                <label>Add Practitioner Note</label>
+                                <input type="text" id="note-text-${client.client_id}" placeholder="Type consultation notes..." style="margin-bottom:0;" required>
+                            </div>
+                            <div>
+                                <label>Upload File / Document</label>
+                                <input type="file" id="note-file-${client.client_id}" style="margin-bottom:0;">
+                            </div>
+                            <button type="submit" class="btn" style="padding: 0.8rem 1rem;">Update File</button>
+                        </form>
                     </div>
-
-                    <form onsubmit="return savePractitionerNote(event, '${client.client_id}')" style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 1rem; align-items: end;">
-                        <div>
-                            <label>Add Practitioner Note</label>
-                            <input type="text" id="note-text-${client.client_id}" placeholder="Type consultation notes..." style="margin-bottom:0;" required>
-                        </div>
-                        <div>
-                            <label>Upload File / Document</label>
-                            <input type="file" id="note-file-${client.client_id}" style="margin-bottom:0;">
-                        </div>
-                        <button type="submit" class="btn" style="padding: 0.8rem 1rem;">Update File</button>
-                    </form>
-                </div>
-            `).join('');
+                `).join('');
+            } catch(err) {
+                container.innerHTML = '<p style="color: red;">Error loading client records.</p>';
+            }
         }
 
         window.savePractitionerNote = async function(e, clientId) {
@@ -293,6 +296,5 @@
             return false;
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
 </body>
 </html>
