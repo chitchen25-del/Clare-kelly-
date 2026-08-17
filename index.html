@@ -709,7 +709,7 @@
                 </div>
 
                 <div class="dash-card">
-                    <h3>Clinic Announcements & Articles</h3>
+                    <h3>Clinic Announcements & Protocols</h3>
                     <div id="client-broadcasts-list">
                         <div class="broadcast-item">
                             <span class="broadcast-date">August 17, 2026</span>
@@ -810,7 +810,6 @@
             const email = document.getElementById('reg-email').value.trim();
             const pass = document.getElementById('reg-password').value.trim();
             
-            // Medical Questionnaire Data
             const age = document.getElementById('reg-age').value.trim();
             const sex = document.getElementById('reg-sex').value;
             const gender = document.getElementById('reg-gender').value.trim();
@@ -822,7 +821,6 @@
             const service = document.getElementById('reg-service').value;
             const date = document.getElementById('reg-date').value;
 
-            // Bundle intake notes for metadata storage
             const intakeSummary = `Age: ${age} | Sex: ${sex} | Gender: ${gender} | Height: ${height} | Weight: ${weight} | Conditions: ${conditions} | Treatment Aims: ${aims}`;
 
             const { data: authData, error: authError } = await db.auth.signUp({
@@ -981,13 +979,20 @@
 
             const { data: bData } = await db.from('broadcasts').select('*').order('created_at', { ascending: false });
             if(bData && bData.length > 0) {
-                broadcastList.innerHTML = bData.map(b => `
-                    <div class="broadcast-item">
-                        <span class="broadcast-date">${new Date(b.created_at).toLocaleDateString()}</span>
-                        <h4>${b.title}</h4>
-                        <p>${b.content}</p>
-                    </div>
-                `).join('');
+                const filteredBroadcasts = bData.filter(b => b.recipient_email === 'all' || b.recipient_email === user.id);
+                
+                if(filteredBroadcasts.length === 0) {
+                    broadcastList.innerHTML = '<p style="color: #555;">No current announcements or targeted advice.</p>';
+                } else {
+                    broadcastList.innerHTML = filteredBroadcasts.map(b => `
+                        <div class="broadcast-item" style="${b.recipient_email !== 'all' ? 'border-left: 4px solid var(--primary-sage); padding-left: 1rem; background: #FAF9F5;' : ''}">
+                            <span class="broadcast-date">${b.recipient_email !== 'all' ? '🔒 Private Protocol / Advice • ' : ''}${new Date(b.created_at).toLocaleDateString()}</span>
+                            <h4>${b.title}</h4>
+                            <p>${b.content}</p>
+                            ${b.file_url ? `<div style="margin-top: 1rem;"><a href="${b.file_url}" target="_blank" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.5rem 1rem;">Download Attached Protocol / File 📄</a></div>` : ''}
+                        </div>
+                    `).join('');
+                }
             }
         }
 
