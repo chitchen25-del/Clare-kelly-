@@ -75,7 +75,7 @@
             border-bottom: 1px solid var(--secondary-sand);
         }
         .hero h1 { font-size: 3.5rem; font-weight: 300; margin-bottom: 1.5rem; letter-spacing: -1px; }
-        .hero p { font-size: 1.25rem; margin-bottom: 2.5rem; color: #555; max-width: 700px; margin-left: auto; margin-right: auto; }
+        .hero p { font-size: 1.25rem; margin-bottom: 2.5rem; color: #555; max-width: 700px; margin-left: auto; margin-right: auto; font-style: italic; }
 
         /* Elegant Two-Column Layouts */
         .section { padding: 7rem 5%; display: flex; flex-wrap: wrap; align-items: center; gap: 5rem; max-width: 1200px; margin: 0 auto; }
@@ -83,27 +83,29 @@
         .section-image { flex: 1; min-width: 320px; height: 500px; border-radius: 4px; background-position: center; background-size: cover; box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
         .section-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); margin-bottom: 1rem; display: block; }
         h2 { font-size: 2.4rem; font-weight: 300; margin-bottom: 1.5rem; line-height: 1.2; }
-
-        /* Services Grid */
-        .services-section { padding: 7rem 5%; background-color: white; border-top: 1px solid var(--secondary-sand); border-bottom: 1px solid var(--secondary-sand); }
-        .services-header { text-align: center; max-width: 700px; margin: 0 auto 4rem auto; }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; max-width: 1200px; margin: 0 auto; }
-        .service-card { padding: 2rem; border-left: 1px solid var(--secondary-sand); transition: all 0.3s ease; }
-        .service-card:hover { border-left-color: var(--primary-sage); background: #FAFAF7; }
-        .service-card h3 { font-size: 1.3rem; margin-bottom: 1rem; font-weight: 500; }
-        .service-card p { color: #666; font-size: 0.95rem; }
+        
+        .help-list { column-count: 2; column-gap: 2rem; list-style: none; color: #555; font-size: 0.95rem; margin-top: 1.5rem; }
+        .help-list li { margin-bottom: 0.8rem; position: relative; padding-left: 1.2rem; }
+        .help-list li::before { content: "✓"; position: absolute; left: 0; color: var(--primary-sage); font-weight: bold; }
 
         /* Pricing Section */
-        .pricing-section { padding: 7rem 5%; background-color: #FAFAF7; }
+        .pricing-section { padding: 7rem 5%; background-color: #FAFAF7; border-top: 1px solid var(--secondary-sand); }
+        .pricing-section.alt { background-color: white; }
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; max-width: 1200px; margin: 4rem auto 0 auto; }
+        
         .price-card { background: var(--card-bg); border: 1px solid var(--secondary-sand); border-radius: 4px; padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
         .price-card.featured { border-color: var(--primary-sage); box-shadow: 0 15px 35px rgba(90, 107, 93, 0.1); transform: translateY(-10px); }
-        .featured-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary-sage); color: white; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.4rem 1.2rem; border-radius: 20px; font-family: 'Montserrat', sans-serif; }
+        
+        .featured-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary-sage); color: white; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.4rem 1.2rem; border-radius: 20px; font-family: 'Montserrat', sans-serif; white-space: nowrap; }
+        .guarantee-badge { display: block; margin: 1.5rem auto; padding: 0.8rem; background: #F4F3EE; border: 1px dashed var(--primary-sage); font-size: 0.85rem; color: var(--text-main); font-weight: 500; }
+        
         .price-title { font-size: 1.3rem; font-weight: 500; margin-bottom: 0.5rem; }
         .price-duration { font-size: 0.85rem; color: #888; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
-        .price-amount { font-size: 2.5rem; font-weight: 300; color: var(--text-main); margin-bottom: 2rem; }
+        .price-amount { font-size: 2.5rem; font-weight: 300; color: var(--text-main); margin-bottom: 1.5rem; }
+        .price-amount span { font-size: 1rem; color: #888; text-decoration: line-through; margin-left: 0.5rem; }
+        
         .price-features { list-style: none; text-align: left; margin-bottom: 2.5rem; font-size: 0.95rem; color: #555; }
-        .price-features li { margin-bottom: 1rem; padding-left: 1.5rem; position: relative; }
+        .price-features li { margin-bottom: 1rem; padding-left: 1.5rem; position: relative; line-height: 1.5; }
         .price-features li::before { content: "—"; position: absolute; left: 0; color: var(--primary-sage); }
 
         /* Interactive FAQ Section */
@@ -124,7 +126,10 @@
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-sage); }
         textarea { resize: vertical; height: 120px; }
 
-        footer { text-align: center; padding: 4rem 5%; font-size: 0.9rem; border-top: 1px solid var(--secondary-sand); color: #888; background: white; }
+        /* Footer */
+        footer { padding: 4rem 5%; border-top: 1px solid var(--secondary-sand); color: #666; background: white; display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1200px; margin: 0 auto; gap: 2rem; }
+        .footer-col h4 { color: var(--primary-sage); margin-bottom: 1rem; font-size: 1rem; }
+        .footer-col p { font-size: 0.9rem; margin-bottom: 0.5rem; }
         
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.4rem; }
@@ -132,18 +137,18 @@
             .nav-links { gap: 0.5rem; }
             .btn { padding: 0.7rem 1rem; font-size: 0.75rem; }
             .price-card.featured { transform: none; }
+            .help-list { column-count: 1; }
+            footer { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
 
     <script>
-        // Bulletproof Screen Routing
         function openScreen(screenId) {
             document.getElementById('screen-home').classList.remove('visible');
             document.getElementById('screen-login').classList.remove('visible');
             document.getElementById('screen-register').classList.remove('visible');
-            
             document.getElementById(screenId).classList.add('visible');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -163,118 +168,172 @@
         
         <section class="hero">
             <h1>Healing From The Inside Out</h1>
-            <p>Specialized lymphatic drainage, functional health, and soft-tissue therapy located in Castletown, Isle of Man.</p>
-            <button type="button" class="btn" onclick="openScreen('screen-register')">Book Your Consultation</button>
+            <p>"Imagine Life Without Pain."</p>
+            <button type="button" class="btn" onclick="openScreen('screen-register')">Make An Appointment</button>
         </section>
 
-        <!-- The Philosophy / About Section -->
+        <!-- Philosophy / About Section -->
         <section class="section">
             <div class="section-image" style="background-image: url('https://images.unsplash.com/photo-1519823551278-64ac92734fb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');"></div>
             <div class="section-text">
-                <span class="section-subtitle">Our Philosophy</span>
-                <h2>Meet Clare Kelly</h2>
-                <p style="margin-bottom: 1.5rem; color: #555;">[PASTE YOUR WEBSITE 'ABOUT' TEXT HERE] At the heart of The Natural Healing Clinic is a dedication to unlocking the body's innate ability to reset and restore itself. Blending advanced targeted lymphatic drainage methods with precision soft-tissue therapy.</p>
-                <p style="color: #555; margin-bottom: 2rem;">Whether you are addressing sluggish lymphatics, recovering from chronic fatigue, or seeking true structural balance, we provide a sophisticated, complementary approach designed to help you move freely and live vibrantly.</p>
-                <button type="button" class="btn btn-outline" onclick="openScreen('screen-register')">Begin Your Journey</button>
+                <span class="section-subtitle">Meet Clare Kelly</span>
+                <h2>Results in a Realistic Timeframe</h2>
+                <p style="margin-bottom: 1.5rem; color: #555;">The main aim of my clinic is to get results, in a quick and realistic timeframe. If you suffer from pain or discomfort, then I am here to help.</p>
+                <p style="color: #555; margin-bottom: 2rem;">I offer a holistic approach to modern-day aches and pains. The Natural Healing Clinic is complementary to the mainstream medical protocol. My treatment plan is focused on two areas: the individual needs of the patient and the best method to obtain results in an ideal timeframe.</p>
+                
+                <h4 style="margin-bottom: 1rem; color: var(--primary-sage);">Do You Need Help With:</h4>
+                <ul class="help-list">
+                    <li>Pain Management</li>
+                    <li>Acute & Chronic Muscular Pain</li>
+                    <li>Neck, Shoulder or Back Pain</li>
+                    <li>Chronic Fatigue & Long Covid</li>
+                    <li>Fibromyalgia</li>
+                    <li>Whiplash & Jaw Complaints (TMD)</li>
+                    <li>Migraines & Sinus Issues</li>
+                    <li>Sports Injuries & Muscle Tears</li>
+                    <li>Digestive Complaints</li>
+                </ul>
             </div>
         </section>
 
-        <!-- Detailed Services Grid -->
-        <section class="services-section">
-            <div class="services-header">
-                <span class="section-subtitle">Clinical Expertise</span>
-                <h2>Comprehensive Treatments</h2>
-            </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <h3>Manual Lymphatic Drainage</h3>
-                    <p>[PASTE TEXT HERE] A highly specialized, gentle technique that stimulates the lymphatic system, encouraging the natural drainage of the lymph. Essential for post-operative recovery, edema, and systemic detox.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Functional Health Analysis</h3>
-                    <p>[PASTE TEXT HERE] Looking beyond the symptoms to find the root cause. We analyze your structural alignment, daily habits, and systemic inflammation to build a sustainable path to recovery.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Advanced Soft-Tissue Therapy</h3>
-                    <p>[PASTE TEXT HERE] Targeted clinical massage and myofascial release designed to break down scar tissue, alleviate chronic pain patterns, and restore full range of motion.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Package Pricing -->
+        <!-- Functional Medicine Pricing -->
         <section class="pricing-section">
             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-                <span class="section-subtitle">Structured Pathways</span>
-                <h2>Treatment Programs</h2>
-                <p style="color: #666;">Structured therapeutic pathways designed to reset your lymphatic system and support long-term functional recovery.</p>
+                <span class="section-subtitle">Root-Cause Analysis</span>
+                <h2>Functional Medicine</h2>
+                <p style="color: #666;">Choose the programme that's right for you right now.</p>
             </div>
             
             <div class="pricing-grid">
                 <div class="price-card">
                     <div>
-                        <div class="price-title">Lymphatic Reset</div>
-                        <div class="price-duration">4-Week Program</div>
-                        <div class="price-amount">£350</div>
+                        <div class="price-title">Performance Health Audit</div>
+                        <div class="price-duration">90-Minute Consultation</div>
+                        <div class="price-amount">£175</div>
                         <ul class="price-features">
-                            <li>Initial clinical assessment</li>
-                            <li>3x Targeted MLD sessions</li>
-                            <li>Custom home care strategy</li>
-                            <li>Portal access & progress logging</li>
+                            <li>Deep-dive Functional Medicine consultation</li>
+                            <li>Full symptom timeline review (standard medicine misses)</li>
+                            <li>Top 3 root-cause priorities identified</li>
+                            <li>Personalised action plan (diet, lifestyle, testing)</li>
                         </ul>
+                        <div class="guarantee-badge">£100 off the 90-Day Programme if you book within 7 days.</div>
                     </div>
-                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Select Program</button>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Health Audit</button>
                 </div>
 
                 <div class="price-card featured">
-                    <div class="featured-badge">Most Popular</div>
+                    <div class="featured-badge">Only 4 Spaces/Month</div>
                     <div>
-                        <div class="price-title">Vitality & Drainage Protocol</div>
-                        <div class="price-duration">6-Week Program</div>
-                        <div class="price-amount">£520</div>
+                        <div class="price-title">The Gut Reset</div>
+                        <div class="price-duration">21-Day Programme</div>
+                        <div class="price-amount">£297 <span>£500</span></div>
                         <ul class="price-features">
-                            <li>Root-cause evaluation</li>
-                            <li>5x Precision MLD & tissue sessions</li>
-                            <li>Anti-inflammatory guidance</li>
-                            <li>Detailed medical file tracking</li>
+                            <li>60-min gut assessment (worth £150)</li>
+                            <li>Personalised 21-day protocol (clear, calm, repair phases)</li>
+                            <li>Curated supplement guidance specific to your results</li>
+                            <li>2x check-in calls (weeks 1 & 3)</li>
+                            <li>Gut symptom tracker + food guidance PDF</li>
                         </ul>
+                        <div class="guarantee-badge">Follow the protocol and feel no different? You get a free follow-up session.</div>
                     </div>
-                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Select Program</button>
+                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Book Gut Reset</button>
                 </div>
 
                 <div class="price-card">
                     <div>
-                        <div class="price-title">Deep Transformation</div>
-                        <div class="price-duration">8-Week Program</div>
-                        <div class="price-amount">£680</div>
+                        <div class="price-title">Comprehensive Protocol</div>
+                        <div class="price-duration">90-Day Programme</div>
+                        <div class="price-amount">£950</div>
                         <ul class="price-features">
-                            <li>Functional health review</li>
-                            <li>7x Advanced therapeutic sessions</li>
-                            <li>Priority scheduling access</li>
-                            <li>Long-term maintenance blueprint</li>
+                            <li>Initial consultation + detailed follow-ups</li>
+                            <li>Fully personalised protocol</li>
+                            <li>Dedicated support and timeline review</li>
+                            <li><i>Note: Supplements and functional tests quoted separately</i></li>
                         </ul>
                     </div>
-                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Select Program</button>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Select 90-Day Plan</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hands-On Treatments Pricing -->
+        <section class="pricing-section alt">
+            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                <span class="section-subtitle">Clinical Therapy</span>
+                <h2>Hands-on Treatments</h2>
+                <p style="color: #666;">Combining Lymphatic Drainage, Bowen Therapy, and Sports/Vagal work.</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div>
+                        <div class="price-title">Initial Consultation</div>
+                        <div class="price-duration">60 Minutes</div>
+                        <div class="price-amount">£80</div>
+                        <ul class="price-features">
+                            <li>Comprehensive medical case history</li>
+                            <li>Postural assessment</li>
+                            <li>Introductory treatment (Bowen, Lymphatic, or Vagal)</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Consultation</button>
+                </div>
+
+                <div class="price-card featured">
+                    <div class="featured-badge">Max 6 New Clients/Month</div>
+                    <div>
+                        <div class="price-title">The Reset Series</div>
+                        <div class="price-duration">3-Week Series</div>
+                        <div class="price-amount">£175 <span>£210</span></div>
+                        <ul class="price-features">
+                            <li>3x Bowen Therapy sessions over 3 weeks</li>
+                            <li>Pre-session intake form & postural assessment</li>
+                            <li>Home care guide between sessions</li>
+                            <li>Priority booking — your slot is secured</li>
+                        </ul>
+                        <div class="guarantee-badge">Complete all 3 sessions with no meaningful improvement? Your 4th is on me.</div>
+                    </div>
+                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Book The Reset Series</button>
+                </div>
+
+                <div class="price-card">
+                    <div>
+                        <div class="price-title">Standard Care</div>
+                        <div class="price-duration">Follow-Ups & Courses</div>
+                        <div class="price-amount">£70 <span style="text-decoration:none; font-size:1rem;">/ session</span></div>
+                        <ul class="price-features">
+                            <li>Single 60-Minute Session: £70</li>
+                            <li>Course of 4 Sessions: Normal recommendation</li>
+                            <li>Course of 6 Bowen Sessions: £390 (Save £30 - pay upfront, use flexibly)</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book a Session</button>
                 </div>
             </div>
         </section>
 
         <!-- Interactive FAQ -->
         <section class="faq-section">
-            <h2 style="text-align: center; margin-bottom: 3rem;">Frequently Asked Questions</h2>
+            <h2 style="text-align: center; margin-bottom: 3rem;">Making An Appointment</h2>
             
             <details>
-                <summary>What should I expect during my first consultation?</summary>
-                <p>[PASTE TEXT HERE] Your initial consultation involves a deep dive into your health history, structural assessment, and a discussion of your specific goals. We will outline a clear pathway and usually perform a brief introductory treatment.</p>
+                <summary>What should I expect during my first visit?</summary>
+                <p>A medical history will be taken on the initial visit, and a list of your medications will be needed. We will discuss your goals and perform a postural assessment before beginning treatment.</p>
             </details>
             
             <details>
-                <summary>How many sessions will I need?</summary>
-                <p>[PASTE TEXT HERE] Healing is not linear, and every body is different. While some clients feel immediate relief, systemic issues like lymphatic congestion usually require a structured 4 to 6-week block to see sustainable change.</p>
+                <summary>What should I wear to my session?</summary>
+                <p>The treatment can be done through loose, thin clothing. Please wear something you feel comfortable moving around in.</p>
             </details>
 
             <details>
-                <summary>Do you offer one-off sessions?</summary>
-                <p>[PASTE TEXT HERE] We prioritize clients enrolled in our structured protocols because consistency yields the best clinical results. However, single maintenance sessions are available for clients who have completed a full program.</p>
+                <summary>How many sessions will I need?</summary>
+                <p>Did you know you can turn the volume down on your pain? It won't happen by itself and you need to be ready to work towards it with me. A course of 4 sessions over a period of a month is the normal recommendation for sustainable results.</p>
+            </details>
+
+            <details>
+                <summary>What is your cancellation policy?</summary>
+                <p>A cancellation period of at least 24 hours before the appointment would be expected to allow us to offer the slot to another client in need.</p>
             </details>
         </section>
     </div>
@@ -291,7 +350,7 @@
             <label>Password</label>
             <input type="password" placeholder="••••••••">
             
-            <button type="button" class="btn" style="width: 100%; margin-top: 1rem;" onclick="alert('The client dashboard logic connects to the real database here once you finalize the frontend design.')">Sign In to Portal</button>
+            <button type="button" class="btn" style="width: 100%; margin-top: 1rem;" onclick="alert('Client authentication will securely connect to Supabase here.')">Sign In to Portal</button>
         </div>
     </div>
 
@@ -315,10 +374,12 @@
             
             <label>Select Treatment Pathway</label>
             <select>
-                <option>Single Consult Appointment (£90)</option>
-                <option>4-Week Lymphatic Reset Block (£350)</option>
-                <option>6-Week Vitality Protocol (£520)</option>
-                <option>8-Week Deep Transformation (£680)</option>
+                <option value="consult">Initial Hands-on Consultation (£80)</option>
+                <option value="reset-series">The Reset Series - 3 Weeks (£175)</option>
+                <option value="single">Single Follow-Up Session (£70)</option>
+                <option value="health-audit">Performance Health Audit (£175)</option>
+                <option value="gut-reset">The Gut Reset - 21 Days (£297)</option>
+                <option value="90-day">90-Day FM Programme (£950)</option>
             </select>
             
             <label>Preferred First Session Date</label>
@@ -328,8 +389,25 @@
         </div>
     </div>
 
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2026 The Natural Healing Clinic. 8 Malew Street, Castletown, Isle of Man.</p>
+        <div class="footer-col">
+            <h4>The Natural Healing Clinic</h4>
+            <p>1st Floor, 8-10 Malew Street</p>
+            <p>Castletown, Isle of Man</p>
+            <p>IM9 1AB</p>
+        </div>
+        <div class="footer-col">
+            <h4>Contact</h4>
+            <p>Tel: 07624 202 121</p>
+            <p>Email: clare@claretownsend.co.uk</p>
+        </div>
+        <div class="footer-col">
+            <h4>Opening Hours</h4>
+            <p>Monday & Friday: 10:00 - 15:00</p>
+            <p>Wednesday: 10:00 - 12:00</p>
+            <p>Saturday: 09:00 - 18:00</p>
+        </div>
     </footer>
 
 </body>
