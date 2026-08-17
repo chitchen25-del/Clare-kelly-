@@ -136,11 +136,11 @@
         #auth-container {
             background: white;
             color: var(--text-main);
-            max-width: 420px;
+            max-width: 440px;
             margin: 2rem auto;
             padding: 2.5rem;
-            border-radius: 4px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 6px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
             text-align: left;
         }
         .auth-tabs {
@@ -151,12 +151,13 @@
         .auth-tab {
             flex: 1;
             text-align: center;
-            padding: 0.5rem;
+            padding: 0.75rem;
             cursor: pointer;
             font-family: 'Montserrat', sans-serif;
             font-size: 0.9rem;
             font-weight: 500;
             color: #666;
+            transition: color 0.3s ease;
         }
         .auth-tab.active {
             color: var(--primary-sage);
@@ -165,14 +166,24 @@
         .form-panel { display: none; }
         .form-panel.active { display: block; }
         
+        #auth-container label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #555;
+            margin-bottom: 0.3rem;
+            font-family: 'Montserrat', sans-serif;
+        }
         #auth-container input, #auth-container select {
             width: 100%;
             padding: 0.8rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
             border: 1px solid var(--secondary-sand);
             border-radius: 3px;
             background: #fff;
             font-family: 'Lora', serif;
+            font-size: 1rem;
         }
         
         footer { text-align: center; padding: 3rem 5%; font-size: 0.9rem; border-top: 1px solid var(--secondary-sand); color: #666; }
@@ -274,28 +285,28 @@
 
             <!-- Login Form -->
             <div id="login-panel" class="form-panel active">
-                <label style="font-size: 0.85rem; color: #666;">Email Address</label>
-                <input type="email" id="login-email" placeholder="you@example.com">
-                <label style="font-size: 0.85rem; color: #666;">Password</label>
-                <input type="password" id="login-password" placeholder="••••••••">
+                <label>Email Address or Username</label>
+                <input type="text" id="login-email" placeholder="test or you@example.com">
+                <label>Password</label>
+                <input type="password" id="login-password" placeholder="test or password">
                 <button id="login-submit-btn" class="btn" style="width: 100%; margin-top: 0.5rem;">Sign In</button>
             </div>
 
             <!-- Registration & Booking Form -->
             <div id="signup-panel" class="form-panel">
-                <label style="font-size: 0.85rem; color: #666;">Full Name</label>
+                <label>Full Name</label>
                 <input type="text" id="signup-name" placeholder="Clare Kelly">
-                <label style="font-size: 0.85rem; color: #666;">Email Address</label>
+                <label>Email Address</label>
                 <input type="email" id="signup-email" placeholder="you@example.com">
-                <label style="font-size: 0.85rem; color: #666;">Create Password</label>
+                <label>Create Password</label>
                 <input type="password" id="signup-password" placeholder="••••••••">
-                <label style="font-size: 0.85rem; color: #666;">Select Treatment Program</label>
+                <label>Select Treatment Program</label>
                 <select id="signup-program">
                     <option value="4-Week Reset">4-Week Lymphatic Reset (£350)</option>
                     <option value="6-Week Protocol">6-Week Vitality & Drainage Protocol (£520)</option>
                     <option value="8-Week Transformation">8-Week Deep Transformation (£680)</option>
                 </select>
-                <label style="font-size: 0.85rem; color: #666;">Preferred Treatment Date</label>
+                <label>Preferred Treatment Date</label>
                 <input type="date" id="signup-date">
                 <button id="signup-submit-btn" class="btn" style="width: 100%; margin-top: 0.5rem;">Create Account & Book</button>
             </div>
@@ -330,7 +341,6 @@
             loginPanel.classList.remove('active');
         });
 
-        // Helper function when clicking a package above
         window.selectProgram = function(programName) {
             tabSignup.click();
             const selectElement = document.getElementById('signup-program');
@@ -342,10 +352,16 @@
             }
         };
 
+        // Sign In Logic (Includes test account fallback: user "test", pass "test")
         document.getElementById('login-submit-btn').addEventListener('click', async () => {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value.trim();
             
+            if (email === 'test' && password === 'test') {
+                alert('Test sign-in successful! Welcome back to The Natural Healing Clinic portal.');
+                return;
+            }
+
             const { data, error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) {
                 alert('Login failed: ' + error.message);
@@ -354,6 +370,7 @@
             }
         });
 
+        // Registration & Booking Logic
         document.getElementById('signup-submit-btn').addEventListener('click', async () => {
             const name = document.getElementById('signup-name').value;
             const email = document.getElementById('signup-email').value;
