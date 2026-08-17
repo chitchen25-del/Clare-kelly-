@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>The Natural Healing Clinic | Isle of Man</title>
     
     <!-- Import Premium Fonts -->
@@ -18,7 +18,7 @@
             --secondary-sand: #E3E0D8;
             --card-bg: #FFFFFF;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: 'Lora', serif;
             background-color: var(--bg-color);
@@ -47,23 +47,24 @@
             padding: 0.8rem 2rem;
             text-decoration: none;
             font-size: 0.9rem;
-            font-weight: 500;
+            font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
             border-radius: 3px;
             cursor: pointer;
-            border: 1px solid transparent;
+            border: none;
             background-color: var(--primary-sage);
             color: white;
             transition: background 0.3s ease;
             text-align: center;
+            appearance: none;
         }
-        .btn:hover { background-color: #4A594D; }
-        .btn-outline { border-color: var(--primary-sage); color: var(--primary-sage); background: transparent; }
+        .btn:hover, .btn:active { background-color: #4A594D; }
+        .btn-outline { border-color: var(--primary-sage); color: var(--primary-sage); background: transparent; border: 1px solid var(--primary-sage); }
         .btn-outline:hover { background-color: var(--primary-sage); color: white; }
 
         /* Screen Controller */
-        .page-screen { display: none; animation: fadeIn 0.5s ease; }
+        .page-screen { display: none; animation: fadeIn 0.4s ease; }
         .page-screen.visible { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -120,11 +121,22 @@
         /* Forms Container */
         .form-container { max-width: 550px; margin: 5rem auto; background: white; padding: 3.5rem; border-radius: 4px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 1px solid var(--secondary-sand); }
         .form-container h2 { text-align: center; margin-bottom: 1rem; font-size: 1.8rem; }
+        .form-container p.subtitle { text-align: center; color: #666; margin-bottom: 2rem; }
         
-        label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif; }
-        input, select, textarea { width: 100%; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 3px; background: #fff; font-family: 'Lora', serif; font-size: 1rem; transition: border-color 0.3s; }
+        label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif; font-weight: 600;}
+        input, select, textarea { width: 100%; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 3px; background: #fff; font-family: 'Lora', serif; font-size: 1rem; appearance: none; transition: border-color 0.3s; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-sage); }
         textarea { resize: vertical; height: 120px; }
+
+        /* Client Dashboard */
+        .dashboard-container { max-width: 800px; margin: 5rem auto; padding: 0 5%; }
+        .dash-header { border-bottom: 2px solid var(--secondary-sand); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+        .dash-card { background: white; padding: 2rem; border-radius: 4px; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 1.5rem; }
+        .appt-item { padding: 1.5rem 0; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+        .appt-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .appt-date { font-weight: 600; font-family: 'Montserrat', sans-serif; font-size: 1.1rem; color: var(--primary-sage); }
+        .appt-service { color: #555; font-size: 0.95rem; margin-top: 0.3rem; }
+        .status-badge { background: #e8f0fe; color: #1a73e8; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-family: 'Montserrat', sans-serif; font-weight: 600; text-transform: uppercase;}
 
         /* Footer */
         footer { padding: 4rem 5%; border-top: 1px solid var(--secondary-sand); color: #666; background: white; display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1200px; margin: 0 auto; gap: 2rem; }
@@ -139,16 +151,16 @@
             .price-card.featured { transform: none; }
             .help-list { column-count: 1; }
             footer { flex-direction: column; text-align: center; }
+            .appt-item { flex-direction: column; align-items: flex-start; gap: 1rem; }
         }
     </style>
 </head>
 <body>
 
     <script>
-        function openScreen(screenId) {
-            document.getElementById('screen-home').classList.remove('visible');
-            document.getElementById('screen-login').classList.remove('visible');
-            document.getElementById('screen-register').classList.remove('visible');
+        // Bulletproof Screen Routing (Runs instantly)
+        window.openScreen = function(screenId) {
+            document.querySelectorAll('.page-screen').forEach(el => el.classList.remove('visible'));
             document.getElementById(screenId).classList.add('visible');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -158,12 +170,13 @@
     <nav>
         <div class="nav-logo" onclick="openScreen('screen-home')">The Natural Healing Clinic</div>
         <div class="nav-links">
-            <button type="button" class="btn btn-outline" onclick="openScreen('screen-login')">Client Portal</button>
-            <button type="button" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
+            <button type="button" id="nav-portal-btn" class="btn btn-outline" onclick="openScreen('screen-login')">Client Portal</button>
+            <button type="button" id="nav-book-btn" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
+            <button type="button" id="nav-logout-btn" class="btn btn-outline" style="display: none;" onclick="window.processLogout()">Sign Out</button>
         </div>
     </nav>
 
-    <!-- ================= SCREEN 1: THE NEW PREMIUM HOME ================= -->
+    <!-- ================= SCREEN 1: THE PREMIUM HOME ================= -->
     <div id="screen-home" class="page-screen visible">
         
         <section class="hero">
@@ -238,21 +251,6 @@
                     </div>
                     <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Book Gut Reset</button>
                 </div>
-
-                <div class="price-card">
-                    <div>
-                        <div class="price-title">Comprehensive Protocol</div>
-                        <div class="price-duration">90-Day Programme</div>
-                        <div class="price-amount">£950</div>
-                        <ul class="price-features">
-                            <li>Initial consultation + detailed follow-ups</li>
-                            <li>Fully personalised protocol</li>
-                            <li>Dedicated support and timeline review</li>
-                            <li><i>Note: Supplements and functional tests quoted separately</i></li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Select 90-Day Plan</button>
-                </div>
             </div>
         </section>
 
@@ -295,20 +293,6 @@
                     </div>
                     <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Book The Reset Series</button>
                 </div>
-
-                <div class="price-card">
-                    <div>
-                        <div class="price-title">Standard Care</div>
-                        <div class="price-duration">Follow-Ups & Courses</div>
-                        <div class="price-amount">£70 <span style="text-decoration:none; font-size:1rem;">/ session</span></div>
-                        <ul class="price-features">
-                            <li>Single 60-Minute Session: £70</li>
-                            <li>Course of 4 Sessions: Normal recommendation</li>
-                            <li>Course of 6 Bowen Sessions: £390 (Save £30 - pay upfront, use flexibly)</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book a Session</button>
-                </div>
             </div>
         </section>
 
@@ -330,11 +314,6 @@
                 <summary>How many sessions will I need?</summary>
                 <p>Did you know you can turn the volume down on your pain? It won't happen by itself and you need to be ready to work towards it with me. A course of 4 sessions over a period of a month is the normal recommendation for sustainable results.</p>
             </details>
-
-            <details>
-                <summary>What is your cancellation policy?</summary>
-                <p>A cancellation period of at least 24 hours before the appointment would be expected to allow us to offer the slot to another client in need.</p>
-            </details>
         </section>
     </div>
 
@@ -342,50 +321,76 @@
     <div id="screen-login" class="page-screen">
         <div class="form-container">
             <h2>Client Portal Login</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Access your secure treatment progression files and manage bookings.</p>
+            <p class="subtitle">Access your secure treatment progression files and manage bookings.</p>
             
-            <label>Email Address</label>
-            <input type="text" placeholder="you@example.com">
-            
-            <label>Password</label>
-            <input type="password" placeholder="••••••••">
-            
-            <button type="button" class="btn" style="width: 100%; margin-top: 1rem;" onclick="alert('Client authentication will securely connect to Supabase here.')">Sign In to Portal</button>
+            <!-- Native iOS-Proof Form -->
+            <form onsubmit="return window.processClientLogin(event)">
+                <label>Email Address</label>
+                <input type="email" id="login-email" placeholder="you@example.com" autocorrect="off" autocapitalize="none" required>
+                
+                <label>Password</label>
+                <input type="password" id="login-password" placeholder="••••••••" required>
+                
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Sign In to Portal</button>
+            </form>
         </div>
     </div>
 
-    <!-- ================= SCREEN 3: REGISTER & BOOK (INTAKE) ================= -->
+    <!-- ================= SCREEN 3: REGISTER & BOOK ================= -->
     <div id="screen-register" class="page-screen">
         <div class="form-container" style="max-width: 620px;">
             <h2>Client Registration</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Create your patient file and request your initial booking.</p>
+            <p class="subtitle">Create your patient file and request your initial booking.</p>
             
-            <label>Full Name</label>
-            <input type="text" placeholder="e.g. Jane Smith">
-            
-            <label>Email Address</label>
-            <input type="email" placeholder="you@example.com">
-            
-            <label>Create Secure Password</label>
-            <input type="password" placeholder="••••••••">
-            
-            <label>Primary Health Goals / Symptoms</label>
-            <textarea placeholder="Please describe any issues, lymphatic congestion, or pain points..."></textarea>
-            
-            <label>Select Treatment Pathway</label>
-            <select>
-                <option value="consult">Initial Hands-on Consultation (£80)</option>
-                <option value="reset-series">The Reset Series - 3 Weeks (£175)</option>
-                <option value="single">Single Follow-Up Session (£70)</option>
-                <option value="health-audit">Performance Health Audit (£175)</option>
-                <option value="gut-reset">The Gut Reset - 21 Days (£297)</option>
-                <option value="90-day">90-Day FM Programme (£950)</option>
-            </select>
-            
-            <label>Preferred First Session Date</label>
-            <input type="datetime-local">
-            
-            <button type="button" class="btn" style="width: 100%; margin-top: 1rem;" onclick="alert('Registration complete! Welcome to the clinic.');">Secure Booking & Register</button>
+            <!-- Native iOS-Proof Form -->
+            <form onsubmit="return window.processRegistration(event)">
+                <label>Full Name</label>
+                <input type="text" id="reg-name" placeholder="e.g. Jane Smith" required>
+                
+                <label>Email Address</label>
+                <input type="email" id="reg-email" placeholder="you@example.com" autocorrect="off" autocapitalize="none" required>
+                
+                <label>Create Secure Password</label>
+                <input type="password" id="reg-password" placeholder="••••••••" required>
+                
+                <label>Primary Health Goals / Symptoms</label>
+                <textarea id="reg-notes" placeholder="Please describe any issues, lymphatic congestion, or pain points..."></textarea>
+                
+                <label>Select Treatment Pathway</label>
+                <select id="reg-service">
+                    <option value="Initial Consultation (£80)">Initial Hands-on Consultation (£80)</option>
+                    <option value="The Reset Series (£175)">The Reset Series - 3 Weeks (£175)</option>
+                    <option value="Performance Health Audit (£175)">Performance Health Audit (£175)</option>
+                    <option value="The Gut Reset (£297)">The Gut Reset - 21 Days (£297)</option>
+                </select>
+                
+                <label>Preferred First Session Date</label>
+                <input type="datetime-local" id="reg-date" required>
+                
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Secure Booking & Register</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= SCREEN 4: SECURE CLIENT DASHBOARD ================= -->
+    <div id="screen-dashboard" class="page-screen">
+        <div class="dashboard-container">
+            <div class="dash-header">
+                <h2>Your Patient Portal</h2>
+                <p style="color: #666;">Welcome back. Manage your health journey and upcoming sessions below.</p>
+            </div>
+
+            <div class="dash-card">
+                <h3 style="color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Upcoming Appointments</h3>
+                
+                <div id="client-appointments-list">
+                    <p style="color: #888;">Loading your secure schedule...</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button type="button" class="btn" onclick="openScreen('screen-register')">Book Another Session</button>
+            </div>
         </div>
     </div>
 
@@ -410,5 +415,146 @@
         </div>
     </footer>
 
+    <!-- INLINE JAVASCRIPT LOGIC (Runs securely on mobile) -->
+    <script>
+        const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
+
+        function getSupabase() {
+            if(!window.supabase) {
+                alert("Establishing secure connection. Please try again in 1 second.");
+                return null;
+            }
+            return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
+
+        // --- LOGIN LOGIC ---
+        window.processClientLogin = async function(e) {
+            if(e) e.preventDefault();
+            const db = getSupabase();
+            if(!db) return false;
+
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-password').value.trim();
+
+            const { data, error } = await db.auth.signInWithPassword({ email: email, password: pass });
+            
+            if (error) {
+                alert('Login failed: ' + error.message);
+            } else {
+                updateNavState(true);
+                openScreen('screen-dashboard');
+                loadClientDashboard(db, data.user.id);
+            }
+            return false;
+        };
+
+        // --- REGISTRATION & LIVE BOOKING LOGIC ---
+        window.processRegistration = async function(e) {
+            if(e) e.preventDefault();
+            const db = getSupabase();
+            if(!db) return false;
+
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass = document.getElementById('reg-password').value.trim();
+            const notes = document.getElementById('reg-notes').value.trim();
+            const service = document.getElementById('reg-service').value;
+            const date = document.getElementById('reg-date').value;
+
+            // 1. Create the secure user account
+            const { data: authData, error: authError } = await db.auth.signUp({
+                email: email,
+                password: pass,
+                options: { data: { full_name: name, intake_notes: notes } }
+            });
+
+            if (authError) {
+                alert('Registration Error: ' + authError.message);
+                return false;
+            }
+
+            // 2. Lock in the appointment to the database
+            const userId = authData.user?.id;
+            if(userId) {
+                const { error: apptError } = await db.from('appointments').insert([{
+                    client_id: userId,
+                    client_name: name,
+                    service_name: service,
+                    appointment_time: date,
+                    status: 'confirmed'
+                }]);
+
+                if(apptError) {
+                    // 23505 is the SQL error code for violating our unique time constraint
+                    if(apptError.code === '23505') {
+                        alert("We're sorry, but another client just booked that exact time slot! Please choose another time.");
+                    } else {
+                        alert("Account created, but booking failed: " + apptError.message);
+                    }
+                    return false;
+                }
+            }
+
+            alert('Registration complete! Your appointment is securely locked in.');
+            updateNavState(true);
+            openScreen('screen-dashboard');
+            loadClientDashboard(db, userId);
+            
+            return false;
+        };
+
+        // --- DASHBOARD DATA LOADER ---
+        async function loadClientDashboard(db, userId) {
+            const listElement = document.getElementById('client-appointments-list');
+            listElement.innerHTML = '<p style="color: #888;">Fetching your records...</p>';
+
+            const { data, error } = await db.from('appointments')
+                                          .select('*')
+                                          .eq('client_id', userId)
+                                          .order('appointment_time', { ascending: true });
+
+            if(error) {
+                listElement.innerHTML = '<p style="color: red;">Could not load appointments.</p>';
+                return;
+            }
+
+            if(!data || data.length === 0) {
+                listElement.innerHTML = '<p style="color: #555;">You have no upcoming appointments booked.</p>';
+            } else {
+                listElement.innerHTML = data.map(appt => {
+                    const formattedDate = new Date(appt.appointment_time).toLocaleString('en-GB', { 
+                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit' 
+                    });
+                    return `
+                        <div class="appt-item">
+                            <div>
+                                <div class="appt-date">${formattedDate}</div>
+                                <div class="appt-service">${appt.service_name}</div>
+                            </div>
+                            <div class="status-badge">${appt.status}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // --- LOGOUT LOGIC ---
+        window.processLogout = async function() {
+            const db = getSupabase();
+            if(db) await db.auth.signOut();
+            updateNavState(false);
+            openScreen('screen-home');
+        };
+
+        function updateNavState(isLoggedIn) {
+            document.getElementById('nav-portal-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+            document.getElementById('nav-book-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+            document.getElementById('nav-logout-btn').style.display = isLoggedIn ? 'inline-block' : 'none';
+        }
+    </script>
+
+    <!-- Supabase CDN loaded safely at the end -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
 </body>
 </html>
