@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Practitioner Dashboard | The Natural Healing Clinic</title>
     
     <!-- Supabase Library -->
@@ -20,7 +20,7 @@
             --primary-sage: #5A6B5D;
             --secondary-sand: #E3E0D8;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: 'Lora', serif;
             background-color: var(--bg-color);
@@ -43,26 +43,29 @@
         
         .btn {
             display: inline-block;
-            padding: 0.6rem 1.5rem;
+            padding: 0.8rem 1.5rem;
             text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
+            font-size: 0.9rem;
+            font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: pointer;
-            border: 1px solid transparent;
+            border: none;
             background-color: var(--primary-sage);
             color: white;
             transition: all 0.3s ease;
+            text-align: center;
+            /* Critical for iOS Safari to recognize it as clickable */
+            touch-action: manipulation; 
         }
-        .btn:hover { background-color: #4A594D; }
-        .btn-outline { border-color: var(--primary-sage); color: var(--primary-sage); background: transparent; }
+        .btn:hover, .btn:active { background-color: #4A594D; }
+        .btn-outline { border-color: var(--primary-sage); color: var(--primary-sage); background: transparent; border: 1px solid var(--primary-sage); }
 
         /* Login Container */
-        .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
+        .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 1rem; }
         .form-container { width: 100%; max-width: 400px; background: white; padding: 3rem 2.5rem; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid var(--secondary-sand); text-align: center; }
-        .form-container h2 { margin-bottom: 0.5rem; color: var(--text-main); }
+        .form-container h2 { margin-bottom: 0.5rem; color: var(--text-main); font-size: 1.5rem; }
         .form-container p { color: #666; font-size: 0.9rem; margin-bottom: 2rem; }
         
         label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 0.4rem; text-align: left; }
@@ -71,6 +74,10 @@
         /* Dashboard Layout */
         .dashboard-wrapper { display: none; max-width: 1200px; margin: 3rem auto; padding: 0 5%; }
         .dashboard-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; border-bottom: 2px solid var(--secondary-sand); padding-bottom: 1rem; }
+        @media (max-width: 768px) {
+            .dashboard-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .dashboard-header .btn { width: 100%; }
+        }
         
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
         @media (max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } }
@@ -79,35 +86,37 @@
         .panel h3 { font-size: 1.2rem; color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem; }
 
         /* Tables */
-        table { width: 100%; border-collapse: collapse; text-align: left; }
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 500px; }
         th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #888; padding-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); }
         td { padding: 1rem 0; border-bottom: 1px solid #f0f0f0; font-size: 0.95rem; color: var(--text-main); }
         tr:last-child td { border-bottom: none; }
-        .badge { background: #E3E0D8; color: var(--text-main); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-family: 'Montserrat', sans-serif; font-weight: 500; }
+        .badge { background: #E3E0D8; color: var(--text-main); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-family: 'Montserrat', sans-serif; font-weight: 500; white-space: nowrap; }
         .badge.new { background: var(--primary-sage); color: white; }
+
+        footer { text-align: center; padding: 2rem 5%; font-size: 0.85rem; color: #888; margin-top: 2rem; }
     </style>
 </head>
 <body>
 
     <nav>
         <div class="nav-logo">Practitioner Admin</div>
-        <button type="button" id="logout-btn" class="btn btn-outline" style="display: none;" onclick="location.reload()">Sign Out</button>
+        <button id="btn-logout" class="btn btn-outline" style="display: none; padding: 0.5rem 1rem; font-size: 0.8rem;">Sign Out</button>
     </nav>
 
     <!-- ADMIN LOGIN SCREEN -->
     <div id="admin-login" class="login-wrapper">
         <div class="form-container">
-            <h2>Authorized Access Only</h2>
+            <h2>Authorized Access</h2>
             <p>Please sign in to the practitioner portal.</p>
             
             <label>Admin Email</label>
-            <input type="text" id="admin-email" placeholder="clare@...">
+            <input type="text" id="admin-email" placeholder="clare@..." autocorrect="off" autocapitalize="none">
             
             <label>Password</label>
             <input type="password" id="admin-password" placeholder="••••••••">
             
-            <!-- Type explicitly set to button to prevent Safari blocking -->
-            <button type="button" class="btn" style="width: 100%;" onclick="window.processAdminLogin()">Secure Login</button>
+            <button id="btn-login" class="btn" style="width: 100%;">Secure Login</button>
         </div>
     </div>
 
@@ -118,7 +127,7 @@
                 <h1 style="font-size: 2.2rem; font-weight: 300;">Welcome, Clare</h1>
                 <p style="color: #666; font-size: 1.1rem;">Here is your upcoming schedule and clinic overview.</p>
             </div>
-            <button type="button" class="btn" onclick="alert('Client database export initiated.')">Download Patient Files</button>
+            <button id="btn-download" class="btn btn-outline">Export Patient Files</button>
         </div>
 
         <div class="dashboard-grid">
@@ -126,21 +135,23 @@
             <!-- LEFT COLUMN: Roster -->
             <div class="panel">
                 <h3>Upcoming Appointments</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date & Time</th>
-                            <th>Patient Name</th>
-                            <th>Treatment Plan</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="appointment-list">
-                        <tr>
-                            <td colspan="4" style="text-align: center; color: #888;">Loading your schedule...</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Patient Name</th>
+                                <th>Treatment Plan</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointment-list">
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: #888; padding: 2rem;">Loading your schedule...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- RIGHT COLUMN: Schedule Controls -->
@@ -155,13 +166,13 @@
                     <label>Reason (e.g., Annual Leave)</label>
                     <input type="text" id="block-reason" placeholder="Out of office...">
                     
-                    <button type="button" class="btn" style="width: 100%;" onclick="window.blockDate()">Close Clinic on Date</button>
+                    <button id="btn-block" class="btn" style="width: 100%;">Close Clinic</button>
                 </div>
 
                 <div class="panel">
                     <h3>Currently Blocked Dates</h3>
                     <ul id="blocked-dates-list" style="list-style: none; padding: 0; font-size: 0.9rem; color: #555;">
-                        <li>No upcoming blocked dates.</li>
+                        <li style="padding: 1rem 0;">No upcoming blocked dates.</li>
                     </ul>
                 </div>
             </div>
@@ -169,90 +180,95 @@
         </div>
     </div>
 
+    <footer>
+        <p>&copy; 2026 The Natural Healing Clinic. Admin Portal v2.0</p>
+    </footer>
+
+    <!-- Native Event Listeners (Bulletproof for iOS Safari) -->
     <script>
-        // MOCK DATA GENERATOR (Attached to window so it always fires)
-        window.loadMockData = function() {
-            document.getElementById('appointment-list').innerHTML = `
-                <tr>
-                    <td style="font-weight: 500;">Oct 12, 2026 - 10:00 AM</td>
-                    <td>Jane Smith</td>
-                    <td>6-Week Vitality Protocol</td>
-                    <td><span class="badge new">Confirmed</span></td>
-                </tr>
-                <tr>
-                    <td style="font-weight: 500;">Oct 14, 2026 - 1:30 PM</td>
-                    <td>David O'Connor</td>
-                    <td>Initial Consultation</td>
-                    <td><span class="badge new">Confirmed</span></td>
-                </tr>
-                <tr>
-                    <td style="font-weight: 500;">Oct 15, 2026 - 9:00 AM</td>
-                    <td>Sarah Jenkins</td>
-                    <td>4-Week Lymphatic Reset</td>
-                    <td><span class="badge">Session 2/4</span></td>
-                </tr>
-            `;
-
-            document.getElementById('blocked-dates-list').innerHTML = `
-                <li style="padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;"><strong>2026-10-31</strong> - Bank Holiday</li>
-                <li style="padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;"><strong>2026-11-05</strong> - Practitioner Training Course</li>
-            `;
-        };
-
-        // ADMIN LOGIN LOGIC (Attached to window, runs before database connects)
-        window.processAdminLogin = async function() {
-            const email = document.getElementById('admin-email').value.trim();
-            const password = document.getElementById('admin-password').value.trim();
+        document.addEventListener('DOMContentLoaded', function() {
             
-            // Bypass logic for 'test' runs instantly
-            if (email === 'test' && password === 'test') {
-                document.getElementById('admin-login').style.display = 'none';
-                document.getElementById('admin-dashboard').style.display = 'block';
-                document.getElementById('logout-btn').style.display = 'inline-block';
-                window.loadMockData(); 
-                return;
-            }
+            // Get Elements
+            const loginBtn = document.getElementById('btn-login');
+            const logoutBtn = document.getElementById('btn-logout');
+            const blockBtn = document.getElementById('btn-block');
+            const downloadBtn = document.getElementById('btn-download');
 
-            if (!email || !password) {
-                alert('Please enter your admin credentials.');
-                return;
-            }
-
-            // Real database attempt
-            try {
-                const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
-                const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU'; 
-                const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            // 1. LOGIN LOGIC
+            loginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('admin-email').value.trim();
+                const pass = document.getElementById('admin-password').value.trim();
                 
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-                if (error) {
-                    alert('Access Denied: ' + error.message);
-                } else {
+                if (email === 'test' && pass === 'test') {
+                    // Instantly Swap Views
                     document.getElementById('admin-login').style.display = 'none';
                     document.getElementById('admin-dashboard').style.display = 'block';
-                    document.getElementById('logout-btn').style.display = 'inline-block';
-                    alert("Real database login successful. (Mock data loading for layout review).");
-                    window.loadMockData();
+                    logoutBtn.style.display = 'inline-block';
+                    
+                    // Inject Mock Data
+                    document.getElementById('appointment-list').innerHTML = `
+                        <tr>
+                            <td style="font-weight: 500; min-width: 140px;">Oct 12, 2026<br><span style="color: #666; font-size: 0.85rem;">10:00 AM</span></td>
+                            <td style="min-width: 120px;">Jane Smith</td>
+                            <td style="min-width: 160px;">6-Week Vitality Protocol</td>
+                            <td><span class="badge new">Confirmed</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 500;">Oct 14, 2026<br><span style="color: #666; font-size: 0.85rem;">1:30 PM</span></td>
+                            <td>David O'Connor</td>
+                            <td>Initial Consultation</td>
+                            <td><span class="badge new">Confirmed</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 500;">Oct 15, 2026<br><span style="color: #666; font-size: 0.85rem;">9:00 AM</span></td>
+                            <td>Sarah Jenkins</td>
+                            <td>4-Week Lymphatic Reset</td>
+                            <td><span class="badge">Session 2/4</span></td>
+                        </tr>
+                    `;
+
+                    document.getElementById('blocked-dates-list').innerHTML = `
+                        <li style="padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;"><strong>Oct 31, 2026</strong> <br> <span style="color: #888; font-size: 0.85rem;">Bank Holiday</span></li>
+                        <li style="padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;"><strong>Nov 05, 2026</strong> <br> <span style="color: #888; font-size: 0.85rem;">Training Course</span></li>
+                    `;
+                } else {
+                    alert('Invalid credentials. (Hint: use "test" for both email and password to view the prototype).');
                 }
-            } catch (err) {
-                alert("Could not connect to database. Try 'test' credentials.");
-            }
-        };
+            });
 
-        // BLOCK DATE LOGIC (Attached to window)
-        window.blockDate = function() {
-            const date = document.getElementById('block-date').value;
-            const reason = document.getElementById('block-reason').value || 'Unavailable';
+            // 2. LOGOUT LOGIC
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                location.reload(); // Instantly resets the page back to login
+            });
 
-            if(!date) { 
-                alert("Please select a date first."); 
-                return; 
-            }
+            // 3. BLOCK DATE LOGIC
+            blockBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const date = document.getElementById('block-date').value;
+                const reason = document.getElementById('block-reason').value || 'Unavailable';
 
-            alert(`Success! The clinic is now closed on ${date} for: ${reason}`);
-            const list = document.getElementById('blocked-dates-list');
-            list.innerHTML += `<li style="padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;"><strong>${date}</strong> - ${reason}</li>`;
-        };
+                if(!date) { 
+                    alert("Please select a date from the calendar first."); 
+                    return; 
+                }
+
+                alert(`Success! The clinic is now closed on ${date} for: ${reason}`);
+                const list = document.getElementById('blocked-dates-list');
+                list.innerHTML += `<li style="padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0;"><strong>${date}</strong> <br> <span style="color: #888; font-size: 0.85rem;">${reason}</span></li>`;
+                
+                // Clear the form
+                document.getElementById('block-date').value = '';
+                document.getElementById('block-reason').value = '';
+            });
+
+            // 4. DOWNLOAD LOGIC
+            downloadBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Secure client database export initiated. A CSV file will be sent to clare@thenaturalhealingclinic.co.im');
+            });
+        });
     </script>
 </body>
 </html>
