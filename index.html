@@ -42,6 +42,18 @@
         .nav-logo { font-size: 1.1rem; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; color: var(--primary-sage); }
         .nav-links { display: flex; gap: 1rem; align-items: center; }
 
+        .nav-link-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-sage);
+            cursor: pointer;
+            margin-right: 1rem;
+            transition: color 0.3s ease;
+        }
+        .nav-link-text:hover { color: var(--text-main); }
+
         .btn {
             display: inline-block;
             padding: 0.8rem 2rem;
@@ -78,24 +90,22 @@
         .hero h1 { font-size: 3.5rem; font-weight: 300; margin-bottom: 1.5rem; letter-spacing: -1px; }
         .hero p { font-size: 1.25rem; margin-bottom: 2.5rem; color: #555; max-width: 700px; margin-left: auto; margin-right: auto; font-style: italic; }
 
-        /* Elegant Two-Column Layouts (UPDATED FOR PORTRAIT) */
-        .section { padding: 8rem 5%; display: flex; flex-wrap: wrap; align-items: center; gap: 6rem; max-width: 1200px; margin: 0 auto; }
+        /* Elegant Two-Column Layouts */
+        .section { padding: 7rem 5%; display: flex; flex-wrap: wrap; align-items: center; gap: 5rem; max-width: 1200px; margin: 0 auto; }
         .section-text { flex: 1.2; min-width: 320px; }
         
-        .section-image-wrapper { 
-            flex: 1; 
-            min-width: 320px; 
-            position: relative; 
-        }
+        .section-image-wrapper { flex: 1; min-width: 320px; position: relative; }
         .section-image-wrapper img {
             width: 100%;
             height: auto;
             border-radius: 6px;
-            box-shadow: 0 25px 50px rgba(90, 107, 93, 0.15); /* Premium sage-tinted shadow */
+            box-shadow: 0 25px 50px rgba(90, 107, 93, 0.15); 
             object-fit: cover;
             max-height: 650px;
         }
 
+        .section-image { flex: 1; min-width: 320px; height: 500px; border-radius: 4px; background-position: center; background-size: cover; box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
+        
         .section-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); margin-bottom: 1rem; display: block; }
         h2 { font-size: 2.4rem; font-weight: 300; margin-bottom: 1.5rem; line-height: 1.2; }
         
@@ -161,6 +171,7 @@
             .hero h1 { font-size: 2.4rem; }
             .section { padding: 4rem 5%; gap: 3rem; }
             .nav-links { gap: 0.5rem; }
+            .nav-link-text { display: none; } /* Hides text link on small phones to save space */
             .btn { padding: 0.7rem 1rem; font-size: 0.75rem; }
             .price-card.featured { transform: none; }
             .help-list { column-count: 1; }
@@ -184,13 +195,14 @@
     <nav>
         <div class="nav-logo" onclick="openScreen('screen-home')">The Natural Healing Clinic</div>
         <div class="nav-links">
+            <span class="nav-link-text" onclick="openScreen('screen-about')">About Clare</span>
             <button type="button" id="nav-portal-btn" class="btn btn-outline" onclick="openScreen('screen-login')">Client Portal</button>
             <button type="button" id="nav-book-btn" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
             <button type="button" id="nav-logout-btn" class="btn btn-outline" style="display: none;" onclick="window.processLogout()">Sign Out</button>
         </div>
     </nav>
 
-    <!-- ================= SCREEN 1: THE PREMIUM HOME ================= -->
+    <!-- ================= SCREEN 1: THE HOME PAGE ================= -->
     <div id="screen-home" class="page-screen visible">
         
         <section class="hero">
@@ -199,27 +211,21 @@
             <button type="button" class="btn" onclick="openScreen('screen-register')">Make An Appointment</button>
         </section>
 
-        <!-- Philosophy / About Section -->
+        <!-- Restored Philosophy Section -->
         <section class="section">
             
-            <!-- Professional Photo Frame with .AVIF format -->
-            <div class="section-image-wrapper">
-                <img src="./clare-profile.avif" alt="Clare Kelly - The Natural Healing Clinic">
-            </div>
+            <!-- Upgraded Tranquil Background Image -->
+            <div class="section-image" style="background-image: url('https://images.unsplash.com/photo-1544161513-37651a511674?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');"></div>
 
             <div class="section-text">
-                <span class="section-subtitle">Meet Clare Kelly</span>
+                <span class="section-subtitle">Our Philosophy</span>
                 
                 <h2>Results in a Realistic Timeframe</h2>
                 
-                <p style="margin-bottom: 1.5rem; color: #555; line-height: 1.8;">
-                    Clare Kelly is a dedicated functional health and soft-tissue specialist, committed to resolving chronic pain, systemic inflammation, and structural imbalances. With a deep understanding that the body’s systems are intricately connected, Clare bridges the gap between complementary therapies and mainstream medical protocols.
-                </p>
-                <p style="color: #555; margin-bottom: 2.5rem; line-height: 1.8;">
-                    Specializing in Advanced Lymphatic Drainage, Bowen Therapy, and Functional Medicine, her clinical approach is strictly evidence-informed yet deeply personalized. She doesn't just treat symptoms; she investigates the root cause—whether it is stubborn muscular pain, chronic fatigue, or digestive distress—to deliver sustainable, life-changing results in a realistic timeframe.
-                </p>
+                <p style="margin-bottom: 1.5rem; color: #555;">The main aim of my clinic is to get results, in a quick and realistic timeframe. If you suffer from pain or discomfort, then I am here to help.</p>
+                <p style="color: #555; margin-bottom: 2rem;">I offer a holistic approach to modern-day aches and pains. The Natural Healing Clinic is complementary to the mainstream medical protocol. My treatment plan is focused on two areas: the individual needs of the patient and the best method to obtain results in an ideal timeframe.</p>
                 
-                <h4 style="margin-bottom: 1rem; color: var(--primary-sage);">Specialist Support For:</h4>
+                <h4 style="margin-bottom: 1rem; color: var(--primary-sage);">Do You Need Help With:</h4>
                 <ul class="help-list">
                     <li>Pain Management</li>
                     <li>Acute & Chronic Muscular Pain</li>
@@ -342,7 +348,39 @@
         </section>
     </div>
 
-    <!-- ================= SCREEN 2: LOGIN PAGE ================= -->
+    <!-- ================= SCREEN 2: ABOUT CLARE (NEW TAB) ================= -->
+    <div id="screen-about" class="page-screen">
+        <div style="background-color: white; padding: 4rem 5%; border-bottom: 1px solid var(--secondary-sand);">
+            <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+                <h1 style="font-size: 2.5rem; font-weight: 300; color: var(--text-main);">About The Practitioner</h1>
+            </div>
+        </div>
+
+        <section class="section" style="padding-top: 4rem;">
+            
+            <!-- Professional Photo Frame with .AVIF format -->
+            <div class="section-image-wrapper">
+                <img src="./clare-profile.avif" alt="Clare Kelly - The Natural Healing Clinic">
+            </div>
+
+            <div class="section-text">
+                <span class="section-subtitle">Meet Clare Kelly</span>
+                
+                <h2 style="font-size: 2.2rem;">Clinical Expertise with a Holistic Touch</h2>
+                
+                <p style="margin-bottom: 1.5rem; color: #555; line-height: 1.8;">
+                    Clare Kelly is a dedicated functional health and soft-tissue specialist, committed to resolving chronic pain, systemic inflammation, and structural imbalances. With a deep understanding that the body’s systems are intricately connected, Clare bridges the gap between complementary therapies and mainstream medical protocols.
+                </p>
+                <p style="color: #555; margin-bottom: 2.5rem; line-height: 1.8;">
+                    Specializing in Advanced Lymphatic Drainage, Bowen Therapy, and Functional Medicine, her clinical approach is strictly evidence-informed yet deeply personalized. She doesn't just treat symptoms; she investigates the root cause—whether it is stubborn muscular pain, chronic fatigue, or digestive distress—to deliver sustainable, life-changing results in a realistic timeframe.
+                </p>
+                
+                <button type="button" class="btn" onclick="openScreen('screen-register')">Book Your Consultation</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= SCREEN 3: LOGIN PAGE ================= -->
     <div id="screen-login" class="page-screen">
         <div class="form-container">
             <h2>Client Portal Login</h2>
@@ -360,7 +398,7 @@
         </div>
     </div>
 
-    <!-- ================= SCREEN 3: REGISTER & BOOK ================= -->
+    <!-- ================= SCREEN 4: REGISTER & BOOK ================= -->
     <div id="screen-register" class="page-screen">
         <div class="form-container" style="max-width: 620px;">
             <h2>Client Registration</h2>
@@ -395,7 +433,7 @@
         </div>
     </div>
 
-    <!-- ================= SCREEN 4: SECURE CLIENT DASHBOARD ================= -->
+    <!-- ================= SCREEN 5: SECURE CLIENT DASHBOARD ================= -->
     <div id="screen-dashboard" class="page-screen">
         <div class="dashboard-container">
             <div class="dash-header">
