@@ -89,13 +89,13 @@
         /* Standard Portrait Image (Used for Clare's AVIF) */
         .portrait-img { width: 100%; height: auto; border-radius: 6px; box-shadow: 0 25px 50px rgba(90, 107, 93, 0.15); object-fit: cover; max-height: 650px; }
         
-        /* NEW: Stylized Architectural Arch Image (Used for the Tranquil Photo) */
+        /* NEW: Functional Medicine Aesthetic Arch Image */
         .image-arch {
             width: 100%;
             height: 600px;
             object-fit: cover;
-            border-radius: 200px 200px 10px 10px; /* Creates the elegant arched top */
-            box-shadow: 0 30px 60px rgba(90, 107, 93, 0.15); /* Sage-tinted premium shadow */
+            border-radius: 200px 200px 10px 10px;
+            box-shadow: 0 30px 60px rgba(90, 107, 93, 0.15);
             border: 1px solid var(--secondary-sand);
         }
         
@@ -126,7 +126,7 @@
         .price-features li { margin-bottom: 1rem; padding-left: 1.5rem; position: relative; line-height: 1.5; }
         .price-features li::before { content: "—"; position: absolute; left: 0; color: var(--primary-sage); }
 
-        /* Clinical Service Menu (For targeted sessions) */
+        /* Clinical Service Menu */
         .service-menu-section { padding: 7rem 5%; background-color: white; border-top: 1px solid var(--secondary-sand); }
         .menu-category-title { font-size: 1.8rem; font-weight: 300; margin-bottom: 3rem; color: var(--text-main); text-align: center; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem; max-width: 800px; margin-left: auto; margin-right: auto; }
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 3rem; max-width: 1000px; margin: 0 auto 5rem auto; }
@@ -145,6 +145,15 @@
         .news-excerpt { font-size: 0.95rem; color: #666; margin-bottom: 2.5rem; line-height: 1.6; }
         .news-link { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); text-decoration: none; display: inline-block; border-bottom: 1px solid transparent; transition: border-color 0.3s; }
         .news-link:hover { border-bottom-color: var(--primary-sage); }
+
+        /* Interactive FAQ Section */
+        .faq-section { padding: 7rem 5%; max-width: 900px; margin: 0 auto; }
+        details { border-bottom: 1px solid var(--secondary-sand); padding: 1.5rem 0; cursor: pointer; }
+        summary { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 500; list-style: none; outline: none; position: relative; padding-right: 2rem; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: '+'; position: absolute; right: 0; top: 0; font-size: 1.5rem; color: var(--primary-sage); font-weight: 300; }
+        details[open] summary::after { content: '−'; }
+        details p { padding-top: 1rem; color: #666; font-size: 0.95rem; line-height: 1.8; }
 
         /* Forms Container */
         .form-container { max-width: 550px; margin: 5rem auto; background: white; padding: 3.5rem; border-radius: 4px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 1px solid var(--secondary-sand); }
@@ -217,11 +226,11 @@
             <button type="button" class="btn" onclick="openScreen('screen-register')">Make An Appointment</button>
         </section>
 
-        <!-- Philosophy Section -->
+        <!-- Philosophy Section (Updated Clinical Imagery) -->
         <section class="section">
             <div class="section-image-wrapper">
-                <!-- NEW: Native Image Tag with Architectural Arch Styling -->
-                <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Tranquil spa stones and natural healing" class="image-arch">
+                <!-- Clinical Botanical Medicine Image -->
+                <img src="https://images.unsplash.com/photo-1611077544689-8eb46f7f6fbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Clinical botanical natural medicine and functional healing" class="image-arch">
             </div>
 
             <div class="section-text">
