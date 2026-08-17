@@ -591,7 +591,7 @@
         </div>
     </div>
 
-    <!-- ================= SCREEN 5: CLEAN REGISTRATION (NO INTAKE CLUTTER) ================= -->
+    <!-- ================= SCREEN 5: CLEAN REGISTRATION ================= -->
     <div id="screen-register" class="page-screen">
         <div class="form-container" style="max-width: 550px;">
             <h2>Client Registration</h2>
@@ -641,7 +641,7 @@
                     <div id="client-appointments-list"><p style="color: #888;">Loading your secure schedule...</p></div>
                 </div>
 
-                <!-- PRIVATE INTAKE & GDPR QUESTIONNAIRE CARD (INSIDE PORTAL) -->
+                <!-- PRIVATE INTAKE & GDPR QUESTIONNAIRE CARD -->
                 <div class="dash-card" style="border-left: 4px solid var(--primary-sage);">
                     <h3>Medical & GDPR Intake File</h3>
                     <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.5rem;">Mandatory: Please complete your confidential questionnaire prior to your first consultation.</p>
@@ -863,17 +863,18 @@
             const conditions = document.getElementById('intake-conditions').value.trim();
             const aims = document.getElementById('intake-aims').value.trim();
 
-            const intakeSummary = `Age: ${age} | Sex: ${sex} | Gender: ${gender} | Height: ${height} | Weight: ${weight} | Conditions: ${conditions} | Treatment Aims: ${aims}`;
+            const intakeSummary = `Age: ${age} | Sex: ${sex} | Gender: ${gender} | Height: ${height} | Weight: ${weight}\nKnown Conditions: ${conditions}\nTreatment Aims: ${aims}`;
 
-            // Populate user metadata so it updates Clare's view
-            const { error } = await db.auth.updateUser({
-                data: { intake_summary: intakeSummary }
-            });
+            await db.auth.updateUser({ data: { intake_summary: intakeSummary } });
+            
+            const { error } = await db.from('appointments')
+                .update({ intake_details: intakeSummary })
+                .eq('client_id', user.id);
 
             if(error) {
                 alert("Error saving intake file: " + error.message);
             } else {
-                alert("Medical intake questionnaire successfully saved and added to your patient file!");
+                alert("Medical intake questionnaire successfully saved and updated in your patient file!");
             }
             return false;
         };
@@ -974,11 +975,6 @@
             
             const clientName = user.user_metadata?.full_name || user.email;
             welcomeTitle.innerText = `Welcome back, ${clientName}`;
-
-            // Pre-fill intake form if already saved
-            if(user.user_metadata?.intake_summary) {
-                // Optional: parses saved data back into form if needed
-            }
 
             listElement.innerHTML = '<p style="color: #888;">Fetching records...</p>';
 
