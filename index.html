@@ -223,7 +223,7 @@
                         <li>Client portal access & basic progress logging</li>
                     </ul>
                 </div>
-                <a href="#portal" class="btn btn-outline" style="width: 100%;">Select 4-Week</a>
+                <a href="#portal" class="btn btn-outline" style="width: 100%;" onclick="selectProgram('4-Week Reset')">Select 4-Week</a>
             </div>
 
             <!-- 6 Week Plan (Featured) -->
@@ -240,7 +240,7 @@
                         <li>Detailed medical file tracking in portal</li>
                     </ul>
                 </div>
-                <a href="#portal" class="btn" style="width: 100%;">Select 6-Week</a>
+                <a href="#portal" class="btn" style="width: 100%;" onclick="selectProgram('6-Week Protocol')">Select 6-Week</a>
             </div>
 
             <!-- 8 Week Plan -->
@@ -256,7 +256,7 @@
                         <li>Comprehensive long-term maintenance blueprint</li>
                     </ul>
                 </div>
-                <a href="#portal" class="btn btn-outline" style="width: 100%;">Select 8-Week</a>
+                <a href="#portal" class="btn btn-outline" style="width: 100%;" onclick="selectProgram('8-Week Transformation')">Select 8-Week</a>
             </div>
         </div>
     </section>
@@ -329,6 +329,18 @@
             signupPanel.classList.add('active');
             loginPanel.classList.remove('active');
         });
+
+        // Helper function when clicking a package above
+        window.selectProgram = function(programName) {
+            tabSignup.click();
+            const selectElement = document.getElementById('signup-program');
+            for (let i = 0; i < selectElement.options.length; i++) {
+                if (selectElement.options[i].value.includes(programName)) {
+                    selectElement.selectedIndex = i;
+                    break;
+                }
+            }
+        };
 
         document.getElementById('login-submit-btn').addEventListener('click', async () => {
             const email = document.getElementById('login-email').value;
