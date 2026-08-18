@@ -561,13 +561,12 @@
                     <div class="footer">
                         <p>Thank you for choosing The Natural Healing Clinic. Please remit payment via bank transfer quoting invoice reference.</p>
                     </div>
-                    <script>
-                        window.onload = function() { window.print(); }
-                    </script>
                 </body>
                 </html>
             `);
             printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => { printWindow.print(); }, 500);
 
             alert("Invoice generated successfully! Ready for printing or postal dispatch.");
             document.getElementById('inv-client').value = '';
