@@ -32,7 +32,7 @@
             line-height: 1.7; 
             font-size: 1.1rem; 
             overflow-x: hidden;
-            padding-bottom: calc(70px + var(--safe-bottom));
+            padding-bottom: calc(75px + var(--safe-bottom));
         }
         h1, h2, h3, h4, th, .nav-logo, .btn, .app-nav-item { font-family: 'Montserrat', sans-serif; }
         
@@ -51,15 +51,16 @@
         .nav-logo { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: var(--primary-sage); letter-spacing: 2px; }
         .btn { padding: 0.7rem 1.2rem; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 4px; cursor: pointer; border: none; background: var(--primary-sage); color: white; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; }
         .btn-outline { background: transparent; border: 1px solid var(--primary-sage); color: var(--primary-sage); }
+        .btn-danger { background-color: #a94442; color: white; padding: 0.4rem 0.8rem; font-size: 0.7rem; }
 
         /* Login Screen */
         .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 1.5rem; }
         .form-container { width: 100%; max-width: 400px; background: white; padding: 3rem 2rem; border-radius: 8px; border: 1px solid var(--secondary-sand); text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.04); }
         label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 0.4rem; text-align: left; font-weight: 600; }
-        input, select, textarea { width: 100%; padding: 1rem; margin-bottom: 1.2rem; border: 1px solid var(--secondary-sand); border-radius: 4px; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; background: #fff; appearance: none; -webkit-appearance: none; }
+        input, select, textarea { width: 100%; padding: 0.9rem; margin-bottom: 1.2rem; border: 1px solid var(--secondary-sand); border-radius: 4px; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; background: #fff; appearance: none; -webkit-appearance: none; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-sage); }
 
-        /* App Dashboard Views */
+        /* App Views */
         .dashboard-wrapper { display: none; max-width: 1200px; margin: 1.5rem auto; padding: 0 4%; }
         .app-view { display: none; }
         .app-view.active-view { display: block; animation: fadeIn 0.3s ease; }
@@ -69,15 +70,21 @@
         .panel { background: white; padding: 1.5rem 1.2rem; border-radius: 8px; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .panel h3 { font-size: 1.15rem; color: var(--primary-sage); margin-bottom: 1.2rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.6rem; font-weight: 500; }
         
+        /* Financial Metrics Grid */
+        .finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+        .metric-card { background: #FAFAF7; border: 1px solid var(--secondary-sand); padding: 1.2rem; border-radius: 6px; text-align: center; }
+        .metric-card span { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: #666; font-family: 'Montserrat'; display: block; margin-bottom: 0.3rem; }
+        .metric-card h4 { font-size: 1.6rem; font-weight: 300; color: var(--primary-sage); }
+
         /* Chat Inbox */
-        .chat-box { height: 320px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #F4F3EE; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+        .chat-box { height: 300px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #F4F3EE; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
         .msg { padding: 0.8rem 1rem; border-radius: 6px; max-width: 85%; font-size: 1rem; }
         .msg.client { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; }
         .msg.admin { background: var(--primary-sage); color: white; align-self: flex-end; }
 
         .client-file-card { background: #FAF9F5; border: 1px solid var(--secondary-sand); padding: 1.2rem; border-radius: 6px; margin-bottom: 1.2rem; }
         
-        /* Bottom App Navigation Bar (iPhone Native Feel) */
+        /* Bottom App Navigation Bar */
         .app-bottom-nav {
             position: fixed;
             bottom: 0;
@@ -98,27 +105,25 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: #777;
             cursor: pointer;
-            width: 25%;
+            width: 20%;
             height: 100%;
-            transition: color 0.2s;
         }
         .app-nav-item.active { color: var(--primary-sage); font-weight: 600; }
-        .app-nav-item svg { width: 22px; height: 22px; margin-bottom: 3px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .app-nav-item svg { width: 20px; height: 20px; margin-bottom: 2px; stroke: currentColor; fill: none; stroke-width: 2; }
 
-        /* Calendar Grid styles */
-        .cal-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-        .cal-card { background: #FAFAF7; border: 1px solid var(--secondary-sand); padding: 1rem; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .cal-card { background: #FAFAF7; border: 1px solid var(--secondary-sand); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
 
         @media (min-width: 900px) {
             .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
             .app-bottom-nav { display: none !important; }
             .dashboard-wrapper { display: block !important; }
             .app-view { display: block !important; }
+            .finance-grid { grid-template-columns: repeat(3, 1fr); }
         }
     </style>
 </head>
@@ -144,29 +149,64 @@
     <!-- MAIN APP DASHBOARD -->
     <div id="admin-dashboard" class="dashboard-wrapper">
         <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="font-size: 1.8rem; font-weight: 300;" id="app-header-title">Clinical Overview</h1>
-            <span id="live-badge" style="font-size: 0.75rem; background: #E6EFE8; color: var(--primary-sage); padding: 0.3rem 0.8rem; border-radius: 20px; font-family: 'Montserrat'; font-weight: 600;">● Live Sync</span>
+            <h1 style="font-size: 1.8rem; font-weight: 300;" id="app-header-title">Master Schedule</h1>
+            <span id="live-badge" style="font-size: 0.7rem; background: #E6EFE8; color: var(--primary-sage); padding: 0.3rem 0.7rem; border-radius: 20px; font-family: 'Montserrat'; font-weight: 600;">● Live Sync</span>
         </div>
 
-        <!-- VIEW 1: SCHEDULE / CALENDAR -->
+        <!-- VIEW 1: SCHEDULE & RESCHEDULING -->
         <div id="view-schedule" class="app-view active-view">
             <div class="panel">
-                <h3>Master Patient Schedule</h3>
-                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.2rem;">Upcoming consultations and confirmed bookings.</p>
-                <div id="admin-schedule-list"><p style="color: #888;">Loading calendar schedule...</p></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>Upcoming Appointments</h3>
+                    <button class="btn" onclick="openNewBookingModal()">+ Manual Booking</button>
+                </div>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.2rem;">Reschedule or review client consultation slots.</p>
+                <div id="admin-schedule-list"><p style="color: #888;">Loading schedule...</p></div>
             </div>
         </div>
 
-        <!-- VIEW 2: CLIENT FILES & INTAKE -->
+        <!-- VIEW 2: CLIENTS & MANUAL ONBOARDING -->
         <div id="view-clients" class="app-view">
             <div class="panel">
-                <h3>Client Files & Medical Questionnaires</h3>
-                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.2rem;">Review patient intake summaries and add notes.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>Client Directory & Onboarding</h3>
+                    <button class="btn" onclick="openClientModal()">+ Add Existing Client</button>
+                </div>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.2rem;">Onboard offline clients or view medical files.</p>
                 <div id="admin-client-files-list"><p style="color: #888;">Loading client records...</p></div>
             </div>
         </div>
 
-        <!-- VIEW 3: LIVE INBOX -->
+        <!-- VIEW 3: MINI-XERO INCOME TRACKER & INVOICING -->
+        <div id="view-finance" class="app-view">
+            <div class="panel">
+                <h3>Clinic Income & Invoicing</h3>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Track monthly clinic revenue and generate professional client invoices.</p>
+                
+                <div class="finance-grid">
+                    <div class="metric-card">
+                        <span>Month Revenue</span>
+                        <h4 id="stat-revenue">£0</h4>
+                    </div>
+                    <div class="metric-card">
+                        <span>Sessions Booked</span>
+                        <h4 id="stat-sessions">0</h4>
+                    </div>
+                </div>
+
+                <div style="background: #FAFAF7; border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 6px; margin-top: 1.5rem;">
+                    <h4 style="font-family: 'Montserrat'; font-size: 1rem; color: var(--primary-sage); margin-bottom: 1rem;">Create & Send Invoice</h4>
+                    <form onsubmit="return generateInvoice(event)">
+                        <label>Client Name</label><input type="text" id="inv-client" placeholder="e.g. Sarah Jenkins" required>
+                        <label>Treatment / Service</label><input type="text" id="inv-service" placeholder="e.g. 360 Burnout Protocol" required>
+                        <label>Fee Amount (£)</label><input type="number" id="inv-amount" placeholder="e.g. 175" required>
+                        <button type="submit" class="btn" style="width: 100%;">Generate & Download Invoice</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 4: LIVE INBOX -->
         <div id="view-inbox" class="app-view">
             <div class="panel">
                 <h3>Live Patient Inbox</h3>
@@ -175,19 +215,18 @@
             </div>
         </div>
 
-        <!-- VIEW 4: BROADCAST / TOOLS -->
+        <!-- VIEW 5: BROADCAST / TOOLS -->
         <div id="view-tools" class="app-view">
             <div class="panel">
-                <h3>Send Advice, Articles & Files</h3>
-                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.2rem;">Broadcast protocols to clients.</p>
+                <h3>Send Advice & Files</h3>
                 <form onsubmit="return publishBroadcast(event)">
                     <label>Send To</label>
                     <select id="broadcast-recipient">
                         <option value="all">All Clients (Mass Broadcast)</option>
                     </select>
-                    <label>Subject / Title</label><input type="text" id="broadcast-title" required>
-                    <label>Detailed Advice</label><textarea id="broadcast-content" style="height: 100px;" required></textarea>
-                    <label>Attach File / Document</label><input type="file" id="broadcast-file">
+                    <label>Title</label><input type="text" id="broadcast-title" required>
+                    <label>Content</label><textarea id="broadcast-content" style="height: 100px;" required></textarea>
+                    <label>Attach File</label><input type="file" id="broadcast-file">
                     <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Dispatch Protocol</button>
                 </form>
             </div>
@@ -204,13 +243,17 @@
             <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
             Clients
         </div>
+        <div class="app-nav-item" onclick="switchAppView('finance', this)">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            Finance
+        </div>
         <div class="app-nav-item" onclick="switchAppView('inbox', this)">
             <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
             Inbox
         </div>
         <div class="app-nav-item" onclick="switchAppView('tools', this)">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c0 .69.41 1.32 1.05 1.51H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            Broadcast
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9c0 .69.41 1.32 1.05 1.51H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1 z"></path></svg>
+            Tools
         </div>
     </div>
 
@@ -231,7 +274,7 @@
             document.getElementById(`view-${viewName}`).classList.add('active-view');
             if(element) element.classList.add('active');
 
-            const titles = { schedule: 'Master Schedule', clients: 'Client Files', inbox: 'Live Patient Inbox', tools: 'Broadcast & Advice' };
+            const titles = { schedule: 'Master Schedule', clients: 'Client Directory', finance: 'Income & Invoicing', inbox: 'Live Patient Inbox', tools: 'Clinic Tools' };
             document.getElementById('app-header-title').innerText = titles[viewName];
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -265,6 +308,7 @@
             loadClientFiles(db);
             loadAdminInbox(db);
             loadClientDropdown(db);
+            loadFinanceMetrics(db);
             setInterval(() => loadAdminInbox(db, true), 10000);
         }
 
@@ -275,16 +319,58 @@
 
             container.innerHTML = appts.map(a => `
                 <div class="cal-card">
-                    <div>
-                        <strong style="color: var(--primary-sage); font-family: 'Montserrat'; font-size: 0.95rem;">${a.client_name}</strong><br>
-                        <span style="font-size: 0.9rem; color: #555;">${a.service_name}</span>
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <strong style="color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1rem;">${a.client_name}</strong><br>
+                            <span style="font-size: 0.95rem; color: #555;">${a.service_name}</span>
+                        </div>
+                        <div style="text-align: right; font-size: 0.85rem; color: #666; font-family: 'Montserrat';">
+                            ${new Date(a.appointment_time).toLocaleDateString('en-GB', {weekday: 'short', month: 'short', day: 'numeric'})}<br>
+                            <strong>${new Date(a.appointment_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</strong>
+                        </div>
                     </div>
-                    <div style="text-align: right; font-size: 0.85rem; color: #666; font-family: 'Montserrat';">
-                        ${new Date(a.appointment_time).toLocaleDateString('en-GB', {weekday: 'short', month: 'short', day: 'numeric'})}<br>
-                        <strong>${new Date(a.appointment_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</strong>
+                    <div style="display: flex; gap: 0.8rem; border-top: 1px solid var(--secondary-sand); padding-top: 0.8rem;">
+                        <input type="datetime-local" id="resched-${a.id}" style="margin-bottom:0; font-size:0.85rem; padding: 0.5rem;" required>
+                        <button class="btn" style="padding: 0.4rem 0.8rem; font-size:0.65rem;" onclick="rescheduleBooking('${a.id}')">Reschedule</button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        async function rescheduleBooking(apptId) {
+            const newTime = document.getElementById(`resched-${apptId}`).value;
+            if(!newTime) { alert("Please select a new date and time."); return; }
+            const db = getSupabase();
+            const { error } = await db.from('appointments').update({ appointment_time: newTime }).eq('id', apptId);
+            if(error) alert("Error rescheduling: " + error.message);
+            else { alert("Appointment successfully rescheduled!"); loadSchedule(db); }
+        }
+
+        async function openNewBookingModal() {
+            const clientName = prompt("Enter Client Full Name:");
+            if(!clientName) return;
+            const service = prompt("Enter Service Name (e.g. Initial Consultation £85):", "Initial Consultation (£85)");
+            const dateInput = prompt("Enter Date & Time (YYYY-MM-DD HH:MM):", new Date().toISOString().slice(0,16).replace('T', ' '));
+            if(!dateInput) return;
+
+            const db = getSupabase();
+            const dummyId = 'manual_' + Date.now();
+            const { error } = await db.from('appointments').insert([{ client_id: dummyId, client_name: clientName, service_name: service, appointment_time: new Date(dateInput).toISOString(), status: 'confirmed' }]);
+            if(error) alert("Error: " + error.message);
+            else { alert("Manual booking added!"); loadSchedule(db); loadClientFiles(db); }
+        }
+
+        async function openClientModal() {
+            const name = prompt("Enter Existing Client Full Name:");
+            if(!name) return;
+            const email = prompt("Enter Client Email:");
+            if(!email) return;
+
+            const db = getSupabase();
+            const clientId = 'client_' + Date.now();
+            const { error } = await db.from('appointments').insert([{ client_id: clientId, client_name: name, service_name: 'Existing Client Record', appointment_time: new Date().toISOString(), status: 'confirmed' }]);
+            if(error) alert("Error onboarding client: " + error.message);
+            else { alert("Client successfully added to directory!"); loadClientFiles(db); loadSchedule(db); }
         }
 
         async function loadClientFiles(db) {
@@ -298,25 +384,26 @@
             container.innerHTML = uniqueClients.map(client => {
                 const clientMsgs = msgs ? msgs.filter(m => m.client_id === client.client_id) : [];
                 const intakeMsg = clientMsgs.find(m => m.content && m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
-                let intakeDisplay = intakeMsg ? intakeMsg.content.replace('[MEDICAL INTAKE SUBMISSION]', '').trim() : 'Questionnaire not yet completed.';
+                let intakeDisplay = intakeMsg ? intakeMsg.content.replace('[MEDICAL INTAKE SUBMISSION]', '').trim() : 'Questionnaire not yet completed by client.';
 
                 return `
                     <div class="client-file-card">
-                        <h4 style="color: var(--primary-sage); font-size: 1.2rem; margin-bottom: 0.3rem; font-family: 'Montserrat', sans-serif;">${client.client_name}</h4>
-                        <div style="background: white; padding: 1.2rem; border: 1px solid var(--secondary-sand); border-radius: 4px; margin-bottom: 1rem; font-size: 1rem;">
+                        <h4 style="color: var(--primary-sage); font-size: 1.25rem; margin-bottom: 0.4rem; font-family: 'Montserrat', sans-serif;">${client.client_name}</h4>
+                        <p style="font-size: 0.8rem; color: #666; margin-bottom: 1rem;">ID: ${client.client_id}</p>
+                        <div style="background: white; padding: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 4px; margin-bottom: 1.2rem; font-size: 1.05rem;">
                             <strong style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); font-family: 'Montserrat';">Medical Questionnaire:</strong><br>
-                            <pre style="margin-top: 0.6rem; color: #333; background: #FAFAF7; padding: 1rem; border-radius: 3px; border-left: 3px solid var(--primary-sage); font-family: inherit; white-space: pre-wrap; line-height: 1.6;">${intakeDisplay}</pre>
+                            <pre style="margin-top: 0.8rem; color: #333; background: #FAFAF7; padding: 1.2rem; border-radius: 3px; border-left: 3px solid var(--primary-sage); font-family: inherit; white-space: pre-wrap; line-height: 1.7;">${intakeDisplay}</pre>
                         </div>
-                        <form onsubmit="return savePractitionerNote(event, '${client.client_id}')" style="display: flex; flex-direction: column; gap: 0.8rem;">
-                            <input type="text" id="note-text-${client.client_id}" placeholder="Add clinical consultation note..." style="margin-bottom:0;" required>
+                        <form onsubmit="return savePractitionerNote(event, '${client.client_id}')" style="display: flex; flex-direction: column; gap: 1rem;">
+                            <input type="text" id="note-text-${client.client_id}" placeholder="Type consultation notes..." style="margin-bottom:0;" required>
                             <input type="file" id="note-file-${client.client_id}" style="margin-bottom:0;">
-                            <button type="submit" class="btn">Save Note & Upload File</button>
+                            <button type="submit" class="btn">Update File</button>
                         </form>
                     </div>`;
             }).join('');
         }
 
-        window.savePractitionerNote = async function(e, clientId) {
+        async function savePractitionerNote(e, clientId) {
             e.preventDefault();
             const db = getSupabase();
             const noteText = document.getElementById(`note-text-${clientId}`).value.trim();
@@ -339,6 +426,63 @@
             fileInput.value = '';
             return false;
         };
+
+        async function loadFinanceMetrics(db) {
+            const { data: appts } = await db.from('appointments').select('*');
+            if(!appts) return;
+            
+            let totalRevenue = 0;
+            appts.forEach(a => {
+                if(a.service_name.includes('£85')) totalRevenue += 85;
+                else if(a.service_name.includes('£175')) totalRevenue += 175;
+                else if(a.service_name.includes('£297')) totalRevenue += 297;
+                else if(a.service_name.includes('£1,450')) totalRevenue += 1450;
+                else totalRevenue += 75; // baseline
+            });
+
+            document.getElementById('stat-revenue').innerText = `£${totalRevenue.toLocaleString()}`;
+            document.getElementById('stat-sessions').innerText = appts.length;
+        }
+
+        function generateInvoice(e) {
+            e.preventDefault();
+            const client = document.getElementById('inv-client').value;
+            const service = document.getElementById('inv-service').value;
+            const amount = document.getElementById('inv-amount').value;
+            const invNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000);
+
+            const invoiceHTML = `
+                <html>
+                <head><title>Invoice ${invNumber}</title></head>
+                <body style="font-family: 'Montserrat', sans-serif; padding: 40px; color: #252D26;">
+                    <h2>THE NATURAL HEALING CLINIC</h2>
+                    <p>1st Floor, 8-10 Malew Street, Castletown, Isle of Man</p>
+                    <hr style="border: 1px solid #E5E2D9; margin: 20px 0;">
+                    <h3>INVOICE: ${invNumber}</h3>
+                    <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+                    <p><strong>Billed To:</strong> ${client}</p>
+                    <table style="width: 100%; margin-top: 30px; border-collapse: collapse;">
+                        <tr style="background: #FAFAF7; text-align: left;"><th style="padding: 10px; border-bottom: 1px solid #E5E2D9;">Description</th><th style="padding: 10px; border-bottom: 1px solid #E5E2D9; text-align: right;">Amount</th></tr>
+                        <tr><td style="padding: 15px; border-bottom: 1px solid #E5E2D9;">${service}</td><td style="padding: 15px; border-bottom: 1px solid #E5E2D9; text-align: right;">£${amount}</td></tr>
+                    </table>
+                    <h3 style="text-align: right; margin-top: 20px;">Total Due: £${amount}</h3>
+                    <p style="margin-top: 50px; font-size: 0.85rem; color: #777; text-align: center;">Thank you for choosing The Natural Healing Clinic.</p>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob([invoiceHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${invNumber}_${client.replace(/\s+/g, '_')}.html`;
+            a.click();
+            alert("Invoice generated and downloaded successfully!");
+            document.getElementById('inv-client').value = '';
+            document.getElementById('inv-service').value = '';
+            document.getElementById('inv-amount').value = '';
+            return false;
+        }
 
         async function loadClientDropdown(db) {
             const select = document.getElementById('broadcast-recipient');
