@@ -16,11 +16,11 @@
 
     <style>
         :root {
-            --bg-color: #F9F8F6; /* Softer, premium cream */
+            --bg-color: #F9F8F6;
             --text-main: #252D26;
             --primary-sage: #4A594D;
             --sage-hover: #3B473D;
-            --secondary-sand: #EFECE6; /* Subtle borders */
+            --secondary-sand: #EFECE6;
             --card-bg: #FFFFFF;
             --gold-accent: #C5A880;
         }
@@ -98,6 +98,14 @@
         .menu-price { font-family: 'Montserrat', sans-serif; font-weight: 500; color: var(--primary-sage); font-size: 1.1rem; }
         .menu-item p { color: #666; font-size: 1.05rem; line-height: 1.7; }
 
+        /* Journal Grid */
+        .news-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 0 auto; }
+        .news-card { background: white; border: 1px solid var(--secondary-sand); border-radius: 4px; padding: 3rem 2.2rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 15px 35px rgba(0,0,0,0.02); }
+        .news-meta { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-accent); margin-bottom: 1.2rem; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+        .news-title { font-size: 1.5rem; font-weight: 400; margin-bottom: 1rem; line-height: 1.4; color: var(--text-main); }
+        .news-excerpt { font-size: 1.05rem; color: #666; margin-bottom: 2.5rem; line-height: 1.7; }
+        .news-link { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); text-decoration: none; display: inline-block; }
+
         /* Forms Container */
         .form-container { max-width: 100%; margin: 3rem 5%; background: white; padding: 4rem 2.5rem; border-radius: 12px; box-shadow: 0 25px 60px rgba(0,0,0,0.03); border: 1px solid var(--secondary-sand); }
         .form-container h2 { text-align: center; margin-bottom: 0.8rem; font-size: 2rem; font-weight: 300; }
@@ -130,40 +138,56 @@
         .journal-panel { padding: 0 1.5rem; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; border-left: 1px solid var(--secondary-sand); border-right: 1px solid var(--secondary-sand); margin-top: -0.8rem; margin-bottom: 1.5rem; border-radius: 0 0 8px 8px; border-bottom: 1px solid transparent; }
         .journal-panel.show { padding: 2rem 1.5rem; max-height: 4000px; border-bottom: 1px solid var(--secondary-sand); box-shadow: 0 12px 30px rgba(0,0,0,0.03); overflow: visible; }
         
-        /* RESTRUCTURED MFP MACRO & MICRO MATRIX (4 & 5 COLUMNS) */
-        .macro-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+        /* -----------------------------------------------------------
+           RESPONSIVE MFP MACRO & MICRO MATRIX (ANTI-SQUASH FIX) 
+           ----------------------------------------------------------- */
+        
+        /* Mobile Default: Clean 2x2 grids so fields have breathing room */
+        .macro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
         .macro-grid div { display: flex; flex-direction: column; }
-        .macro-grid label { font-size: 0.6rem; text-align: center; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 0.4rem; font-weight: 600; }
-        .macro-grid input { padding: 0.8rem; font-size: 0.95rem; text-align: center; margin-bottom: 0; font-family: 'Montserrat'; font-weight: 500; background: white; border: 1px solid var(--secondary-sand); }
+        .macro-grid label { font-size: 0.65rem; text-align: left; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 0.4rem; font-weight: 600; padding-left: 0.2rem; }
+        .macro-grid input { padding: 0.9rem 0.8rem; font-size: 1rem; text-align: left; margin-bottom: 0; font-family: 'Montserrat'; font-weight: 500; background: white; border: 1px solid var(--secondary-sand); border-radius: 6px; }
         .macro-grid input:focus { border-color: var(--primary-sage); }
         
-        .micro-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem; margin-top: 1.2rem; margin-bottom: 1.5rem; }
+        .micro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.2rem; margin-bottom: 1.5rem; }
         .micro-grid div { display: flex; flex-direction: column; }
-        .micro-grid label { font-size: 0.55rem; text-align: center; letter-spacing: 1px; color: #888; margin-bottom: 0.4rem; }
-        .micro-grid input { padding: 0.7rem; font-size: 0.85rem; text-align: center; margin-bottom: 0; font-family: 'Montserrat'; background-color: #FAFAF7; border: 1px solid var(--secondary-sand); }
+        .micro-grid label { font-size: 0.6rem; text-align: left; letter-spacing: 1px; color: #888; margin-bottom: 0.4rem; padding-left: 0.2rem; }
+        .micro-grid input { padding: 0.8rem; font-size: 0.95rem; text-align: left; margin-bottom: 0; font-family: 'Montserrat'; background-color: #FAFAF7; border: 1px solid var(--secondary-sand); border-radius: 6px; }
         .micro-grid input:focus { border-color: var(--primary-sage); }
 
-        .meal-section { border-bottom: 1px dashed var(--secondary-sand); padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
+        .meal-section { border-bottom: 1px dashed var(--secondary-sand); padding-bottom: 2rem; margin-bottom: 2rem; }
         .meal-section h5 { font-family: 'Montserrat'; font-size: 0.95rem; color: var(--primary-sage); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 
-        /* DAILY TOTALS DASHBOARDS */
-        .daily-totals-macro { background: var(--text-main); color: white; padding: 1.5rem; border-radius: 8px 8px 0 0; margin-top: 1rem; display: flex; justify-content: space-between; font-family: 'Montserrat'; }
-        .daily-totals-macro div { text-align: center; }
+        /* Mobile Default: Wrap Totals Dashboard */
+        .daily-totals-macro { background: var(--text-main); color: white; padding: 1.8rem 1.5rem; border-radius: 8px 8px 0 0; margin-top: 1rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; font-family: 'Montserrat'; }
+        .daily-totals-macro div { text-align: left; }
         .daily-totals-macro span { font-size: 0.65rem; color: #aaa; letter-spacing: 1.5px; display: block; margin-bottom: 0.4rem; }
         
-        .daily-totals-micro { background: #E6EFE8; color: var(--text-main); padding: 1.2rem 1.5rem; border-radius: 0 0 8px 8px; margin-bottom: 2rem; display: flex; justify-content: space-between; font-family: 'Montserrat'; border: 1px solid var(--primary-sage); border-top: none; }
-        .daily-totals-micro div { text-align: center; }
-        .daily-totals-micro span { font-size: 0.6rem; color: #666; letter-spacing: 1px; display: block; margin-bottom: 0.3rem; }
+        .daily-totals-micro { background: #E6EFE8; color: var(--text-main); padding: 1.8rem 1.5rem; border-radius: 0 0 8px 8px; margin-bottom: 2rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; font-family: 'Montserrat'; border: 1px solid var(--primary-sage); border-top: none; }
+        .daily-totals-micro div { text-align: left; }
+        .daily-totals-micro span { font-size: 0.65rem; color: #666; letter-spacing: 1px; display: block; margin-bottom: 0.3rem; }
 
         /* LIVE DATABASE DROPDOWN UI */
-        .premium-list-item { padding: 1rem 1.2rem; border-bottom: 1px solid #EFECE6; cursor: pointer; transition: background 0.2s; border-radius: 6px; margin-bottom: 0.3rem; }
+        .premium-list-item { padding: 1.2rem; border-bottom: 1px solid #EFECE6; cursor: pointer; transition: background 0.2s; border-radius: 6px; margin-bottom: 0.4rem; }
         .premium-list-item:hover { background-color: #F9F8F6; }
-        .premium-list-item strong { color: var(--primary-sage); font-family: 'Montserrat'; font-size: 0.95rem; }
-        .premium-list-item span { font-size: 0.75rem; color: #777; font-family: 'Montserrat'; display: block; margin-top: 0.3rem; }
+        .premium-list-item strong { color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1rem; }
+        .premium-list-item span { font-size: 0.8rem; color: #777; font-family: 'Montserrat'; display: block; margin-top: 0.4rem; line-height: 1.5; }
 
         footer { padding: 4rem 6%; border-top: 1px solid var(--secondary-sand); color: #666; background: white; display: flex; flex-direction: column; text-align: center; gap: 2.5rem; max-width: 1300px; margin: 0 auto; }
         .footer-col h4 { color: var(--primary-sage); margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; }
         .footer-col p { font-size: 1.05rem; margin-bottom: 0.5rem; }
+
+        /* Desktop Layout Snap-Backs */
+        @media (min-width: 768px) {
+            .macro-grid { grid-template-columns: repeat(4, 1fr); }
+            .micro-grid { grid-template-columns: repeat(5, 1fr); }
+            .macro-grid label, .micro-grid label { text-align: center; padding-left: 0; }
+            .macro-grid input, .micro-grid input { text-align: center; }
+            .daily-totals-macro { display: flex; justify-content: space-between; }
+            .daily-totals-macro div { text-align: center; }
+            .daily-totals-micro { display: flex; justify-content: space-between; }
+            .daily-totals-micro div { text-align: center; }
+        }
 
         @media (min-width: 900px) {
             .mobile-menu-btn { display: none; }
@@ -199,6 +223,10 @@
             btn.classList.toggle('active');
             btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
         }
+        function toggleAI() {
+            const win = document.getElementById('ai-window');
+            win.style.display = win.style.display === 'block' ? 'none' : 'block';
+        }
         function promptInstall() {
             alert("To install this app on your iPhone:\n\n1. Tap the Share icon (square with an upward arrow) at the bottom of Safari.\n2. Scroll down and tap 'Add to Home Screen'.\n3. Tap 'Add'.");
         }
@@ -226,6 +254,20 @@
         <span class="mobile-drawer-link" onclick="openScreen('screen-login')" id="mobile-portal-link">Client Portal</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-register')" id="mobile-book-link">Register & Book</span>
         <span class="mobile-drawer-link" onclick="window.processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
+    </div>
+
+    <!-- AI AGENT WIDGET -->
+    <div class="ai-fab" onclick="toggleAI()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    </div>
+
+    <div class="ai-window" id="ai-window">
+        <div class="ai-header"><span>Clinic AI Assistant</span><span style="cursor: pointer;" onclick="toggleAI()">✖</span></div>
+        <div class="ai-body" id="ai-chat-body"><div class="msg admin">Hi there! I'm the Natural Healing Clinic's AI Assistant. How can I help you today?</div></div>
+        <form class="ai-input" onsubmit="return handleAIQuery(event)">
+            <input type="text" id="ai-input-text" placeholder="Type your question..." required>
+            <button type="submit">></button>
+        </form>
     </div>
 
     <!-- ================= SCREEN 1: THE HOME PAGE ================= -->
@@ -383,27 +425,27 @@
             <div class="news-grid">
                 <div class="news-card">
                     <div>
-                        <div class="news-meta">Gut Microbiome • Functional Medicine</div>
-                        <h3 class="news-title">The Role of the Gut Microbiome in Systemic Inflammation</h3>
-                        <p class="news-excerpt">Recent clinical research highlights how intestinal permeability and gut dysbiosis directly fuel chronic inflammatory cascades throughout the body.</p>
+                        <div class="news-meta">Gut Microbiome</div>
+                        <h3 class="news-title">The Role of the Gut Microbiome in Inflammation</h3>
+                        <p class="news-excerpt">Recent clinical studies highlight how gut dysbiosis contributes to chronic inflammatory conditions.</p>
                     </div>
                     <a href="https://www.ifm.org/news-insights/the-functional-medicine-approach-to-the-microbiome/" target="_blank" class="news-link">Read Research Outline &rarr;</a>
                 </div>
                 <div class="news-card">
                     <div>
-                        <div class="news-meta">Manual Lymphatic Drainage • Edema</div>
-                        <h3 class="news-title">Efficacy of MLD on Chronic Fatigue and Post-Op Edema</h3>
-                        <p class="news-excerpt">Clinical trials indicate that specialized manual lymphatic drainage significantly accelerates interstitial fluid clearance and reduces recovery times.</p>
-                    </div>
-                    <a href="https://pubmed.ncbi.nlm.nih.gov/25655383/" target="_blank" class="news-link">View Clinical Study &rarr;</a>
-                </div>
-                <div class="news-card">
-                    <div>
-                        <div class="news-meta">Autonomic Regulation • Vagus Nerve</div>
+                        <div class="news-meta">Autonomic Regulation</div>
                         <h3 class="news-title">Autonomic Regulation via Somatic Vagal Stimulation</h3>
                         <p class="news-excerpt">An exploration of how targeted physical touch therapies stimulate the vagus nerve to downregulate sympathetic 'fight or flight' overactivity.</p>
                     </div>
                     <a href="https://pubmed.ncbi.nlm.nih.gov/29563853/" target="_blank" class="news-link">Read Peer-Reviewed Paper &rarr;</a>
+                </div>
+                <div class="news-card">
+                    <div>
+                        <div class="news-meta">Adrenal Resilience</div>
+                        <h3 class="news-title">HPA-Axis Dysfunction in Executive Burnout</h3>
+                        <p class="news-excerpt">A deep-dive into cortisol rhythm flattening and nutritional strategies required to restore adrenal vitality and mitochondrial energy.</p>
+                    </div>
+                    <a href="https://www.ifm.org" target="_blank" class="news-link">Explore IFM Insights &rarr;</a>
                 </div>
             </div>
         </section>
@@ -472,7 +514,7 @@
                     
                     <form onsubmit="return submitDailyLog(event)">
                         
-                        <!-- Food (Live Database & 4x5 Macro/Micro Grid) -->
+                        <!-- Food (Live Database & Responsive Matrix) -->
                         <div class="journal-accordion" onclick="toggleAccordion('journal-food')"><span>🥗 Advanced Nutrition Tracker</span> <span class="icon">+</span></div>
                         <div class="journal-panel" id="journal-food">
                             
@@ -492,7 +534,6 @@
                                 <h5>1. Breakfast</h5>
                                 <textarea id="log-brk-desc" placeholder="Exact foods & weights"></textarea>
                                 
-                                <!-- 4-Column Macro Grid -->
                                 <div class="macro-grid">
                                     <div><label>KCAL</label><input type="number" id="log-brk-cal" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                     <div><label>PRO (g)</label><input type="number" id="log-brk-pro" placeholder="0" oninput="window.updateDailyTotals()"></div>
@@ -500,7 +541,6 @@
                                     <div><label>FAT (g)</label><input type="number" id="log-brk-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                 </div>
                                 
-                                <!-- Expandable 5-Column Micro Grid (With Fiber) -->
                                 <details style="outline: none;">
                                     <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #888; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem;">+ Edit Fiber & Micronutrients</summary>
                                     <div class="micro-grid">
@@ -581,17 +621,17 @@
 
                             <!-- LUXURY DAILY TOTALS DASHBOARD -->
                             <div class="daily-totals-macro">
-                                <div><span>CALORIES</span><strong id="tot-cal" style="font-size:1.6rem;">0</strong></div>
-                                <div><span>PROTEIN</span><strong id="tot-pro" style="font-size:1.2rem;">0g</strong></div>
-                                <div><span>CARBS</span><strong id="tot-car" style="font-size:1.2rem;">0g</strong></div>
-                                <div><span>FAT</span><strong id="tot-fat" style="font-size:1.2rem;">0g</strong></div>
+                                <div><span>CALORIES</span><strong id="tot-cal" style="font-size:1.8rem;">0</strong></div>
+                                <div><span>PROTEIN</span><strong id="tot-pro" style="font-size:1.3rem;">0g</strong></div>
+                                <div><span>CARBS</span><strong id="tot-car" style="font-size:1.3rem;">0g</strong></div>
+                                <div><span>FAT</span><strong id="tot-fat" style="font-size:1.3rem;">0g</strong></div>
                             </div>
                             <div class="daily-totals-micro">
                                 <div><span>FIBER</span><strong id="tot-fib" style="font-size:1.1rem; color:var(--primary-sage);">0g</strong></div>
-                                <div><span>SODIUM</span><strong id="tot-sod" style="font-size:1rem;">0mg</strong></div>
-                                <div><span>POTASSIUM</span><strong id="tot-pot" style="font-size:1rem;">0mg</strong></div>
-                                <div><span>CALCIUM</span><strong id="tot-calc" style="font-size:1rem;">0mg</strong></div>
-                                <div><span>IRON</span><strong id="tot-iron" style="font-size:1rem;">0mg</strong></div>
+                                <div><span>SODIUM</span><strong id="tot-sod" style="font-size:1.1rem;">0mg</strong></div>
+                                <div><span>POTASSIUM</span><strong id="tot-pot" style="font-size:1.1rem;">0mg</strong></div>
+                                <div><span>CALCIUM</span><strong id="tot-calc" style="font-size:1.1rem;">0mg</strong></div>
+                                <div><span>IRON</span><strong id="tot-iron" style="font-size:1.1rem;">0mg</strong></div>
                             </div>
 
                         </div>
@@ -757,6 +797,16 @@
         function getSupabase() {
             if(!window.supabase) return null;
             return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
+
+        function handleAIQuery(e) {
+            e.preventDefault();
+            const input = document.getElementById('ai-input-text');
+            const body = document.getElementById('ai-chat-body');
+            body.innerHTML += `<div class="msg client">${input.value}</div>`;
+            input.value = '';
+            setTimeout(() => body.innerHTML += `<div class="msg admin">In Functional Medicine, we look at root causes. Would you like to book a consultation?</div>`, 800);
+            return false;
         }
 
         window.processClientLogin = async function(e) {
