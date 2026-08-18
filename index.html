@@ -44,7 +44,6 @@
         .btn { display: inline-block; padding: 0.9rem 2rem; text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border-radius: 2px; cursor: pointer; border: none; background-color: var(--primary-sage); color: white; transition: all 0.3s ease; text-align: center; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(74, 89, 77, 0.12); }
         .btn:active { background-color: var(--sage-hover); transform: scale(0.98); }
         .btn-outline { border: 1px solid var(--primary-sage); color: var(--primary-sage); background: transparent; box-shadow: none; }
-        .btn-danger { background-color: #a94442; color: white; padding: 0.5rem 1rem; font-size: 0.75rem; box-shadow: none; min-height: auto; }
 
         .page-screen { display: none; animation: fadeIn 0.4s ease; }
         .page-screen.visible { display: block; }
@@ -112,12 +111,22 @@
         .form-row, .form-row.three { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
         label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif; font-weight: 600;}
         input, select, textarea { width: 100%; padding: 1.1rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 4px; background: #fff; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; appearance: none; -webkit-appearance: none; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-sage); }
         textarea { resize: vertical; height: 120px; }
 
-        /* Client Dashboard */
+        /* MFP Macro Matrix Styles */
+        .macro-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1.5rem; }
+        .macro-grid div { display: flex; flex-direction: column; }
+        .macro-grid label { font-size: 0.6rem; text-align: center; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 0.2rem; }
+        .macro-grid input { padding: 0.7rem; font-size: 0.95rem; text-align: center; margin-bottom: 0; font-family: 'Montserrat'; font-weight: 500; }
+        .meal-section { border-bottom: 1px dashed var(--secondary-sand); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+        .meal-section h5 { font-family: 'Montserrat'; font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 1px; }
+        .meal-section textarea { height: 60px; margin-bottom: 0.8rem; font-size: 1rem; }
+
         .dashboard-container { max-width: 1300px; margin: 3rem auto; padding: 0 5%; display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
         .dash-card { background: white; padding: 2.2rem 1.5rem; border-radius: 6px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 2rem; }
         .dash-card h3 { color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.7rem; font-size: 1.25rem; font-weight: 500; }
+        
         .chat-box { height: 260px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #F4F3EE; padding: 1.2rem; border-radius: 3px; margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem; }
         .msg { padding: 0.9rem 1.2rem; border-radius: 4px; max-width: 90%; font-size: 1.05rem; }
         .msg.client { background: var(--primary-sage); color: white; align-self: flex-end; }
@@ -127,21 +136,11 @@
         .journal-accordion { background-color: #FAFAF7; color: var(--text-main); cursor: pointer; padding: 1.2rem; width: 100%; border: 1px solid var(--secondary-sand); border-radius: 4px; text-align: left; font-size: 0.9rem; font-family: 'Montserrat', sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; transition: 0.3s; }
         .journal-accordion.active { background-color: #E6EFE8; border-color: var(--primary-sage); color: var(--primary-sage); }
         .journal-panel { padding: 0 1.2rem; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; border-left: 1px solid var(--secondary-sand); border-right: 1px solid var(--secondary-sand); margin-top: -0.5rem; margin-bottom: 1rem; border-radius: 0 0 4px 4px; border-bottom: 1px solid transparent; }
-        .journal-panel.show { padding: 1.5rem 1.2rem; max-height: 1500px; border-bottom: 1px solid var(--secondary-sand); }
+        .journal-panel.show { padding: 1.5rem 1.2rem; max-height: 2500px; border-bottom: 1px solid var(--secondary-sand); }
         
         .consent-box { background: #F4F3EE; border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: 0.95rem; color: #555; line-height: 1.7; }
         .consent-box h4 { font-family: 'Montserrat', sans-serif; color: var(--primary-sage); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.8rem; font-weight: 600; }
 
-        /* AI AGENT WIDGET */
-        .ai-fab { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: var(--primary-sage); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 15px 35px rgba(0,0,0,0.2); cursor: pointer; z-index: 1000; }
-        .ai-window { display: none; position: fixed; bottom: 95px; right: 5%; width: 90%; max-width: 370px; background: white; border-radius: 6px; box-shadow: 0 25px 50px rgba(0,0,0,0.15); border: 1px solid var(--secondary-sand); z-index: 1000; overflow: hidden; }
-        .ai-header { background: var(--text-main); color: white; padding: 1.2rem; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 1px; display: flex; justify-content: space-between; }
-        .ai-body { height: 280px; padding: 1.2rem; background: #FAFAF7; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 0.8rem; }
-        .ai-input { display: flex; border-top: 1px solid var(--secondary-sand); }
-        .ai-input input { border: none; padding: 1.1rem; width: 100%; border-radius: 0; margin: 0; font-size: 1rem; }
-        .ai-input button { background: var(--primary-sage); color: white; border: none; padding: 0 1.6rem; cursor: pointer; font-family: 'Montserrat'; font-weight: bold;}
-
-        /* Footer */
         footer { padding: 4rem 6%; border-top: 1px solid var(--secondary-sand); color: #666; background: white; display: flex; flex-direction: column; text-align: center; gap: 2.5rem; max-width: 1300px; margin: 0 auto; }
         .footer-col h4 { color: var(--primary-sage); margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; }
         .footer-col p { font-size: 1.05rem; margin-bottom: 0.5rem; }
@@ -180,10 +179,6 @@
             btn.classList.toggle('active');
             btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
         }
-        function toggleAI() {
-            const win = document.getElementById('ai-window');
-            win.style.display = win.style.display === 'block' ? 'none' : 'block';
-        }
         function promptInstall() {
             alert("To install this app on your iPhone:\n\n1. Tap the Share icon (square with an upward arrow) at the bottom of Safari.\n2. Scroll down and tap 'Add to Home Screen'.\n3. Tap 'Add'.");
         }
@@ -215,20 +210,6 @@
         <span class="mobile-drawer-link" onclick="openScreen('screen-login')" id="mobile-portal-link">Client Portal</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-register')" id="mobile-book-link">Register & Book</span>
         <span class="mobile-drawer-link" onclick="window.processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
-    </div>
-
-    <!-- AI AGENT WIDGET -->
-    <div class="ai-fab" onclick="toggleAI()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-    </div>
-
-    <div class="ai-window" id="ai-window">
-        <div class="ai-header"><span>Clinic AI Assistant</span><span style="cursor: pointer;" onclick="toggleAI()">✖</span></div>
-        <div class="ai-body" id="ai-chat-body"><div class="msg admin">Hi there! I'm the Natural Healing Clinic's AI Assistant. How can I help you today?</div></div>
-        <form class="ai-input" onsubmit="return handleAIQuery(event)">
-            <input type="text" id="ai-input-text" placeholder="Type your question..." required>
-            <button type="submit">></button>
-        </form>
     </div>
 
     <!-- ================= SCREEN 1: THE HOME PAGE ================= -->
@@ -267,7 +248,6 @@
             </div>
         </section>
 
-        <!-- Functional Medicine Pricing -->
         <section class="pricing-section">
             <div style="text-align: center; max-width: 700px; margin: 0 auto;">
                 <span class="section-subtitle">Pillar 1: Deep Transformation</span>
@@ -322,7 +302,6 @@
             </div>
         </section>
 
-        <!-- Specialized Clinical Therapy Menu -->
         <section class="service-menu-section">
             <div style="text-align: center; max-width: 700px; margin: 0 auto 4rem auto;">
                 <span class="section-subtitle">Targeted Interventions</span>
@@ -333,17 +312,11 @@
             <h3 class="menu-category-title">Advanced Lymphatic & Fluid Dynamics</h3>
             <div class="menu-grid">
                 <div class="menu-item">
-                    <div class="menu-header">
-                        <h4>Post-Op Lymphatic Recovery</h4>
-                        <span class="menu-price">£95 / £450 (Course of 5)</span>
-                    </div>
+                    <div class="menu-header"><h4>Post-Op Lymphatic Recovery</h4><span class="menu-price">£95 / £450 (Course of 5)</span></div>
                     <p>Ultra-gentle drainage vital for clients recovering from surgeries to accelerate healing.</p>
                 </div>
                 <div class="menu-item">
-                    <div class="menu-header">
-                        <h4>The Sculpt & Flush (TMJ)</h4>
-                        <span class="menu-price">£85</span>
-                    </div>
+                    <div class="menu-header"><h4>The Sculpt & Flush (TMJ)</h4><span class="menu-price">£85</span></div>
                     <p>Relieves jaw tension (TMJ), clears sinus congestion, and sculpts facial tissues.</p>
                 </div>
             </div>
@@ -351,17 +324,11 @@
             <h3 class="menu-category-title">Nervous System & Soft-Tissue Reset</h3>
             <div class="menu-grid">
                 <div class="menu-item">
-                    <div class="menu-header">
-                        <h4>The Vagal Reset</h4>
-                        <span class="menu-price">£85</span>
-                    </div>
+                    <div class="menu-header"><h4>The Vagal Reset</h4><span class="menu-price">£85</span></div>
                     <p>Stimulating the Vagus nerve to pull the body out of chronic 'fight or flight'.</p>
                 </div>
                 <div class="menu-item">
-                    <div class="menu-header">
-                        <h4>Elite Athletic Optimization</h4>
-                        <span class="menu-price">£90</span>
-                    </div>
+                    <div class="menu-header"><h4>Elite Athletic Optimization</h4><span class="menu-price">£90</span></div>
                     <p>Combining deep fascial release with structural realignment for athletes.</p>
                 </div>
             </div>
@@ -386,15 +353,8 @@
             <div class="section-text">
                 <span class="section-subtitle">Practitioner Profile</span>
                 <h2 style="font-size: 2.2rem;">Bridging Functional Medicine & Soft-Tissue Therapy</h2>
-                <p style="margin-bottom: 1.5rem; color: #555; line-height: 1.9;">
-                    Clare Kelly is a leading functional health and soft-tissue practitioner based in Castletown, Isle of Man. With decades of clinical experience, Clare established <strong>The Natural Healing Clinic</strong> with a singular mission: to provide patients suffering from chronic pain, systemic inflammation, and deep-seated physical trauma with clear, sustainable results in a realistic timeframe.
-                </p>
-                <p style="margin-bottom: 1.5rem; color: #555; line-height: 1.9;">
-                    Her clinical methodology is strictly evidence-informed, drawing from advanced training in Bowen Therapy, Manual Lymphatic Drainage (MLD), and Functional Medicine frameworks. Clare works closely alongside mainstream medical protocols, investigating the root causes of musculoskeletal disorders, autoimmune flare-ups, and nervous system dysregulation rather than merely masking symptoms.
-                </p>
-                <p style="margin-bottom: 2.5rem; color: #555; line-height: 1.9;">
-                    Whether treating professional endurance athletes, individuals recovering from complex surgeries, or patients battling long-term fatigue, Clare crafts bespoke recovery protocols tailored entirely to the individual's physiological timeline.
-                </p>
+                <p style="margin-bottom: 1.5rem; color: #555; line-height: 1.9;">Clare Kelly is a leading functional health and soft-tissue practitioner based in Castletown, Isle of Man. With decades of clinical experience, Clare established <strong>The Natural Healing Clinic</strong> with a singular mission: to provide patients suffering from chronic pain, systemic inflammation, and deep-seated physical trauma with clear, sustainable results in a realistic timeframe.</p>
+                <p style="margin-bottom: 1.5rem; color: #555; line-height: 1.9;">Her clinical methodology is strictly evidence-informed, drawing from advanced training in Bowen Therapy, Manual Lymphatic Drainage (MLD), and Functional Medicine frameworks. Clare works closely alongside mainstream medical protocols, investigating the root causes of musculoskeletal disorders, autoimmune flare-ups, and nervous system dysregulation rather than merely masking symptoms.</p>
                 <button type="button" class="btn" onclick="openScreen('screen-register')">Book Your Initial Consultation</button>
             </div>
         </section>
@@ -405,63 +365,33 @@
         <div style="background-color: white; padding: 4rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
             <span class="section-subtitle">Clinical Journal</span>
             <h1 style="font-size: 2.5rem; font-weight: 300; margin-top: 0.5rem;">Research & Evidence Library</h1>
-            <p style="color: #666; margin-top: 1rem; max-width: 650px; margin-left: auto; margin-right: auto; line-height: 1.8;">Explore peer-reviewed studies and clinical insights underpinning our functional medicine protocols.</p>
         </div>
 
         <section style="padding: 6rem 6%; background-color: var(--bg-color);">
             <div class="news-grid">
                 <div class="news-card">
                     <div>
-                        <div class="news-meta">Gut Microbiome • Functional Medicine</div>
-                        <h3 class="news-title">The Role of the Gut Microbiome in Systemic Inflammation</h3>
-                        <p class="news-excerpt">Recent clinical research highlights how intestinal permeability and gut dysbiosis directly fuel chronic inflammatory cascades throughout the body.</p>
+                        <div class="news-meta">Gut Microbiome</div>
+                        <h3 class="news-title">The Role of the Gut Microbiome in Inflammation</h3>
+                        <p class="news-excerpt">Recent clinical studies highlight how gut dysbiosis contributes to chronic inflammatory conditions.</p>
                     </div>
                     <a href="https://www.ifm.org/news-insights/the-functional-medicine-approach-to-the-microbiome/" target="_blank" class="news-link">Read Research Outline &rarr;</a>
                 </div>
-
                 <div class="news-card">
                     <div>
-                        <div class="news-meta">Manual Lymphatic Drainage • Edema</div>
-                        <h3 class="news-title">Efficacy of MLD on Chronic Fatigue and Post-Op Edema</h3>
-                        <p class="news-excerpt">Clinical trials indicate that specialized manual lymphatic drainage significantly accelerates interstitial fluid clearance and reduces recovery times.</p>
-                    </div>
-                    <a href="https://pubmed.ncbi.nlm.nih.gov/25655383/" target="_blank" class="news-link">View Clinical Study &rarr;</a>
-                </div>
-
-                <div class="news-card">
-                    <div>
-                        <div class="news-meta">Autonomic Regulation • Vagus Nerve</div>
+                        <div class="news-meta">Autonomic Regulation</div>
                         <h3 class="news-title">Autonomic Regulation via Somatic Vagal Stimulation</h3>
                         <p class="news-excerpt">An exploration of how targeted physical touch therapies stimulate the vagus nerve to downregulate sympathetic 'fight or flight' overactivity.</p>
                     </div>
                     <a href="https://pubmed.ncbi.nlm.nih.gov/29563853/" target="_blank" class="news-link">Read Peer-Reviewed Paper &rarr;</a>
                 </div>
-
                 <div class="news-card">
                     <div>
-                        <div class="news-meta">Myofascial Release • Pain Management</div>
-                        <h3 class="news-title">Fascial Plasticity and Chronic Back Pain Resolution</h3>
-                        <p class="news-excerpt">Examining how structural Bowen and fascial realignment alter connective tissue matrix tension to provide lasting pain relief.</p>
-                    </div>
-                    <a href="https://pubmed.ncbi.nlm.nih.gov/30429780/" target="_blank" class="news-link">Read Study Abstract &rarr;</a>
-                </div>
-
-                <div class="news-card">
-                    <div>
-                        <div class="news-meta">Adrenal Resilience • Functional Endocrinology</div>
+                        <div class="news-meta">Adrenal Resilience</div>
                         <h3 class="news-title">HPA-Axis Dysfunction in Executive Burnout</h3>
                         <p class="news-excerpt">A deep-dive into cortisol rhythm flattening and nutritional strategies required to restore adrenal vitality and mitochondrial energy.</p>
                     </div>
                     <a href="https://www.ifm.org" target="_blank" class="news-link">Explore IFM Insights &rarr;</a>
-                </div>
-
-                <div class="news-card">
-                    <div>
-                        <div class="news-meta">TMJ & Cranial Dynamics • Sinus Health</div>
-                        <h3 class="news-title">Alleviating Chronic Migraines Through Cranial Release</h3>
-                        <p class="news-excerpt">How releasing temporal and sphenoid restrictions relieves intracranial pressure and chronic sinus congestion.</p>
-                    </div>
-                    <a href="https://pubmed.ncbi.nlm.nih.gov/22184305/" target="_blank" class="news-link">View Clinical Paper &rarr;</a>
                 </div>
             </div>
         </section>
@@ -520,18 +450,61 @@
                     <button class="btn" style="background: white; color: var(--primary-sage); box-shadow: none;" onclick="promptInstall()">How to Install</button>
                 </div>
 
-                <!-- DAILY HEALTH JOURNAL -->
+                <!-- MFP STYLE HEALTH JOURNAL -->
                 <div class="dash-card" style="border-left: 4px solid var(--primary-sage);">
                     <h3>Daily Health & Lifestyle Journal</h3>
-                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 1.5rem;">Log your daily metrics. Click a category to expand and enter details. Clare reviews these to monitor your progress.</p>
+                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 1.5rem;">Log your daily metrics. Provide precise food weights and macronutrient breakdowns where possible.</p>
                     
                     <form onsubmit="return submitDailyLog(event)">
-                        <div class="journal-accordion" onclick="toggleAccordion('journal-food')"><span>🥗 Food & Nutrition</span> <span class="icon">+</span></div>
+                        
+                        <!-- Food (MFP Style) -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-food')"><span>🥗 Advanced Nutrition Tracker</span> <span class="icon">+</span></div>
                         <div class="journal-panel" id="journal-food">
-                            <label>Breakfast</label><input type="text" id="log-breakfast" placeholder="What did you eat?">
-                            <label>Lunch</label><input type="text" id="log-lunch" placeholder="What did you eat?">
-                            <label>Dinner</label><input type="text" id="log-dinner" placeholder="What did you eat?">
-                            <label>Snacks / Symptoms</label><input type="text" id="log-snacks" placeholder="Any snacks or digestive reactions?">
+                            
+                            <div class="meal-section">
+                                <h5>1. Breakfast</h5>
+                                <textarea id="log-brk-desc" placeholder="Exact foods & weights (e.g., 50g oats, 100g blueberries)"></textarea>
+                                <div class="macro-grid">
+                                    <div><label>KCAL</label><input type="number" id="log-brk-cal" placeholder="0"></div>
+                                    <div><label>PRO (g)</label><input type="number" id="log-brk-pro" placeholder="0"></div>
+                                    <div><label>CARB (g)</label><input type="number" id="log-brk-car" placeholder="0"></div>
+                                    <div><label>FAT (g)</label><input type="number" id="log-brk-fat" placeholder="0"></div>
+                                </div>
+                            </div>
+
+                            <div class="meal-section">
+                                <h5>2. Lunch</h5>
+                                <textarea id="log-lun-desc" placeholder="Exact foods & weights (e.g., 200g wild salmon, 100g spinach)"></textarea>
+                                <div class="macro-grid">
+                                    <div><label>KCAL</label><input type="number" id="log-lun-cal" placeholder="0"></div>
+                                    <div><label>PRO (g)</label><input type="number" id="log-lun-pro" placeholder="0"></div>
+                                    <div><label>CARB (g)</label><input type="number" id="log-lun-car" placeholder="0"></div>
+                                    <div><label>FAT (g)</label><input type="number" id="log-lun-fat" placeholder="0"></div>
+                                </div>
+                            </div>
+
+                            <div class="meal-section">
+                                <h5>3. Dinner</h5>
+                                <textarea id="log-din-desc" placeholder="Exact foods & weights"></textarea>
+                                <div class="macro-grid">
+                                    <div><label>KCAL</label><input type="number" id="log-din-cal" placeholder="0"></div>
+                                    <div><label>PRO (g)</label><input type="number" id="log-din-pro" placeholder="0"></div>
+                                    <div><label>CARB (g)</label><input type="number" id="log-din-car" placeholder="0"></div>
+                                    <div><label>FAT (g)</label><input type="number" id="log-din-fat" placeholder="0"></div>
+                                </div>
+                            </div>
+
+                            <div class="meal-section" style="border-bottom: none; margin-bottom: 0;">
+                                <h5>4. Snacks & Supplements</h5>
+                                <textarea id="log-snk-desc" placeholder="Exact foods, supplements, and any digestive symptoms/bloating"></textarea>
+                                <div class="macro-grid">
+                                    <div><label>KCAL</label><input type="number" id="log-snk-cal" placeholder="0"></div>
+                                    <div><label>PRO (g)</label><input type="number" id="log-snk-pro" placeholder="0"></div>
+                                    <div><label>CARB (g)</label><input type="number" id="log-snk-car" placeholder="0"></div>
+                                    <div><label>FAT (g)</label><input type="number" id="log-snk-fat" placeholder="0"></div>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="journal-accordion" onclick="toggleAccordion('journal-activity')"><span>🏃‍♀️ Activity & Movement</span> <span class="icon">+</span></div>
@@ -581,15 +554,15 @@
                     </form>
                 </div>
 
-                <!-- COMPREHENSIVE MEDICAL INTAKE (WITH FUNCTIONAL FORMS) -->
+                <!-- COMPREHENSIVE MEDICAL INTAKE -->
                 <div class="dash-card">
                     <h3>Comprehensive Medical Intake</h3>
                     <p style="font-size: 0.95rem; color: #666; margin-bottom: 1.5rem;">Please complete this detailed functional health profile prior to your initial consultation.</p>
                     
                     <form onsubmit="return window.submitMedicalIntake(event)">
-                        <div class="form-row three">
+                        <div class="form-row">
                             <div><label>Age</label><input type="number" id="intake-age" required></div>
-                            <div><label>Sex</label><select id="intake-sex" required><option value="">Select</option><option value="Female">Female</option><option value="Male">Male</option><option value="Other">Other</option></select></div>
+                            <div><label>Sex</label><select id="intake-sex" required><option value="">Select</option><option value="Female">Female</option><option value="Male">Male</option></select></div>
                         </div>
                         <div class="form-row">
                             <div><label>Height</label><input type="text" id="intake-height" required></div>
@@ -598,7 +571,6 @@
                         <label>Primary Treatment Aims</label>
                         <textarea id="intake-aims" style="height:80px;" required></textarea>
 
-                        <!-- Functional Medicine Additions -->
                         <div style="margin: 2rem 0; border-top: 1px solid var(--secondary-sand); padding-top: 1.5rem;">
                             <h4 style="color: var(--primary-sage); font-family: 'Montserrat'; margin-bottom: 1rem;">1. Immune & Digestion Systems</h4>
                             <label>Have you ever been diagnosed with an autoimmune disease?</label>
@@ -626,7 +598,6 @@
                             <input type="text" id="fm-blood-1" placeholder="Describe post-meal energy">
                         </div>
 
-                        <!-- Informed Consent -->
                         <div class="consent-box">
                             <h4>Functional Medicine Services Informed Consent</h4>
                             <p>I understand in the practice of functional medicine, some treatments are considered "alternative" by the conventional medical community. I understand Functional Medicine is not a substitute for treatment from a primary care physician.</p>
@@ -698,16 +669,6 @@
             return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         }
 
-        function handleAIQuery(e) {
-            e.preventDefault();
-            const input = document.getElementById('ai-input-text');
-            const body = document.getElementById('ai-chat-body');
-            body.innerHTML += `<div class="msg client">${input.value}</div>`;
-            input.value = '';
-            setTimeout(() => body.innerHTML += `<div class="msg admin">In Functional Medicine, we look at root causes. Would you like to book a consultation?</div>`, 800);
-            return false;
-        }
-
         window.processClientLogin = async function(e) {
             e.preventDefault();
             const db = getSupabase();
@@ -758,8 +719,7 @@ Morning Energy: ${document.getElementById('fm-hormone-2').value || 'N/A'}
 Thyroid Markers: ${document.getElementById('fm-thyroid-1').value || 'N/A'}
 Blood Sugar: ${document.getElementById('fm-blood-1').value || 'N/A'}
 
-CONSENT:
-Patient has digitally signed the Functional Medicine Informed Consent waiver regarding alternative treatments and email communication risks.`;
+CONSENT: Patient has digitally signed the Functional Medicine Informed Consent waiver regarding alternative treatments and email communication risks.`;
 
             await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: summary }]);
             alert("Comprehensive Medical Intake questionnaire successfully submitted to Clare!");
@@ -772,14 +732,29 @@ Patient has digitally signed the Functional Medicine Informed Consent waiver reg
             const { data: { user } } = await db.auth.getUser();
             if(!user) return false;
 
+            // Calculate exact macros for the payload
+            const totCal = (Number(document.getElementById('log-brk-cal').value)||0) + (Number(document.getElementById('log-lun-cal').value)||0) + (Number(document.getElementById('log-din-cal').value)||0) + (Number(document.getElementById('log-snk-cal').value)||0);
+            const totPro = (Number(document.getElementById('log-brk-pro').value)||0) + (Number(document.getElementById('log-lun-pro').value)||0) + (Number(document.getElementById('log-din-pro').value)||0) + (Number(document.getElementById('log-snk-pro').value)||0);
+            const totCar = (Number(document.getElementById('log-brk-car').value)||0) + (Number(document.getElementById('log-lun-car').value)||0) + (Number(document.getElementById('log-din-car').value)||0) + (Number(document.getElementById('log-snk-car').value)||0);
+            const totFat = (Number(document.getElementById('log-brk-fat').value)||0) + (Number(document.getElementById('log-lun-fat').value)||0) + (Number(document.getElementById('log-din-fat').value)||0) + (Number(document.getElementById('log-snk-fat').value)||0);
+
             const logData = `[DAILY HEALTH LOG]
 Date: ${new Date().toLocaleDateString('en-GB')}
 
-🥗 FOOD:
-- Breakfast: ${document.getElementById('log-breakfast').value || '-'}
-- Lunch: ${document.getElementById('log-lunch').value || '-'}
-- Dinner: ${document.getElementById('log-dinner').value || '-'}
-- Snacks/Symptoms: ${document.getElementById('log-snacks').value || '-'}
+🥗 FOOD & NUTRITION:
+[Breakfast] ${document.getElementById('log-brk-desc').value || '-'}
+> Macros: ${document.getElementById('log-brk-cal').value||0} kcal | ${document.getElementById('log-brk-pro').value||0}g Pro | ${document.getElementById('log-brk-car').value||0}g Carbs | ${document.getElementById('log-brk-fat').value||0}g Fat
+
+[Lunch] ${document.getElementById('log-lun-desc').value || '-'}
+> Macros: ${document.getElementById('log-lun-cal').value||0} kcal | ${document.getElementById('log-lun-pro').value||0}g Pro | ${document.getElementById('log-lun-car').value||0}g Carbs | ${document.getElementById('log-lun-fat').value||0}g Fat
+
+[Dinner] ${document.getElementById('log-din-desc').value || '-'}
+> Macros: ${document.getElementById('log-din-cal').value||0} kcal | ${document.getElementById('log-din-pro').value||0}g Pro | ${document.getElementById('log-din-car').value||0}g Carbs | ${document.getElementById('log-din-fat').value||0}g Fat
+
+[Snacks] ${document.getElementById('log-snk-desc').value || '-'}
+> Macros: ${document.getElementById('log-snk-cal').value||0} kcal | ${document.getElementById('log-snk-pro').value||0}g Pro | ${document.getElementById('log-snk-car').value||0}g Carbs | ${document.getElementById('log-snk-fat').value||0}g Fat
+
+>> DAILY TOTALS: ${totCal} kcal | ${totPro}g Protein | ${totCar}g Carbs | ${totFat}g Fat
 
 🏃‍♀️ ACTIVITY: ${document.getElementById('log-activity-type').value || '-'} (${document.getElementById('log-activity-dur').value || '0'} mins, ${document.getElementById('log-activity-int').value || '-'})
 
