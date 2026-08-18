@@ -115,11 +115,17 @@
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-sage); }
         textarea { resize: vertical; height: 120px; }
 
-        /* MFP Macro Matrix Styles */
-        .macro-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1.5rem; }
+        /* MFP Macro & Micro Matrix Styles */
+        .macro-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; margin-bottom: 1.5rem; }
         .macro-grid div { display: flex; flex-direction: column; }
         .macro-grid label { font-size: 0.6rem; text-align: center; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 0.2rem; }
         .macro-grid input { padding: 0.7rem; font-size: 0.95rem; text-align: center; margin-bottom: 0; font-family: 'Montserrat'; font-weight: 500; }
+        
+        .micro-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 0.8rem; margin-bottom: 1.5rem; }
+        .micro-grid div { display: flex; flex-direction: column; }
+        .micro-grid label { font-size: 0.55rem; text-align: center; letter-spacing: 1px; color: #888; margin-bottom: 0.2rem; }
+        .micro-grid input { padding: 0.6rem; font-size: 0.85rem; text-align: center; margin-bottom: 0; font-family: 'Montserrat'; background-color: #FAFAF7; }
+
         .meal-section { border-bottom: 1px dashed var(--secondary-sand); padding-bottom: 1rem; margin-bottom: 1.5rem; }
         .meal-section h5 { font-family: 'Montserrat'; font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 1px; }
         .meal-section textarea { height: 60px; margin-bottom: 0.8rem; font-size: 1rem; }
@@ -137,7 +143,7 @@
         .journal-accordion { background-color: #FAFAF7; color: var(--text-main); cursor: pointer; padding: 1.2rem; width: 100%; border: 1px solid var(--secondary-sand); border-radius: 4px; text-align: left; font-size: 0.9rem; font-family: 'Montserrat', sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; transition: 0.3s; }
         .journal-accordion.active { background-color: #E6EFE8; border-color: var(--primary-sage); color: var(--primary-sage); }
         .journal-panel { padding: 0 1.2rem; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; border-left: 1px solid var(--secondary-sand); border-right: 1px solid var(--secondary-sand); margin-top: -0.5rem; margin-bottom: 1rem; border-radius: 0 0 4px 4px; border-bottom: 1px solid transparent; }
-        .journal-panel.show { padding: 1.5rem 1.2rem; max-height: 2500px; border-bottom: 1px solid var(--secondary-sand); overflow: visible; }
+        .journal-panel.show { padding: 1.5rem 1.2rem; max-height: 3500px; border-bottom: 1px solid var(--secondary-sand); overflow: visible; }
         
         .consent-box { background: #F4F3EE; border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: 0.95rem; color: #555; line-height: 1.7; }
         .consent-box h4 { font-family: 'Montserrat', sans-serif; color: var(--primary-sage); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.8rem; font-weight: 600; }
@@ -193,7 +199,6 @@
     <nav>
         <div class="nav-logo" onclick="openScreen('screen-home')">The Natural Healing Clinic</div>
         
-        <!-- Desktop Links -->
         <div class="desktop-nav-links">
             <span class="nav-link-text" onclick="openScreen('screen-about')">About Clare</span>
             <span class="nav-link-text" onclick="openScreen('screen-news')">Journal & Research</span>
@@ -268,7 +273,6 @@
             </div>
         </section>
 
-        <!-- Functional Medicine Pricing -->
         <section class="pricing-section">
             <div style="text-align: center; max-width: 700px; margin: 0 auto;">
                 <span class="section-subtitle">Pillar 1: Deep Transformation</span>
@@ -323,7 +327,6 @@
             </div>
         </section>
 
-        <!-- Specialized Clinical Therapy Menu -->
         <section class="service-menu-section">
             <div style="text-align: center; max-width: 700px; margin: 0 auto 4rem auto;">
                 <span class="section-subtitle">Targeted Interventions</span>
@@ -524,10 +527,10 @@
                     <button class="btn" style="background: white; color: var(--primary-sage); box-shadow: none;" onclick="promptInstall()">How to Install</button>
                 </div>
 
-                <!-- MFP STYLE HEALTH JOURNAL -->
+                <!-- MFP STYLE HEALTH JOURNAL (WITH MICRONUTRIENTS) -->
                 <div class="dash-card" style="border-left: 4px solid var(--primary-sage);">
                     <h3>Daily Health & Lifestyle Journal</h3>
-                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 1.5rem;">Log your daily metrics. Search the live database to track precise food weights and macronutrients.</p>
+                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 1.5rem;">Log your daily metrics. Search the live database to track precise food weights, macronutrients, and key micronutrients.</p>
                     
                     <form onsubmit="return submitDailyLog(event)">
                         
@@ -546,6 +549,7 @@
                                 <div id="food-selection-panel" style="display: none;"></div>
                             </div>
 
+                            <!-- Breakfast -->
                             <div class="meal-section">
                                 <h5>1. Breakfast</h5>
                                 <textarea id="log-brk-desc" placeholder="Exact foods & weights"></textarea>
@@ -554,9 +558,20 @@
                                     <div><label>PRO (g)</label><input type="number" id="log-brk-pro" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                     <div><label>CARB (g)</label><input type="number" id="log-brk-car" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                     <div><label>FAT (g)</label><input type="number" id="log-brk-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>FIBER (g)</label><input type="number" id="log-brk-fib" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                 </div>
+                                <details style="outline: none;">
+                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: var(--primary-sage); cursor: pointer; text-transform: uppercase; letter-spacing: 1px;">+ Edit Micronutrients</summary>
+                                    <div class="micro-grid">
+                                        <div><label>SODIUM (mg)</label><input type="number" id="log-brk-sod" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>POTAS (mg)</label><input type="number" id="log-brk-pot" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>CALC (mg)</label><input type="number" id="log-brk-calc" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>IRON (mg)</label><input type="number" id="log-brk-iron" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    </div>
+                                </details>
                             </div>
 
+                            <!-- Lunch -->
                             <div class="meal-section">
                                 <h5>2. Lunch</h5>
                                 <textarea id="log-lun-desc" placeholder="Exact foods & weights"></textarea>
@@ -565,9 +580,20 @@
                                     <div><label>PRO (g)</label><input type="number" id="log-lun-pro" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                     <div><label>CARB (g)</label><input type="number" id="log-lun-car" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                     <div><label>FAT (g)</label><input type="number" id="log-lun-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>FIBER (g)</label><input type="number" id="log-lun-fib" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                 </div>
+                                <details style="outline: none;">
+                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: var(--primary-sage); cursor: pointer; text-transform: uppercase; letter-spacing: 1px;">+ Edit Micronutrients</summary>
+                                    <div class="micro-grid">
+                                        <div><label>SODIUM (mg)</label><input type="number" id="log-lun-sod" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>POTAS (mg)</label><input type="number" id="log-lun-pot" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>CALC (mg)</label><input type="number" id="log-lun-calc" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>IRON (mg)</label><input type="number" id="log-lun-iron" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    </div>
+                                </details>
                             </div>
 
+                            <!-- Dinner -->
                             <div class="meal-section">
                                 <h5>3. Dinner</h5>
                                 <textarea id="log-din-desc" placeholder="Exact foods & weights"></textarea>
@@ -576,38 +602,54 @@
                                     <div><label>PRO (g)</label><input type="number" id="log-din-pro" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                     <div><label>CARB (g)</label><input type="number" id="log-din-car" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                     <div><label>FAT (g)</label><input type="number" id="log-din-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>FIBER (g)</label><input type="number" id="log-din-fib" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                 </div>
+                                <details style="outline: none;">
+                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: var(--primary-sage); cursor: pointer; text-transform: uppercase; letter-spacing: 1px;">+ Edit Micronutrients</summary>
+                                    <div class="micro-grid">
+                                        <div><label>SODIUM (mg)</label><input type="number" id="log-din-sod" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>POTAS (mg)</label><input type="number" id="log-din-pot" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>CALC (mg)</label><input type="number" id="log-din-calc" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>IRON (mg)</label><input type="number" id="log-din-iron" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    </div>
+                                </details>
                             </div>
 
+                            <!-- Snacks -->
                             <div class="meal-section" style="border-bottom: none; margin-bottom: 0;">
                                 <h5>4. Snacks & Supplements</h5>
-                                <textarea id="log-snk-desc" placeholder="Exact foods, supplements, and any digestive symptoms/bloating"></textarea>
+                                <textarea id="log-snk-desc" placeholder="Exact foods, supplements, and any digestive symptoms"></textarea>
                                 <div class="macro-grid">
                                     <div><label>KCAL</label><input type="number" id="log-snk-cal" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                     <div><label>PRO (g)</label><input type="number" id="log-snk-pro" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                     <div><label>CARB (g)</label><input type="number" id="log-snk-car" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                     <div><label>FAT (g)</label><input type="number" id="log-snk-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>FIBER (g)</label><input type="number" id="log-snk-fib" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                 </div>
+                                <details style="outline: none;">
+                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: var(--primary-sage); cursor: pointer; text-transform: uppercase; letter-spacing: 1px;">+ Edit Micronutrients</summary>
+                                    <div class="micro-grid">
+                                        <div><label>SODIUM (mg)</label><input type="number" id="log-snk-sod" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>POTAS (mg)</label><input type="number" id="log-snk-pot" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>CALC (mg)</label><input type="number" id="log-snk-calc" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>IRON (mg)</label><input type="number" id="log-snk-iron" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    </div>
+                                </details>
                             </div>
 
-                            <!-- LIVE RUNNING MACRO TOTALS BAR -->
-                            <div style="background: var(--text-main); color: white; padding: 1.2rem; border-radius: 6px; margin-top: 1rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; font-family: 'Montserrat';">
-                                <div style="text-align:center;">
-                                    <span style="font-size:0.65rem; color:#aaa; letter-spacing:1.5px; display:block; margin-bottom: 0.3rem;">CALORIES</span>
-                                    <strong id="tot-cal" style="font-size:1.4rem;">0</strong>
-                                </div>
-                                <div style="text-align:center;">
-                                    <span style="font-size:0.65rem; color:#aaa; letter-spacing:1.5px; display:block; margin-bottom: 0.3rem;">PROTEIN</span>
-                                    <strong id="tot-pro" style="font-size:1.2rem;">0g</strong>
-                                </div>
-                                <div style="text-align:center;">
-                                    <span style="font-size:0.65rem; color:#aaa; letter-spacing:1.5px; display:block; margin-bottom: 0.3rem;">CARBS</span>
-                                    <strong id="tot-car" style="font-size:1.2rem;">0g</strong>
-                                </div>
-                                <div style="text-align:center;">
-                                    <span style="font-size:0.65rem; color:#aaa; letter-spacing:1.5px; display:block; margin-bottom: 0.3rem;">FAT</span>
-                                    <strong id="tot-fat" style="font-size:1.2rem;">0g</strong>
-                                </div>
+                            <!-- LIVE RUNNING MACRO & MICRO TOTALS BAR -->
+                            <div style="background: var(--text-main); color: white; padding: 1.2rem; border-radius: 6px 6px 0 0; margin-top: 1rem; display: flex; justify-content: space-between; font-family: 'Montserrat';">
+                                <div style="text-align:center;"><span style="font-size:0.65rem; color:#aaa; letter-spacing:1.5px; display:block; margin-bottom: 0.3rem;">CALORIES</span><strong id="tot-cal" style="font-size:1.4rem;">0</strong></div>
+                                <div style="text-align:center;"><span style="font-size:0.65rem; color:#aaa; letter-spacing:1.5px; display:block; margin-bottom: 0.3rem;">PROTEIN</span><strong id="tot-pro" style="font-size:1.2rem;">0g</strong></div>
+                                <div style="text-align:center;"><span style="font-size:0.65rem; color:#aaa; letter-spacing:1.5px; display:block; margin-bottom: 0.3rem;">CARBS</span><strong id="tot-car" style="font-size:1.2rem;">0g</strong></div>
+                                <div style="text-align:center;"><span style="font-size:0.65rem; color:#aaa; letter-spacing:1.5px; display:block; margin-bottom: 0.3rem;">FAT</span><strong id="tot-fat" style="font-size:1.2rem;">0g</strong></div>
+                                <div style="text-align:center;"><span style="font-size:0.65rem; color:#aaa; letter-spacing:1.5px; display:block; margin-bottom: 0.3rem;">FIBER</span><strong id="tot-fib" style="font-size:1.2rem; color:var(--primary-sage);">0g</strong></div>
+                            </div>
+                            <div style="background: #E6EFE8; color: var(--text-main); padding: 1rem 1.2rem; border-radius: 0 0 6px 6px; margin-bottom: 1.5rem; display: flex; justify-content: space-between; font-family: 'Montserrat'; border: 1px solid var(--primary-sage); border-top: none;">
+                                <div style="text-align:center;"><span style="font-size:0.6rem; color:#555; letter-spacing:1px; display:block; margin-bottom: 0.2rem;">SODIUM</span><strong id="tot-sod" style="font-size:1rem;">0mg</strong></div>
+                                <div style="text-align:center;"><span style="font-size:0.6rem; color:#555; letter-spacing:1px; display:block; margin-bottom: 0.2rem;">POTASSIUM</span><strong id="tot-pot" style="font-size:1rem;">0mg</strong></div>
+                                <div style="text-align:center;"><span style="font-size:0.6rem; color:#555; letter-spacing:1px; display:block; margin-bottom: 0.2rem;">CALCIUM</span><strong id="tot-calc" style="font-size:1rem;">0mg</strong></div>
+                                <div style="text-align:center;"><span style="font-size:0.6rem; color:#555; letter-spacing:1px; display:block; margin-bottom: 0.2rem;">IRON</span><strong id="tot-iron" style="font-size:1rem;">0mg</strong></div>
                             </div>
 
                         </div>
@@ -774,16 +816,6 @@
             return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         }
 
-        function handleAIQuery(e) {
-            e.preventDefault();
-            const input = document.getElementById('ai-input-text');
-            const body = document.getElementById('ai-chat-body');
-            body.innerHTML += `<div class="msg client">${input.value}</div>`;
-            input.value = '';
-            setTimeout(() => body.innerHTML += `<div class="msg admin">In Functional Medicine, we look at root causes. Would you like to book a consultation?</div>`, 800);
-            return false;
-        }
-
         window.processClientLogin = async function(e) {
             e.preventDefault();
             const db = getSupabase();
@@ -834,15 +866,14 @@ Morning Energy: ${document.getElementById('fm-hormone-2').value || 'N/A'}
 Thyroid Markers: ${document.getElementById('fm-thyroid-1').value || 'N/A'}
 Blood Sugar: ${document.getElementById('fm-blood-1').value || 'N/A'}
 
-CONSENT:
-Patient has digitally signed the Functional Medicine Informed Consent waiver regarding alternative treatments and email communication risks.`;
+CONSENT: Patient has digitally signed the Functional Medicine Informed Consent waiver.`;
 
             await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: summary }]);
             alert("Comprehensive Medical Intake questionnaire successfully submitted to Clare!");
             return false;
         };
 
-        // --- OPEN FOOD FACTS API INTEGRATION ---
+        // --- OPEN FOOD FACTS API INTEGRATION (MACROS + MICROS) ---
         window.searchFood = async function() {
             const query = document.getElementById('food-search-query').value.trim();
             if(!query) return;
@@ -856,18 +887,27 @@ Patient has digitally signed the Functional Medicine Informed Consent waiver reg
                     data.products.forEach((p) => {
                         const name = p.product_name || 'Unknown Food';
                         const brand = p.brands ? `(${p.brands})` : '';
+                        
+                        // Macros
                         const kcal = p.nutriments ? (p.nutriments['energy-kcal_100g'] || 0) : 0;
                         const pro = p.nutriments ? (p.nutriments.proteins_100g || 0) : 0;
                         const car = p.nutriments ? (p.nutriments.carbohydrates_100g || 0) : 0;
                         const fat = p.nutriments ? (p.nutriments.fat_100g || 0) : 0;
+                        const fib = p.nutriments ? (p.nutriments.fiber_100g || 0) : 0;
+
+                        // Micros (Converting grams to mg for OFF API)
+                        const sod = p.nutriments ? ((p.nutriments.sodium_100g || 0) * 1000) : 0;
+                        const pot = p.nutriments ? ((p.nutriments.potassium_100g || 0) * 1000) : 0;
+                        const calc = p.nutriments ? ((p.nutriments.calcium_100g || 0) * 1000) : 0;
+                        const iron = p.nutriments ? ((p.nutriments.iron_100g || 0) * 1000) : 0;
                         
                         const safeName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
                         
                         html += `<li style="padding: 0.8rem; border-bottom: 1px solid #eee; cursor: pointer; transition: background 0.2s;" 
-                            onclick="window.selectFood('${safeName}', ${kcal}, ${pro}, ${car}, ${fat})"
+                            onclick="window.selectFood('${safeName}', ${kcal}, ${pro}, ${car}, ${fat}, ${fib}, ${sod}, ${pot}, ${calc}, ${iron})"
                             onmouseover="this.style.backgroundColor='#F4F3EE'" onmouseout="this.style.backgroundColor='transparent'">
                             <strong style="color: var(--primary-sage); font-family: 'Montserrat';">${name} ${brand}</strong><br>
-                            <span style="font-size:0.8rem; color:#666; font-family: 'Montserrat';">Per 100g: ${kcal} kcal | Pro: ${pro}g | Carb: ${car}g | Fat: ${fat}g</span>
+                            <span style="font-size:0.8rem; color:#666; font-family: 'Montserrat';">Per 100g: ${kcal} kcal | Pro: ${pro}g | Carb: ${car}g | Fat: ${fat}g | Fiber: ${fib}g</span>
                         </li>`;
                     });
                     html += '</ul>';
@@ -880,7 +920,7 @@ Patient has digitally signed the Functional Medicine Informed Consent waiver reg
             }
         };
 
-        window.selectFood = function(name, kcal100, pro100, car100, fat100) {
+        window.selectFood = function(name, k, p, c, f, fib, sod, pot, calc, iron) {
             const panel = document.getElementById('food-selection-panel');
             panel.style.display = 'block';
             panel.innerHTML = `
@@ -888,10 +928,10 @@ Patient has digitally signed the Functional Medicine Informed Consent waiver reg
                     <h5 style="margin-bottom:0.8rem; color: var(--primary-sage); font-family: 'Montserrat';">${name}</h5>
                     <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1rem;">
                         <label style="margin:0; font-size: 0.85rem;">Portion (grams):</label>
-                        <input type="number" id="food-grams" value="100" style="width: 100px; padding:0.6rem; margin:0;" oninput="window.updatePreviewMacros(${kcal100}, ${pro100}, ${car100}, ${fat100})">
+                        <input type="number" id="food-grams" value="100" style="width: 100px; padding:0.6rem; margin:0;" oninput="window.updatePreviewMacros(${k}, ${p}, ${c}, ${f}, ${fib})">
                     </div>
                     <div id="food-macro-preview" style="font-size:0.9rem; color:#555; margin-bottom:1rem; font-family: 'Montserrat';">
-                        <strong style="color:var(--primary-sage);">${kcal100} kcal</strong> | ${pro100}g Pro | ${car100}g Carbs | ${fat100}g Fat
+                        <strong style="color:var(--primary-sage);">${k} kcal</strong> | ${p}g Pro | ${c}g Carbs | ${f}g Fat | ${fib}g Fiber
                     </div>
                     <div style="display:flex; gap:0.8rem;">
                         <select id="food-meal-target" style="padding:0.6rem; margin:0; flex:1;">
@@ -900,20 +940,20 @@ Patient has digitally signed the Functional Medicine Informed Consent waiver reg
                             <option value="din">Dinner</option>
                             <option value="snk">Snacks & Supplements</option>
                         </select>
-                        <button type="button" class="btn" style="padding:0 1.2rem; min-height:35px;" onclick="window.addFoodToLog('${name.replace(/'/g, "\\'")}', ${kcal100}, ${pro100}, ${car100}, ${fat100})">Add to Meal</button>
+                        <button type="button" class="btn" style="padding:0 1.2rem; min-height:35px;" onclick="window.addFoodToLog('${name.replace(/'/g, "\\'")}', ${k}, ${p}, ${c}, ${f}, ${fib}, ${sod}, ${pot}, ${calc}, ${iron})">Add to Meal</button>
                     </div>
                 </div>
             `;
             document.getElementById('food-search-results').innerHTML = '';
         };
 
-        window.updatePreviewMacros = function(k, p, c, f) {
+        window.updatePreviewMacros = function(k, p, c, f, fib) {
             const g = document.getElementById('food-grams').value || 0;
             const ratio = g / 100;
-            document.getElementById('food-macro-preview').innerHTML = `<strong style="color:var(--primary-sage);">${Math.round(k*ratio)} kcal</strong> | ${Math.round(p*ratio)}g Pro | ${Math.round(c*ratio)}g Carbs | ${Math.round(f*ratio)}g Fat`;
+            document.getElementById('food-macro-preview').innerHTML = `<strong style="color:var(--primary-sage);">${Math.round(k*ratio)} kcal</strong> | ${Math.round(p*ratio)}g Pro | ${Math.round(c*ratio)}g Carbs | ${Math.round(f*ratio)}g Fat | ${Math.round(fib*ratio)}g Fiber`;
         };
 
-        window.addFoodToLog = function(name, k, p, c, f) {
+        window.addFoodToLog = function(name, k, p, c, f, fib, sod, pot, calc, iron) {
             const g = document.getElementById('food-grams').value || 0;
             const ratio = g / 100;
             const meal = document.getElementById('food-meal-target').value;
@@ -922,15 +962,16 @@ Patient has digitally signed the Functional Medicine Informed Consent waiver reg
             const entryText = `${name} (${g}g)\n`;
             descInput.value = descInput.value ? descInput.value + entryText : entryText;
 
-            const calIn = document.getElementById(`log-${meal}-cal`);
-            const proIn = document.getElementById(`log-${meal}-pro`);
-            const carIn = document.getElementById(`log-${meal}-car`);
-            const fatIn = document.getElementById(`log-${meal}-fat`);
+            document.getElementById(`log-${meal}-cal`).value = Math.round((Number(document.getElementById(`log-${meal}-cal`).value) || 0) + (k * ratio));
+            document.getElementById(`log-${meal}-pro`).value = Math.round((Number(document.getElementById(`log-${meal}-pro`).value) || 0) + (p * ratio));
+            document.getElementById(`log-${meal}-car`).value = Math.round((Number(document.getElementById(`log-${meal}-car`).value) || 0) + (c * ratio));
+            document.getElementById(`log-${meal}-fat`).value = Math.round((Number(document.getElementById(`log-${meal}-fat`).value) || 0) + (f * ratio));
+            document.getElementById(`log-${meal}-fib`).value = Math.round((Number(document.getElementById(`log-${meal}-fib`).value) || 0) + (fib * ratio));
 
-            calIn.value = Math.round((Number(calIn.value) || 0) + (k * ratio));
-            proIn.value = Math.round((Number(proIn.value) || 0) + (p * ratio));
-            carIn.value = Math.round((Number(carIn.value) || 0) + (c * ratio));
-            fatIn.value = Math.round((Number(fatIn.value) || 0) + (f * ratio));
+            document.getElementById(`log-${meal}-sod`).value = Math.round((Number(document.getElementById(`log-${meal}-sod`).value) || 0) + (sod * ratio));
+            document.getElementById(`log-${meal}-pot`).value = Math.round((Number(document.getElementById(`log-${meal}-pot`).value) || 0) + (pot * ratio));
+            document.getElementById(`log-${meal}-calc`).value = Math.round((Number(document.getElementById(`log-${meal}-calc`).value) || 0) + (calc * ratio));
+            document.getElementById(`log-${meal}-iron`).value = Math.round((Number(document.getElementById(`log-${meal}-iron`).value) || 0) + (iron * ratio));
 
             document.getElementById('food-selection-panel').style.display = 'none';
             document.getElementById('food-search-query').value = '';
@@ -941,17 +982,29 @@ Patient has digitally signed the Functional Medicine Informed Consent waiver reg
 
         window.updateDailyTotals = function() {
             const meals = ['brk', 'lun', 'din', 'snk'];
-            let tCal=0, tPro=0, tCar=0, tFat=0;
+            let tCal=0, tPro=0, tCar=0, tFat=0, tFib=0, tSod=0, tPot=0, tCalc=0, tIron=0;
             meals.forEach(m => {
                 tCal += Number(document.getElementById(`log-${m}-cal`).value) || 0;
                 tPro += Number(document.getElementById(`log-${m}-pro`).value) || 0;
                 tCar += Number(document.getElementById(`log-${m}-car`).value) || 0;
                 tFat += Number(document.getElementById(`log-${m}-fat`).value) || 0;
+                tFib += Number(document.getElementById(`log-${m}-fib`).value) || 0;
+                
+                tSod += Number(document.getElementById(`log-${m}-sod`).value) || 0;
+                tPot += Number(document.getElementById(`log-${m}-pot`).value) || 0;
+                tCalc += Number(document.getElementById(`log-${m}-calc`).value) || 0;
+                tIron += Number(document.getElementById(`log-${m}-iron`).value) || 0;
             });
             document.getElementById('tot-cal').innerText = tCal;
             document.getElementById('tot-pro').innerText = tPro + 'g';
             document.getElementById('tot-car').innerText = tCar + 'g';
             document.getElementById('tot-fat').innerText = tFat + 'g';
+            document.getElementById('tot-fib').innerText = tFib + 'g';
+            
+            document.getElementById('tot-sod').innerText = tSod + 'mg';
+            document.getElementById('tot-pot').innerText = tPot + 'mg';
+            document.getElementById('tot-calc').innerText = tCalc + 'mg';
+            document.getElementById('tot-iron').innerText = tIron + 'mg';
         };
 
         window.submitDailyLog = async function(e) {
@@ -960,28 +1013,34 @@ Patient has digitally signed the Functional Medicine Informed Consent waiver reg
             const { data: { user } } = await db.auth.getUser();
             if(!user) return false;
 
-            const totCal = (Number(document.getElementById('log-brk-cal').value)||0) + (Number(document.getElementById('log-lun-cal').value)||0) + (Number(document.getElementById('log-din-cal').value)||0) + (Number(document.getElementById('log-snk-cal').value)||0);
-            const totPro = (Number(document.getElementById('log-brk-pro').value)||0) + (Number(document.getElementById('log-lun-pro').value)||0) + (Number(document.getElementById('log-din-pro').value)||0) + (Number(document.getElementById('log-snk-pro').value)||0);
-            const totCar = (Number(document.getElementById('log-brk-car').value)||0) + (Number(document.getElementById('log-lun-car').value)||0) + (Number(document.getElementById('log-din-car').value)||0) + (Number(document.getElementById('log-snk-car').value)||0);
-            const totFat = (Number(document.getElementById('log-brk-fat').value)||0) + (Number(document.getElementById('log-lun-fat').value)||0) + (Number(document.getElementById('log-din-fat').value)||0) + (Number(document.getElementById('log-snk-fat').value)||0);
+            const tCal = document.getElementById('tot-cal').innerText;
+            const tPro = document.getElementById('tot-pro').innerText;
+            const tCar = document.getElementById('tot-car').innerText;
+            const tFat = document.getElementById('tot-fat').innerText;
+            const tFib = document.getElementById('tot-fib').innerText;
 
             const logData = `[DAILY HEALTH LOG]
 Date: ${new Date().toLocaleDateString('en-GB')}
 
 🥗 FOOD & NUTRITION:
 [Breakfast] ${document.getElementById('log-brk-desc').value || '-'}
-> Macros: ${document.getElementById('log-brk-cal').value||0} kcal | ${document.getElementById('log-brk-pro').value||0}g Pro | ${document.getElementById('log-brk-car').value||0}g Carbs | ${document.getElementById('log-brk-fat').value||0}g Fat
+> Macros: ${document.getElementById('log-brk-cal').value||0}kcal | ${document.getElementById('log-brk-pro').value||0}g Pro | ${document.getElementById('log-brk-car').value||0}g Carb | ${document.getElementById('log-brk-fat').value||0}g Fat | ${document.getElementById('log-brk-fib').value||0}g Fib
+> Micros: Sodium: ${document.getElementById('log-brk-sod').value||0}mg | Potassium: ${document.getElementById('log-brk-pot').value||0}mg | Calcium: ${document.getElementById('log-brk-calc').value||0}mg | Iron: ${document.getElementById('log-brk-iron').value||0}mg
 
 [Lunch] ${document.getElementById('log-lun-desc').value || '-'}
-> Macros: ${document.getElementById('log-lun-cal').value||0} kcal | ${document.getElementById('log-lun-pro').value||0}g Pro | ${document.getElementById('log-lun-car').value||0}g Carbs | ${document.getElementById('log-lun-fat').value||0}g Fat
+> Macros: ${document.getElementById('log-lun-cal').value||0}kcal | ${document.getElementById('log-lun-pro').value||0}g Pro | ${document.getElementById('log-lun-car').value||0}g Carb | ${document.getElementById('log-lun-fat').value||0}g Fat | ${document.getElementById('log-lun-fib').value||0}g Fib
+> Micros: Sodium: ${document.getElementById('log-lun-sod').value||0}mg | Potassium: ${document.getElementById('log-lun-pot').value||0}mg | Calcium: ${document.getElementById('log-lun-calc').value||0}mg | Iron: ${document.getElementById('log-lun-iron').value||0}mg
 
 [Dinner] ${document.getElementById('log-din-desc').value || '-'}
-> Macros: ${document.getElementById('log-din-cal').value||0} kcal | ${document.getElementById('log-din-pro').value||0}g Pro | ${document.getElementById('log-din-car').value||0}g Carbs | ${document.getElementById('log-din-fat').value||0}g Fat
+> Macros: ${document.getElementById('log-din-cal').value||0}kcal | ${document.getElementById('log-din-pro').value||0}g Pro | ${document.getElementById('log-din-car').value||0}g Carb | ${document.getElementById('log-din-fat').value||0}g Fat | ${document.getElementById('log-din-fib').value||0}g Fib
+> Micros: Sodium: ${document.getElementById('log-din-sod').value||0}mg | Potassium: ${document.getElementById('log-din-pot').value||0}mg | Calcium: ${document.getElementById('log-din-calc').value||0}mg | Iron: ${document.getElementById('log-din-iron').value||0}mg
 
 [Snacks] ${document.getElementById('log-snk-desc').value || '-'}
-> Macros: ${document.getElementById('log-snk-cal').value||0} kcal | ${document.getElementById('log-snk-pro').value||0}g Pro | ${document.getElementById('log-snk-car').value||0}g Carbs | ${document.getElementById('log-snk-fat').value||0}g Fat
+> Macros: ${document.getElementById('log-snk-cal').value||0}kcal | ${document.getElementById('log-snk-pro').value||0}g Pro | ${document.getElementById('log-snk-car').value||0}g Carb | ${document.getElementById('log-snk-fat').value||0}g Fat | ${document.getElementById('log-snk-fib').value||0}g Fib
+> Micros: Sodium: ${document.getElementById('log-snk-sod').value||0}mg | Potassium: ${document.getElementById('log-snk-pot').value||0}mg | Calcium: ${document.getElementById('log-snk-calc').value||0}mg | Iron: ${document.getElementById('log-snk-iron').value||0}mg
 
->> DAILY TOTALS: ${totCal} kcal | ${totPro}g Protein | ${totCar}g Carbs | ${totFat}g Fat
+>> DAILY MACRO TOTALS: ${tCal} kcal | ${tPro} Protein | ${tCar} Carbs | ${tFat} Fat | ${tFib} Fiber
+>> DAILY MICRO TOTALS: ${document.getElementById('tot-sod').innerText} Sodium | ${document.getElementById('tot-pot').innerText} Potassium | ${document.getElementById('tot-calc').innerText} Calcium | ${document.getElementById('tot-iron').innerText} Iron
 
 🏃‍♀️ ACTIVITY: ${document.getElementById('log-activity-type').value || '-'} (${document.getElementById('log-activity-dur').value || '0'} mins, ${document.getElementById('log-activity-int').value || '-'})
 
