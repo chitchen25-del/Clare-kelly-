@@ -125,8 +125,8 @@
         .app-promo-card { background: linear-gradient(135deg, #4A594D, #3B473D); color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; box-shadow: 0 15px 40px rgba(74,89,77,0.25); }
         .app-promo-card h4 { font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 0.4rem; font-weight: 600; letter-spacing: 1px; }
 
-        /* REFINED HIGH-END JOURNAL TABS */
-        .journal-tab-btn { background: white; border: 1px solid var(--secondary-sand); border-radius: 30px; padding: 0.8rem 1rem; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); cursor: pointer; transition: all 0.3s; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        /* REFINED HIGH-END JOURNAL TABS (PILLS) */
+        .journal-tab-btn { flex: 0 0 auto; background: white; border: 1px solid var(--secondary-sand); border-radius: 30px; padding: 0.8rem 1.2rem; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); cursor: pointer; transition: all 0.3s; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .journal-tab-btn:hover { color: var(--primary-sage); }
         .journal-tab-btn.active { background: var(--primary-sage) !important; color: white !important; border-color: var(--primary-sage) !important; box-shadow: 0 6px 15px rgba(74, 89, 77, 0.2) !important; }
 
@@ -481,12 +481,12 @@
                     <form onsubmit="return submitDailyLog(event)">
                         
                         <!-- REFINED HIGH-END JOURNAL TABS -->
-                        <div style="display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.8rem; margin-bottom: 2.5rem; scrollbar-width: none;">
-                            <button type="button" class="journal-tab-btn active" onclick="switchJournalTab('j-food', this)" style="flex: 1; min-width: 110px;">Nutrition</button>
-                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-activity', this)" style="flex: 1; min-width: 110px;">Activity</button>
-                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-mood', this)" style="flex: 1; min-width: 110px;">Mood & Mind</button>
-                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-sleep', this)" style="flex: 1; min-width: 110px;">Sleep</button>
-                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-biometrics', this)" style="flex: 1; min-width: 110px;">Biometrics</button>
+                        <div style="display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.8rem; margin-bottom: 2.5rem; scrollbar-width: none; -webkit-overflow-scrolling: touch;">
+                            <button type="button" class="journal-tab-btn active" onclick="switchJournalTab('j-food', this)">Nutrition</button>
+                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-activity', this)">Activity</button>
+                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-mood', this)">Mood & Mind</button>
+                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-sleep', this)">Sleep</button>
+                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-biometrics', this)">Biometrics</button>
                         </div>
 
                         <!-- Pane: NUTRITION (Includes Scanner) -->
