@@ -132,7 +132,7 @@
         .journal-panel { padding: 0 1.5rem; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; border-left: 1px solid var(--secondary-sand); border-right: 1px solid var(--secondary-sand); margin-top: -0.8rem; margin-bottom: 1.5rem; border-radius: 0 0 8px 8px; border-bottom: 1px solid transparent; }
         .journal-panel.show { padding: 2rem 1.5rem; max-height: 4000px; border-bottom: 1px solid var(--secondary-sand); box-shadow: 0 12px 30px rgba(0,0,0,0.03); overflow: visible; }
         
-        /* RESTRUCTURED MFP MACRO & MICRO MATRIX (4 & 5 COLUMNS) */
+        /* RESTRUCTURED MFP MACRO & MICRO MATRIX */
         .macro-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
         .macro-grid div { display: flex; flex-direction: column; }
         .macro-grid label { font-size: 0.6rem; text-align: center; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 0.4rem; font-weight: 600; }
@@ -164,9 +164,8 @@
         .premium-list-item span { font-size: 0.75rem; color: #777; font-family: 'Montserrat'; display: block; margin-top: 0.3rem; }
 
         /* SCANNER SPECIFIC UI TWEAKS */
-        #reader { border: none !important; }
-        #reader video { object-fit: cover; border-radius: 8px; }
-        #reader__dashboard_section_csr span { font-family: 'Montserrat', sans-serif !important; font-size: 0.8rem; }
+        #reader { border: none !important; width: 100%; border-radius: 8px; overflow: hidden; background: #000; }
+        #reader video { object-fit: cover; width: 100%; height: 100%; }
 
         footer { padding: 4rem 6%; border-top: 1px solid var(--secondary-sand); color: #666; background: white; display: flex; flex-direction: column; text-align: center; gap: 2.5rem; max-width: 1300px; margin: 0 auto; }
         .footer-col h4 { color: var(--primary-sage); margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; }
@@ -499,7 +498,7 @@
 
                                 <!-- Scanner Camera Feed Container -->
                                 <div id="scanner-container" style="display: none; margin-bottom: 1rem; padding: 1rem; background: white; border: 1px solid var(--secondary-sand); border-radius: 8px;">
-                                    <div id="reader" style="width: 100%;"></div>
+                                    <div id="reader" style="width: 100%; min-height: 250px;"></div>
                                     <button type="button" class="btn btn-outline" style="width: 100%; margin-top: 1rem; color: #a94442; border-color: #a94442; box-shadow: none;" onclick="window.closeScanner()">Cancel Scan</button>
                                 </div>
 
@@ -879,55 +878,78 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
             }
         };
 
-        // --- SCANNER LOGIC ---
+        // --- DIRECT CORE API SCANNER LOGIC FOR iOS ---
         window.startScanner = function() {
             const scannerContainer = document.getElementById('scanner-container');
             scannerContainer.style.display = 'block';
-            if (!window.html5QrcodeScanner) {
-                window.html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: {width: 250, height: 150} }, false);
+            
+            const resBox = document.getElementById('food-search-results');
+            resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Initializing camera...</p>';
+
+            if (!window.html5QrCode) {
+                window.html5QrCode = new Html5Qrcode("reader");
             }
-            window.html5QrcodeScanner.render(async function onScanSuccess(decodedText) {
-                window.closeScanner();
-                const resBox = document.getElementById('food-search-results');
-                resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Looking up scanned item...</p>';
-                try {
-                    const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${decodedText}.json`);
-                    const data = await res.json();
-                    
-                    if (data.status === 1 && data.product) {
-                        const p = data.product;
-                        const name = p.product_name || 'Unknown Food';
-                        const brand = p.brands ? `(${p.brands})` : '';
-                        const fullName = `${name} ${brand}`.trim();
+            
+            // Explicitly request the back camera, which fixes iOS failures
+            window.html5QrCode.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 150 },
+                    aspectRatio: 1.0
+                },
+                async function onScanSuccess(decodedText) {
+                    window.closeScanner();
+                    resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Looking up scanned item...</p>';
+                    try {
+                        const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${decodedText}.json`);
+                        const data = await res.json();
                         
-                        const kcal = p.nutriments ? (p.nutriments['energy-kcal_100g'] || 0) : 0;
-                        const pro = p.nutriments ? (p.nutriments.proteins_100g || 0) : 0;
-                        const car = p.nutriments ? (p.nutriments.carbohydrates_100g || 0) : 0;
-                        const fat = p.nutriments ? (p.nutriments.fat_100g || 0) : 0;
-                        const fib = p.nutriments ? (p.nutriments.fiber_100g || 0) : 0;
-                        const sod = p.nutriments ? ((p.nutriments.sodium_100g || 0) * 1000) : 0;
-                        const pot = p.nutriments ? ((p.nutriments.potassium_100g || 0) * 1000) : 0;
-                        const calc = p.nutriments ? ((p.nutriments.calcium_100g || 0) * 1000) : 0;
-                        const iron = p.nutriments ? ((p.nutriments.iron_100g || 0) * 1000) : 0;
-                        
-                        const safeName = fullName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                        
-                        // Pass exact nutrients straight into the preview panel
-                        window.selectFood(safeName, kcal, pro, car, fat, fib, sod, pot, calc, iron);
-                    } else {
-                        resBox.innerHTML = `<p style="color:#a94442; font-size:0.9rem; margin-top:0.5rem;">Product barcode (${decodedText}) not found in database.</p>`;
+                        if (data.status === 1 && data.product) {
+                            const p = data.product;
+                            const name = p.product_name || 'Unknown Food';
+                            const brand = p.brands ? `(${p.brands})` : '';
+                            const fullName = `${name} ${brand}`.trim();
+                            
+                            const kcal = p.nutriments ? (p.nutriments['energy-kcal_100g'] || 0) : 0;
+                            const pro = p.nutriments ? (p.nutriments.proteins_100g || 0) : 0;
+                            const car = p.nutriments ? (p.nutriments.carbohydrates_100g || 0) : 0;
+                            const fat = p.nutriments ? (p.nutriments.fat_100g || 0) : 0;
+                            const fib = p.nutriments ? (p.nutriments.fiber_100g || 0) : 0;
+                            const sod = p.nutriments ? ((p.nutriments.sodium_100g || 0) * 1000) : 0;
+                            const pot = p.nutriments ? ((p.nutriments.potassium_100g || 0) * 1000) : 0;
+                            const calc = p.nutriments ? ((p.nutriments.calcium_100g || 0) * 1000) : 0;
+                            const iron = p.nutriments ? ((p.nutriments.iron_100g || 0) * 1000) : 0;
+                            
+                            const safeName = fullName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                            window.selectFood(safeName, kcal, pro, car, fat, fib, sod, pot, calc, iron);
+                        } else {
+                            resBox.innerHTML = `<p style="color:#a94442; font-size:0.9rem; margin-top:0.5rem;">Product barcode (${decodedText}) not found in database.</p>`;
+                        }
+                    } catch(err) {
+                        resBox.innerHTML = '<p style="color:#a94442; font-size:0.9rem; margin-top:0.5rem;">Error connecting to database.</p>';
                     }
-                } catch(err) {
-                    resBox.innerHTML = '<p style="color:#a94442; font-size:0.9rem; margin-top:0.5rem;">Error connecting to database.</p>';
+                },
+                function onScanFailure(error) {
+                    // This fires repeatedly on every empty frame, safe to ignore
                 }
+            ).then(() => {
+                resBox.innerHTML = ''; // Clear initializing message once running
+            }).catch((err) => {
+                // If iOS still blocks it, print the exact error on the screen
+                resBox.innerHTML = `<p style="color:#a94442; font-size:0.9rem; margin-top:0.5rem;">Camera Error: ${err}</p>`;
             });
         };
 
         window.closeScanner = function() {
-            if (window.html5QrcodeScanner) {
-                window.html5QrcodeScanner.clear().then(() => {
+            if (window.html5QrCode) {
+                window.html5QrCode.stop().then(() => {
+                    document.getElementById('scanner-container').style.display = 'none';
+                }).catch(err => {
                     document.getElementById('scanner-container').style.display = 'none';
                 });
+            } else {
+                document.getElementById('scanner-container').style.display = 'none';
             }
         };
 
