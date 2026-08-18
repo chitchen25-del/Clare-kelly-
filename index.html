@@ -837,14 +837,18 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
             return false;
         };
 
-        // --- OPEN FOOD FACTS API INTEGRATION (TEXT SEARCH & SCANNER) ---
+        // --- OPEN FOOD FACTS API INTEGRATION (V2 WITH USER-AGENT) ---
         window.searchFood = async function() {
             const query = document.getElementById('food-search-query').value.trim();
             if(!query) return;
             const resBox = document.getElementById('food-search-results');
             resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Searching database...</p>';
             try {
-                const res = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10`);
+                const res = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10`, {
+                    headers: {
+                        "User-Agent": "TheNaturalHealingClinic - WebApp - Version 1.0"
+                    }
+                });
                 const data = await res.json();
                 if(data.products && data.products.length > 0) {
                     let html = '<div style="margin-top: 1rem;">';
@@ -880,7 +884,7 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
             }
         };
 
-        // --- DIRECT CORE API SCANNER LOGIC FOR iOS ---
+        // --- FIXED CORE API SCANNER LOGIC FOR iOS & PROPER STOPPING ---
         window.startScanner = function() {
             const scannerContainer = document.getElementById('scanner-container');
             scannerContainer.style.display = 'block';
@@ -896,10 +900,15 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
                 { facingMode: "environment" },
                 { fps: 10, qrbox: { width: 250, height: 150 }, aspectRatio: 1.0 },
                 async function onScanSuccess(decodedText) {
-                    window.closeScanner();
+                    await window.closeScanner();
+                    
                     resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Looking up scanned item...</p>';
                     try {
-                        const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${decodedText}.json`);
+                        const res = await fetch(`https://world.openfoodfacts.org/api/v2/product/${decodedText}.json`, {
+                            headers: {
+                                "User-Agent": "TheNaturalHealingClinic - WebApp - Version 1.0"
+                            }
+                        });
                         const data = await res.json();
                         
                         if (data.status === 1 && data.product) {
@@ -935,16 +944,18 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
             });
         };
 
-        window.closeScanner = function() {
+        window.closeScanner = async function() {
+            const scannerContainer = document.getElementById('scanner-container');
             if (window.html5QrCode) {
-                window.html5QrCode.stop().then(() => {
-                    document.getElementById('scanner-container').style.display = 'none';
-                }).catch(err => {
-                    document.getElementById('scanner-container').style.display = 'none';
-                });
-            } else {
-                document.getElementById('scanner-container').style.display = 'none';
+                try {
+                    if (window.html5QrCode.isScanning) {
+                        await window.html5QrCode.stop();
+                    }
+                } catch (err) {
+                    console.error("Error stopping scanner: ", err);
+                }
             }
+            scannerContainer.style.display = 'none';
         };
 
         window.selectFood = function(name, k, p, c, f, fib, sod, pot, calc, iron) {
