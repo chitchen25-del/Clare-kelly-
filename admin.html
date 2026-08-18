@@ -180,8 +180,8 @@
         <!-- VIEW 3: MINI-XERO INCOME TRACKER & INVOICING -->
         <div id="view-finance" class="app-view">
             <div class="panel">
-                <h3>Clinic Income & Invoicing</h3>
-                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Track monthly clinic revenue and generate professional client invoices.</p>
+                <h3>Clinic Income & Professional Invoicing</h3>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Track monthly clinic revenue and generate postal-ready client invoices.</p>
                 
                 <div class="finance-grid">
                     <div class="metric-card">
@@ -195,12 +195,32 @@
                 </div>
 
                 <div style="background: #FAFAF7; border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 6px; margin-top: 1.5rem;">
-                    <h4 style="font-family: 'Montserrat'; font-size: 1rem; color: var(--primary-sage); margin-bottom: 1rem;">Create & Send Invoice</h4>
+                    <h4 style="font-family: 'Montserrat'; font-size: 1rem; color: var(--primary-sage); margin-bottom: 1rem;">Create & Print Invoice</h4>
                     <form onsubmit="return generateInvoice(event)">
-                        <label>Client Name</label><input type="text" id="inv-client" placeholder="e.g. Sarah Jenkins" required>
-                        <label>Treatment / Service</label><input type="text" id="inv-service" placeholder="e.g. 360 Burnout Protocol" required>
-                        <label>Fee Amount (£)</label><input type="number" id="inv-amount" placeholder="e.g. 175" required>
-                        <button type="submit" class="btn" style="width: 100%;">Generate & Download Invoice</button>
+                        <label>Client Full Name</label><input type="text" id="inv-client" placeholder="e.g. Sarah Jenkins" required>
+                        <label>Client Postal Address</label><textarea id="inv-address" placeholder="12 Example Street, Douglas, Isle of Man" style="height: 70px;" required></textarea>
+                        
+                        <label>Select Treatment Service</label>
+                        <select id="inv-service-select" onchange="toggleCustomService(this)">
+                            <option value="Initial Consultation (£85)">Initial Consultation - £85</option>
+                            <option value="Standard Follow-Up Session (£75)">Standard Follow-Up Session - £75</option>
+                            <option value="Post-Op Lymphatic Recovery (£95)">Post-Op Lymphatic Recovery - £95</option>
+                            <option value="The Sculpt & Flush (£85)">The Sculpt & Flush (TMJ) - £85</option>
+                            <option value="The Vagal Reset (£85)">The Vagal Reset - £85</option>
+                            <option value="Elite Athletic Optimization (£90)">Elite Athletic Optimization - £90</option>
+                            <option value="Performance Health Audit (£175)">Performance Health Audit - £175</option>
+                            <option value="The Gut Reset (£297)">The Gut Reset - £297</option>
+                            <option value="360 Burnout Protocol (£1,450)">360° Burnout Protocol - £1,450</option>
+                            <option value="custom">Bespoke / Custom Treatment...</option>
+                        </select>
+
+                        <!-- Custom Treatment Fields (Hidden by default) -->
+                        <div id="custom-service-box" style="display: none; background: white; padding: 1rem; border: 1px solid var(--secondary-sand); border-radius: 4px; margin-bottom: 1.2rem;">
+                            <label>Bespoke Treatment Description</label><input type="text" id="inv-custom-desc" placeholder="e.g. Special Combination Therapy">
+                            <label>Bespoke Fee Amount (£)</label><input type="number" id="inv-custom-amount" placeholder="e.g. 120">
+                        </div>
+
+                        <button type="submit" class="btn" style="width: 100%;">Generate Printable / Postal Invoice</button>
                     </form>
                 </div>
             </div>
@@ -252,7 +272,7 @@
             Inbox
         </div>
         <div class="app-nav-item" onclick="switchAppView('tools', this)">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9c0 .69.41 1.32 1.05 1.51H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1 z"></path></svg>
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0-2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9c0 .69.41 1.32 1.05 1.51H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             Tools
         </div>
     </div>
@@ -277,6 +297,19 @@
             const titles = { schedule: 'Master Schedule', clients: 'Client Directory', finance: 'Income & Invoicing', inbox: 'Live Patient Inbox', tools: 'Clinic Tools' };
             document.getElementById('app-header-title').innerText = titles[viewName];
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleCustomService(selectObj) {
+            const customBox = document.getElementById('custom-service-box');
+            if(selectObj.value === 'custom') {
+                customBox.style.display = 'block';
+                document.getElementById('inv-custom-desc').required = true;
+                document.getElementById('inv-custom-amount').required = true;
+            } else {
+                customBox.style.display = 'none';
+                document.getElementById('inv-custom-desc').required = false;
+                document.getElementById('inv-custom-amount').required = false;
+            }
         }
 
         async function processAdminLogin(e) {
@@ -349,7 +382,7 @@
         async function openNewBookingModal() {
             const clientName = prompt("Enter Client Full Name:");
             if(!clientName) return;
-            const service = prompt("Enter Service Name (e.g. Initial Consultation £85):", "Initial Consultation (£85)");
+            const service = prompt("Enter Service Name (e.g. Initial Consultation (£85)):", "Initial Consultation (£85)");
             const dateInput = prompt("Enter Date & Time (YYYY-MM-DD HH:MM):", new Date().toISOString().slice(0,16).replace('T', ' '));
             if(!dateInput) return;
 
@@ -447,40 +480,100 @@
         function generateInvoice(e) {
             e.preventDefault();
             const client = document.getElementById('inv-client').value;
-            const service = document.getElementById('inv-service').value;
-            const amount = document.getElementById('inv-amount').value;
+            const address = document.getElementById('inv-address').value;
+            const selectVal = document.getElementById('inv-service-select').value;
+            
+            let serviceDesc = selectVal;
+            let amount = 85;
+
+            if(selectVal === 'custom') {
+                serviceDesc = document.getElementById('inv-custom-desc').value;
+                amount = document.getElementById('inv-custom-amount').value;
+            } else {
+                if(selectVal.includes('£75')) amount = 75;
+                else if(selectVal.includes('£85')) amount = 85;
+                else if(selectVal.includes('£95')) amount = 95;
+                else if(selectVal.includes('£90')) amount = 90;
+                else if(selectVal.includes('£175')) amount = 175;
+                else if(selectVal.includes('£297')) amount = 297;
+                else if(selectVal.includes('£1,450')) amount = 1450;
+            }
+
             const invNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000);
 
-            const invoiceHTML = `
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
                 <html>
-                <head><title>Invoice ${invNumber}</title></head>
-                <body style="font-family: 'Montserrat', sans-serif; padding: 40px; color: #252D26;">
-                    <h2>THE NATURAL HEALING CLINIC</h2>
-                    <p>1st Floor, 8-10 Malew Street, Castletown, Isle of Man</p>
-                    <hr style="border: 1px solid #E5E2D9; margin: 20px 0;">
-                    <h3>INVOICE: ${invNumber}</h3>
-                    <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
-                    <p><strong>Billed To:</strong> ${client}</p>
-                    <table style="width: 100%; margin-top: 30px; border-collapse: collapse;">
-                        <tr style="background: #FAFAF7; text-align: left;"><th style="padding: 10px; border-bottom: 1px solid #E5E2D9;">Description</th><th style="padding: 10px; border-bottom: 1px solid #E5E2D9; text-align: right;">Amount</th></tr>
-                        <tr><td style="padding: 15px; border-bottom: 1px solid #E5E2D9;">${service}</td><td style="padding: 15px; border-bottom: 1px solid #E5E2D9; text-align: right;">£${amount}</td></tr>
+                <head>
+                    <title>Invoice ${invNumber} - The Natural Healing Clinic</title>
+                    <style>
+                        body { font-family: 'Montserrat', sans-serif; padding: 50px; color: #252D26; line-height: 1.6; }
+                        .header { display: flex; justify-content: space-between; align-items: start; }
+                        .clinic-info h2 { font-size: 1.4rem; color: #4A594D; margin-bottom: 5px; }
+                        .clinic-info p, .invoice-details p { font-size: 0.9rem; color: #555; }
+                        .invoice-details { text-align: right; }
+                        table { width: 100%; margin-top: 40px; border-collapse: collapse; }
+                        th { background: #FAFAF7; text-align: left; padding: 12px; border-bottom: 2px solid #E5E2D9; font-size: 0.85rem; text-transform: uppercase; }
+                        td { padding: 15px 12px; border-bottom: 1px solid #E5E2D9; font-size: 0.95rem; }
+                        .total-section { margin-top: 30px; text-align: right; }
+                        .total-section h3 { font-size: 1.3rem; color: #4A594D; }
+                        .footer { margin-top: 60px; font-size: 0.8rem; color: #777; text-align: center; border-top: 1px solid #E5E2D9; pt: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="clinic-info">
+                            <h2>THE NATURAL HEALING CLINIC</h2>
+                            <p>1st Floor, 8-10 Malew Street<br>Castletown, Isle of Man, IM9 1AB<br>Tel: 07624 202 121</p>
+                        </div>
+                        <div class="invoice-details">
+                            <h3 style="color: #4A594D; margin-bottom: 5px;">INVOICE</h3>
+                            <p><strong>Invoice No:</strong> ${invNumber}</p>
+                            <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 40px;">
+                        <p style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #777; margin-bottom: 5px;">Billed To:</p>
+                        <strong style="font-size: 1.1rem;">${client}</strong>
+                        <p style="white-space: pre-wrap; color: #555; margin-top: 5px;">${address}</p>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Clinical Service / Treatment Description</th>
+                                <th style="text-align: right;">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${serviceDesc}</td>
+                                <td style="text-align: right;">£${amount}</td>
+                            </tr>
+                        </tbody>
                     </table>
-                    <h3 style="text-align: right; margin-top: 20px;">Total Due: £${amount}</h3>
-                    <p style="margin-top: 50px; font-size: 0.85rem; color: #777; text-align: center;">Thank you for choosing The Natural Healing Clinic.</p>
+
+                    <div class="total-section">
+                        <h3>Total Amount Due: £${amount}</h3>
+                    </div>
+
+                    <div class="footer">
+                        <p>Thank you for choosing The Natural Healing Clinic. Please remit payment via bank transfer quoting invoice reference.</p>
+                    </div>
+                    <script>
+                        window.onload = function() { window.print(); }
+                    </script>
                 </body>
                 </html>
-            `;
+            `);
+            printWindow.document.close();
 
-            const blob = new Blob([invoiceHTML], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${invNumber}_${client.replace(/\s+/g, '_')}.html`;
-            a.click();
-            alert("Invoice generated and downloaded successfully!");
+            alert("Invoice generated successfully! Ready for printing or postal dispatch.");
             document.getElementById('inv-client').value = '';
-            document.getElementById('inv-service').value = '';
-            document.getElementById('inv-amount').value = '';
+            document.getElementById('inv-address').value = '';
+            document.getElementById('inv-custom-desc').value = '';
+            document.getElementById('inv-custom-amount').value = '';
             return false;
         }
 
