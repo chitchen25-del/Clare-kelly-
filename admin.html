@@ -214,7 +214,7 @@
                             <option value="custom">Bespoke / Custom Treatment...</option>
                         </select>
 
-                        <!-- Custom Treatment Fields (Hidden by default) -->
+                        <!-- Custom Treatment Fields -->
                         <div id="custom-service-box" style="display: none; background: white; padding: 1rem; border: 1px solid var(--secondary-sand); border-radius: 4px; margin-bottom: 1.2rem;">
                             <label>Bespoke Treatment Description</label><input type="text" id="inv-custom-desc" placeholder="e.g. Special Combination Therapy">
                             <label>Bespoke Fee Amount (£)</label><input type="number" id="inv-custom-amount" placeholder="e.g. 120">
@@ -470,7 +470,7 @@
                 else if(a.service_name.includes('£175')) totalRevenue += 175;
                 else if(a.service_name.includes('£297')) totalRevenue += 297;
                 else if(a.service_name.includes('£1,450')) totalRevenue += 1450;
-                else totalRevenue += 75; // baseline
+                else totalRevenue += 75;
             });
 
             document.getElementById('stat-revenue').innerText = `£${totalRevenue.toLocaleString()}`;
