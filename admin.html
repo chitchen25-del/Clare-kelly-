@@ -593,7 +593,10 @@
         async function loadAdminInbox(db, isPolling = false) {
             const chatBox = document.getElementById('admin-chat-box');
             const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
-            if(!data || data.length === 0) { chatBox.innerHTML = '<p style="color: #888;">No messages yet.</p>'; return; }
+            if(!data || data.length === 0) { 
+                chatBox.innerHTML = '<p style="color: #888;">No messages yet.</p>'; 
+                return; 
+            }
 
             if (isPolling && data.length > lastMessageCount && lastMessageCount > 0) {
                 document.title = "🔔 NEW MESSAGE - Clinic App";
