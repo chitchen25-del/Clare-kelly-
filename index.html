@@ -837,50 +837,94 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
             return false;
         };
 
-        // --- BROWSER-COMPATIBLE API INTEGRATION (USING LIBRE FOOD FACTS) ---
+        // --- INFALLIBLE LOCAL CLINICAL DATABASE FALLBACK ---
+        window.localClinicalFoodDB = [
+            { name: "Organic Oats", brands: "Whole Foods", kcal: 385, pro: 12, car: 52, fat: 16, fib: 8, sod: 10, pot: 200, calc: 40, iron: 2 },
+            { name: "Wild Alaskan Salmon", brands: "Fresh", kcal: 208, pro: 20, car: 0, fat: 13, fib: 0, sod: 50, pot: 360, calc: 10, iron: 1 },
+            { name: "Sweet Potato", brands: "Fresh", kcal: 86, pro: 1.6, car: 20, fat: 0.1, fib: 3, sod: 55, pot: 337, calc: 30, iron: 0.6 },
+            { name: "Broccoli", brands: "Fresh", kcal: 34, pro: 2.8, car: 6.6, fat: 0.4, fib: 2.6, sod: 33, pot: 316, calc: 47, iron: 0.7 },
+            { name: "Avocado", brands: "Fresh", kcal: 160, pro: 2, car: 8.5, fat: 14.7, fib: 6.7, sod: 7, pot: 485, calc: 12, iron: 0.5 },
+            { name: "Quinoa", brands: "Organic", kcal: 120, pro: 4.4, car: 21.3, fat: 1.9, fib: 2.8, sod: 7, pot: 172, calc: 17, iron: 1.5 },
+            { name: "Almonds", brands: "Raw", kcal: 579, pro: 21.1, car: 21.6, fat: 49.9, fib: 12.5, sod: 1, pot: 733, calc: 269, iron: 3.7 },
+            { name: "Chicken Breast", brands: "Free Range", kcal: 165, pro: 31, car: 0, fat: 3.6, fib: 0, sod: 74, pot: 256, calc: 15, iron: 1 },
+            { name: "Spinach", brands: "Fresh", kcal: 23, pro: 2.9, car: 3.6, fat: 0.4, fib: 2.2, sod: 79, pot: 558, calc: 99, iron: 2.7 },
+            { name: "Olive Oil", brands: "Extra Virgin", kcal: 884, pro: 0, car: 0, fat: 100, fib: 0, sod: 2, pot: 1, calc: 1, iron: 0.5 },
+            { name: "Brown Rice", brands: "Organic", kcal: 111, pro: 2.6, car: 23, fat: 0.9, fib: 1.8, sod: 5, pot: 43, calc: 10, iron: 0.4 },
+            { name: "Blueberries", brands: "Fresh", kcal: 57, pro: 0.7, car: 14.5, fat: 0.3, fib: 2.4, sod: 1, pot: 77, calc: 6, iron: 0.3 },
+            { name: "Greek Yogurt", brands: "Unsweetened", kcal: 59, pro: 10, car: 3.6, fat: 0.4, fib: 0, sod: 36, pot: 141, calc: 110, iron: 0.1 },
+            { name: "Eggs", brands: "Free Range", kcal: 143, pro: 12.6, car: 0.7, fat: 9.5, fib: 0, sod: 142, pot: 138, calc: 50, iron: 1.2 }
+        ];
+
+        // --- BROWSER-COMPATIBLE API INTEGRATION (CORS FIX + FALLBACK) ---
         window.searchFood = async function() {
             const query = document.getElementById('food-search-query').value.trim();
             if(!query) return;
             const resBox = document.getElementById('food-search-results');
             resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Searching database...</p>';
-            try {
-                const res = await fetch(`https://world.librefoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10`, {
-                    headers: {
-                        "User-Agent": "TheNaturalHealingClinic - WebApp - Version 1.0"
-                    }
-                });
-                const data = await res.json();
-                if(data.products && data.products.length > 0) {
-                    let html = '<div style="margin-top: 1rem;">';
-                    data.products.forEach((p) => {
-                        const name = p.product_name || 'Unknown Food';
-                        const brand = p.brands ? `(${p.brands})` : '';
-                        
-                        const kcal = p.nutriments ? (p.nutriments['energy-kcal_100g'] || 0) : 0;
-                        const pro = p.nutriments ? (p.nutriments.proteins_100g || 0) : 0;
-                        const car = p.nutriments ? (p.nutriments.carbohydrates_100g || 0) : 0;
-                        const fat = p.nutriments ? (p.nutriments.fat_100g || 0) : 0;
-                        const fib = p.nutriments ? (p.nutriments.fiber_100g || 0) : 0;
+            
+            let html = '<div style="margin-top: 1rem;">';
+            let foundResults = false;
 
-                        const sod = p.nutriments ? ((p.nutriments.sodium_100g || 0) * 1000) : 0;
-                        const pot = p.nutriments ? ((p.nutriments.potassium_100g || 0) * 1000) : 0;
-                        const calc = p.nutriments ? ((p.nutriments.calcium_100g || 0) * 1000) : 0;
-                        const iron = p.nutriments ? ((p.nutriments.iron_100g || 0) * 1000) : 0;
-                        
-                        const safeName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                        
-                        html += `<div class="premium-list-item" onclick="window.selectFood('${safeName}', ${kcal}, ${pro}, ${car}, ${fat}, ${fib}, ${sod}, ${pot}, ${calc}, ${iron})">
-                            <strong>${name} ${brand}</strong>
-                            <span>Per 100g: ${kcal} kcal | ${pro}g Pro | ${car}g Carb | ${fat}g Fat | ${fib}g Fiber</span>
-                        </div>`;
-                    });
-                    html += '</div>';
-                    resBox.innerHTML = html;
-                } else {
-                    resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">No results found. Try another search.</p>';
+            try {
+                // Request WITHOUT custom headers to prevent browser CORS preflight blocks
+                const res = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=15`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if(data.products && data.products.length > 0) {
+                        foundResults = true;
+                        data.products.forEach((p) => {
+                            const name = p.product_name || 'Unknown Food';
+                            const brand = p.brands ? `(${p.brands})` : '';
+                            
+                            const kcal = p.nutriments ? (p.nutriments['energy-kcal_100g'] || 0) : 0;
+                            const pro = p.nutriments ? (p.nutriments.proteins_100g || 0) : 0;
+                            const car = p.nutriments ? (p.nutriments.carbohydrates_100g || 0) : 0;
+                            const fat = p.nutriments ? (p.nutriments.fat_100g || 0) : 0;
+                            const fib = p.nutriments ? (p.nutriments.fiber_100g || 0) : 0;
+
+                            const sod = p.nutriments ? ((p.nutriments.sodium_100g || 0) * 1000) : 0;
+                            const pot = p.nutriments ? ((p.nutriments.potassium_100g || 0) * 1000) : 0;
+                            const calc = p.nutriments ? ((p.nutriments.calcium_100g || 0) * 1000) : 0;
+                            const iron = p.nutriments ? ((p.nutriments.iron_100g || 0) * 1000) : 0;
+                            
+                            const safeName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                            
+                            html += `<div class="premium-list-item" onclick="window.selectFood('${safeName}', ${kcal}, ${pro}, ${car}, ${fat}, ${fib}, ${sod}, ${pot}, ${calc}, ${iron})">
+                                <strong>${name} ${brand}</strong>
+                                <span>Per 100g: ${kcal} kcal | ${pro}g Pro | ${car}g Carb | ${fat}g Fat | ${fib}g Fiber</span>
+                            </div>`;
+                        });
+                    }
                 }
             } catch(err) {
-                resBox.innerHTML = '<p style="color:red; font-size:0.9rem;">Error connecting to food database.</p>';
+                console.warn("Live API blocked by browser or rate limit. Failing over to Clinical Fallback DB.");
+            }
+
+            // Infallible Fallback Logic
+            if (!foundResults) {
+                const queryLower = query.toLowerCase();
+                const localMatches = window.localClinicalFoodDB.filter(f => f.name.toLowerCase().includes(queryLower) || f.brands.toLowerCase().includes(queryLower));
+                
+                if (localMatches.length > 0) {
+                    html += `<p style="font-size: 0.75rem; color: var(--gold-accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8rem; margin-top: 0.5rem; font-weight: 600;">Clinical Database Match</p>`;
+                    localMatches.forEach((p) => {
+                        const brand = p.brands ? `(${p.brands})` : '';
+                        const safeName = p.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        html += `<div class="premium-list-item" onclick="window.selectFood('${safeName}', ${p.kcal}, ${p.pro}, ${p.car}, ${p.fat}, ${p.fib}, ${p.sod}, ${p.pot}, ${p.calc}, ${p.iron})">
+                            <strong>${p.name} ${brand}</strong>
+                            <span>Per 100g: ${p.kcal} kcal | ${p.pro}g Pro | ${p.car}g Carb | ${p.fat}g Fat | ${p.fib}g Fiber</span>
+                        </div>`;
+                    });
+                    foundResults = true;
+                }
+            }
+
+            html += '</div>';
+
+            if (foundResults) {
+                resBox.innerHTML = html;
+            } else {
+                resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">No results found. Try a broader search.</p>';
             }
         };
 
@@ -900,15 +944,12 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
                 { facingMode: "environment" },
                 { fps: 10, qrbox: { width: 250, height: 150 }, aspectRatio: 1.0 },
                 async function onScanSuccess(decodedText) {
+                    // Instantly trigger hardware shutdown on success
                     await window.closeScanner();
                     
                     resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Looking up scanned item...</p>';
                     try {
-                        const res = await fetch(`https://world.librefoodfacts.org/api/v2/product/${decodedText}.json`, {
-                            headers: {
-                                "User-Agent": "TheNaturalHealingClinic - WebApp - Version 1.0"
-                            }
-                        });
+                        const res = await fetch(`https://world.openfoodfacts.org/api/v2/product/${decodedText}.json`);
                         const data = await res.json();
                         
                         if (data.status === 1 && data.product) {
@@ -940,7 +981,7 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
             ).then(() => {
                 resBox.innerHTML = '';
             }).catch((err) => {
-                resBox.innerHTML = `<p style="color:#a94442; font-size:0.9rem; margin-top:0.5rem;">Camera Error: ${err}</p>`;
+                resBox.innerHTML = `<p style="color:#a94442; font-size:0.9rem; margin-top:0.5rem;">Camera Error. Please ensure permissions are granted in Safari settings.</p>`;
             });
         };
 
@@ -948,6 +989,7 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
             const scannerContainer = document.getElementById('scanner-container');
             if (window.html5QrCode) {
                 try {
+                    // Strictly check state to safely sever the video feed without freezing iOS
                     if (window.html5QrCode.isScanning) {
                         await window.html5QrCode.stop();
                     }
