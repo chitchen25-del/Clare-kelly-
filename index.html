@@ -18,11 +18,11 @@
 
     <style>
         :root {
-            --bg-color: #F9F8F6;
+            --bg-color: #F9F8F6; /* Softer, premium cream */
             --text-main: #252D26;
             --primary-sage: #4A594D;
             --sage-hover: #3B473D;
-            --secondary-sand: #EFECE6;
+            --secondary-sand: #EFECE6; /* Subtle borders */
             --card-bg: #FFFFFF;
             --gold-accent: #C5A880;
         }
@@ -90,6 +90,16 @@
         .price-features li { margin-bottom: 1.2rem; padding-left: 1.8rem; position: relative; line-height: 1.5; }
         .price-features li::before { content: "—"; position: absolute; left: 0; color: var(--gold-accent); }
 
+        /* Service Menu */
+        .service-menu-section { padding: 7rem 6%; background-color: white; border-top: 1px solid var(--secondary-sand); }
+        .menu-category-title { font-size: 1.8rem; font-weight: 300; margin-bottom: 3rem; color: var(--text-main); text-align: center; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1.2rem; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; max-width: 1100px; margin: 0 auto 4rem auto; }
+        .menu-item { border-bottom: 1px solid var(--secondary-sand); padding-bottom: 2rem; }
+        .menu-header { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+        .menu-header h4 { font-size: 1.2rem; font-weight: 600; color: var(--text-main); font-family: 'Montserrat', sans-serif; }
+        .menu-price { font-family: 'Montserrat', sans-serif; font-weight: 500; color: var(--primary-sage); font-size: 1.1rem; }
+        .menu-item p { color: #666; font-size: 1.05rem; line-height: 1.7; }
+
         /* Forms Container */
         .form-container { max-width: 100%; margin: 3rem 5%; background: white; padding: 4rem 2.5rem; border-radius: 12px; box-shadow: 0 25px 60px rgba(0,0,0,0.03); border: 1px solid var(--secondary-sand); }
         .form-container h2 { text-align: center; margin-bottom: 0.8rem; font-size: 2rem; font-weight: 300; }
@@ -101,59 +111,50 @@
         input:focus, select:focus, textarea:focus { background: white; border: 1px solid var(--primary-sage); box-shadow: 0 4px 15px rgba(74,89,77,0.06); outline: none; }
         textarea { resize: vertical; height: 100px; }
 
-        /* =========================================
-           PREMIUM TABBED DASHBOARD STYLES
-           ========================================= */
+        /* Client Dashboard */
         .dashboard-container { max-width: 1000px; margin: 2rem auto 5rem auto; padding: 0 5%; }
-        .dash-card { background: white; padding: 3rem 2rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 15px 50px rgba(0,0,0,0.03); margin-bottom: 2.5rem; animation: fadeIn 0.4s ease; }
+        .dash-card { background: white; padding: 3rem 2rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 15px 50px rgba(0,0,0,0.03); margin-bottom: 2.5rem; }
         .dash-card h3 { color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-size: 1.35rem; font-weight: 500; }
-        
-        /* Main Portal Navigation Tabs */
-        .portal-tabs { display: flex; gap: 0.8rem; overflow-x: auto; padding-bottom: 1rem; margin-bottom: 2rem; -webkit-overflow-scrolling: touch; border-bottom: 1px solid var(--secondary-sand); scrollbar-width: none; }
-        .portal-tabs::-webkit-scrollbar { display: none; }
-        .portal-tab-btn { background: transparent; border: none; font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #888; padding: 0.8rem 1.2rem; cursor: pointer; transition: all 0.3s; white-space: nowrap; border-radius: 6px; }
-        .portal-tab-btn:hover { color: var(--primary-sage); background: #F9F8F6; }
-        .portal-tab-btn.active { color: var(--primary-sage); border-bottom: 3px solid var(--gold-accent); border-radius: 6px 6px 0 0; background: #F9F8F6; }
-        
-        .portal-tab-content { display: none; }
-        .portal-tab-content.active { display: block; }
-
-        /* Inner Pill Tabs for Journal */
-        .journal-tabs { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2.5rem; background: #F4F3EE; padding: 0.6rem; border-radius: 12px; }
-        .journal-tab-btn { flex: 1; min-width: 120px; text-align: center; background: transparent; border: none; border-radius: 8px; padding: 0.8rem 0.5rem; font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 600; color: #666; cursor: pointer; transition: all 0.3s; }
-        .journal-tab-btn:hover { color: var(--primary-sage); }
-        .journal-tab-btn.active { background: white; color: var(--gold-accent); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-
-        .journal-pane { display: none; animation: fadeIn 0.3s ease; }
-        .journal-pane.active { display: block; }
         
         .chat-box { height: 350px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #F9F8F6; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; border: 1px solid var(--secondary-sand); }
         .msg { padding: 1rem 1.2rem; border-radius: 8px; max-width: 85%; font-size: 1rem; line-height: 1.5; }
         .msg.client { background: var(--primary-sage); color: white; align-self: flex-end; }
         .msg.admin { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
 
+        /* PREMIUM APP PROMO CARD */
+        .app-promo-card { background: linear-gradient(135deg, #4A594D, #3B473D); color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; box-shadow: 0 15px 40px rgba(74,89,77,0.25); }
+        .app-promo-card h4 { font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 0.4rem; font-weight: 600; letter-spacing: 1px; }
+
+        /* REFINED HIGH-END JOURNAL TABS */
+        .journal-tab-btn { background: white; border: 1px solid var(--secondary-sand); border-radius: 30px; padding: 0.8rem 1rem; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); cursor: pointer; transition: all 0.3s; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .journal-tab-btn:hover { color: var(--primary-sage); }
+        .journal-tab-btn.active { background: var(--primary-sage) !important; color: white !important; border-color: var(--primary-sage) !important; box-shadow: 0 6px 15px rgba(74, 89, 77, 0.2) !important; }
+
+        .journal-pane { display: none; animation: fadeIn 0.3s ease; }
+        .journal-pane.active { display: block; }
+
         /* RESTRUCTURED MFP MACRO & MICRO MATRIX */
         .macro-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
         .macro-grid div { display: flex; flex-direction: column; }
         .macro-grid label { font-size: 0.6rem; text-align: center; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 0.4rem; font-weight: 600; }
         .macro-grid input { padding: 0.8rem; font-size: 0.95rem; text-align: center; margin-bottom: 0; font-family: 'Montserrat'; font-weight: 500; background: white; border: 1px solid var(--secondary-sand); }
-        .macro-grid input:focus { border-color: var(--gold-accent); }
+        .macro-grid input:focus { border-color: var(--primary-sage); }
         
         .micro-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem; margin-top: 1.2rem; margin-bottom: 1.5rem; }
         .micro-grid div { display: flex; flex-direction: column; }
         .micro-grid label { font-size: 0.55rem; text-align: center; letter-spacing: 1px; color: #888; margin-bottom: 0.4rem; }
         .micro-grid input { padding: 0.7rem; font-size: 0.85rem; text-align: center; margin-bottom: 0; font-family: 'Montserrat'; background-color: #FAFAF7; border: 1px solid var(--secondary-sand); }
-        .micro-grid input:focus { border-color: var(--gold-accent); }
+        .micro-grid input:focus { border-color: var(--primary-sage); }
 
         .meal-section { border-bottom: 1px dashed var(--secondary-sand); padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
-        .meal-section h5 { font-family: 'Montserrat'; font-size: 0.95rem; color: var(--gold-accent); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        .meal-section h5 { font-family: 'Montserrat'; font-size: 0.95rem; color: var(--primary-sage); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 
         /* DAILY TOTALS DASHBOARDS */
         .daily-totals-macro { background: var(--text-main); color: white; padding: 1.5rem; border-radius: 8px 8px 0 0; margin-top: 1rem; display: flex; justify-content: space-between; font-family: 'Montserrat'; }
         .daily-totals-macro div { text-align: center; }
         .daily-totals-macro span { font-size: 0.65rem; color: #aaa; letter-spacing: 1.5px; display: block; margin-bottom: 0.4rem; }
         
-        .daily-totals-micro { background: #EFECE6; color: var(--text-main); padding: 1.2rem 1.5rem; border-radius: 0 0 8px 8px; margin-bottom: 2rem; display: flex; justify-content: space-between; font-family: 'Montserrat'; border: 1px solid var(--secondary-sand); border-top: none; }
+        .daily-totals-micro { background: #E6EFE8; color: var(--text-main); padding: 1.2rem 1.5rem; border-radius: 0 0 8px 8px; margin-bottom: 2rem; display: flex; justify-content: space-between; font-family: 'Montserrat'; border: 1px solid var(--primary-sage); border-top: none; }
         .daily-totals-micro div { text-align: center; }
         .daily-totals-micro span { font-size: 0.6rem; color: #666; letter-spacing: 1px; display: block; margin-bottom: 0.3rem; }
 
@@ -180,7 +181,9 @@
             .form-container { max-width: 580px; margin: 6rem auto; padding: 5rem 4rem; }
             .form-row { grid-template-columns: 1fr 1fr; }
             .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
-            .dash-card { padding: 4rem 3.5rem; }
+            .dashboard-container { grid-template-columns: 2fr 1fr; padding: 0 6%; margin: 5rem auto; gap: 3rem; }
+            .dash-card { padding: 3rem 2.5rem; }
+            .menu-header { flex-direction: row; justify-content: space-between; align-items: baseline; }
             footer { flex-direction: row; text-align: left; justify-content: space-between; padding: 5rem 6%; }
         }
     </style>
@@ -197,13 +200,6 @@
         }
         function toggleMobileMenu() { document.getElementById('mobile-drawer').classList.toggle('open'); }
         
-        // NEW TAB SWITCHING LOGIC
-        function switchPortalTab(tabId, btn) {
-            document.querySelectorAll('.portal-tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.portal-tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            btn.classList.add('active');
-        }
         function switchJournalTab(tabId, btn) {
             document.querySelectorAll('.journal-pane').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.journal-tab-btn').forEach(el => el.classList.remove('active'));
@@ -240,13 +236,14 @@
         <span class="mobile-drawer-link" onclick="window.processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
     </div>
 
-    <!-- ================= SCREEN 1-5 (REMOVED FOR BREVITY IN DISPLAY, BUT ASSUME THEY ARE HERE UNCHANGED IN YOUR FULL FILE. I AM INCLUDING FULL FILE FOR COPY PASTE) ================= -->
+    <!-- ================= SCREEN 1: THE HOME PAGE ================= -->
     <div id="screen-home" class="page-screen visible">
         <section class="hero">
             <h1>Healing From The Inside Out</h1>
             <p>"Imagine Life Without Pain."</p>
             <button type="button" class="btn" onclick="openScreen('screen-register')">Make An Appointment</button>
         </section>
+
         <section class="section">
             <div class="section-image-wrapper">
                 <div class="image-arch-container">
@@ -257,6 +254,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="section-text">
                 <span class="section-subtitle">Our Philosophy</span>
                 <h2>Results in a Realistic Timeframe</h2>
@@ -272,8 +270,99 @@
                 </ul>
             </div>
         </section>
+
+        <section class="pricing-section">
+            <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+                <span class="section-subtitle">Pillar 1: Deep Transformation</span>
+                <h2>Functional Medicine</h2>
+                <p style="color: #666;">Comprehensive, root-cause investigation and structured restorative pathways.</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div>
+                        <div class="price-title">Performance Health Audit</div>
+                        <div class="price-duration">Functional Kickstart</div>
+                        <div class="price-amount">£175</div>
+                        <ul class="price-features">
+                            <li>90-minute deep-dive functional consultation</li>
+                            <li>Full symptom timeline review</li>
+                            <li>Top 3 root-cause priorities identified</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Health Audit</button>
+                </div>
+
+                <div class="price-card featured">
+                    <div class="featured-badge">Comprehensive Protocol</div>
+                    <div>
+                        <div class="price-title">360° Burnout & Adrenal Protocol</div>
+                        <div class="price-duration">12-Week Executive Program</div>
+                        <div class="price-amount">£1,450</div>
+                        <ul class="price-features">
+                            <li>Complete root-cause functional health investigation</li>
+                            <li>Bi-weekly hands-on Vagal/Bowen resets</li>
+                            <li>Curated functional supplementation blueprint</li>
+                        </ul>
+                        <div class="guarantee-badge">Designed for severe fatigue and executive burnout.</div>
+                    </div>
+                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Apply For Protocol</button>
+                </div>
+
+                <div class="price-card">
+                    <div>
+                        <div class="price-title">The Gut Reset</div>
+                        <div class="price-duration">21-Day Programme</div>
+                        <div class="price-amount">£297 <span>£500</span></div>
+                        <ul class="price-features">
+                            <li>60-min functional gut assessment</li>
+                            <li>Personalised 21-day protocol</li>
+                            <li>Curated supplement guidance</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Gut Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="service-menu-section">
+            <div style="text-align: center; max-width: 700px; margin: 0 auto 4rem auto;">
+                <span class="section-subtitle">Targeted Interventions</span>
+                <h2>Specialized Clinical Therapy</h2>
+                <p style="color: #666;">Expert, hands-on protocols tailored to specific systemic needs.</p>
+            </div>
+
+            <h3 class="menu-category-title">Advanced Lymphatic & Fluid Dynamics</h3>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="menu-header"><h4>Post-Op Lymphatic Recovery</h4><span class="menu-price">£95 / £450 (Course of 5)</span></div>
+                    <p>Ultra-gentle drainage vital for clients recovering from surgeries to accelerate healing.</p>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-header"><h4>The Sculpt & Flush (TMJ)</h4><span class="menu-price">£85</span></div>
+                    <p>Relieves jaw tension (TMJ), clears sinus congestion, and sculpts facial tissues.</p>
+                </div>
+            </div>
+
+            <h3 class="menu-category-title">Nervous System & Soft-Tissue Reset</h3>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="menu-header"><h4>The Vagal Reset</h4><span class="menu-price">£85</span></div>
+                    <p>Stimulating the Vagus nerve to pull the body out of chronic 'fight or flight'.</p>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-header"><h4>Elite Athletic Optimization</h4><span class="menu-price">£90</span></div>
+                    <p>Combining deep fascial release with structural realignment for athletes.</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <button type="button" class="btn" onclick="openScreen('screen-register')">Book A Session</button>
+            </div>
+        </section>
     </div>
 
+    <!-- ================= SCREEN 2: ABOUT CLARE ================= -->
     <div id="screen-about" class="page-screen">
         <div style="background-color: white; padding: 4rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
             <span class="section-subtitle">Clinical Leadership</span>
@@ -291,13 +380,44 @@
         </section>
     </div>
 
+    <!-- ================= SCREEN 3: JOURNAL & RESEARCH ================= -->
     <div id="screen-news" class="page-screen">
         <div style="background-color: white; padding: 4rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
             <span class="section-subtitle">Clinical Journal</span>
             <h1 style="font-size: 2.5rem; font-weight: 300; margin-top: 0.5rem;">Research & Evidence Library</h1>
         </div>
+
+        <section style="padding: 6rem 6%; background-color: var(--bg-color);">
+            <div class="news-grid">
+                <div class="news-card">
+                    <div>
+                        <div class="news-meta">Gut Microbiome • Functional Medicine</div>
+                        <h3 class="news-title">The Role of the Gut Microbiome in Systemic Inflammation</h3>
+                        <p class="news-excerpt">Recent clinical research highlights how intestinal permeability and gut dysbiosis directly fuel chronic inflammatory cascades throughout the body.</p>
+                    </div>
+                    <a href="https://www.ifm.org/news-insights/the-functional-medicine-approach-to-the-microbiome/" target="_blank" class="news-link">Read Research Outline &rarr;</a>
+                </div>
+                <div class="news-card">
+                    <div>
+                        <div class="news-meta">Manual Lymphatic Drainage • Edema</div>
+                        <h3 class="news-title">Efficacy of MLD on Chronic Fatigue and Post-Op Edema</h3>
+                        <p class="news-excerpt">Clinical trials indicate that specialized manual lymphatic drainage significantly accelerates interstitial fluid clearance and reduces recovery times.</p>
+                    </div>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/25655383/" target="_blank" class="news-link">View Clinical Study &rarr;</a>
+                </div>
+                <div class="news-card">
+                    <div>
+                        <div class="news-meta">Autonomic Regulation • Vagus Nerve</div>
+                        <h3 class="news-title">Autonomic Regulation via Somatic Vagal Stimulation</h3>
+                        <p class="news-excerpt">An exploration of how targeted physical touch therapies stimulate the vagus nerve to downregulate sympathetic 'fight or flight' overactivity.</p>
+                    </div>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/29563853/" target="_blank" class="news-link">Read Peer-Reviewed Paper &rarr;</a>
+                </div>
+            </div>
+        </section>
     </div>
 
+    <!-- ================= SCREEN 4: LOGIN ================= -->
     <div id="screen-login" class="page-screen">
         <div class="form-container" style="max-width: 480px; margin: 6rem auto;">
             <h2>Client Portal Login</h2>
@@ -307,9 +427,13 @@
                 <label>Password</label><input type="password" id="login-password" required>
                 <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Sign In</button>
             </form>
+            <div style="margin-top: 2.5rem; text-align: center;">
+                <a href="#" style="font-size: 0.75rem; color: var(--primary-sage); text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;">Forgot password?</a>
+            </div>
         </div>
     </div>
 
+    <!-- ================= SCREEN 5: REGISTRATION ================= -->
     <div id="screen-register" class="page-screen">
         <div class="form-container" style="max-width: 580px; margin: 6rem auto;">
             <h2>Client Registration</h2>
@@ -329,52 +453,47 @@
         </div>
     </div>
 
-    <!-- ================= SCREEN 6: NEW LUXURY TABBED DASHBOARD ================= -->
+    <!-- ================= SCREEN 6: LUXURY CLIENT DASHBOARD ================= -->
     <div id="screen-dashboard" class="page-screen">
-        
-        <!-- Premium Gradient Header -->
-        <div style="background: linear-gradient(135deg, #4A594D, #3B473D); padding: 4rem 6%; color: white; border-bottom: 4px solid var(--gold-accent);">
-            <div style="max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;">
-                <div>
-                    <h1 id="portal-welcome-title" style="font-size: 2.2rem; font-weight: 300; color: white; margin-bottom: 0.2rem;">Patient Portal</h1>
-                    <p style="color: #EFECE6; font-style: italic; opacity: 0.9; margin: 0;">Manage your health journey.</p>
-                </div>
-                <button class="btn" style="background: white; color: var(--primary-sage); box-shadow: 0 10px 30px rgba(0,0,0,0.15);" onclick="promptInstall()">Install App</button>
+        <div style="background-color: white; padding: 3rem 6%; border-bottom: 1px solid var(--secondary-sand);">
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <h1 id="portal-welcome-title" style="font-size: 2.2rem; font-weight: 300;">Patient Portal</h1>
+                <p style="color: #666; font-style: italic;">Manage your health journey.</p>
             </div>
         </div>
 
         <div class="dashboard-container">
-            
-            <!-- Main Portal Tabs -->
-            <div class="portal-tabs">
-                <button class="portal-tab-btn active" onclick="switchPortalTab('tab-journal', this)">Daily Journal</button>
-                <button class="portal-tab-btn" onclick="switchPortalTab('tab-intake', this)">Medical Intake</button>
-                <button class="portal-tab-btn" onclick="switchPortalTab('tab-appointments', this)">Appointments</button>
-                <button class="portal-tab-btn" onclick="switchPortalTab('tab-messages', this)">Messages</button>
-            </div>
+            <div>
+                <!-- Premium App Install Prompt -->
+                <div class="app-promo-card">
+                    <div>
+                        <h4>Install the Clinic App</h4>
+                        <p style="font-size: 0.95rem; opacity: 0.9; margin:0;">Add this portal to your Home Screen for one-tap daily journaling.</p>
+                    </div>
+                    <button class="btn" style="background: white; color: var(--primary-sage); box-shadow: none; border-radius: 8px;" onclick="promptInstall()">How to Install</button>
+                </div>
 
-            <!-- TAB 1: DAILY JOURNAL -->
-            <div id="tab-journal" class="portal-tab-content active">
+                <!-- LUXURY MFP STYLE HEALTH JOURNAL -->
                 <div class="dash-card">
-                    <h3>Today's Health Journal</h3>
-                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">Select a category below to log your metrics. Ensure you save your log at the end of the day.</p>
+                    <h3>Daily Health Journal</h3>
+                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">Log your daily metrics. Search the live database or scan a barcode to track precise food weights, macronutrients, and key micronutrients.</p>
                     
                     <form onsubmit="return submitDailyLog(event)">
                         
-                        <!-- Inner Journal Pill Tabs -->
-                        <div class="journal-tabs">
-                            <button type="button" class="journal-tab-btn active" onclick="switchJournalTab('j-food', this)">🥗 Nutrition</button>
-                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-activity', this)">🏃‍♀️ Activity</button>
-                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-mood', this)">🧠 Mood</button>
-                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-sleep', this)">💤 Sleep</button>
-                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-biometrics', this)">💧 Biometrics</button>
+                        <!-- REFINED HIGH-END JOURNAL TABS -->
+                        <div style="display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.8rem; margin-bottom: 2.5rem; scrollbar-width: none;">
+                            <button type="button" class="journal-tab-btn active" onclick="switchJournalTab('j-food', this)" style="flex: 1; min-width: 110px;">Nutrition</button>
+                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-activity', this)" style="flex: 1; min-width: 110px;">Activity</button>
+                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-mood', this)" style="flex: 1; min-width: 110px;">Mood & Mind</button>
+                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-sleep', this)" style="flex: 1; min-width: 110px;">Sleep</button>
+                            <button type="button" class="journal-tab-btn" onclick="switchJournalTab('j-biometrics', this)" style="flex: 1; min-width: 110px;">Biometrics</button>
                         </div>
 
                         <!-- Pane: NUTRITION (Includes Scanner) -->
                         <div id="j-food" class="journal-pane active">
                             <!-- Live API Search Tool & Scanner -->
                             <div style="background: #FAFAF7; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand); margin-bottom: 2.5rem; margin-top: 1rem;">
-                                <h4 style="font-family: 'Montserrat'; font-size: 0.95rem; color: var(--text-main); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">Live Food Database</h4>
+                                <h4 style="font-family: 'Montserrat'; font-size: 0.95rem; color: var(--text-main); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">Live Food Database & Barcode Scanner</h4>
                                 
                                 <div style="position: relative; display: flex; gap: 0.8rem; margin-bottom: 1rem;">
                                     <div style="position: relative; flex: 1;">
@@ -416,6 +535,7 @@
                                     </div>
                                 </details>
                             </div>
+                            
                             <div class="meal-section">
                                 <h5>2. Lunch</h5>
                                 <textarea id="log-lun-desc" placeholder="Exact foods & weights"></textarea>
@@ -436,6 +556,7 @@
                                     </div>
                                 </details>
                             </div>
+
                             <div class="meal-section">
                                 <h5>3. Dinner</h5>
                                 <textarea id="log-din-desc" placeholder="Exact foods & weights"></textarea>
@@ -456,6 +577,7 @@
                                     </div>
                                 </details>
                             </div>
+
                             <div class="meal-section" style="border: none;">
                                 <h5>4. Snacks & Supplements</h5>
                                 <textarea id="log-snk-desc" placeholder="Exact foods & supplements"></textarea>
@@ -501,7 +623,7 @@
                             <select id="log-sleep-quality"><option value="">Select...</option><option value="5">5 - Excellent</option><option value="4">4 - Good</option><option value="3">3 - Fair</option><option value="2">2 - Poor</option><option value="1">1 - Terrible</option></select>
                         </div>
 
-                        <!-- Pane: BIOMETRICS (Combined Bowel, Water, Vitals) -->
+                        <!-- Pane: BIOMETRICS -->
                         <div id="j-biometrics" class="journal-pane">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
                                 <div>
@@ -523,7 +645,7 @@
                             <label>Blood Pressure / Pulse (Optional)</label><input type="text" id="log-meas-bp" placeholder="e.g. 120/80">
                         </div>
 
-                        <!-- DAILY TOTALS DASHBOARD (Always visible at bottom of form) -->
+                        <!-- DAILY TOTALS DASHBOARD -->
                         <div style="margin-top: 3rem;">
                             <div class="daily-totals-macro">
                                 <div><span>CALORIES</span><strong id="tot-cal" style="font-size:1.6rem;">0</strong></div>
@@ -542,13 +664,12 @@
                         </div>
                     </form>
                 </div>
-            </div>
 
-            <!-- TAB 2: MEDICAL INTAKE -->
-            <div id="tab-intake" class="portal-tab-content">
+                <!-- COMPREHENSIVE MEDICAL INTAKE -->
                 <div class="dash-card">
                     <h3>Comprehensive Medical Intake</h3>
                     <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">Please complete this detailed functional health profile prior to your initial consultation.</p>
+                    
                     <form onsubmit="return window.submitMedicalIntake(event)">
                         <div class="form-row">
                             <div><label>Age</label><input type="number" id="intake-age" required></div>
@@ -565,8 +686,10 @@
                             <h4 style="color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.2rem;">1. Immune & Digestion Systems</h4>
                             <label>Have you ever been diagnosed with an autoimmune disease?</label>
                             <input type="text" id="fm-immune-1" placeholder="Specify disease and when diagnosed">
+                            
                             <label>Do you experience gas and/or bloating after eating? Any foods in particular?</label>
                             <input type="text" id="fm-digest-1" placeholder="Specify triggers">
+                            
                             <label>Do you experience skin itching, psoriasis, eczema, rosacea, or acne?</label>
                             <input type="text" id="fm-digest-2" placeholder="Specify skin conditions">
                         </div>
@@ -575,10 +698,13 @@
                             <h4 style="color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.2rem;">2. Hormones, Thyroid & Blood Sugar</h4>
                             <label>Do you get cravings for sugar OR salt?</label>
                             <input type="text" id="fm-hormone-1" placeholder="Specify cravings">
+                            
                             <label>When you wake up, do you feel energised or do you want to sleep longer?</label>
                             <input type="text" id="fm-hormone-2" placeholder="Describe morning energy">
+                            
                             <label>Do you get cold hands/feet, easily gain weight, or have constipation?</label>
                             <input type="text" id="fm-thyroid-1" placeholder="Specify symptoms">
+                            
                             <label>Do you feel tired/fatigued after a meal, or energized?</label>
                             <input type="text" id="fm-blood-1" placeholder="Describe post-meal energy">
                         </div>
@@ -592,17 +718,11 @@
                                 <label style="text-transform: none; letter-spacing: 0; font-family: 'Montserrat'; font-size: 0.9rem; color: var(--text-main); font-weight: 500; margin: 0; line-height: 1.5;">I acknowledge I have carefully read and understand the above consent. I authorize medical treatment and use of e-mail correspondence.</label>
                             </div>
                         </div>
+
                         <button type="submit" class="btn" style="width: 100%;">Sign & Submit Intake File</button>
                     </form>
                 </div>
-            </div>
 
-            <!-- TAB 3: APPOINTMENTS -->
-            <div id="tab-appointments" class="portal-tab-content">
-                <div class="dash-card">
-                    <h3>Your Appointments</h3>
-                    <div id="client-appointments-list"><p style="color: #888; font-size: 0.95rem;">Loading schedule...</p></div>
-                </div>
                 <div class="dash-card" id="new-booking-card">
                     <h3>Book Another Session</h3>
                     <form onsubmit="return window.bookNewSession(event)">
@@ -619,11 +739,14 @@
                 </div>
             </div>
 
-            <!-- TAB 4: MESSAGES -->
-            <div id="tab-messages" class="portal-tab-content">
+            <div>
+                <div class="dash-card">
+                    <h3>Your Appointments</h3>
+                    <div id="client-appointments-list"><p style="color: #888; font-size: 0.95rem;">Loading schedule...</p></div>
+                </div>
+
                 <div class="dash-card">
                     <h3>Secure Messaging</h3>
-                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">Contact Clare directly for support between sessions.</p>
                     <div class="chat-box" id="client-chat-box"></div>
                     <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 1rem;">
                         <input type="text" id="client-msg-input" placeholder="Type message..." style="margin-bottom: 0; flex: 1;" required>
@@ -631,7 +754,6 @@
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -805,9 +927,7 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
                         resBox.innerHTML = '<p style="color:#a94442; font-size:0.9rem; margin-top:0.5rem;">Error connecting to database.</p>';
                     }
                 },
-                function onScanFailure(error) {
-                    // This fires repeatedly on every empty frame, safe to ignore
-                }
+                function onScanFailure(error) {}
             ).then(() => {
                 resBox.innerHTML = '';
             }).catch((err) => {
