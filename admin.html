@@ -9,27 +9,33 @@
     <style>
         :root { --bg-color: #F7F6F2; --text-main: #252D26; --primary-sage: #4A594D; --secondary-sand: #E5E2D9; --gold-accent: #C5A880; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Cormorant Garamond', serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.8; font-size: 1.15rem; }
+        body { font-family: 'Cormorant Garamond', serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.8; font-size: 1.125rem; overflow-x: hidden; }
         h1, h2, h3, h4, th, .nav-logo, .btn { font-family: 'Montserrat', sans-serif; }
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 6%; background: white; border-bottom: 1px solid var(--secondary-sand); }
-        .nav-logo { font-size: 1rem; font-weight: 600; text-transform: uppercase; color: var(--primary-sage); letter-spacing: 2px; }
-        .btn { padding: 0.8rem 1.8rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; border-radius: 2px; cursor: pointer; border: none; background: var(--primary-sage); color: white; transition: background 0.3s; }
-        .btn:hover { background-color: #3B473D; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 4%; background: white; border-bottom: 1px solid var(--secondary-sand); }
+        .nav-logo { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: var(--primary-sage); letter-spacing: 1.5px; }
+        .btn { padding: 0.8rem 1.4rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 2px; cursor: pointer; border: none; background: var(--primary-sage); color: white; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
         .btn-outline { background: transparent; border: 1px solid var(--primary-sage); color: var(--primary-sage); }
-        .btn-outline:hover { background-color: var(--primary-sage); color: white; }
         .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 1rem; }
-        .form-container { width: 100%; max-width: 420px; background: white; padding: 4rem 3rem; border-radius: 4px; border: 1px solid var(--secondary-sand); text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.04); }
-        label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 0.5rem; text-align: left; font-weight: 600; font-family: 'Montserrat', sans-serif; }
-        input, select, textarea { width: 100%; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 2px; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; background: #fff; }
-        .dashboard-wrapper { display: none; max-width: 1400px; margin: 4rem auto; padding: 0 3%; }
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
-        .panel { background: white; padding: 2.5rem; border-radius: 4px; border: 1px solid var(--secondary-sand); margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
-        .panel h3 { font-size: 1.3rem; color: var(--primary-sage); margin-bottom: 1.8rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-weight: 500; }
-        .chat-box { height: 280px; overflow-y: auto; background: #F4F3EE; padding: 1.2rem; border-radius: 3px; margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem; }
-        .msg { padding: 0.9rem 1.2rem; border-radius: 4px; max-width: 80%; font-size: 1.05rem; }
+        .form-container { width: 100%; max-width: 400px; background: white; padding: 2.5rem 1.5rem; border-radius: 4px; border: 1px solid var(--secondary-sand); text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.04); }
+        label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: #555; margin-bottom: 0.4rem; text-align: left; font-weight: 600; font-family: 'Montserrat', sans-serif; }
+        input, select, textarea { width: 100%; padding: 0.9rem; margin-bottom: 1.2rem; border: 1px solid var(--secondary-sand); border-radius: 2px; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; background: #fff; appearance: none; -webkit-appearance: none; }
+        .dashboard-wrapper { display: none; max-width: 1200px; margin: 2rem auto; padding: 0 4%; }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+        .panel { background: white; padding: 1.8rem 1.2rem; border-radius: 4px; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem; box-shadow: 0 5px 20px rgba(0,0,0,0.02); }
+        .panel h3 { font-size: 1.15rem; color: var(--primary-sage); margin-bottom: 1.2rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.6rem; font-weight: 500; }
+        .chat-box { height: 260px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #F4F3EE; padding: 1rem; border-radius: 3px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+        .msg { padding: 0.8rem 1rem; border-radius: 4px; max-width: 90%; font-size: 1rem; }
         .msg.client { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; }
         .msg.admin { background: var(--primary-sage); color: white; align-self: flex-end; }
-        .client-file-card { background: #FAF9F5; border: 1px solid var(--secondary-sand); padding: 2rem; border-radius: 4px; margin-bottom: 1.5rem; }
+        .client-file-card { background: #FAF9F5; border: 1px solid var(--secondary-sand); padding: 1.5rem 1rem; border-radius: 4px; margin-bottom: 1.2rem; }
+
+        @media (min-width: 768px) {
+            .dashboard-grid { grid-template-columns: 1fr 1fr; gap: 3rem; }
+            .dashboard-wrapper { margin: 4rem auto; padding: 0 4%; }
+            .panel { padding: 2.5rem; }
+            .form-container { max-width: 420px; padding: 3.5rem; }
+            .client-file-card { padding: 2rem; }
+        }
     </style>
 </head>
 <body>
@@ -50,49 +56,32 @@
     </div>
 
     <div id="admin-dashboard" class="dashboard-wrapper">
-        <div style="margin-bottom: 3rem; border-bottom: 2px solid var(--secondary-sand); padding-bottom: 1.2rem;">
-            <h1 style="font-size: 2.5rem; font-weight: 300;">Welcome, Clare</h1>
+        <div style="margin-bottom: 2.5rem; border-bottom: 2px solid var(--secondary-sand); padding-bottom: 1rem;">
+            <h1 style="font-size: 2rem; font-weight: 300;">Welcome, Clare</h1>
         </div>
 
         <div class="dashboard-grid">
-            <!-- CLIENT FILES & INTAKE DIRECTORY -->
-            <div class="panel" style="grid-column: span 2;">
+            <div class="panel" style="grid-column: 1 / -1;">
                 <h3>Client Files & Medical Questionnaires</h3>
-                <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">View patient intake details, add clinical notes, and upload historical client documents.</p>
-                <div id="admin-client-files-list">
-                    <p style="color: #888;">Loading client records...</p>
-                </div>
+                <div id="admin-client-files-list"><p style="color: #888;">Loading client records...</p></div>
             </div>
 
-            <!-- INBOX PANEL -->
             <div class="panel">
                 <h3>Live Patient Inbox</h3>
-                <p style="font-size: 0.95rem; color: #666; margin-bottom: 1.5rem;">Messages sent from active client portals.</p>
-                <div class="chat-box" id="admin-chat-box">
-                    <p style="color: #888;">Loading messages from database...</p>
-                </div>
+                <div class="chat-box" id="admin-chat-box"><p style="color: #888;">Loading messages...</p></div>
             </div>
 
-            <!-- BROADCAST / ADVICE PANEL -->
             <div class="panel">
-                <h3>Send Advice, Articles & Files</h3>
-                <p style="font-size: 0.95rem; color: #666; margin-bottom: 1.5rem;">Broadcast to all clients or send targeted advice to a specific patient.</p>
+                <h3>Send Advice & Files</h3>
                 <form onsubmit="return publishBroadcast(event)">
                     <label>Send To</label>
                     <select id="broadcast-recipient">
-                        <option value="all">Publish to All Clients (Mass Broadcast)</option>
+                        <option value="all">All Clients (Mass Broadcast)</option>
                     </select>
-
-                    <label>Subject / Article Title</label>
-                    <input type="text" id="broadcast-title" placeholder="e.g. Personal Protocol Adjustment" required>
-                    
-                    <label>Detailed Advice / Content</label>
-                    <textarea id="broadcast-content" style="height: 120px;" placeholder="Write comprehensive advice here..." required></textarea>
-                    
-                    <label>Attach Protocol / Document (PDF, Image)</label>
-                    <input type="file" id="broadcast-file">
-
-                    <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Send Advice & Files</button>
+                    <label>Title</label><input type="text" id="broadcast-title" required>
+                    <label>Content</label><textarea id="broadcast-content" required></textarea>
+                    <label>Attach File</label><input type="file" id="broadcast-file">
+                    <button type="submit" class="btn" style="width: 100%;">Dispatch</button>
                 </form>
             </div>
         </div>
@@ -101,12 +90,10 @@
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
+        let lastMessageCount = 0;
 
         function getSupabase() {
-            if(!window.supabase || !window.supabase.createClient) {
-                alert("Supabase library still initializing. Please try again in 1 second.");
-                return null;
-            }
+            if(!window.supabase) return null;
             return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         }
 
@@ -120,89 +107,58 @@
                 document.getElementById('admin-dashboard').style.display = 'block';
                 document.getElementById('btn-logout').style.display = 'inline-block';
                 const db = getSupabase();
-                if(db) {
-                    loadAdminInbox(db);
-                    loadClientFiles(db);
-                    loadClientDropdown(db);
-                }
+                loadAdminInbox(db); loadClientFiles(db); loadClientDropdown(db);
+                setInterval(() => loadAdminInbox(db, true), 10000);
                 return false;
             }
 
             const db = getSupabase();
-            if(!db) return false;
-
-            const { data, error } = await db.auth.signInWithPassword({ email: email, password: pass });
-            if (error) {
-                alert('Admin Login failed: ' + error.message);
-            } else {
+            const { error } = await db.auth.signInWithPassword({ email, password: pass });
+            if (error) alert('Login failed: ' + error.message);
+            else {
                 document.getElementById('admin-login').style.display = 'none';
                 document.getElementById('admin-dashboard').style.display = 'block';
                 document.getElementById('btn-logout').style.display = 'inline-block';
-                loadAdminInbox(db);
-                loadClientFiles(db);
-                loadClientDropdown(db);
+                loadAdminInbox(db); loadClientFiles(db); loadClientDropdown(db);
+                setInterval(() => loadAdminInbox(db, true), 10000);
             }
             return false;
         }
 
         async function loadClientFiles(db) {
             const container = document.getElementById('admin-client-files-list');
-            try {
-                const { data: appointments } = await db.from('appointments').select('*');
-                const { data: messages } = await db.from('messages').select('*');
+            const { data: appts } = await db.from('appointments').select('*');
+            const { data: msgs } = await db.from('messages').select('*');
 
-                if(!appointments || appointments.length === 0) {
-                    container.innerHTML = '<p style="color: #666;">No registered clients found yet.</p>';
-                    return;
-                }
+            if(!appts || appts.length === 0) { container.innerHTML = '<p style="color: #666;">No clients found.</p>'; return; }
 
-                const uniqueClients = Array.from(new Set(appointments.map(a => a.client_id)))
-                    .map(id => appointments.find(a => a.client_id === id));
+            const uniqueClients = Array.from(new Set(appts.map(a => a.client_id))).map(id => appts.find(a => a.client_id === id));
 
-                container.innerHTML = uniqueClients.map(client => {
-                    // Find any message from this client that contains the medical intake submission
-                    const clientMsgs = messages ? messages.filter(m => m.client_id === client.client_id) : [];
-                    const intakeMsg = clientMsgs.find(m => m.content && m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
-                    
-                    let intakeDisplay = 'Questionnaire not yet completed by client.';
-                    if (intakeMsg) {
-                        intakeDisplay = intakeMsg.content.replace('[MEDICAL INTAKE SUBMISSION]', '').trim();
-                    }
+            container.innerHTML = uniqueClients.map(client => {
+                const clientMsgs = msgs ? msgs.filter(m => m.client_id === client.client_id) : [];
+                const intakeMsg = clientMsgs.find(m => m.content && m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
+                let intakeDisplay = intakeMsg ? intakeMsg.content.replace('[MEDICAL INTAKE SUBMISSION]', '').trim() : 'Questionnaire not yet completed.';
 
-                    return `
-                        <div class="client-file-card">
-                            <h4 style="color: var(--primary-sage); font-size: 1.25rem; margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif;">${client.client_name}</h4>
-                            <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.2rem;"><strong>Client ID:</strong> ${client.client_id}</p>
-                            
-                            <div style="background: white; padding: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 3px; margin-bottom: 1.5rem; font-size: 1.05rem;">
-                                <strong style="font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--primary-sage);">Medical Intake & Questionnaire Summary:</strong><br>
-                                <pre style="margin-top: 0.8rem; color: #333; background: #FAFAF7; padding: 1.2rem; border-radius: 3px; border-left: 3px solid var(--primary-sage); font-family: inherit; white-space: pre-wrap; line-height: 1.7;">${intakeDisplay}</pre>
-                            </div>
-
-                            <form onsubmit="return savePractitionerNote(event, '${client.client_id}')" style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 1.5rem; align-items: end;">
-                                <div>
-                                    <label>Add Practitioner Note</label>
-                                    <input type="text" id="note-text-${client.client_id}" placeholder="Type consultation notes..." style="margin-bottom:0;" required>
-                                </div>
-                                <div>
-                                    <label>Upload File / Document</label>
-                                    <input type="file" id="note-file-${client.client_id}" style="margin-bottom:0;">
-                                </div>
-                                <button type="submit" class="btn" style="padding: 1rem 1.5rem;">Update File</button>
-                            </form>
+                return `
+                    <div class="client-file-card">
+                        <h4 style="color: var(--primary-sage); font-size: 1.1rem; margin-bottom: 0.3rem;">${client.client_name}</h4>
+                        <p style="font-size: 0.75rem; color: #666; margin-bottom: 1rem;">ID: ${client.client_id}</p>
+                        <div style="background: white; padding: 1.2rem; border: 1px solid var(--secondary-sand); border-radius: 3px; margin-bottom: 1rem; font-size: 0.95rem;">
+                            <strong>Medical Questionnaire:</strong><br>
+                            <pre style="margin-top: 0.6rem; color: #333; background: #FAFAF7; padding: 1rem; border-radius: 3px; border-left: 3px solid var(--primary-sage); font-family: inherit; white-space: pre-wrap;">${intakeDisplay}</pre>
                         </div>
-                    `;
-                }).join('');
-            } catch(err) {
-                container.innerHTML = '<p style="color: red;">Error loading client records.</p>';
-            }
+                        <form onsubmit="return savePractitionerNote(event, '${client.client_id}')" style="display: flex; flex-direction: column; gap: 0.8rem;">
+                            <input type="text" id="note-text-${client.client_id}" placeholder="Type consultation notes..." style="margin-bottom:0;" required>
+                            <input type="file" id="note-file-${client.client_id}" style="margin-bottom:0;">
+                            <button type="submit" class="btn">Update File</button>
+                        </form>
+                    </div>`;
+            }).join('');
         }
 
         window.savePractitionerNote = async function(e, clientId) {
             e.preventDefault();
             const db = getSupabase();
-            if(!db) return false;
-
             const noteText = document.getElementById(`note-text-${clientId}`).value.trim();
             const fileInput = document.getElementById(`note-file-${clientId}`);
             let fileUrl = null;
@@ -211,38 +167,24 @@
                 const file = fileInput.files[0];
                 const filePath = `client_records/${clientId}_${Date.now()}_${file.name}`;
                 const { error: uploadError } = await db.storage.from('client-files').upload(filePath, file);
-                
-                if (uploadError) {
-                    alert("File upload warning: Ensure 'client-files' storage bucket is created in Supabase.");
-                } else {
+                if (!uploadError) {
                     const { data: { publicUrl } } = db.storage.from('client-files').getPublicUrl(filePath);
                     fileUrl = publicUrl;
                 }
             }
 
-            const { error } = await db.from('client_notes').insert([{
-                client_id: clientId,
-                practitioner_notes: noteText,
-                file_url: fileUrl
-            }]);
-
-            if(error) {
-                alert("Error saving note: " + error.message);
-            } else {
-                alert("Client file successfully updated with new notes and documents!");
-                document.getElementById(`note-text-${clientId}`).value = '';
-                fileInput.value = '';
-            }
+            await db.from('client_notes').insert([{ client_id: clientId, practitioner_notes: noteText, file_url: fileUrl }]);
+            alert("Client file successfully updated!");
+            document.getElementById(`note-text-${clientId}`).value = '';
+            fileInput.value = '';
             return false;
         };
 
         async function loadClientDropdown(db) {
             const select = document.getElementById('broadcast-recipient');
             const { data } = await db.from('appointments').select('client_name, client_id');
-            if(data && data.length > 0) {
-                const uniqueClients = Array.from(new Set(data.map(a => a.client_id)))
-                    .map(id => data.find(a => a.client_id === id));
-
+            if(data) {
+                const uniqueClients = Array.from(new Set(data.map(a => a.client_id))).map(id => data.find(a => a.client_id === id));
                 uniqueClients.forEach(c => {
                     const opt = document.createElement('option');
                     opt.value = c.client_id;
@@ -252,63 +194,43 @@
             }
         }
 
-        async function loadAdminInbox(db) {
+        async function loadAdminInbox(db, isPolling = false) {
             const chatBox = document.getElementById('admin-chat-box');
-            const { data, error } = await db.from('messages').select('*').order('created_at', { ascending: true });
+            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
+            if(!data || data.length === 0) { chatBox.innerHTML = '<p style="color: #888;">No messages yet.</p>'; return; }
 
-            if(error) {
-                chatBox.innerHTML = '<p style="color: red;">Error loading inbox messages.</p>';
-                return;
+            if (isPolling && data.length > lastMessageCount && lastMessageCount > 0) {
+                document.title = "🔔 NEW MESSAGE - Admin";
             }
+            lastMessageCount = data.length;
 
-            if(!data || data.length === 0) {
-                chatBox.innerHTML = '<p style="color: #888;">No incoming messages from clients yet.</p>';
-            } else {
-                chatBox.innerHTML = data.map(m => `
-                    <div class="msg ${m.sender}">
-                        <strong>${m.sender === 'client' ? 'Patient' : 'Clare'}:</strong> ${m.content}
-                    </div>
-                `).join('');
-            }
+            chatBox.innerHTML = data.map(m => `<div class="msg ${m.sender}"><strong>${m.sender === 'client' ? 'Patient' : 'Clare'}:</strong> ${m.content}</div>`).join('');
         }
 
         async function publishBroadcast(e) {
             e.preventDefault();
             const db = getSupabase();
-            if(!db) return false;
-
             const recipient = document.getElementById('broadcast-recipient').value;
             const title = document.getElementById('broadcast-title').value.trim();
             const content = document.getElementById('broadcast-content').value.trim();
             const fileInput = document.getElementById('broadcast-file');
-
             let fileUrl = null;
+
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
                 const filePath = `protocols/${Date.now()}_${file.name}`;
-                const { data: uploadData, error: uploadError } = await db.storage.from('client-files').upload(filePath, file);
-                
+                const { error: uploadError } = await db.storage.from('client-files').upload(filePath, file);
                 if (!uploadError) {
                     const { data: { publicUrl } } = db.storage.from('client-files').getPublicUrl(filePath);
                     fileUrl = publicUrl;
                 }
             }
 
-            const { error } = await db.from('broadcasts').insert([{ 
-                title: title, 
-                content: content, 
-                recipient_email: recipient,
-                file_url: fileUrl 
-            }]);
-
-            if(error) {
-                alert('Error sending advice: ' + error.message);
-            } else {
-                alert("Advice and documents successfully dispatched!");
-                document.getElementById('broadcast-title').value = '';
-                document.getElementById('broadcast-content').value = '';
-                fileInput.value = '';
-            }
+            await db.from('broadcasts').insert([{ title, content, recipient_email: recipient, file_url: fileUrl }]);
+            alert("Dispatched successfully!");
+            document.getElementById('broadcast-title').value = '';
+            document.getElementById('broadcast-content').value = '';
+            fileInput.value = '';
             return false;
         }
     </script>
