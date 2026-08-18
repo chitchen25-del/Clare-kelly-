@@ -294,6 +294,33 @@
                 </div>
 
                 <div class="dash-card">
+                    <h3>Medical Intake File</h3>
+                    <form onsubmit="return window.submitMedicalIntake(event)">
+                        <div class="form-row">
+                            <div><label>Age</label><input type="number" id="intake-age" required></div>
+                            <div>
+                                <label>Sex</label>
+                                <select id="intake-sex" required>
+                                    <option value="">Select</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div><label>Height</label><input type="text" id="intake-height" required></div>
+                            <div><label>Weight</label><input type="text" id="intake-weight" required></div>
+                        </div>
+                        <label>Known Medical Conditions</label>
+                        <textarea id="intake-conditions" required></textarea>
+                        <label>Treatment Aims</label>
+                        <textarea id="intake-aims" required></textarea>
+                        <button type="submit" class="btn" style="width: 100%;">Save Intake File</button>
+                    </form>
+                </div>
+
+                <div class="dash-card">
                     <h3>Your Appointments</h3>
                     <div id="client-appointments-list"><p style="color: #888;">Loading schedule...</p></div>
                 </div>
@@ -311,6 +338,19 @@
             </div>
         </div>
     </div>
+
+    <footer>
+        <div class="footer-col">
+            <h4>The Natural Healing Clinic</h4>
+            <p>13 Cronk Drine</p>
+            <p>Union Mills, IM4 4NG</p>
+        </div>
+        <div class="footer-col">
+            <h4>Contact & Hours</h4>
+            <p>Tel: 07624 202 121</p>
+            <p>Mon & Fri: 10:00 - 15:00</p>
+        </div>
+    </footer>
 
     <!-- JS LOGIC -->
     <script>
@@ -348,6 +388,19 @@
                 await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
             }
             alert('Registered successfully!'); updateNavState(true); openScreen('screen-dashboard'); loadClientDashboard(db, authData.user);
+            return false;
+        };
+
+        window.submitMedicalIntake = async function(e) {
+            e.preventDefault();
+            const db = getSupabase();
+            const { data: { user } } = await db.auth.getUser();
+            if(!user) return false;
+
+            const summary = `[MEDICAL INTAKE SUBMISSION]\nAge: ${document.getElementById('intake-age').value} | Sex: ${document.getElementById('intake-sex').value} | Height: ${document.getElementById('intake-height').value} | Weight: ${document.getElementById('intake-weight').value}\nConditions: ${document.getElementById('intake-conditions').value}\nAims: ${document.getElementById('intake-aims').value}`;
+
+            await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: summary }]);
+            alert("Medical intake questionnaire successfully submitted to Clare!");
             return false;
         };
 
@@ -417,7 +470,7 @@ Date: ${new Date().toLocaleDateString('en-GB')}
             const { data: msgs } = await db.from('messages').select('*').eq('client_id', user.id).order('created_at', { ascending: true });
             if(msgs) {
                 // Filter out logs from the main chat box so it doesn't clutter
-                const chatMsgs = msgs.filter(m => !m.content.includes('[DAILY HEALTH LOG]'));
+                const chatMsgs = msgs.filter(m => !m.content.includes('[DAILY HEALTH LOG]') && !m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
                 chatBox.innerHTML = chatMsgs.map(m => `<div class="msg ${m.sender}">${m.content}</div>`).join('');
                 chatBox.scrollTop = chatBox.scrollHeight;
             }
