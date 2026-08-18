@@ -36,7 +36,12 @@
         .msg { padding: 0.8rem 1rem; border-radius: 6px; max-width: 85%; font-size: 1rem; }
         .msg.client { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; }
         .msg.admin { background: var(--primary-sage); color: white; align-self: flex-end; }
-        .client-file-card { background: #FAF9F5; border: 1px solid var(--secondary-sand); padding: 1.2rem; border-radius: 6px; margin-bottom: 1.2rem; }
+        
+        /* Master-Detail Client List */
+        .client-list-item { background: white; border: 1px solid var(--secondary-sand); padding: 1.2rem; border-radius: 6px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .client-list-item:active { transform: scale(0.98); background: #FAFAF7; }
+        .client-list-item h4 { color: var(--primary-sage); font-size: 1.15rem; margin-bottom: 0.2rem; }
+        
         .app-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--secondary-sand); display: none; justify-content: space-around; align-items: center; z-index: 1000; }
         .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: #777; cursor: pointer; width: 20%; height: 100%; }
         .app-nav-item.active { color: var(--primary-sage); font-weight: 600; }
@@ -71,26 +76,38 @@
             <span id="live-badge" style="font-size: 0.7rem; background: #E6EFE8; color: var(--primary-sage); padding: 0.3rem 0.7rem; border-radius: 20px; font-family: 'Montserrat'; font-weight: 600;">● Live Sync</span>
         </div>
 
+        <!-- VIEW 1: SCHEDULE -->
         <div id="view-schedule" class="app-view active-view">
             <div class="panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                     <h3>Upcoming Appointments</h3>
-                    <button class="btn" onclick="alert('Manual booking module opened.')">+ Manual Booking</button>
+                    <button class="btn" onclick="openNewBookingModal()">+ Manual Booking</button>
                 </div>
                 <div id="admin-schedule-list"><p style="color: #888;">Loading schedule...</p></div>
             </div>
         </div>
 
+        <!-- VIEW 2: CLIENT DIRECTORY (MASTER LIST) -->
         <div id="view-clients" class="app-view">
             <div class="panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h3>Client Directory & Health Journals</h3>
-                    <button class="btn" onclick="alert('Client onboarding module opened.')">+ Add Client</button>
+                    <h3>Patient Directory</h3>
+                    <button class="btn" onclick="openClientModal()">+ Add Client</button>
                 </div>
-                <div id="admin-client-files-list"><p style="color: #888;">Loading client records...</p></div>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.2rem;">Tap a patient to view their full clinical profile and journals.</p>
+                <div id="admin-client-directory-list"><p style="color: #888;">Loading client records...</p></div>
             </div>
         </div>
 
+        <!-- NEW VIEW: DEDICATED CLIENT PROFILE (DETAIL PAGE) -->
+        <div id="view-client-detail" class="app-view">
+            <button class="btn btn-outline" style="margin-bottom: 1.5rem;" onclick="switchAppView('clients')">&larr; Back to Directory</button>
+            <div id="client-detail-content">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </div>
+
+        <!-- VIEW 3: FINANCE -->
         <div id="view-finance" class="app-view">
             <div class="panel">
                 <h3>Clinic Income & Professional Invoicing</h3>
@@ -115,6 +132,7 @@
             </div>
         </div>
 
+        <!-- VIEW 4: LIVE INBOX -->
         <div id="view-inbox" class="app-view">
             <div class="panel">
                 <h3>Live Patient Inbox</h3>
@@ -122,6 +140,7 @@
             </div>
         </div>
 
+        <!-- VIEW 5: BROADCAST -->
         <div id="view-tools" class="app-view">
             <div class="panel">
                 <h3>Send Advice & Files</h3>
@@ -155,13 +174,17 @@
     </div>
 
     <script>
+        let globalClients = [];
+        let globalMsgs = [];
+
         function switchAppView(viewName, element) {
             document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active-view'));
             document.querySelectorAll('.app-nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`view-${viewName}`).classList.add('active-view');
             if(element) element.classList.add('active');
-            const titles = { schedule: 'Master Schedule', clients: 'Client Directory', finance: 'Income & Invoicing', inbox: 'Live Patient Inbox', tools: 'Clinic Tools' };
-            document.getElementById('app-header-title').innerText = titles[viewName];
+            
+            const titles = { schedule: 'Master Schedule', clients: 'Patient Directory', 'client-detail': 'Clinical Profile', finance: 'Income & Invoicing', inbox: 'Live Patient Inbox', tools: 'Clinic Tools' };
+            document.getElementById('app-header-title').innerText = titles[viewName] || 'Dashboard';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -175,8 +198,92 @@
             return false;
         }
 
+        // ---- THE MASTER DETAIL PROFILE VIEW GENERATOR ----
+        function openClientProfile(clientId) {
+            const client = globalClients.find(c => c.client_id === clientId) || { client_name: 'Unknown Client', client_id: clientId };
+            const clientMsgs = globalMsgs.filter(m => m.client_id === clientId);
+
+            const intakeMsg = clientMsgs.find(m => m.content && m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
+            let intakeDisplay = intakeMsg ? intakeMsg.content.replace('[MEDICAL INTAKE SUBMISSION]', '').trim() : 'Questionnaire not yet completed.';
+
+            const dailyLogs = clientMsgs.filter(m => m.content && m.content.includes('[DAILY HEALTH LOG]'));
+            let logsHtml = '<p style="font-size:0.9rem; color:#888;">No daily journals logged yet.</p>';
+            if(dailyLogs.length > 0) {
+                logsHtml = dailyLogs.map(log => {
+                    const cleanContent = log.content.replace('[DAILY HEALTH LOG]', '').trim();
+                    return `<div style="background: white; border-left: 4px solid var(--primary-sage); padding: 1.2rem; margin-bottom: 1rem; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
+                        <pre style="white-space: pre-wrap; font-family: inherit; font-size: 0.95rem; color: #333; line-height: 1.6;">${cleanContent}</pre>
+                    </div>`;
+                }).join('');
+            }
+
+            const html = `
+                <div class="panel" style="border-top: 4px solid var(--primary-sage);">
+                    <h2 style="font-size: 2rem; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 300;">${client.client_name}</h2>
+                    <p style="font-size: 0.8rem; color: #888; margin-bottom: 2rem; font-family: 'Montserrat';">PATIENT ID: ${client.client_id}</p>
+                    
+                    <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Comprehensive Medical Intake</h3>
+                    <div style="background: #FAFAF7; padding: 1.5rem; border-radius: 4px; margin-bottom: 2.5rem; font-size: 1.05rem;">
+                        <pre style="white-space: pre-wrap; font-family: inherit; color: #444; line-height: 1.7;">${intakeDisplay}</pre>
+                    </div>
+
+                    <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Running Health Journals (MFP Detailed View)</h3>
+                    <div style="margin-bottom: 2.5rem; max-height: 600px; overflow-y: auto; padding-right: 10px;">
+                        ${logsHtml}
+                    </div>
+
+                    <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Add Clinical Note</h3>
+                    <form onsubmit="alert('Note Saved to File!'); return false;" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <textarea placeholder="Type consultation notes..." style="height: 100px; margin-bottom:0;" required></textarea>
+                        <input type="file" style="margin-bottom:0;">
+                        <button type="submit" class="btn">Update Clinical File</button>
+                    </form>
+                </div>
+            `;
+            
+            document.getElementById('client-detail-content').innerHTML = html;
+            switchAppView('client-detail');
+        }
+
         function injectDemoData() {
-            // BULLETPROOF DOM INJECTION FOR LIVE DEMO
+            // SET GLOBALS FOR MASTER DETAIL VIEW
+            globalClients = [
+                { client_id: 'demo_1', client_name: 'Sarah Jenkins' },
+                { client_id: 'demo_2', client_name: 'Marcus Vance' },
+                { client_id: 'demo_3', client_name: 'Elena Rostova' }
+            ];
+
+            // INJECT MFP-STYLE GRANULAR LOG
+            globalMsgs = [
+                { client_id: 'demo_1', sender: 'client', content: '[MEDICAL INTAKE SUBMISSION]\nAge: 42 | Sex: Female | Height: 165cm | Weight: 68kg\n\nAIMS: Regain consistent energy, reduce brain fog, manage Hashimoto\'s.\n\nFUNCTIONAL MARKERS:\nAutoimmune: Hashimoto\'s (Diagnosed 2021)\nDigestion/Gas: Bloating after gluten or dairy\nCravings: Heavy sugar cravings at 3 PM\nMorning Energy: Exhausted until 10 AM' },
+                { client_id: 'demo_1', sender: 'client', content: `[DAILY HEALTH LOG]
+Date: Today
+
+🥗 FOOD & NUTRITION:
+[Breakfast] Gluten Free Oats (50g), Blueberries (80g), Almond Milk (150ml), Chia Seeds (15g).
+> Macros: 385 kcal | 12g Pro | 52g Carbs | 16g Fat
+
+[Lunch] Wild Salmon (150g), Sweet Potato (100g), Spinach (2 large handfuls), Olive Oil (1 tbsp).
+> Macros: 510 kcal | 38g Pro | 24g Carbs | 28g Fat
+
+[Dinner] Organic Chicken Breast (200g), Broccoli (100g), Quinoa (80g).
+> Macros: 440 kcal | 62g Pro | 30g Carbs | 8g Fat
+
+[Snacks] Handful of Walnuts (30g). Slight bloating 30 mins after eating.
+> Macros: 196 kcal | 4g Pro | 4g Carbs | 19g Fat
+
+>> DAILY TOTALS: 1,531 kcal | 116g Protein | 110g Carbs | 71g Fat
+
+🏃‍♀️ ACTIVITY: Pilates Flow (45 mins, Moderate)
+🧠 MOOD & STRESS: Okay | Energy: 5/10. Notes: Felt a mid-afternoon crash.
+💤 SLEEP: 6.5 hours | Quality: 3/5
+🚽 BOWEL: Type 3 | Freq: 1
+💧 WATER: 2.5 Liters
+📏 VITALS: Weight: 67.5kg` },
+                { client_id: 'demo_2', sender: 'client', content: '[MEDICAL INTAKE SUBMISSION]\nAge: 29 | Sex: Male\nAims: Improve marathon completion time, achieve full ROM without sciatic pain.' },
+                { client_id: 'demo_3', sender: 'client', content: 'Hi Clare, I am really looking forward to starting the Gut Reset. Do I need to cut out coffee completely?' }
+            ];
+
             document.getElementById('stat-revenue').innerText = '£1,837';
             document.getElementById('stat-sessions').innerText = '3';
 
@@ -193,37 +300,23 @@
                         <div style="text-align: right; font-size: 0.85rem; color: #666;">Thursday<br><strong>02:30 PM</strong></div>
                     </div>
                 </div>
-                <div class="cal-card">
-                    <div style="display: flex; justify-content: space-between;">
-                        <div><strong style="color: var(--primary-sage); font-family: 'Montserrat';">Elena Rostova</strong><br><span style="font-size: 0.95rem; color: #555;">The Gut Reset (£297)</span></div>
-                        <div style="text-align: right; font-size: 0.85rem; color: #666;">Friday<br><strong>11:00 AM</strong></div>
-                    </div>
-                </div>
             `;
 
-            document.getElementById('admin-client-files-list').innerHTML = `
-                <div class="client-file-card">
-                    <h4 style="color: var(--primary-sage); font-size: 1.25rem; margin-bottom: 0.4rem;">Sarah Jenkins</h4>
-                    <div style="background: white; padding: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 4px; margin-bottom: 1.2rem; font-size: 1.05rem;">
-                        <strong style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage); font-family: 'Montserrat';">Medical Questionnaire:</strong><br>
-                        <pre style="margin-top: 0.8rem; color: #333; background: #FAFAF7; padding: 1.2rem; border-radius: 3px; border-left: 3px solid var(--primary-sage); font-family: inherit; white-space: pre-wrap; line-height: 1.7;">Age: 42 | Sex: Female | Height: 165cm | Weight: 68kg
-Conditions: Chronic fatigue, Hashimoto's thyroiditis.
-Aims: Regain consistent energy and manage autoimmune flare-ups.</pre>
+            // INJECT MASTER DIRECTORY LIST
+            document.getElementById('admin-client-directory-list').innerHTML = `
+                <div class="client-list-item" onclick="openClientProfile('demo_1')">
+                    <div>
+                        <h4>Sarah Jenkins</h4>
+                        <span style="font-size: 0.85rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
                     </div>
-                    <div style="margin-top: 1.5rem;">
-                        <strong style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage);">Daily Health Journals</strong>
-                        <div style="background: white; border-left: 3px solid var(--primary-sage); padding: 1rem; margin-top: 0.8rem; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
-                            <pre style="white-space: pre-wrap; font-family: inherit; font-size: 0.95rem; color: #444;">Date: Today
-
-🥗 FOOD:
-- Breakfast: GF Oats & Berries
-- Lunch: Salmon Salad
-- Snacks/Symptoms: Slight bloating at 4pm.
-
-🧠 MOOD & STRESS: Okay | Energy: 4/10
-💤 SLEEP: 6 hours | Quality: 2/5</pre>
-                        </div>
+                    <span style="color: var(--primary-sage); font-size: 1.5rem;">&rarr;</span>
+                </div>
+                <div class="client-list-item" onclick="openClientProfile('demo_2')">
+                    <div>
+                        <h4>Marcus Vance</h4>
+                        <span style="font-size: 0.85rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
                     </div>
+                    <span style="color: var(--primary-sage); font-size: 1.5rem;">&rarr;</span>
                 </div>
             `;
 
@@ -232,7 +325,6 @@ Aims: Regain consistent energy and manage autoimmune flare-ups.</pre>
                 <div class="msg admin"><strong>Clare:</strong> Yes Sarah! Take the magnesium with dinner. See you tomorrow at 10!</div>
                 <div class="msg client"><strong>Patient (Elena):</strong> I am really looking forward to starting the Gut Reset. Do I need to cut out coffee completely?</div>
             `;
-
             document.title = "🔔 NEW MESSAGE - Clinic App";
         }
 
