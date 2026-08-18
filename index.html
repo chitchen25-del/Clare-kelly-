@@ -2,421 +2,452 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Clare's Clinic | Practitioner App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Natural Healing Clinic | Isle of Man</title>
     
-    <!-- PWA & Apple Mobile Web App Configuration -->
+    <!-- PWA Installation Tags for Clients -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Clinic Admin">
+    <meta name="apple-mobile-web-app-title" content="My Clinic">
     <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=180&h=180&fit=crop">
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
     <style>
-        :root { 
-            --bg-color: #F7F6F2; 
-            --text-main: #252D26; 
-            --primary-sage: #4A594D; 
-            --secondary-sand: #E5E2D9; 
-            --gold-accent: #C5A880; 
-            --safe-bottom: env(safe-area-inset-bottom);
+        :root {
+            --bg-color: #F7F6F2;
+            --text-main: #252D26;
+            --primary-sage: #4A594D;
+            --sage-hover: #3B473D;
+            --secondary-sand: #E5E2D9;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --gold-accent: #C5A880;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Cormorant Garamond', serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; font-size: 1.1rem; overflow-x: hidden; padding-bottom: calc(75px + var(--safe-bottom)); }
-        h1, h2, h3, h4, th, .nav-logo, .btn, .app-nav-item { font-family: 'Montserrat', sans-serif; }
+        body { font-family: 'Cormorant Garamond', serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.8; font-size: 1.15rem; overflow-x: hidden; }
+        h1, h2, h3, h4, .nav-logo, .btn, .price-amount { font-family: 'Montserrat', sans-serif; }
         
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5%; background: white; border-bottom: 1px solid var(--secondary-sand); position: sticky; top: 0; z-index: 100; }
-        .nav-logo { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: var(--primary-sage); letter-spacing: 2px; }
-        .btn { padding: 0.7rem 1.2rem; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 4px; cursor: pointer; border: none; background: var(--primary-sage); color: white; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; }
-        .btn-outline { background: transparent; border: 1px solid var(--primary-sage); color: var(--primary-sage); }
+        /* Navigation */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; background-color: rgba(247, 246, 242, 0.95); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--secondary-sand); }
+        .nav-logo { font-size: 0.9rem; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; color: var(--primary-sage); }
+        .desktop-nav-links { display: none; align-items: center; gap: 1.5rem; }
+        .nav-link-text { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); cursor: pointer; transition: color 0.3s; }
+        .nav-link-text:hover { color: var(--gold-accent); }
+        .mobile-menu-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 6px; padding: 0.5rem; z-index: 102; }
+        .mobile-menu-btn span { display: block; width: 26px; height: 2px; background-color: var(--primary-sage); transition: transform 0.3s ease; }
 
-        .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 1.5rem; }
-        .form-container { width: 100%; max-width: 400px; background: white; padding: 3rem 2rem; border-radius: 8px; border: 1px solid var(--secondary-sand); text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.04); }
-        label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 0.4rem; text-align: left; font-weight: 600; }
-        input, select, textarea { width: 100%; padding: 0.9rem; margin-bottom: 1.2rem; border: 1px solid var(--secondary-sand); border-radius: 4px; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; background: #fff; appearance: none; -webkit-appearance: none; }
-        
-        .dashboard-wrapper { display: none; max-width: 1200px; margin: 1.5rem auto; padding: 0 4%; }
-        .app-view { display: none; }
-        .app-view.active-view { display: block; animation: fadeIn 0.3s ease; }
+        .mobile-drawer { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background-color: var(--bg-color); z-index: 101; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2rem; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding: 2rem; border-left: 1px solid var(--secondary-sand); }
+        .mobile-drawer.open { right: 0; }
+        .mobile-drawer-link { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 400; text-transform: uppercase; letter-spacing: 3px; color: var(--primary-sage); text-decoration: none; cursor: pointer; }
+
+        .btn { display: inline-block; padding: 0.9rem 2rem; text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border-radius: 2px; cursor: pointer; border: none; background-color: var(--primary-sage); color: white; transition: all 0.3s ease; text-align: center; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(74, 89, 77, 0.12); }
+        .btn:active { transform: scale(0.98); }
+        .btn-outline { border: 1px solid var(--primary-sage); color: var(--primary-sage); background: transparent; box-shadow: none; }
+        .btn-danger { background-color: #a94442; color: white; padding: 0.5rem 1rem; font-size: 0.75rem; box-shadow: none; min-height: auto; }
+
+        .page-screen { display: none; animation: fadeIn 0.4s ease; }
+        .page-screen.visible { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .panel { background: white; padding: 1.5rem 1.2rem; border-radius: 8px; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-        .panel h3 { font-size: 1.15rem; color: var(--primary-sage); margin-bottom: 1.2rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.6rem; font-weight: 500; }
+        .hero { text-align: center; padding: 9rem 6%; background: linear-gradient(rgba(247, 246, 242, 0.88), rgba(247, 246, 242, 0.96)), url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover; border-bottom: 1px solid var(--secondary-sand); }
+        .hero h1 { font-size: 3rem; font-weight: 300; margin-bottom: 1.2rem; letter-spacing: -0.5px; line-height: 1.2; }
+        .hero p { font-size: 1.3rem; margin-bottom: 2.5rem; color: #555; max-width: 650px; margin-left: auto; margin-right: auto; font-style: italic; }
+
+        .form-container { max-width: 100%; margin: 3rem 5%; background: white; padding: 3rem 2rem; border-radius: 4px; box-shadow: 0 25px 50px rgba(0,0,0,0.04); border: 1px solid var(--secondary-sand); }
+        .form-container h2 { text-align: center; margin-bottom: 0.8rem; font-size: 2rem; font-weight: 300; }
+        .form-row, .form-row.three { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif; font-weight: 600;}
+        input, select, textarea { width: 100%; padding: 1.1rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 4px; background: #fff; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; appearance: none; -webkit-appearance: none; }
+        textarea { resize: vertical; height: 120px; }
+
+        /* Client Dashboard */
+        .dashboard-container { max-width: 1300px; margin: 3rem auto; padding: 0 5%; display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
+        .dash-card { background: white; padding: 2.2rem 1.5rem; border-radius: 6px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 2rem; }
+        .dash-card h3 { color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.7rem; font-size: 1.25rem; font-weight: 500; }
         
-        .finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-        .metric-card { background: #FAFAF7; border: 1px solid var(--secondary-sand); padding: 1.2rem; border-radius: 6px; text-align: center; }
-        .metric-card span { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: #666; font-family: 'Montserrat'; display: block; margin-bottom: 0.3rem; }
-        .metric-card h4 { font-size: 1.6rem; font-weight: 300; color: var(--primary-sage); }
+        .chat-box { height: 260px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #F4F3EE; padding: 1.2rem; border-radius: 3px; margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem; }
+        .msg { padding: 0.9rem 1.2rem; border-radius: 4px; max-width: 90%; font-size: 1.05rem; }
+        .msg.client { background: var(--primary-sage); color: white; align-self: flex-end; }
+        .msg.admin { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; }
 
-        .chat-box { height: 300px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #F4F3EE; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
-        .msg { padding: 0.8rem 1rem; border-radius: 6px; max-width: 85%; font-size: 1rem; }
-        .msg.client { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; }
-        .msg.admin { background: var(--primary-sage); color: white; align-self: flex-end; }
-
-        .client-file-card { background: #FAF9F5; border: 1px solid var(--secondary-sand); padding: 1.2rem; border-radius: 6px; margin-bottom: 1.2rem; }
-        
-        .app-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--secondary-sand); display: none; justify-content: space-around; align-items: center; z-index: 1000; }
-        .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: #777; cursor: pointer; width: 20%; height: 100%; }
-        .app-nav-item.active { color: var(--primary-sage); font-weight: 600; }
-        .app-nav-item svg { width: 20px; height: 20px; margin-bottom: 2px; stroke: currentColor; fill: none; stroke-width: 2; }
-
-        .cal-card { background: #FAFAF7; border: 1px solid var(--secondary-sand); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+        /* Journal Accordion Styles */
+        .journal-accordion { background-color: #FAFAF7; color: var(--text-main); cursor: pointer; padding: 1.2rem; width: 100%; border: 1px solid var(--secondary-sand); border-radius: 4px; text-align: left; font-size: 0.9rem; font-family: 'Montserrat', sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; transition: 0.3s; }
+        .journal-accordion.active { background-color: #E6EFE8; border-color: var(--primary-sage); color: var(--primary-sage); }
+        .journal-panel { padding: 0 1.2rem; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; border-left: 1px solid var(--secondary-sand); border-right: 1px solid var(--secondary-sand); margin-top: -0.5rem; margin-bottom: 1rem; border-radius: 0 0 4px 4px; border-bottom: 1px solid transparent; }
+        .journal-panel.show { padding: 1.5rem 1.2rem; max-height: 1000px; border-bottom: 1px solid var(--secondary-sand); }
+        .journal-panel input, .journal-panel select { padding: 0.9rem; font-size: 1rem; margin-bottom: 1rem; }
 
         @media (min-width: 900px) {
-            .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-            .app-bottom-nav { display: none !important; }
-            .dashboard-wrapper { display: block !important; }
-            .app-view { display: block !important; }
-            .finance-grid { grid-template-columns: repeat(3, 1fr); }
+            .mobile-menu-btn { display: none; }
+            .desktop-nav-links { display: flex; }
+            .form-container { max-width: 580px; margin: 6rem auto; padding: 4rem; }
+            .form-row { grid-template-columns: 1fr 1fr; }
+            .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+            .dashboard-container { grid-template-columns: 2fr 1fr; padding: 0 6%; margin: 5rem auto; gap: 3rem; }
+            .dash-card { padding: 2.5rem; }
         }
     </style>
 </head>
 <body>
+
+    <script>
+        window.openScreen = function(screenId) {
+            document.querySelectorAll('.page-screen').forEach(el => el.classList.remove('visible'));
+            document.getElementById(screenId).classList.add('visible');
+            const drawer = document.getElementById('mobile-drawer');
+            if(drawer) drawer.classList.remove('open');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function toggleMobileMenu() {
+            document.getElementById('mobile-drawer').classList.toggle('open');
+        }
+        function toggleAccordion(id) {
+            const panel = document.getElementById(id);
+            const btn = panel.previousElementSibling;
+            panel.classList.toggle('show');
+            btn.classList.toggle('active');
+            btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
+        }
+        function promptInstall() {
+            alert("To install this app on your iPhone:\n\n1. Tap the Share icon (square with an upward arrow) at the bottom of Safari.\n2. Scroll down and tap 'Add to Home Screen'.\n3. Tap 'Add'.");
+        }
+    </script>
+
+    <!-- Navigation Bar -->
     <nav>
-        <div class="nav-logo">Clare's Clinic App</div>
-        <button id="btn-logout" class="btn btn-outline" style="display: none;" onclick="location.reload();">Sign Out</button>
+        <div class="nav-logo" onclick="openScreen('screen-home')">The Natural Healing Clinic</div>
+        <div class="desktop-nav-links">
+            <button type="button" id="nav-portal-btn" class="btn btn-outline" onclick="openScreen('screen-login')">Client Portal</button>
+            <button type="button" id="nav-book-btn" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
+            <button type="button" id="nav-logout-btn" class="btn btn-outline" style="display: none;" onclick="window.processLogout()">Sign Out</button>
+        </div>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
 
-    <div id="admin-login" class="login-wrapper">
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <span style="position: absolute; top: 1.5rem; right: 2rem; font-size: 1.8rem; cursor: pointer; color: var(--primary-sage);" onclick="toggleMobileMenu()">✕</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-home')">Home</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-login')" id="mobile-portal-link">Client Portal</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-register')" id="mobile-book-link">Register & Book</span>
+        <span class="mobile-drawer-link" onclick="window.processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
+    </div>
+
+    <!-- ================= SCREEN 1: HOME ================= -->
+    <div id="screen-home" class="page-screen visible">
+        <section class="hero">
+            <h1>Healing From The Inside Out</h1>
+            <p>"Imagine Life Without Pain."</p>
+            <button type="button" class="btn" onclick="openScreen('screen-register')">Make An Appointment</button>
+        </section>
+    </div>
+
+    <!-- ================= SCREEN 4: LOGIN ================= -->
+    <div id="screen-login" class="page-screen">
         <div class="form-container">
-            <h2>Practitioner Access</h2>
-            <form onsubmit="return processAdminLogin(event)">
-                <label>Admin Email</label><input type="text" id="admin-email" placeholder="test or email" required>
-                <label>Password</label><input type="password" id="admin-password" placeholder="test or password" required>
-                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Launch Dashboard</button>
+            <h2>Client Portal Login</h2>
+            <p class="subtitle" style="text-align: center; color: #666; margin-bottom: 2rem;">Access your files, daily journal, and messages.</p>
+            <form onsubmit="return window.processClientLogin(event)">
+                <label>Email Address</label><input type="email" id="login-email" required>
+                <label>Password</label><input type="password" id="login-password" required>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Sign In</button>
             </form>
         </div>
     </div>
 
-    <div id="admin-dashboard" class="dashboard-wrapper">
-        <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="font-size: 1.8rem; font-weight: 300;" id="app-header-title">Master Schedule</h1>
-            <span id="live-badge" style="font-size: 0.7rem; background: #E6EFE8; color: var(--primary-sage); padding: 0.3rem 0.7rem; border-radius: 20px; font-family: 'Montserrat'; font-weight: 600;">● Live Sync</span>
+    <!-- ================= SCREEN 5: REGISTRATION ================= -->
+    <div id="screen-register" class="page-screen">
+        <div class="form-container">
+            <h2>Client Registration</h2>
+            <form onsubmit="return window.processRegistration(event)">
+                <label>Full Name</label><input type="text" id="reg-name" required>
+                <label>Email Address</label><input type="email" id="reg-email" required>
+                <label>Create Password</label><input type="password" id="reg-password" required>
+                <label>Treatment Pathway</label>
+                <select id="reg-service">
+                    <option value="Initial Consultation (£85)">Initial Consultation (£85)</option>
+                    <option value="Performance Health Audit (£175)">Performance Health Audit (£175)</option>
+                </select>
+                <label>First Session Date & Time</label><input type="datetime-local" id="reg-date" required>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Complete Booking</button>
+            </form>
         </div>
+    </div>
 
-        <!-- VIEW 1: SCHEDULE -->
-        <div id="view-schedule" class="app-view active-view">
-            <div class="panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h3>Upcoming Appointments</h3>
-                    <button class="btn" onclick="openNewBookingModal()">+ Manual Booking</button>
-                </div>
-                <div id="admin-schedule-list"><p style="color: #888;">Loading schedule...</p></div>
+    <!-- ================= SCREEN 6: CLIENT DASHBOARD ================= -->
+    <div id="screen-dashboard" class="page-screen">
+        <div style="background-color: white; padding: 3rem 6%; border-bottom: 1px solid var(--secondary-sand);">
+            <div style="max-width: 1300px; margin: 0 auto;">
+                <h1 id="portal-welcome-title" style="font-size: 2.2rem; font-weight: 300;">Patient Portal</h1>
+                <p style="color: #666; font-style: italic;">Manage your health journey.</p>
             </div>
         </div>
 
-        <!-- VIEW 2: CLIENTS & DAILY LOGS -->
-        <div id="view-clients" class="app-view">
-            <div class="panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h3>Client Directory & Health Journals</h3>
-                    <button class="btn" onclick="openClientModal()">+ Add Existing Client</button>
+        <div class="dashboard-container">
+            <div>
+                <!-- App Install Prompt -->
+                <div style="background: var(--primary-sage); color: white; padding: 1.5rem; border-radius: 6px; margin-bottom: 2rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; box-shadow: 0 10px 30px rgba(74,89,77,0.2);">
+                    <div>
+                        <h4 style="margin-bottom: 0.3rem; font-family: 'Montserrat'; font-size: 1rem;">Install Clinic App</h4>
+                        <p style="font-size: 0.9rem; opacity: 0.9; margin:0;">Add this portal to your Home Screen for one-tap daily journaling.</p>
+                    </div>
+                    <button class="btn" style="background: white; color: var(--primary-sage); box-shadow: none;" onclick="promptInstall()">How to Install</button>
                 </div>
-                <div id="admin-client-files-list"><p style="color: #888;">Loading client records...</p></div>
-            </div>
-        </div>
 
-        <!-- VIEW 3: FINANCE -->
-        <div id="view-finance" class="app-view">
-            <div class="panel">
-                <h3>Clinic Income & Professional Invoicing</h3>
-                <div class="finance-grid">
-                    <div class="metric-card"><span>Month Revenue</span><h4 id="stat-revenue">£0</h4></div>
-                    <div class="metric-card"><span>Sessions Booked</span><h4 id="stat-sessions">0</h4></div>
-                </div>
-                <div style="background: #FAFAF7; border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 6px; margin-top: 1.5rem;">
-                    <h4 style="font-family: 'Montserrat'; font-size: 1rem; color: var(--primary-sage); margin-bottom: 1rem;">Create Invoice</h4>
-                    <form onsubmit="return generateInvoice(event)">
-                        <label>Client Full Name</label><input type="text" id="inv-client" required>
-                        <label>Client Postal Address</label><textarea id="inv-address" style="height: 70px;" required></textarea>
-                        <label>Select Treatment</label>
-                        <select id="inv-service-select" onchange="toggleCustomService(this)">
-                            <option value="Initial Consultation (£85)">Initial Consultation - £85</option>
-                            <option value="Standard Follow-Up Session (£75)">Standard Follow-Up Session - £75</option>
-                            <option value="custom">Bespoke / Custom Treatment...</option>
-                        </select>
-                        <div id="custom-service-box" style="display: none; background: white; padding: 1rem; border: 1px solid var(--secondary-sand); border-radius: 4px; margin-bottom: 1.2rem;">
-                            <label>Bespoke Description</label><input type="text" id="inv-custom-desc">
-                            <label>Bespoke Amount (£)</label><input type="number" id="inv-custom-amount">
+                <!-- DAILY HEALTH JOURNAL -->
+                <div class="dash-card" style="border-left: 4px solid var(--primary-sage);">
+                    <h3>Daily Health & Lifestyle Journal</h3>
+                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 1.5rem;">Log your daily metrics. Click a category to expand and enter details. Clare reviews these to monitor your progress.</p>
+                    
+                    <form onsubmit="return submitDailyLog(event)">
+                        
+                        <!-- Food -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-food')">
+                            <span>🥗 Food & Nutrition</span> <span class="icon">+</span>
                         </div>
-                        <button type="submit" class="btn" style="width: 100%;">Generate Printable Invoice</button>
+                        <div class="journal-panel" id="journal-food">
+                            <label>Breakfast</label><input type="text" id="log-breakfast" placeholder="What did you eat?">
+                            <label>Lunch</label><input type="text" id="log-lunch" placeholder="What did you eat?">
+                            <label>Dinner</label><input type="text" id="log-dinner" placeholder="What did you eat?">
+                            <label>Snacks / Symptoms</label><input type="text" id="log-snacks" placeholder="Any snacks or digestive reactions?">
+                        </div>
+
+                        <!-- Activity -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-activity')">
+                            <span>🏃‍♀️ Activity & Movement</span> <span class="icon">+</span>
+                        </div>
+                        <div class="journal-panel" id="journal-activity">
+                            <label>Workout / Activity Type</label><input type="text" id="log-activity-type" placeholder="e.g. Walking, Yoga, Cycling">
+                            <label>Duration (Minutes)</label><input type="number" id="log-activity-dur" placeholder="e.g. 45">
+                            <label>Intensity</label>
+                            <select id="log-activity-int">
+                                <option value="">Select...</option><option value="Light">Light</option><option value="Moderate">Moderate</option><option value="Vigorous">Vigorous</option>
+                            </select>
+                        </div>
+
+                        <!-- Mood -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-mood')">
+                            <span>🧠 Mood & Stress</span> <span class="icon">+</span>
+                        </div>
+                        <div class="journal-panel" id="journal-mood">
+                            <label>Overall Mood</label>
+                            <select id="log-mood-rating">
+                                <option value="">Select...</option><option value="Great">Great</option><option value="Good">Good</option><option value="Okay">Okay</option><option value="Low">Low</option><option value="Anxious/Stressed">Anxious/Stressed</option>
+                            </select>
+                            <label>Energy Level (1-10)</label><input type="number" id="log-energy" placeholder="10 = High Energy" min="1" max="10">
+                            <label>Emotional Notes</label><input type="text" id="log-mood-notes" placeholder="Any specific triggers today?">
+                        </div>
+
+                        <!-- Sleep -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-sleep')">
+                            <span>💤 Sleep</span> <span class="icon">+</span>
+                        </div>
+                        <div class="journal-panel" id="journal-sleep">
+                            <label>Hours Slept</label><input type="number" step="0.5" id="log-sleep-hours" placeholder="e.g. 7.5">
+                            <label>Sleep Quality (1-5)</label>
+                            <select id="log-sleep-quality">
+                                <option value="">Select...</option><option value="5">5 - Excellent</option><option value="4">4 - Good</option><option value="3">3 - Fair</option><option value="2">2 - Poor</option><option value="1">1 - Terrible</option>
+                            </select>
+                        </div>
+
+                        <!-- Bowel Movements -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-bowel')">
+                            <span>🚽 Bowel Movements</span> <span class="icon">+</span>
+                        </div>
+                        <div class="journal-panel" id="journal-bowel">
+                            <label>Type (Bristol Scale)</label>
+                            <select id="log-bowel-type">
+                                <option value="">Select type...</option>
+                                <option value="Type 1: Separate hard lumps">Type 1: Separate hard lumps</option>
+                                <option value="Type 2: Sausage-shaped, lumpy">Type 2: Sausage-shaped, lumpy</option>
+                                <option value="Type 3: Like a sausage but with cracks">Type 3: Like a sausage but with cracks</option>
+                                <option value="Type 4: Like a sausage, smooth & soft">Type 4: Like a sausage, smooth & soft (Ideal)</option>
+                                <option value="Type 5: Soft blobs with clear cut edges">Type 5: Soft blobs</option>
+                                <option value="Type 6: Fluffy pieces with ragged edges">Type 6: Fluffy/Mushy</option>
+                                <option value="Type 7: Watery, no solid pieces">Type 7: Watery/Liquid</option>
+                            </select>
+                            <label>Frequency Today</label><input type="number" id="log-bowel-freq" placeholder="How many times today?">
+                        </div>
+
+                        <!-- Water -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-water')">
+                            <span>💧 Hydration</span> <span class="icon">+</span>
+                        </div>
+                        <div class="journal-panel" id="journal-water">
+                            <label>Water Intake</label><input type="text" id="log-water" placeholder="e.g. 2 Liters or 8 Glasses">
+                        </div>
+
+                        <!-- Measurements -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-meas')">
+                            <span>📏 Measurements & Vitals</span> <span class="icon">+</span>
+                        </div>
+                        <div class="journal-panel" id="journal-meas">
+                            <label>Weight</label><input type="text" id="log-meas-weight" placeholder="e.g. 72 kg or 11.3 st">
+                            <label>Blood Pressure / Pulse (Optional)</label><input type="text" id="log-meas-bp" placeholder="e.g. 120/80">
+                        </div>
+
+                        <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Save & Submit Daily Log</button>
+                    </form>
+                </div>
+
+                <div class="dash-card">
+                    <h3>Your Appointments</h3>
+                    <div id="client-appointments-list"><p style="color: #888;">Loading schedule...</p></div>
+                </div>
+            </div>
+
+            <div>
+                <div class="dash-card">
+                    <h3>Secure Messaging</h3>
+                    <div class="chat-box" id="client-chat-box"></div>
+                    <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.8rem;">
+                        <input type="text" id="client-msg-input" placeholder="Type message..." style="margin-bottom: 0; flex: 1;" required>
+                        <button type="submit" class="btn" style="padding: 0 1.5rem;">Send</button>
                     </form>
                 </div>
             </div>
         </div>
-
-        <!-- VIEW 4: LIVE INBOX -->
-        <div id="view-inbox" class="app-view">
-            <div class="panel">
-                <h3>Live Patient Inbox</h3>
-                <div class="chat-box" id="admin-chat-box"><p style="color: #888;">Loading messages...</p></div>
-            </div>
-        </div>
-
-        <!-- VIEW 5: BROADCAST -->
-        <div id="view-tools" class="app-view">
-            <div class="panel">
-                <h3>Send Advice & Files</h3>
-                <form onsubmit="return publishBroadcast(event)">
-                    <label>Send To</label><select id="broadcast-recipient"><option value="all">All Clients (Mass Broadcast)</option></select>
-                    <label>Title</label><input type="text" id="broadcast-title" required>
-                    <label>Content</label><textarea id="broadcast-content" style="height: 100px;" required></textarea>
-                    <label>Attach File</label><input type="file" id="broadcast-file">
-                    <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Dispatch Protocol</button>
-                </form>
-            </div>
-        </div>
     </div>
 
-    <!-- BOTTOM NAV -->
-    <div class="app-bottom-nav" id="app-bottom-nav">
-        <div class="app-nav-item active" onclick="switchAppView('schedule', this)">
-            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>Schedule
-        </div>
-        <div class="app-nav-item" onclick="switchAppView('clients', this)">
-            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>Clients
-        </div>
-        <div class="app-nav-item" onclick="switchAppView('finance', this)">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>Finance
-        </div>
-        <div class="app-nav-item" onclick="switchAppView('inbox', this)">
-            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>Inbox
-        </div>
-        <div class="app-nav-item" onclick="switchAppView('tools', this)">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9c0 .69.41 1.32 1.05 1.51H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Tools
-        </div>
-    </div>
-
+    <!-- JS LOGIC -->
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
-        let lastMessageCount = 0;
 
         function getSupabase() {
             if(!window.supabase) return null;
             return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         }
 
-        function switchAppView(viewName, element) {
-            document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active-view'));
-            document.querySelectorAll('.app-nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`view-${viewName}`).classList.add('active-view');
-            if(element) element.classList.add('active');
-            const titles = { schedule: 'Master Schedule', clients: 'Client Directory', finance: 'Income & Invoicing', inbox: 'Live Patient Inbox', tools: 'Clinic Tools' };
-            document.getElementById('app-header-title').innerText = titles[viewName];
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function toggleCustomService(selectObj) {
-            const customBox = document.getElementById('custom-service-box');
-            if(selectObj.value === 'custom') {
-                customBox.style.display = 'block';
-                document.getElementById('inv-custom-desc').required = true;
-                document.getElementById('inv-custom-amount').required = true;
-            } else {
-                customBox.style.display = 'none';
-                document.getElementById('inv-custom-desc').required = false;
-                document.getElementById('inv-custom-amount').required = false;
-            }
-        }
-
-        async function processAdminLogin(e) {
+        window.processClientLogin = async function(e) {
             e.preventDefault();
-            const email = document.getElementById('admin-email').value.trim();
-            const pass = document.getElementById('admin-password').value.trim();
-            if (email === 'test' && pass === 'test') { initDashboard(); return false; }
             const db = getSupabase();
-            const { error } = await db.auth.signInWithPassword({ email, password: pass });
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-password').value.trim();
+            const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
             if (error) alert('Login failed: ' + error.message);
-            else initDashboard();
+            else { updateNavState(true); openScreen('screen-dashboard'); loadClientDashboard(db, data.user); }
             return false;
-        }
+        };
 
-        function initDashboard() {
-            document.getElementById('admin-login').style.display = 'none';
-            document.getElementById('admin-dashboard').style.display = 'block';
-            document.getElementById('btn-logout').style.display = 'inline-block';
-            if(window.innerWidth < 900) { document.getElementById('app-bottom-nav').style.display = 'flex'; }
+        window.processRegistration = async function(e) {
+            e.preventDefault();
             const db = getSupabase();
-            loadSchedule(db); loadClientFiles(db); loadAdminInbox(db); loadClientDropdown(db); loadFinanceMetrics(db);
-            setInterval(() => loadAdminInbox(db, true), 10000);
-        }
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass = document.getElementById('reg-password').value.trim();
+            const service = document.getElementById('reg-service').value;
+            const date = document.getElementById('reg-date').value;
 
-        async function loadSchedule(db) {
-            const container = document.getElementById('admin-schedule-list');
-            const { data: appts } = await db.from('appointments').select('*').order('appointment_time', { ascending: true });
-            if(!appts || appts.length === 0) { container.innerHTML = '<p style="color: #666;">No upcoming bookings found.</p>'; return; }
+            const { data: authData, error } = await db.auth.signUp({ email, password: pass, options: { data: { full_name: name } } });
+            if (error) { alert('Error: ' + error.message); return false; }
+            if (authData.user) {
+                await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
+            }
+            alert('Registered successfully!'); updateNavState(true); openScreen('screen-dashboard'); loadClientDashboard(db, authData.user);
+            return false;
+        };
 
-            container.innerHTML = appts.map(a => `
-                <div class="cal-card">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <div>
-                            <strong style="color: var(--primary-sage); font-size: 1rem;">${a.client_name}</strong><br>
-                            <span style="font-size: 0.95rem; color: #555;">${a.service_name}</span>
-                        </div>
-                        <div style="text-align: right; font-size: 0.85rem; color: #666;">
-                            ${new Date(a.appointment_time).toLocaleDateString('en-GB', {weekday: 'short', month: 'short', day: 'numeric'})}<br>
-                            <strong>${new Date(a.appointment_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</strong>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 0.8rem; border-top: 1px solid var(--secondary-sand); padding-top: 0.8rem;">
-                        <input type="datetime-local" id="resched-${a.id}" style="margin-bottom:0; font-size:0.85rem; padding: 0.5rem;" required>
-                        <button class="btn" style="padding: 0.4rem 0.8rem; font-size:0.65rem;" onclick="rescheduleBooking('${a.id}')">Reschedule</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function rescheduleBooking(apptId) {
-            const newTime = document.getElementById(`resched-${apptId}`).value;
-            if(!newTime) { alert("Please select a new date and time."); return; }
+        window.submitDailyLog = async function(e) {
+            e.preventDefault();
             const db = getSupabase();
-            await db.from('appointments').update({ appointment_time: newTime }).eq('id', apptId);
-            alert("Rescheduled!"); loadSchedule(db);
-        }
+            const { data: { user } } = await db.auth.getUser();
+            if(!user) return false;
 
-        async function openNewBookingModal() {
-            const clientName = prompt("Enter Client Full Name:");
-            if(!clientName) return;
-            const service = prompt("Enter Service Name:", "Initial Consultation (£85)");
-            const dateInput = prompt("Enter Date & Time (YYYY-MM-DD HH:MM):", new Date().toISOString().slice(0,16).replace('T', ' '));
-            if(!dateInput) return;
-            const db = getSupabase();
-            await db.from('appointments').insert([{ client_id: 'manual_' + Date.now(), client_name: clientName, service_name: service, appointment_time: new Date(dateInput).toISOString(), status: 'confirmed' }]);
-            alert("Manual booking added!"); loadSchedule(db); loadClientFiles(db);
-        }
+            // Gather all data into a clean text block
+            const logData = `[DAILY HEALTH LOG]
+Date: ${new Date().toLocaleDateString('en-GB')}
 
-        async function openClientModal() {
-            const name = prompt("Enter Existing Client Full Name:");
-            if(!name) return;
-            const db = getSupabase();
-            await db.from('appointments').insert([{ client_id: 'client_' + Date.now(), client_name: name, service_name: 'Existing Record', appointment_time: new Date().toISOString(), status: 'confirmed' }]);
-            alert("Added to directory!"); loadClientFiles(db); loadSchedule(db);
-        }
+🥗 FOOD:
+- Breakfast: ${document.getElementById('log-breakfast').value || '-'}
+- Lunch: ${document.getElementById('log-lunch').value || '-'}
+- Dinner: ${document.getElementById('log-dinner').value || '-'}
+- Snacks/Symptoms: ${document.getElementById('log-snacks').value || '-'}
 
-        async function loadClientFiles(db) {
-            const container = document.getElementById('admin-client-files-list');
-            const { data: appts } = await db.from('appointments').select('*');
-            const { data: msgs } = await db.from('messages').select('*').order('created_at', { ascending: false });
+🏃‍♀️ ACTIVITY: ${document.getElementById('log-activity-type').value || '-'} (${document.getElementById('log-activity-dur').value || '0'} mins, ${document.getElementById('log-activity-int').value || '-'})
 
-            if(!appts || appts.length === 0) { container.innerHTML = '<p style="color: #666;">No clients found.</p>'; return; }
-            const uniqueClients = Array.from(new Set(appts.map(a => a.client_id))).map(id => appts.find(a => a.client_id === id));
+🧠 MOOD & STRESS: ${document.getElementById('log-mood-rating').value || '-'} | Energy: ${document.getElementById('log-energy').value || '-'}/10
+- Notes: ${document.getElementById('log-mood-notes').value || '-'}
 
-            container.innerHTML = uniqueClients.map(client => {
-                const clientMsgs = msgs ? msgs.filter(m => m.client_id === client.client_id) : [];
-                
-                // Extract Daily Health Logs
-                const dailyLogs = clientMsgs.filter(m => m.content && m.content.includes('[DAILY HEALTH LOG]'));
-                let logsHtml = '<p style="font-size:0.9rem; color:#888;">No daily journals logged yet.</p>';
-                if(dailyLogs.length > 0) {
-                    logsHtml = dailyLogs.map(log => {
-                        const cleanContent = log.content.replace('[DAILY HEALTH LOG]', '').trim();
-                        return `<div style="background: white; border-left: 3px solid var(--primary-sage); padding: 1rem; margin-bottom: 0.8rem; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
-                            <pre style="white-space: pre-wrap; font-family: inherit; font-size: 0.95rem; color: #444;">${cleanContent}</pre>
-                        </div>`;
-                    }).join('');
-                }
+💤 SLEEP: ${document.getElementById('log-sleep-hours').value || '-'} hours | Quality: ${document.getElementById('log-sleep-quality').value || '-'}/5
 
-                return `
-                    <div class="client-file-card">
-                        <h4 style="color: var(--primary-sage); font-size: 1.25rem; margin-bottom: 0.4rem;">${client.client_name}</h4>
-                        <div style="margin-top: 1.5rem;">
-                            <strong style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-sage);">Daily Health Journals</strong>
-                            <div style="margin-top: 0.8rem; max-height: 400px; overflow-y: auto;">
-                                ${logsHtml}
-                            </div>
-                        </div>
-                    </div>`;
-            }).join('');
-        }
+🚽 BOWEL: ${document.getElementById('log-bowel-type').value || '-'} | Freq: ${document.getElementById('log-bowel-freq').value || '-'}
 
-        async function loadFinanceMetrics(db) {
-            const { data: appts } = await db.from('appointments').select('*');
-            if(!appts) return;
-            let totalRevenue = 0;
-            appts.forEach(a => {
-                if(a.service_name.includes('£85')) totalRevenue += 85;
-                else if(a.service_name.includes('£175')) totalRevenue += 175;
-                else if(a.service_name.includes('£297')) totalRevenue += 297;
-                else if(a.service_name.includes('£1,450')) totalRevenue += 1450;
-                else totalRevenue += 75;
+💧 WATER: ${document.getElementById('log-water').value || '-'}
+
+📏 VITALS: Weight: ${document.getElementById('log-meas-weight').value || '-'} | BP: ${document.getElementById('log-meas-bp').value || '-'}`;
+
+            await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: logData }]);
+            alert("Daily Health Log saved successfully to your practitioner file!");
+            
+            // Clear inputs
+            e.target.reset();
+            // Close accordions
+            document.querySelectorAll('.journal-panel').forEach(p => p.classList.remove('show'));
+            document.querySelectorAll('.journal-accordion').forEach(a => {
+                a.classList.remove('active');
+                a.querySelector('.icon').innerText = '+';
             });
-            document.getElementById('stat-revenue').innerText = `£${totalRevenue.toLocaleString()}`;
-            document.getElementById('stat-sessions').innerText = appts.length;
-        }
-
-        function generateInvoice(e) {
-            e.preventDefault();
-            const client = document.getElementById('inv-client').value;
-            const address = document.getElementById('inv-address').value;
-            const selectVal = document.getElementById('inv-service-select').value;
-            let serviceDesc = selectVal;
-            let amount = 85;
-
-            if(selectVal === 'custom') {
-                serviceDesc = document.getElementById('inv-custom-desc').value;
-                amount = document.getElementById('inv-custom-amount').value;
-            } else {
-                if(selectVal.includes('£75')) amount = 75;
-                else if(selectVal.includes('£85')) amount = 85;
-                else if(selectVal.includes('£175')) amount = 175;
-            }
-
-            const invNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000);
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write('<html><head><title>Invoice ' + invNumber + '</title><style>body{font-family:sans-serif;padding:40px;}</style></head><body>');
-            printWindow.document.write('<h2>THE NATURAL HEALING CLINIC</h2><p>Invoice No: ' + invNumber + '</p><hr>');
-            printWindow.document.write('<p><strong>Billed To:</strong> ' + client + '<br>' + address + '</p>');
-            printWindow.document.write('<h3>Service: ' + serviceDesc + '</h3>');
-            printWindow.document.write('<h3>Total Due: £' + amount + '</h3>');
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            setTimeout(() => { printWindow.print(); }, 500);
-
-            document.getElementById('inv-client').value = '';
             return false;
-        }
+        };
 
-        async function loadClientDropdown(db) {
-            const select = document.getElementById('broadcast-recipient');
-            const { data } = await db.from('appointments').select('client_name, client_id');
-            if(data) {
-                const uniqueClients = Array.from(new Set(data.map(a => a.client_id))).map(id => data.find(a => a.client_id === id));
-                uniqueClients.forEach(c => {
-                    const opt = document.createElement('option');
-                    opt.value = c.client_id;
-                    opt.textContent = c.client_name;
-                    select.appendChild(opt);
-                });
+        window.cancelAppointment = async function(id) {
+            if(!confirm("Cancel appointment?")) return;
+            const db = getSupabase();
+            await db.from('appointments').delete().eq('id', id);
+            const { data: { user } } = await db.auth.getUser();
+            loadClientDashboard(db, user);
+        };
+
+        async function loadClientDashboard(db, user) {
+            const list = document.getElementById('client-appointments-list');
+            const chatBox = document.getElementById('client-chat-box');
+            document.getElementById('portal-welcome-title').innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
+
+            const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id);
+            list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#555;">No appointments booked.</p>' : appts.map(a => `
+                <div style="padding: 1rem 0; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center;">
+                    <div><strong>${new Date(a.appointment_time).toLocaleString('en-GB')}</strong><br><span style="font-size:0.95rem; color:#555;">${a.service_name}</span></div>
+                    <button class="btn btn-danger" onclick="window.cancelAppointment('${a.id}')">Cancel</button>
+                </div>`).join('');
+
+            const { data: msgs } = await db.from('messages').select('*').eq('client_id', user.id).order('created_at', { ascending: true });
+            if(msgs) {
+                // Filter out logs from the main chat box so it doesn't clutter
+                const chatMsgs = msgs.filter(m => !m.content.includes('[DAILY HEALTH LOG]'));
+                chatBox.innerHTML = chatMsgs.map(m => `<div class="msg ${m.sender}">${m.content}</div>`).join('');
+                chatBox.scrollTop = chatBox.scrollHeight;
             }
         }
 
-        async function loadAdminInbox(db, isPolling = false) {
-            const chatBox = document.getElementById('admin-chat-box');
-            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
-            if(!data || data.length === 0) { chatBox.innerHTML = '<p style="color: #888;">No messages yet.</p>'; return; }
-
-            const chatMsgs = data.filter(m => !m.content.includes('[DAILY HEALTH LOG]'));
-            if (isPolling && chatMsgs.length > lastMessageCount && lastMessageCount > 0) {
-                document.title = "🔔 NEW MESSAGE";
-            }
-            lastMessageCount = chatMsgs.length;
-
-            chatBox.innerHTML = chatMsgs.map(m => `<div class="msg ${m.sender}"><strong>${m.sender === 'client' ? 'Patient' : 'Clare'}:</strong> ${m.content}</div>`).join('');
-        }
-
-        async function publishBroadcast(e) {
+        async function handleClientMessage(e) {
             e.preventDefault();
             const db = getSupabase();
-            const recipient = document.getElementById('broadcast-recipient').value;
-            const title = document.getElementById('broadcast-title').value.trim();
-            const content = document.getElementById('broadcast-content').value.trim();
-            await db.from('broadcasts').insert([{ title, content, recipient_email: recipient }]);
-            alert("Dispatched successfully!");
-            document.getElementById('broadcast-title').value = '';
-            document.getElementById('broadcast-content').value = '';
+            const input = document.getElementById('client-msg-input');
+            const { data: { user } } = await db.auth.getUser();
+            await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: input.value.trim() }]);
+            document.getElementById('client-chat-box').innerHTML += `<div class="msg client">${input.value}</div>`;
+            input.value = '';
+            document.getElementById('client-chat-box').scrollTop = document.getElementById('client-chat-box').scrollHeight;
             return false;
+        }
+
+        window.processLogout = async function() {
+            const db = getSupabase();
+            if(db) await db.auth.signOut();
+            updateNavState(false); openScreen('screen-home');
+        };
+
+        function updateNavState(isLoggedIn) {
+            document.getElementById('nav-portal-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+            document.getElementById('nav-book-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+            document.getElementById('nav-logout-btn').style.display = isLoggedIn ? 'inline-block' : 'none';
+            document.getElementById('mobile-portal-link').style.display = isLoggedIn ? 'none' : 'block';
+            document.getElementById('mobile-book-link').style.display = isLoggedIn ? 'none' : 'block';
+            document.getElementById('mobile-logout-link').style.display = isLoggedIn ? 'block' : 'none';
         }
     </script>
 </body>
