@@ -990,9 +990,11 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
             if (window.html5QrCode) {
                 try {
                     // Strictly check state to safely sever the video feed without freezing iOS
-                    if (window.html5QrCode.isScanning) {
+                    const state = typeof window.html5QrCode.getState === 'function' ? window.html5QrCode.getState() : 0;
+                    if (state === 2) { // 2 = SCANNING
                         await window.html5QrCode.stop();
                     }
+                    window.html5QrCode.clear();
                 } catch (err) {
                     console.error("Error stopping scanner: ", err);
                 }
