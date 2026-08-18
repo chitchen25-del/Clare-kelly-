@@ -837,14 +837,14 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
             return false;
         };
 
-        // --- OPEN FOOD FACTS API INTEGRATION (V2 WITH USER-AGENT) ---
+        // --- BROWSER-COMPATIBLE API INTEGRATION (USING LIBRE FOOD FACTS) ---
         window.searchFood = async function() {
             const query = document.getElementById('food-search-query').value.trim();
             if(!query) return;
             const resBox = document.getElementById('food-search-results');
             resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Searching database...</p>';
             try {
-                const res = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10`, {
+                const res = await fetch(`https://world.librefoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10`, {
                     headers: {
                         "User-Agent": "TheNaturalHealingClinic - WebApp - Version 1.0"
                     }
@@ -884,7 +884,7 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
             }
         };
 
-        // --- FIXED CORE API SCANNER LOGIC FOR iOS & PROPER STOPPING ---
+        // --- SCANNER LOGIC WITH PROPER HARDWARE STOPPING ---
         window.startScanner = function() {
             const scannerContainer = document.getElementById('scanner-container');
             scannerContainer.style.display = 'block';
@@ -904,7 +904,7 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
                     
                     resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Looking up scanned item...</p>';
                     try {
-                        const res = await fetch(`https://world.openfoodfacts.org/api/v2/product/${decodedText}.json`, {
+                        const res = await fetch(`https://world.librefoodfacts.org/api/v2/product/${decodedText}.json`, {
                             headers: {
                                 "User-Agent": "TheNaturalHealingClinic - WebApp - Version 1.0"
                             }
