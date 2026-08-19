@@ -80,10 +80,6 @@
         
         .section-subtitle { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--primary-sage); margin-bottom: 1.2rem; display: block; font-weight: 600; border-bottom: 1px solid var(--gold-accent); display: inline-block; padding-bottom: 0.3rem;}
         h2 { font-size: 2.8rem; margin-bottom: 1.5rem; }
-        
-        .help-list { column-count: 1; list-style: none; color: var(--text-main); font-size: 1.1rem; margin-top: 2rem; }
-        .help-list li { margin-bottom: 1rem; position: relative; padding-left: 2rem; }
-        .help-list li::before { content: "—"; position: absolute; left: 0; color: var(--gold-accent); font-weight: bold; }
 
         /* The Clinical Pathway Section */
         .pathway-section { padding: 8rem 6%; background-color: var(--card-bg); border-top: 1px solid var(--secondary-sand); }
@@ -215,6 +211,9 @@
             btn.classList.toggle('active');
             btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
         }
+        function promptInstall() {
+            alert("To install this app on your iPhone:\n\n1. Tap the Share icon (square with an upward arrow) at the bottom of Safari.\n2. Scroll down and tap 'Add to Home Screen'.\n3. Tap 'Add'.");
+        }
     </script>
 
     <nav>
@@ -222,7 +221,6 @@
         
         <div class="desktop-nav-links">
             <span class="nav-link-text" onclick="openScreen('screen-about')">About Clare</span>
-            <span class="nav-link-text" onclick="openScreen('screen-news')">Journal & Research</span>
             <button type="button" id="nav-portal-btn" class="btn btn-outline" onclick="openScreen('screen-login')">Patient Portal</button>
             <button type="button" id="nav-book-btn" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
             <button type="button" id="nav-logout-btn" class="btn btn-outline" style="display: none;" onclick="window.processLogout()">Sign Out</button>
@@ -236,7 +234,6 @@
         <span style="position: absolute; top: 1.5rem; right: 2rem; font-size: 2rem; cursor: pointer; color: var(--text-main);" onclick="toggleMobileMenu()">✕</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-home')">Home</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-about')">About Clare</span>
-        <span class="mobile-drawer-link" onclick="openScreen('screen-news')">Journal & Research</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-login')" id="mobile-portal-link">Patient Portal</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-register')" id="mobile-book-link">Register & Book</span>
         <span class="mobile-drawer-link" onclick="window.processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
@@ -253,11 +250,7 @@
         <section class="section">
             <div class="section-image-wrapper">
                 <div class="image-arch-container">
-                    <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Hands holding flower - natural healing" class="image-arch">
-                    <div class="image-floating-badge">
-                        <span>Evidence-Informed Care</span>
-                        <p>Root-cause functional protocols designed for rapid, sustainable recovery.</p>
-                    </div>
+                    <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Hands holding flower" class="image-arch">
                 </div>
             </div>
 
@@ -266,14 +259,6 @@
                 <h2>Results in a Realistic Timeframe</h2>
                 <p style="margin-bottom: 1.5rem;">The main aim of my clinic is to get results, in a quick and realistic timeframe. If you suffer from pain or discomfort, then I am here to help.</p>
                 <p style="margin-bottom: 2.5rem;">I offer a holistic approach to modern-day aches and pains. The Natural Healing Clinic is complementary to mainstream medical protocols.</p>
-                <h4 style="margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;">Do You Need Help With:</h4>
-                <ul class="help-list">
-                    <li>Pain Management & Muscular Pain</li>
-                    <li>Neck, Shoulder or Back Pain</li>
-                    <li>Chronic Fatigue & Long Covid</li>
-                    <li>Fibromyalgia & Sports Injuries</li>
-                    <li>Migraines & Digestive Complaints</li>
-                </ul>
             </div>
         </section>
 
@@ -318,62 +303,9 @@
                 </div>
             </div>
         </section>
-
-        <section class="pricing-section">
-            <div style="text-align: center; max-width: 700px; margin: 0 auto;">
-                <span class="section-subtitle">Pillar 1: Deep Transformation</span>
-                <h2>Functional Medicine</h2>
-                <p style="color: #555;">Comprehensive, root-cause investigation and structured restorative pathways.</p>
-            </div>
-            
-            <div class="pricing-grid">
-                <div class="price-card">
-                    <div>
-                        <div class="price-title">Performance Health Audit</div>
-                        <div class="price-duration">Functional Kickstart</div>
-                        <div class="price-amount">£175</div>
-                        <ul class="price-features">
-                            <li>90-minute deep-dive functional consultation</li>
-                            <li>Full symptom timeline review</li>
-                            <li>Top 3 root-cause priorities identified</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Health Audit</button>
-                </div>
-
-                <div class="price-card featured">
-                    <div class="featured-badge">Comprehensive Protocol</div>
-                    <div>
-                        <div class="price-title">360° Burnout & Adrenal Protocol</div>
-                        <div class="price-duration">12-Week Executive Program</div>
-                        <div class="price-amount">£1,450</div>
-                        <ul class="price-features">
-                            <li>Complete root-cause functional health investigation</li>
-                            <li>Bi-weekly hands-on Vagal/Bowen resets</li>
-                            <li>Curated functional supplementation blueprint</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Apply For Protocol</button>
-                </div>
-
-                <div class="price-card">
-                    <div>
-                        <div class="price-title">The Gut Reset</div>
-                        <div class="price-duration">21-Day Programme</div>
-                        <div class="price-amount">£297 <span>£500</span></div>
-                        <ul class="price-features">
-                            <li>60-min functional gut assessment</li>
-                            <li>Personalised 21-day protocol</li>
-                            <li>Curated supplement guidance</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Gut Reset</button>
-                </div>
-            </div>
-        </section>
     </div>
 
-    <!-- ================= SCREEN 2: ABOUT CLARE ================= -->
+    <!-- ================= SCREEN 2: ABOUT CLARE (WITH VIDEO) ================= -->
     <div id="screen-about" class="page-screen">
         <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
             <span class="section-subtitle">Clinical Leadership</span>
@@ -382,7 +314,7 @@
         <section class="section">
             <div class="section-image-wrapper">
                 <video width="100%" controls playsinline style="border-radius: 2px; box-shadow: 0 25px 60px rgba(9, 93, 40, 0.08); object-fit: cover; max-height: 600px; background: var(--secondary-sand);">
-                    <source src="./clare-video.mp4" type="video/mp4">
+                    <source src="./clare-video.mp4.MOV" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
@@ -392,43 +324,6 @@
                 <p style="margin-bottom: 1.5rem; color: #555;">Clare Kelly is a leading functional health and soft-tissue practitioner based in Castletown, Isle of Man. With decades of clinical experience, Clare established <strong>The Natural Healing Clinic</strong> with a singular mission: to provide patients suffering from chronic pain, systemic inflammation, and deep-seated physical trauma with clear, sustainable results in a realistic timeframe.</p>
                 <p style="margin-bottom: 2.5rem; color: #555;">Her clinical methodology is strictly evidence-informed, drawing from advanced training in Bowen Therapy, Manual Lymphatic Drainage (MLD), and Functional Medicine frameworks. Clare works closely alongside mainstream medical protocols, investigating the root causes of musculoskeletal disorders, autoimmune flare-ups, and nervous system dysregulation rather than merely masking symptoms.</p>
                 <button type="button" class="btn" onclick="openScreen('screen-register')">Book Your Initial Consultation</button>
-            </div>
-        </section>
-    </div>
-
-    <!-- ================= SCREEN 3: JOURNAL & RESEARCH ================= -->
-    <div id="screen-news" class="page-screen">
-        <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
-            <span class="section-subtitle">Clinical Journal</span>
-            <h1 style="margin-top: 0.5rem;">Research & Evidence Library</h1>
-        </div>
-
-        <section style="padding: 6rem 6%; background-color: var(--bg-color);">
-            <div class="news-grid">
-                <div class="news-card">
-                    <div>
-                        <div class="news-meta">Gut Microbiome</div>
-                        <h3 class="news-title">The Role of the Gut Microbiome in Inflammation</h3>
-                        <p class="news-excerpt">Recent clinical studies highlight how gut dysbiosis contributes to chronic inflammatory conditions.</p>
-                    </div>
-                    <a href="https://www.ifm.org/news-insights/the-functional-medicine-approach-to-the-microbiome/" target="_blank" class="news-link">Read Research Outline &rarr;</a>
-                </div>
-                <div class="news-card">
-                    <div>
-                        <div class="news-meta">Autonomic Regulation</div>
-                        <h3 class="news-title">Autonomic Regulation via Somatic Vagal Stimulation</h3>
-                        <p class="news-excerpt">An exploration of how targeted physical touch therapies stimulate the vagus nerve to downregulate sympathetic 'fight or flight' overactivity.</p>
-                    </div>
-                    <a href="https://pubmed.ncbi.nlm.nih.gov/29563853/" target="_blank" class="news-link">Read Peer-Reviewed Paper &rarr;</a>
-                </div>
-                <div class="news-card">
-                    <div>
-                        <div class="news-meta">Adrenal Resilience</div>
-                        <h3 class="news-title">HPA-Axis Dysfunction in Executive Burnout</h3>
-                        <p class="news-excerpt">A deep-dive into cortisol rhythm flattening and nutritional strategies required to restore adrenal vitality and mitochondrial energy.</p>
-                    </div>
-                    <a href="https://www.ifm.org" target="_blank" class="news-link">Explore IFM Insights &rarr;</a>
-                </div>
             </div>
         </section>
     </div>
@@ -665,7 +560,7 @@
                 <!-- COMPREHENSIVE MEDICAL INTAKE -->
                 <div class="dash-card">
                     <h3>Comprehensive Medical Intake</h3>
-                    <p style="font-size: 0.95rem; color: #555; margin-bottom: 2rem;">Please complete this detailed functional health profile prior to your initial consultation.</p>
+                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">Please complete this detailed functional health profile prior to your initial consultation.</p>
                     
                     <form onsubmit="return window.submitMedicalIntake(event)">
                         <div class="form-row">
