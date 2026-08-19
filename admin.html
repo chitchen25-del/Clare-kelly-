@@ -8,10 +8,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Clinic Admin">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            /* VIBRANT GREEN PALETTE */
+            /* VIBRANT GREEN LUXURY PALETTE */
             --bg-color: #f3f1ef;         
             --card-bg: #ffffff;          
             --text-main: #095d28;        
@@ -25,56 +25,69 @@
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Cormorant Garamond', serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; font-size: 1.1rem; overflow-x: hidden; padding-bottom: calc(75px + var(--safe-bottom)); }
-        h1, h2, h3, h4, th, .btn, .app-nav-item { font-family: 'Montserrat', sans-serif; }
         
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background: var(--card-bg); border-bottom: 1px solid var(--secondary-sand); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.02);}
+        /* Editorial Typography */
+        h1, h2 { font-family: 'Cormorant Garamond', serif; font-weight: 400; color: var(--text-main); line-height: 1.2; }
+        h3, h4, h5, .btn, .app-nav-item { font-family: 'Montserrat', sans-serif; }
+        
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; background: var(--card-bg); border-bottom: 1px solid var(--secondary-sand); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 30px rgba(9, 93, 40, 0.03);}
         
         /* Premium Logo Styling */
-        .nav-brand-logo { height: 50px; width: auto; cursor: pointer; transition: opacity 0.3s ease, transform 0.3s ease; object-fit: contain; }
-        .nav-brand-logo:hover { opacity: 0.85; transform: scale(0.98); }
-        .portal-logo { height: 70px; margin: 0 auto 2rem auto; display: block; object-fit: contain; }
+        .nav-brand-logo { height: 50px; width: auto; cursor: pointer; transition: opacity 0.3s ease; object-fit: contain; }
+        .nav-brand-logo:hover { opacity: 0.8; }
+        .portal-logo { height: 70px; margin: 0 auto 2.5rem auto; display: block; object-fit: contain; }
 
-        .btn { padding: 0.8rem 1.2rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 6px; cursor: pointer; border: none; background: var(--primary-sage); color: white; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
-        .btn:active { background: var(--sage-hover); transform: scale(0.98); }
-        .btn-outline { background: transparent; border: 1px solid var(--primary-sage); color: var(--primary-sage); }
+        .btn { padding: 0.9rem 1.8rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; border-radius: 2px; cursor: pointer; border: 1px solid var(--primary-sage); background: var(--primary-sage); color: white; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(13, 155, 70, 0.15); }
+        .btn:hover { background: var(--sage-hover); border-color: var(--sage-hover); transform: translateY(-2px); box-shadow: 0 12px 35px rgba(9, 93, 40, 0.2); }
+        .btn-outline { background: transparent; border: 1px solid var(--secondary-sand); color: var(--text-main); box-shadow: none; }
+        .btn-outline:hover { background: transparent; border-color: var(--primary-sage); color: var(--primary-sage); box-shadow: none; }
+
         .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 1.5rem; }
-        .form-container { width: 100%; max-width: 450px; background: var(--card-bg); padding: 4rem 2.5rem; border-radius: 12px; border: 1px solid var(--secondary-sand); text-align: center; box-shadow: 0 25px 60px rgba(9,93,40,0.08); }
-        label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); margin-bottom: 0.6rem; text-align: left; font-weight: 700; }
-        input, select, textarea { width: 100%; padding: 1.1rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 6px; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; background: var(--bg-color); appearance: none; -webkit-appearance: none; color: var(--text-main); transition: 0.3s; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-sage); background: white; box-shadow: 0 4px 15px rgba(13,155,70,0.06); }
-        .dashboard-wrapper { display: none; max-width: 1200px; margin: 1.5rem auto; padding: 0 4%; }
+        .form-container { width: 100%; max-width: 450px; background: var(--card-bg); padding: 4rem 3rem; border-radius: 2px; border: 1px solid var(--secondary-sand); text-align: center; box-shadow: 0 30px 70px rgba(9, 93, 40, 0.05); }
+        label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); margin-bottom: 0.8rem; text-align: left; font-weight: 600; }
+        input, select, textarea { width: 100%; padding: 1.1rem; margin-bottom: 2rem; border: 1px solid var(--secondary-sand); border-radius: 2px; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; background: transparent; appearance: none; -webkit-appearance: none; color: var(--text-main); transition: 0.3s; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-sage); box-shadow: 0 0 0 1px var(--primary-sage); }
+        
+        .dashboard-wrapper { display: none; max-width: 1200px; margin: 2.5rem auto; padding: 0 5%; }
         .app-view { display: none; }
-        .app-view.active-view { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .panel { background: var(--card-bg); padding: 2rem; border-radius: 12px; border: 1px solid var(--secondary-sand); margin-bottom: 2rem; box-shadow: 0 10px 40px rgba(9,93,40,0.04); }
-        .panel h3 { font-size: 1.25rem; color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-weight: 600; }
-        .finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-        .metric-card { background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 8px; text-align: center; }
-        .metric-card span { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--sage-hover); font-family: 'Montserrat'; display: block; margin-bottom: 0.4rem; font-weight: 600;}
-        .metric-card h4 { font-size: 1.8rem; font-weight: 500; color: var(--primary-sage); }
-        .chat-box { height: 300px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg-color); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; border: 1px solid var(--secondary-sand); }
-        .msg { padding: 1rem 1.2rem; border-radius: 8px; max-width: 85%; font-size: 1rem; line-height: 1.5; }
-        .msg.client { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; color: var(--text-main); box-shadow: 0 4px 10px rgba(0,0,0,0.02);}
+        .app-view.active-view { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .panel { background: var(--card-bg); padding: 2.5rem 2rem; border-radius: 2px; border: 1px solid var(--secondary-sand); margin-bottom: 2.5rem; box-shadow: 0 15px 50px rgba(9, 93, 40, 0.03); }
+        .panel h3 { font-size: 1.3rem; color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem; font-weight: 600; }
+        
+        .finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
+        .metric-card { background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 2rem 1.5rem; border-radius: 2px; text-align: center; }
+        .metric-card span { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); font-family: 'Montserrat'; display: block; margin-bottom: 0.5rem; font-weight: 600;}
+        .metric-card h4 { font-size: 2.2rem; font-weight: 300; color: var(--primary-sage); font-family: 'Cormorant Garamond', serif; line-height: 1; }
+        
+        .chat-box { height: 350px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg-color); padding: 1.5rem; border-radius: 2px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 1rem; border: 1px solid var(--secondary-sand); }
+        .msg { padding: 1.2rem; border-radius: 2px; max-width: 85%; font-size: 1.05rem; }
+        .msg.client { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; color: var(--text-main); box-shadow: 0 4px 15px rgba(9, 93, 40, 0.03);}
         .msg.admin { background: var(--primary-sage); color: white; align-self: flex-end; }
         
         /* Master-Detail Client List */
-        .client-list-item { background: white; border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 10px rgba(9,93,40,0.02); }
+        .client-list-item { background: white; border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 2px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(9, 93, 40, 0.02); }
+        .client-list-item:hover { border-color: var(--primary-sage); transform: translateY(-2px); box-shadow: 0 10px 25px rgba(9, 93, 40, 0.05); }
         .client-list-item:active { transform: scale(0.98); background: var(--bg-color); }
-        .client-list-item h4 { color: var(--primary-sage); font-size: 1.2rem; margin-bottom: 0.3rem; font-weight: 600;}
+        .client-list-item h4 { color: var(--text-main); font-size: 1.2rem; margin-bottom: 0.4rem; font-weight: 600;}
         
-        .app-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); border-top: 1px solid var(--secondary-sand); display: none; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.03); }
-        .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: #777; cursor: pointer; width: 20%; height: 100%; font-weight: 500;}
-        .app-nav-item.active { color: var(--primary-sage); font-weight: 700; }
+        .app-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); border-top: 1px solid var(--secondary-sand); display: none; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -4px 30px rgba(9, 93, 40, 0.03); }
+        .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #777; cursor: pointer; width: 20%; height: 100%; font-weight: 600;}
+        .app-nav-item.active { color: var(--primary-sage); }
         .app-nav-item svg { width: 22px; height: 22px; margin-bottom: 4px; stroke: currentColor; fill: none; stroke-width: 2; }
-        .cal-card { background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
+        
+        .cal-card { background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 2px; margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 1rem; transition: transform 0.3s; }
+        .cal-card:hover { transform: translateY(-2px); border-color: var(--primary-sage); }
+        
         @media (min-width: 900px) { 
             .nav-brand-logo { height: 60px; } 
-            .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; } 
+            .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; } 
             .app-bottom-nav { display: none !important; } 
             .dashboard-wrapper { display: block !important; padding: 0 6%; } 
             .app-view { display: block !important; } 
             .finance-grid { grid-template-columns: repeat(3, 1fr); } 
-            .panel { padding: 3rem; }
+            .panel { padding: 4rem 3rem; }
         }
     </style>
 </head>
@@ -83,7 +96,7 @@
         <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="location.reload();">
         
         <div style="display: flex; gap: 1rem; align-items: center;">
-            <button id="btn-demo" class="btn" style="display: none; background-color: var(--bright-accent); color: var(--text-main); font-weight: 700; box-shadow: 0 4px 15px rgba(18, 219, 20, 0.4);" onclick="injectDemoData()">Load Demo Data</button>
+            <button id="btn-demo" class="btn" style="display: none; background-color: var(--text-main); border-color: var(--text-main); color: white; box-shadow: none;" onclick="injectDemoData()">Load Demo Data</button>
             <button id="btn-logout" class="btn btn-outline" style="display: none;" onclick="location.reload();">Sign Out</button>
         </div>
     </nav>
@@ -91,25 +104,25 @@
     <div id="admin-login" class="login-wrapper">
         <div class="form-container">
             <img src="./logo.png" alt="The Natural Healing Clinic" class="portal-logo">
-            <h2 style="color: var(--text-main); margin-bottom: 1.5rem; font-weight: 400;">Practitioner Access</h2>
+            <h2 style="color: var(--text-main); margin-bottom: 2rem; font-weight: 300;">Practitioner Access</h2>
             <form onsubmit="return processAdminLogin(event)">
-                <label>Admin Email</label><input type="text" id="admin-email" placeholder="test or email" required>
-                <label>Password</label><input type="password" id="admin-password" placeholder="test or password" required>
-                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Launch Dashboard</button>
+                <label>Admin Email</label><input type="text" id="admin-email" placeholder="Enter clinical email" required>
+                <label>Password</label><input type="password" id="admin-password" placeholder="Enter secure password" required>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Authenticate</button>
             </form>
         </div>
     </div>
 
     <div id="admin-dashboard" class="dashboard-wrapper">
         <div style="margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="font-size: 2rem; font-weight: 400; color: var(--text-main);" id="app-header-title">Master Schedule</h1>
-            <span id="live-badge" style="font-size: 0.75rem; background: rgba(16, 211, 88, 0.1); color: var(--primary-sage); border: 1px solid var(--primary-sage); padding: 0.4rem 1rem; border-radius: 20px; font-family: 'Montserrat'; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">● Live Sync</span>
+            <h1 style="font-size: 2.2rem; font-weight: 300; color: var(--text-main);" id="app-header-title">Master Schedule</h1>
+            <span id="live-badge" style="font-size: 0.75rem; background: transparent; color: var(--primary-sage); border: 1px solid var(--primary-sage); padding: 0.5rem 1.2rem; border-radius: 2px; font-family: 'Montserrat'; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;">● Live Sync</span>
         </div>
 
         <!-- VIEW 1: SCHEDULE -->
         <div id="view-schedule" class="app-view active-view">
             <div class="panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                     <h3>Upcoming Appointments</h3>
                     <button class="btn" onclick="openNewBookingModal()">+ Manual Booking</button>
                 </div>
@@ -120,11 +133,11 @@
         <!-- VIEW 2: CLIENT DIRECTORY (MASTER LIST) -->
         <div id="view-clients" class="app-view">
             <div class="panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                     <h3>Patient Directory</h3>
                     <button class="btn" onclick="openClientModal()">+ Add Client</button>
                 </div>
-                <p style="font-size: 0.95rem; color: var(--sage-hover); margin-bottom: 2rem; font-weight: 500;">Tap a patient to view their full clinical profile and journals.</p>
+                <p style="font-size: 1rem; color: #666; margin-bottom: 2.5rem;">Select a patient to view their clinical history and journals.</p>
                 <div id="admin-client-directory-list"><p style="color: #888; font-size: 0.95rem;">Loading client records...</p></div>
             </div>
         </div>
@@ -145,13 +158,13 @@
                     <div class="metric-card"><span>Month Revenue</span><h4 id="stat-revenue">£0</h4></div>
                     <div class="metric-card"><span>Sessions Booked</span><h4 id="stat-sessions">0</h4></div>
                 </div>
-                <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 2rem; border-radius: 8px; margin-top: 2rem;">
-                    <h4 style="font-family: 'Montserrat'; font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1.5rem; font-weight: 600;">Create Invoice</h4>
+                <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 2.5rem; border-radius: 2px; margin-top: 3rem;">
+                    <h4 style="font-family: 'Montserrat'; font-size: 1.1rem; color: var(--text-main); margin-bottom: 1.5rem; font-weight: 600;">Create Invoice</h4>
                     <form onsubmit="return generateInvoice(event)">
-                        <label>Client Full Name</label><input type="text" id="inv-client" required>
-                        <label>Client Postal Address</label><textarea id="inv-address" style="height: 80px;" required></textarea>
+                        <label>Client Full Name</label><input type="text" id="inv-client" required style="background: white;">
+                        <label>Client Postal Address</label><textarea id="inv-address" style="height: 80px; background: white;" required></textarea>
                         <label>Select Treatment</label>
-                        <select id="inv-service-select">
+                        <select id="inv-service-select" style="background: white;">
                             <option value="Initial Consultation (£85)">Initial Consultation - £85</option>
                             <option value="Standard Follow-Up Session (£75)">Standard Follow-Up Session - £75</option>
                             <option value="360 Burnout Protocol (£1,450)">360° Burnout Protocol - £1,450</option>
@@ -260,22 +273,22 @@
         async function loadSchedule(db) {
             const container = document.getElementById('admin-schedule-list');
             const { data: appts } = await db.from('appointments').select('*').order('appointment_time', { ascending: true });
-            if(!appts || appts.length === 0) { container.innerHTML = '<p style="color: #666; font-size: 0.95rem;">No upcoming bookings found.</p>'; return; }
+            if(!appts || appts.length === 0) { container.innerHTML = '<p style="color: #666; font-size: 1rem;">No upcoming bookings found.</p>'; return; }
 
             container.innerHTML = appts.map(a => `
                 <div class="cal-card">
                     <div style="display: flex; justify-content: space-between; align-items: start;">
                         <div>
-                            <strong style="color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1.1rem;">${a.client_name}</strong><br>
-                            <span style="font-size: 0.95rem; color: var(--sage-hover); font-weight: 500;">${a.service_name}</span>
+                            <strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.15rem;">${a.client_name}</strong><br>
+                            <span style="font-size: 0.95rem; color: #555; font-weight: 500;">${a.service_name}</span>
                         </div>
                         <div style="text-align: right; font-size: 0.85rem; color: #666;">
                             ${new Date(a.appointment_time).toLocaleDateString('en-GB', {weekday: 'short', month: 'short', day: 'numeric'})}<br>
-                            <strong style="color: var(--text-main); font-size: 1rem;">${new Date(a.appointment_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</strong>
+                            <strong style="color: var(--primary-sage); font-size: 1.05rem;">${new Date(a.appointment_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</strong>
                         </div>
                     </div>
-                    <div style="display: flex; gap: 1rem; border-top: 1px dashed var(--secondary-sand); padding-top: 1.2rem; margin-top: 0.8rem;">
-                        <input type="datetime-local" id="resched-${a.id}" style="margin-bottom:0; font-size:0.9rem; padding: 0.8rem; flex: 1;" required>
+                    <div style="display: flex; gap: 1rem; border-top: 1px solid var(--secondary-sand); padding-top: 1.2rem; margin-top: 1rem;">
+                        <input type="datetime-local" id="resched-${a.id}" style="margin-bottom:0; font-size:0.95rem; padding: 0.8rem; flex: 1; background: white;" required>
                         <button class="btn" style="padding: 0 1.5rem; font-size:0.75rem;" onclick="rescheduleBooking('${a.id}')">Reschedule</button>
                     </div>
                 </div>
@@ -333,7 +346,7 @@
             const { data: msgs } = await db.from('messages').select('*').order('created_at', { ascending: false });
 
             if(!appts || appts.length === 0) { 
-                container.innerHTML = '<p style="color: #666; font-size: 0.95rem;">No clients found in database.</p>'; 
+                container.innerHTML = '<p style="color: #666; font-size: 1rem;">No clients found in database.</p>'; 
                 return; 
             }
             
@@ -344,7 +357,7 @@
                 <div class="client-list-item" onclick="openClientProfile('${client.client_id}')">
                     <div>
                         <h4>${client.client_name}</h4>
-                        <span style="font-size: 0.85rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
+                        <span style="font-size: 0.9rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
                     </div>
                     <span style="color: var(--primary-sage); font-size: 1.5rem;">&rarr;</span>
                 </div>
@@ -371,7 +384,7 @@
         async function loadAdminInbox(db, isPolling = false) {
             const chatBox = document.getElementById('admin-chat-box');
             const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
-            if(!data || data.length === 0) { chatBox.innerHTML = '<p style="color: #888; font-size: 0.95rem;">No messages yet.</p>'; return; }
+            if(!data || data.length === 0) { chatBox.innerHTML = '<p style="color: #888; font-size: 1rem;">No messages yet.</p>'; return; }
 
             const chatMsgs = data.filter(m => !m.content.includes('[DAILY HEALTH LOG]') && !m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
             if (isPolling && chatMsgs.length > window.lastMessageCount && window.lastMessageCount > 0) {
@@ -390,34 +403,34 @@
             let intakeDisplay = intakeMsg ? intakeMsg.content.replace('[MEDICAL INTAKE SUBMISSION]', '').trim() : 'Questionnaire not yet completed.';
 
             const dailyLogs = clientMsgs.filter(m => m.content && m.content.includes('[DAILY HEALTH LOG]'));
-            let logsHtml = '<p style="font-size:0.95rem; color:#888;">No daily journals logged yet.</p>';
+            let logsHtml = '<p style="font-size:1rem; color:#888;">No daily journals logged yet.</p>';
             if(dailyLogs.length > 0) {
                 logsHtml = dailyLogs.map(log => {
                     const cleanContent = log.content.replace('[DAILY HEALTH LOG]', '').trim();
-                    return `<div style="background: white; border-left: 4px solid var(--primary-sage); padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(9,93,40,0.04); border: 1px solid var(--secondary-sand);">
-                        <pre style="white-space: pre-wrap; font-family: inherit; font-size: 1rem; color: #333; line-height: 1.7;">${cleanContent}</pre>
+                    return `<div style="background: white; padding: 2rem; margin-bottom: 2rem; border-radius: 2px; box-shadow: 0 10px 30px rgba(9,93,40,0.04); border: 1px solid var(--secondary-sand); border-left: 4px solid var(--primary-sage);">
+                        <pre style="white-space: pre-wrap; font-family: inherit; font-size: 1.05rem; color: #333; line-height: 1.7;">${cleanContent}</pre>
                     </div>`;
                 }).join('');
             }
 
             const html = `
                 <div class="panel" style="border-top: 4px solid var(--primary-sage);">
-                    <h2 style="font-size: 2.2rem; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 400;">${client.client_name}</h2>
-                    <p style="font-size: 0.85rem; color: #888; margin-bottom: 2.5rem; font-family: 'Montserrat'; letter-spacing: 1px;">PATIENT ID: ${client.client_id}</p>
+                    <h2 style="font-size: 2.5rem; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 300;">${client.client_name}</h2>
+                    <p style="font-size: 0.85rem; color: #888; margin-bottom: 3rem; font-family: 'Montserrat'; letter-spacing: 2px;">PATIENT ID: ${client.client_id}</p>
                     
-                    <h3 style="font-size: 1.2rem; color: var(--primary-sage); margin-bottom: 1.2rem; border-bottom: 1px dashed var(--secondary-sand); padding-bottom: 0.8rem; font-weight: 600;">Comprehensive Medical Intake</h3>
-                    <div style="background: var(--bg-color); padding: 2rem; border-radius: 8px; margin-bottom: 3rem; font-size: 1.05rem; border: 1px solid var(--secondary-sand);">
+                    <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-weight: 700;">Comprehensive Medical Intake</h3>
+                    <div style="background: var(--bg-color); padding: 2.5rem; border-radius: 2px; margin-bottom: 4rem; font-size: 1.1rem; border: 1px solid var(--secondary-sand);">
                         <pre style="white-space: pre-wrap; font-family: inherit; color: var(--text-main); line-height: 1.8;">${intakeDisplay}</pre>
                     </div>
 
-                    <h3 style="font-size: 1.2rem; color: var(--primary-sage); margin-bottom: 1.2rem; border-bottom: 1px dashed var(--secondary-sand); padding-bottom: 0.8rem; font-weight: 600;">Running Health Journals (MFP Detailed View)</h3>
-                    <div style="margin-bottom: 3rem; max-height: 700px; overflow-y: auto; padding-right: 15px;">
+                    <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-weight: 700;">Running Health Journals (MFP Detailed View)</h3>
+                    <div style="margin-bottom: 4rem; max-height: 800px; overflow-y: auto; padding-right: 15px;">
                         ${logsHtml}
                     </div>
 
-                    <h3 style="font-size: 1.2rem; color: var(--primary-sage); margin-bottom: 1.2rem; border-bottom: 1px dashed var(--secondary-sand); padding-bottom: 0.8rem; font-weight: 600;">Add Clinical Note</h3>
+                    <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-weight: 700;">Add Clinical Note</h3>
                     <form onsubmit="alert('Note Saved to File!'); return false;" style="display: flex; flex-direction: column; gap: 1rem;">
-                        <textarea placeholder="Type consultation notes..." style="height: 120px; margin-bottom:0;" required></textarea>
+                        <textarea placeholder="Type consultation notes..." style="height: 150px; margin-bottom:0; background: var(--bg-color);" required></textarea>
                         <input type="file" style="margin-bottom:0; background: white;">
                         <button type="submit" class="btn">Update Clinical File</button>
                     </form>
@@ -428,6 +441,7 @@
             switchAppView('client-detail');
         }
 
+        // --- INSTANT DEMO DATA INJECTION FOR PRESENTATION ---
         function injectDemoData() {
             globalClients = [
                 { client_id: 'demo_1', client_name: 'Sarah Jenkins' },
@@ -476,14 +490,14 @@ Date: Today
             document.getElementById('admin-schedule-list').innerHTML = `
                 <div class="cal-card">
                     <div style="display: flex; justify-content: space-between;">
-                        <div><strong style="color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1.1rem;">Sarah Jenkins</strong><br><span style="font-size: 0.95rem; color: var(--sage-hover);">360° Burnout Protocol (£1,450)</span></div>
-                        <div style="text-align: right; font-size: 0.85rem; color: #666;">Tomorrow<br><strong style="color: var(--text-main); font-size: 1rem;">10:00 AM</strong></div>
+                        <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.15rem;">Sarah Jenkins</strong><br><span style="font-size: 0.95rem; color: #555;">360° Burnout Protocol (£1,450)</span></div>
+                        <div style="text-align: right; font-size: 0.85rem; color: #666;">Tomorrow<br><strong style="color: var(--primary-sage); font-size: 1.05rem;">10:00 AM</strong></div>
                     </div>
                 </div>
                 <div class="cal-card">
                     <div style="display: flex; justify-content: space-between;">
-                        <div><strong style="color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1.1rem;">Marcus Vance</strong><br><span style="font-size: 0.95rem; color: var(--sage-hover);">Elite Athletic Optimization (£90)</span></div>
-                        <div style="text-align: right; font-size: 0.85rem; color: #666;">Thursday<br><strong style="color: var(--text-main); font-size: 1rem;">02:30 PM</strong></div>
+                        <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.15rem;">Marcus Vance</strong><br><span style="font-size: 0.95rem; color: #555;">Elite Athletic Optimization (£90)</span></div>
+                        <div style="text-align: right; font-size: 0.85rem; color: #666;">Thursday<br><strong style="color: var(--primary-sage); font-size: 1.05rem;">02:30 PM</strong></div>
                     </div>
                 </div>
             `;
@@ -492,16 +506,16 @@ Date: Today
                 <div class="client-list-item" onclick="openClientProfile('demo_1')">
                     <div>
                         <h4>Sarah Jenkins</h4>
-                        <span style="font-size: 0.9rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
+                        <span style="font-size: 0.95rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
                     </div>
-                    <span style="color: var(--primary-sage); font-size: 1.5rem;">&rarr;</span>
+                    <span style="color: var(--primary-sage); font-size: 1.8rem;">&rarr;</span>
                 </div>
                 <div class="client-list-item" onclick="openClientProfile('demo_2')">
                     <div>
                         <h4>Marcus Vance</h4>
-                        <span style="font-size: 0.9rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
+                        <span style="font-size: 0.95rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
                     </div>
-                    <span style="color: var(--primary-sage); font-size: 1.5rem;">&rarr;</span>
+                    <span style="color: var(--primary-sage); font-size: 1.8rem;">&rarr;</span>
                 </div>
             `;
 
