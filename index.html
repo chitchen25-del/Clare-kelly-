@@ -12,11 +12,11 @@
     <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=180&h=180&fit=crop">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* NEW VIBRANT GREEN PALETTE */
+            /* VIBRANT GREEN PALETTE */
             --bg-color: #f3f1ef;         
             --card-bg: #ffffff;          
             --text-main: #095d28;        
@@ -32,12 +32,15 @@
         h1, h2, h3, h4, .btn, .price-amount { font-family: 'Montserrat', sans-serif; }
         
         /* Luxury Navigation */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5%; background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
         
         /* Premium Logo Styling */
-        .nav-brand-logo { height: 50px; width: auto; cursor: pointer; transition: opacity 0.3s ease, transform 0.3s ease; object-fit: contain; }
+        .nav-brand-logo { height: 60px; width: auto; cursor: pointer; transition: opacity 0.3s ease, transform 0.3s ease; object-fit: contain; }
         .nav-brand-logo:hover { opacity: 0.85; transform: scale(0.98); }
-        
+        .portal-logo { height: 70px; margin: 0 auto 2rem auto; display: block; object-fit: contain; }
+        .footer-logo-wrapper { width: 100%; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 3rem; margin-bottom: 3rem; text-align: center; }
+        .footer-brand-logo { height: 85px; object-fit: contain; opacity: 0.9; }
+
         .desktop-nav-links { display: none; align-items: center; gap: 1.5rem; }
         .nav-link-text { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); cursor: pointer; transition: color 0.3s; }
         .nav-link-text:hover { color: var(--gold-accent); }
@@ -76,12 +79,18 @@
         
         .section-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 3px; color: var(--gold-accent); margin-bottom: 1.2rem; display: block; font-weight: 700; }
         h2 { font-size: 2.5rem; font-weight: 400; margin-bottom: 1.5rem; line-height: 1.2; color: var(--text-main); }
-        .help-list { column-count: 1; list-style: none; color: var(--sage-hover); font-size: 1.05rem; margin-top: 1.8rem; }
-        .help-list li { margin-bottom: 0.9rem; position: relative; padding-left: 1.6rem; font-weight: 500; }
-        .help-list li::before { content: "—"; position: absolute; left: 0; color: var(--gold-accent); font-weight: bold; }
+        
+        /* The Clinical Pathway Section */
+        .pathway-section { padding: 7rem 6%; background-color: var(--card-bg); border-top: 1px solid var(--secondary-sand); }
+        .pathway-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; max-width: 1200px; margin: 0 auto; }
+        .pathway-card { padding: 2.5rem; border: 1px solid var(--secondary-sand); border-radius: 8px; transition: transform 0.3s ease, border-color 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.01); background: var(--bg-color); }
+        .pathway-card:hover { border-color: var(--primary-sage); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(9, 93, 40, 0.08); }
+        .pathway-card h4 { color: var(--text-main); font-size: 1.15rem; margin-bottom: 0.8rem; line-height: 1.4; font-weight: 700; }
+        .pathway-card p { color: var(--sage-hover); font-size: 0.95rem; line-height: 1.6; margin: 0;}
+        .pathway-number { font-family: 'Montserrat'; font-size: 0.75rem; color: var(--gold-accent); font-weight: 700; letter-spacing: 2px; margin-bottom: 1rem; display: block; }
 
         /* Pricing */
-        .pricing-section { padding: 7rem 6%; border-top: 1px solid var(--secondary-sand); }
+        .pricing-section { padding: 7rem 6%; border-top: 1px solid var(--secondary-sand); background-color: var(--bg-color); }
         .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 4rem auto 0 auto; }
         .price-card { background: var(--card-bg); border: 1px solid var(--secondary-sand); border-radius: 12px; padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 15px 40px rgba(9, 93, 40, 0.05); }
         .price-card.featured { border-color: var(--primary-sage); box-shadow: 0 25px 60px rgba(9, 93, 40, 0.1); }
@@ -121,7 +130,7 @@
         label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); margin-bottom: 0.6rem; font-family: 'Montserrat', sans-serif; font-weight: 700;}
         
         /* PREMIUM INPUT STYLING */
-        input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 6px; background: var(--bg-color); font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
+        input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 1.5rem; border: 1px solid transparent; border-radius: 6px; background: #F4F3EE; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
         input:focus, select:focus, textarea:focus { background: white; border: 1px solid var(--primary-sage); box-shadow: 0 4px 15px rgba(13, 155, 70, 0.1); outline: none; }
         textarea { resize: vertical; height: 100px; }
 
@@ -177,11 +186,13 @@
         .premium-list-item strong { color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1rem; font-weight: 700;}
         .premium-list-item span { font-size: 0.8rem; color: var(--sage-hover); font-family: 'Montserrat'; display: block; margin-top: 0.4rem; line-height: 1.5; font-weight: 500; }
 
-        footer { padding: 4rem 6%; border-top: 1px solid var(--secondary-sand); color: var(--sage-hover); background: var(--card-bg); display: flex; flex-direction: column; text-align: center; gap: 2.5rem; max-width: 1300px; margin: 0 auto; }
+        footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); color: var(--sage-hover); background: var(--card-bg); display: flex; flex-direction: column; text-align: center; gap: 2.5rem; max-width: 1300px; margin: 0 auto; }
         .footer-col h4 { color: var(--primary-sage); margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
         .footer-col p { font-size: 1.05rem; margin-bottom: 0.5rem; }
 
+        /* Desktop Layout Snap-Backs */
         @media (min-width: 768px) {
+            .pathway-grid { grid-template-columns: repeat(2, 1fr); }
             .macro-grid { grid-template-columns: repeat(4, 1fr); }
             .micro-grid { grid-template-columns: repeat(5, 1fr); }
             .macro-grid label, .micro-grid label { text-align: center; padding-left: 0; }
@@ -193,9 +204,10 @@
         }
 
         @media (min-width: 900px) {
-            .nav-brand-logo { height: 60px; } /* Slightly larger logo on desktop */
+            .nav-brand-logo { height: 75px; } 
             .mobile-menu-btn { display: none; }
             .desktop-nav-links { display: flex; }
+            .pathway-grid { grid-template-columns: repeat(3, 1fr); }
             .pricing-grid { grid-template-columns: repeat(3, 1fr); max-width: 1300px; }
             .menu-grid { grid-template-columns: repeat(2, 1fr); max-width: 1100px; }
             .news-grid { grid-template-columns: repeat(3, 1fr); max-width: 1300px; }
@@ -205,7 +217,7 @@
             .dashboard-container { grid-template-columns: 2fr 1fr; padding: 0 6%; margin: 5rem auto; gap: 3rem; }
             .dash-card { padding: 3rem 2.5rem; }
             .menu-header { flex-direction: row; justify-content: space-between; align-items: baseline; }
-            footer { flex-direction: row; text-align: left; justify-content: space-between; padding: 5rem 6%; }
+            footer { flex-direction: row; text-align: left; justify-content: space-between; padding: 0 6% 5rem 6%; }
         }
     </style>
 </head>
@@ -226,10 +238,6 @@
             panel.classList.toggle('show');
             btn.classList.toggle('active');
             btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
-        }
-        function toggleAI() {
-            const win = document.getElementById('ai-window');
-            win.style.display = win.style.display === 'block' ? 'none' : 'block';
         }
         function promptInstall() {
             alert("To install this app on your iPhone:\n\n1. Tap the Share icon (square with an upward arrow) at the bottom of Safari.\n2. Scroll down and tap 'Add to Home Screen'.\n3. Tap 'Add'.");
@@ -262,20 +270,6 @@
         <span class="mobile-drawer-link" onclick="window.processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
     </div>
 
-    <!-- AI AGENT WIDGET -->
-    <div class="ai-fab" onclick="toggleAI()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-    </div>
-
-    <div class="ai-window" id="ai-window">
-        <div class="ai-header"><span>Clinic AI Assistant</span><span style="cursor: pointer;" onclick="toggleAI()">✖</span></div>
-        <div class="ai-body" id="ai-chat-body"><div class="msg admin">Hi there! I'm the Natural Healing Clinic's AI Assistant. How can I help you today?</div></div>
-        <form class="ai-input" onsubmit="return handleAIQuery(event)">
-            <input type="text" id="ai-input-text" placeholder="Type your question..." required>
-            <button type="submit">></button>
-        </form>
-    </div>
-
     <!-- ================= SCREEN 1: THE HOME PAGE ================= -->
     <div id="screen-home" class="page-screen visible">
         <section class="hero">
@@ -284,30 +278,45 @@
             <button type="button" class="btn" onclick="openScreen('screen-register')">Make An Appointment</button>
         </section>
 
-        <section class="section">
-            <div class="section-image-wrapper">
-                <div class="image-arch-container">
-                    <img src="./clinical-herb.jpeg" alt="Clinical botanical natural medicine and functional healing" class="image-arch">
-                    <div class="image-floating-badge">
-                        <span>Evidence-Informed Care</span>
-                        <p>Root-cause functional protocols designed for rapid, sustainable recovery.</p>
-                    </div>
-                </div>
+        <!-- THE CLINICAL PATHWAY SECTION -->
+        <section class="pathway-section">
+            <div style="text-align: center; max-width: 800px; margin: 0 auto 4rem auto;">
+                <span class="section-subtitle">Our Clinical Pathway</span>
+                <h2>Comprehensive Functional Care</h2>
+                <p style="color: var(--sage-hover);">A meticulously structured approach designed to map your physiology and orchestrate profound, lasting healing.</p>
             </div>
-
-            <div class="section-text">
-                <span class="section-subtitle">Our Philosophy</span>
-                <h2>Results in a Realistic Timeframe</h2>
-                <p style="margin-bottom: 1.5rem; color: var(--sage-hover);">The main aim of my clinic is to get results, in a quick and realistic timeframe. If you suffer from pain or discomfort, then I am here to help.</p>
-                <p style="color: var(--sage-hover); margin-bottom: 2.5rem;">I offer a holistic approach to modern-day aches and pains. The Natural Healing Clinic is complementary to mainstream medical protocols.</p>
-                <h4 style="margin-bottom: 1rem; color: var(--primary-sage); font-family: 'Montserrat', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;">Do You Need Help With:</h4>
-                <ul class="help-list">
-                    <li>Pain Management & Muscular Pain</li>
-                    <li>Neck, Shoulder or Back Pain</li>
-                    <li>Chronic Fatigue & Long Covid</li>
-                    <li>Fibromyalgia & Sports Injuries</li>
-                    <li>Migraines & Digestive Complaints</li>
-                </ul>
+            
+            <div class="pathway-grid">
+                <div class="pathway-card">
+                    <span class="pathway-number">01.</span>
+                    <h4>Full Symptom Assessment & Medical History Review</h4>
+                    <p>An exhaustive clinical deep-dive into your physiological timeline to map the origin and progression of your condition.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">02.</span>
+                    <h4>Lifestyle & Metabolic Assessment</h4>
+                    <p>Evaluating the critical pillars of your health, including nutrition, sleep architecture, stress load, and metabolic function.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">03.</span>
+                    <h4>Identifying the Root Cause of Your Symptoms</h4>
+                    <p>Moving beyond symptom management to isolate the underlying systemic dysfunctions driving your discomfort.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">04.</span>
+                    <h4>Personalised Treatment Plan</h4>
+                    <p>A bespoke, evidence-informed protocol tailored precisely to your unique biology and treatment goals.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">05.</span>
+                    <h4>Progress Tracking</h4>
+                    <p>Continuous monitoring via your secure Patient Portal to ensure your protocol adapts as your body heals.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">06.</span>
+                    <h4>Lymphatic Treatments</h4>
+                    <p>Advanced hands-on therapies to clear systemic inflammation, reduce edema, and accelerate tissue recovery.</p>
+                </div>
             </div>
         </section>
 
@@ -410,7 +419,7 @@
         </div>
         <section class="section">
             <div class="section-image-wrapper">
-                <!-- VIDEO PLAYER INSERTED HERE -->
+                <!-- VIDEO PLAYER -->
                 <video width="100%" controls playsinline style="border-radius: 12px; box-shadow: 0 25px 60px rgba(9, 93, 40, 0.15); object-fit: cover; max-height: 600px; background: var(--text-main);">
                     <source src="./clare-video.mp4.MOV">
                     Your browser does not support the video tag.
@@ -466,8 +475,9 @@
     <!-- ================= SCREEN 4: LOGIN ================= -->
     <div id="screen-login" class="page-screen">
         <div class="form-container" style="max-width: 480px; margin: 6rem auto;">
-            <h2>Client Portal Login</h2>
-            <p style="text-align: center; color: var(--sage-hover); margin-bottom: 2rem;">Access your files, daily journal, and messages.</p>
+            <img src="./logo.png" alt="The Natural Healing Clinic" class="portal-logo">
+            <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem;">Client Portal</h2>
+            <p style="text-align: center; color: var(--sage-hover); margin-bottom: 2.5rem;">Access your files, daily journal, and messages.</p>
             <form onsubmit="return window.processClientLogin(event)">
                 <label>Email Address</label><input type="email" id="login-email" required>
                 <label>Password</label><input type="password" id="login-password" required>
@@ -482,7 +492,8 @@
     <!-- ================= SCREEN 5: REGISTRATION ================= -->
     <div id="screen-register" class="page-screen">
         <div class="form-container" style="max-width: 580px; margin: 6rem auto;">
-            <h2>Client Registration</h2>
+            <img src="./logo.png" alt="The Natural Healing Clinic" class="portal-logo">
+            <h2 style="font-size: 1.8rem; margin-bottom: 2.5rem;">Client Registration</h2>
             <form onsubmit="return window.processRegistration(event)">
                 <label>Full Name</label><input type="text" id="reg-name" required>
                 <label>Email Address</label><input type="email" id="reg-email" required>
@@ -546,7 +557,6 @@
                                 <h5>1. Breakfast</h5>
                                 <textarea id="log-brk-desc" placeholder="Exact foods & weights"></textarea>
                                 
-                                <!-- 4-Column Macro Grid -->
                                 <div class="macro-grid">
                                     <div><label>KCAL</label><input type="number" id="log-brk-cal" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                     <div><label>PRO (g)</label><input type="number" id="log-brk-pro" placeholder="0" oninput="window.updateDailyTotals()"></div>
@@ -554,7 +564,6 @@
                                     <div><label>FAT (g)</label><input type="number" id="log-brk-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                 </div>
                                 
-                                <!-- Expandable 5-Column Micro Grid (With Fiber) -->
                                 <details style="outline: none;">
                                     <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: var(--sage-hover); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 700;">+ Edit Fiber & Micronutrients</summary>
                                     <div class="micro-grid">
@@ -791,15 +800,20 @@
     </div>
 
     <footer>
-        <div class="footer-col">
-            <h4>The Natural Healing Clinic</h4>
-            <p>13 Cronk Drine, Union Mills</p>
-            <p>Isle of Man, IM4 4NG</p>
+        <div class="footer-logo-wrapper">
+            <img src="./logo.png" alt="The Natural Healing Clinic" class="footer-brand-logo">
         </div>
-        <div class="footer-col">
-            <h4>Contact & Hours</h4>
-            <p>Tel: 07624 202 121</p>
-            <p>Mon & Fri: 10:00 - 15:00</p>
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; width: 100%;">
+            <div class="footer-col" style="text-align: left;">
+                <h4>The Natural Healing Clinic</h4>
+                <p>13 Cronk Drine, Union Mills</p>
+                <p>Isle of Man, IM4 4NG</p>
+            </div>
+            <div class="footer-col" style="text-align: right;">
+                <h4>Contact & Hours</h4>
+                <p>Tel: 07624 202 121</p>
+                <p>Mon & Fri: 10:00 - 15:00</p>
+            </div>
         </div>
     </footer>
 
@@ -811,16 +825,6 @@
         function getSupabase() {
             if(!window.supabase) return null;
             return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        }
-
-        function handleAIQuery(e) {
-            e.preventDefault();
-            const input = document.getElementById('ai-input-text');
-            const body = document.getElementById('ai-chat-body');
-            body.innerHTML += `<div class="msg client">${input.value}</div>`;
-            input.value = '';
-            setTimeout(() => body.innerHTML += `<div class="msg admin">In Functional Medicine, we look at root causes. Would you like to book a consultation?</div>`, 800);
-            return false;
         }
 
         window.processClientLogin = async function(e) {
