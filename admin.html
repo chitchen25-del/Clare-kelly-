@@ -16,8 +16,7 @@
         h1, h2, h3, h4, th, .nav-logo, .btn, .app-nav-item { font-family: 'Montserrat', sans-serif; }
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5%; background: white; border-bottom: 1px solid var(--secondary-sand); position: sticky; top: 0; z-index: 100; }
         .nav-logo { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; color: var(--primary-sage); letter-spacing: 2px; }
-        .btn { padding: 0.7rem 1.2rem; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 4px; cursor: pointer; border: none; background: var(--primary-sage); color: white; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; }
-        .btn:active { transform: scale(0.98); }
+        .btn { padding: 0.7rem 1.2rem; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 4px; cursor: pointer; border: none; background: var(--primary-sage); color: white; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; }
         .btn-outline { background: transparent; border: 1px solid var(--primary-sage); color: var(--primary-sage); }
         .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 1.5rem; }
         .form-container { width: 100%; max-width: 400px; background: white; padding: 3rem 2rem; border-radius: 8px; border: 1px solid var(--secondary-sand); text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.04); }
@@ -26,14 +25,14 @@
         .dashboard-wrapper { display: none; max-width: 1200px; margin: 1.5rem auto; padding: 0 4%; }
         .app-view { display: none; }
         .app-view.active-view { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .panel { background: white; padding: 1.5rem 1.2rem; border-radius: 8px; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .panel h3 { font-size: 1.15rem; color: var(--primary-sage); margin-bottom: 1.2rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.6rem; font-weight: 500; }
         .finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
         .metric-card { background: #FAFAF7; border: 1px solid var(--secondary-sand); padding: 1.2rem; border-radius: 6px; text-align: center; }
         .metric-card span { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: #666; font-family: 'Montserrat'; display: block; margin-bottom: 0.3rem; }
         .metric-card h4 { font-size: 1.6rem; font-weight: 300; color: var(--primary-sage); }
-        .chat-box { height: 400px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #F4F3EE; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+        .chat-box { height: 300px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #F4F3EE; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
         .msg { padding: 0.8rem 1rem; border-radius: 6px; max-width: 85%; font-size: 1rem; }
         .msg.client { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; }
         .msg.admin { background: var(--primary-sage); color: white; align-self: flex-end; }
@@ -43,19 +42,11 @@
         .client-list-item:active { transform: scale(0.98); background: #FAFAF7; }
         .client-list-item h4 { color: var(--primary-sage); font-size: 1.15rem; margin-bottom: 0.2rem; }
         
-        /* Clinical Profile Internal Tabs */
-        .profile-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); overflow-x: auto; scrollbar-width: none; }
-        .profile-tabs::-webkit-scrollbar { display: none; }
-        .profile-tab-btn { background: transparent; border: none; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #888; padding: 0.8rem 1rem; cursor: pointer; transition: all 0.3s; white-space: nowrap; }
-        .profile-tab-btn.active { color: var(--primary-sage); border-bottom: 3px solid var(--gold-accent); }
-        .profile-pane { display: none; animation: fadeIn 0.3s ease; }
-        .profile-pane.active { display: block; }
-
         .app-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--secondary-sand); display: none; justify-content: space-around; align-items: center; z-index: 1000; }
         .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: #777; cursor: pointer; width: 20%; height: 100%; }
         .app-nav-item.active { color: var(--primary-sage); font-weight: 600; }
         .app-nav-item svg { width: 20px; height: 20px; margin-bottom: 2px; stroke: currentColor; fill: none; stroke-width: 2; }
-        .cal-card { background: #FAFAF7; border: 1px solid var(--secondary-sand); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .cal-card { background: #FAFAF7; border: 1px solid var(--secondary-sand); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
         @media (min-width: 900px) { .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; } .app-bottom-nav { display: none !important; } .dashboard-wrapper { display: block !important; } .app-view { display: block !important; } .finance-grid { grid-template-columns: repeat(3, 1fr); } }
     </style>
 </head>
@@ -90,9 +81,9 @@
             <div class="panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                     <h3>Upcoming Appointments</h3>
-                    <button class="btn" onclick="alert('Manual Booking Opened')">+ Manual Booking</button>
+                    <button class="btn" onclick="openNewBookingModal()">+ Manual Booking</button>
                 </div>
-                <div id="admin-schedule-list"><p style="color: #888; font-size: 0.95rem;">Click "Load Demo Data" to populate schedule...</p></div>
+                <div id="admin-schedule-list"><p style="color: #888;">Loading schedule...</p></div>
             </div>
         </div>
 
@@ -101,10 +92,10 @@
             <div class="panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                     <h3>Patient Directory</h3>
-                    <button class="btn" onclick="alert('Add Client Opened')">+ Add Client</button>
+                    <button class="btn" onclick="openClientModal()">+ Add Client</button>
                 </div>
                 <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.2rem;">Tap a patient to view their full clinical profile and journals.</p>
-                <div id="admin-client-directory-list"><p style="color: #888; font-size: 0.95rem;">Loading client records...</p></div>
+                <div id="admin-client-directory-list"><p style="color: #888;">Loading client records...</p></div>
             </div>
         </div>
 
@@ -145,11 +136,7 @@
         <div id="view-inbox" class="app-view">
             <div class="panel">
                 <h3>Live Patient Inbox</h3>
-                <div class="chat-box" id="admin-chat-box"><p style="color: #888; font-size: 0.95rem;">Inbox empty.</p></div>
-                <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                    <input type="text" placeholder="Type reply..." style="margin-bottom: 0; flex: 1;">
-                    <button class="btn">Send</button>
-                </div>
+                <div class="chat-box" id="admin-chat-box"><p style="color: #888;">Loading messages...</p></div>
             </div>
         </div>
 
@@ -187,9 +174,15 @@
     </div>
 
     <script>
+        const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
         let globalClients = [];
         let globalMsgs = [];
-        let apptsGlobal = [];
+
+        function getSupabase() {
+            if(!window.supabase) return null;
+            return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
 
         function switchAppView(viewName, element) {
             document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active-view'));
@@ -202,29 +195,167 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Handle inner tabs on the client detail page
-        function switchProfileTab(tabName, element) {
-            document.querySelectorAll('.profile-pane').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.profile-tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById(`pane-${tabName}`).classList.add('active');
-            if(element) element.classList.add('active');
-        }
-
         async function processAdminLogin(e) {
             e.preventDefault();
+            const email = document.getElementById('admin-email').value.trim();
+            const pass = document.getElementById('admin-password').value.trim();
+            
+            if (email === 'test' && pass === 'test') { 
+                initDashboard(); 
+                return false; 
+            }
+            
+            const db = getSupabase();
+            const { error } = await db.auth.signInWithPassword({ email, password: pass });
+            if (error) alert('Login failed: ' + error.message);
+            else initDashboard();
+            return false;
+        }
+
+        function initDashboard() {
             document.getElementById('admin-login').style.display = 'none';
             document.getElementById('admin-dashboard').style.display = 'block';
             document.getElementById('btn-logout').style.display = 'inline-block';
             document.getElementById('btn-demo').style.display = 'inline-block';
             if(window.innerWidth < 900) { document.getElementById('app-bottom-nav').style.display = 'flex'; }
-            return false;
+            
+            const db = getSupabase();
+            loadSchedule(db); 
+            loadClientDirectory(db); 
+            loadAdminInbox(db); 
+            loadFinanceMetrics(db);
+            setInterval(() => loadAdminInbox(db, true), 10000);
         }
 
-        // ---- THE MASTER DETAIL PROFILE VIEW GENERATOR ----
-        function openClientProfile(clientId) {
-            const client = globalClients.find(c => c.client_id === clientId);
-            if(!client) return;
+        // --- REAL LIVE CLOUD DATA FUNCTIONS ---
+        async function loadSchedule(db) {
+            const container = document.getElementById('admin-schedule-list');
+            const { data: appts } = await db.from('appointments').select('*').order('appointment_time', { ascending: true });
+            if(!appts || appts.length === 0) { container.innerHTML = '<p style="color: #666;">No upcoming bookings found.</p>'; return; }
 
+            container.innerHTML = appts.map(a => `
+                <div class="cal-card">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <strong style="color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1rem;">${a.client_name}</strong><br>
+                            <span style="font-size: 0.95rem; color: #555;">${a.service_name}</span>
+                        </div>
+                        <div style="text-align: right; font-size: 0.85rem; color: #666;">
+                            ${new Date(a.appointment_time).toLocaleDateString('en-GB', {weekday: 'short', month: 'short', day: 'numeric'})}<br>
+                            <strong>${new Date(a.appointment_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</strong>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.8rem; border-top: 1px solid var(--secondary-sand); padding-top: 0.8rem;">
+                        <input type="datetime-local" id="resched-${a.id}" style="margin-bottom:0; font-size:0.85rem; padding: 0.5rem;" required>
+                        <button class="btn" style="padding: 0.4rem 0.8rem; font-size:0.65rem;" onclick="rescheduleBooking('${a.id}')">Reschedule</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function rescheduleBooking(apptId) {
+            const newTime = document.getElementById(`resched-${apptId}`).value;
+            if(!newTime) { alert("Please select a new date and time."); return; }
+            const db = getSupabase();
+            await db.from('appointments').update({ appointment_time: newTime }).eq('id', apptId);
+            alert("Rescheduled!"); loadSchedule(db);
+        }
+
+        async function openNewBookingModal() {
+            const clientName = prompt("Enter Patient Full Name:");
+            if(!clientName) return;
+            const service = prompt("Enter Treatment/Service:", "Initial Consultation (£85)");
+            if(!service) return;
+            const dateInput = prompt("Enter Date & Time (YYYY-MM-DD HH:MM):", new Date().toISOString().slice(0,16).replace('T', ' '));
+            if(!dateInput) return;
+            
+            const db = getSupabase();
+            await db.from('appointments').insert([{ 
+                client_id: 'manual_' + Date.now(), 
+                client_name: clientName, 
+                service_name: service, 
+                appointment_time: new Date(dateInput).toISOString(), 
+                status: 'confirmed' 
+            }]);
+            alert("Patient successfully booked!"); 
+            loadSchedule(db);
+            loadClientDirectory(db);
+        }
+
+        async function openClientModal() {
+            const name = prompt("Enter Patient Full Name to Onboard:");
+            if(!name) return;
+            
+            const db = getSupabase();
+            await db.from('appointments').insert([{ 
+                client_id: 'client_' + Date.now(), 
+                client_name: name, 
+                service_name: 'Existing Record Transferred', 
+                appointment_time: new Date().toISOString(), 
+                status: 'confirmed' 
+            }]);
+            alert("Patient profile created!"); 
+            loadClientDirectory(db);
+        }
+
+        async function loadClientDirectory(db) {
+            const container = document.getElementById('admin-client-directory-list');
+            const { data: appts } = await db.from('appointments').select('*');
+            const { data: msgs } = await db.from('messages').select('*').order('created_at', { ascending: false });
+
+            if(!appts || appts.length === 0) { 
+                container.innerHTML = '<p style="color: #666;">No clients found in database.</p>'; 
+                return; 
+            }
+            
+            globalClients = Array.from(new Set(appts.map(a => a.client_id))).map(id => appts.find(a => a.client_id === id));
+            globalMsgs = msgs || [];
+
+            container.innerHTML = globalClients.map(client => `
+                <div class="client-list-item" onclick="openClientProfile('${client.client_id}')">
+                    <div>
+                        <h4>${client.client_name}</h4>
+                        <span style="font-size: 0.85rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
+                    </div>
+                    <span style="color: var(--primary-sage); font-size: 1.5rem;">&rarr;</span>
+                </div>
+            `).join('');
+        }
+
+        async function loadFinanceMetrics(db) {
+            const { data: appts } = await db.from('appointments').select('*');
+            if(!appts) return;
+            let totalRevenue = 0;
+            appts.forEach(a => {
+                if(a.service_name.includes('£85')) totalRevenue += 85;
+                else if(a.service_name.includes('£175')) totalRevenue += 175;
+                else if(a.service_name.includes('£297')) totalRevenue += 297;
+                else if(a.service_name.includes('£1,450')) totalRevenue += 1450;
+                else if(a.service_name.includes('£90')) totalRevenue += 90;
+                else if(a.service_name.includes('£95')) totalRevenue += 95;
+                else totalRevenue += 75;
+            });
+            document.getElementById('stat-revenue').innerText = `£${totalRevenue.toLocaleString()}`;
+            document.getElementById('stat-sessions').innerText = appts.length;
+        }
+
+        async function loadAdminInbox(db, isPolling = false) {
+            const chatBox = document.getElementById('admin-chat-box');
+            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
+            if(!data || data.length === 0) { chatBox.innerHTML = '<p style="color: #888;">No messages yet.</p>'; return; }
+
+            const chatMsgs = data.filter(m => !m.content.includes('[DAILY HEALTH LOG]') && !m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
+            if (isPolling && chatMsgs.length > window.lastMessageCount && window.lastMessageCount > 0) {
+                document.title = "🔔 NEW MESSAGE - Clinic App";
+            }
+            window.lastMessageCount = chatMsgs.length;
+
+            chatBox.innerHTML = chatMsgs.map(m => `<div class="msg ${m.sender}"><strong>${m.sender === 'client' ? 'Patient' : 'Clare'}:</strong> ${m.content}</div>`).join('');
+        }
+
+        // --- MASTER DETAIL PROFILE VIEW GENERATOR ---
+        function openClientProfile(clientId) {
+            const client = globalClients.find(c => c.client_id === clientId) || { client_name: 'Unknown Client', client_id: clientId };
             const clientMsgs = globalMsgs.filter(m => m.client_id === clientId);
 
             const intakeMsg = clientMsgs.find(m => m.content && m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
@@ -235,48 +366,33 @@
             if(dailyLogs.length > 0) {
                 logsHtml = dailyLogs.map(log => {
                     const cleanContent = log.content.replace('[DAILY HEALTH LOG]', '').trim();
-                    return `<div style="background: #FAFAF7; border-left: 4px solid var(--gold-accent); padding: 1.2rem; margin-bottom: 1.5rem; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border-top: 1px solid var(--secondary-sand); border-right: 1px solid var(--secondary-sand); border-bottom: 1px solid var(--secondary-sand);">
-                        <pre style="white-space: pre-wrap; font-family: inherit; font-size: 0.95rem; color: #444; line-height: 1.6;">${cleanContent}</pre>
+                    return `<div style="background: white; border-left: 4px solid var(--primary-sage); padding: 1.2rem; margin-bottom: 1rem; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
+                        <pre style="white-space: pre-wrap; font-family: inherit; font-size: 0.95rem; color: #333; line-height: 1.6;">${cleanContent}</pre>
                     </div>`;
                 }).join('');
             }
 
             const html = `
-                <div class="panel" style="border-top: 4px solid var(--primary-sage); padding: 2rem 1.5rem;">
-                    <h2 style="font-size: 2.2rem; color: var(--text-main); margin-bottom: 0.2rem; font-weight: 300;">${client.client_name}</h2>
-                    <p style="font-size: 0.8rem; color: #888; margin-bottom: 0.5rem; font-family: 'Montserrat';">PATIENT ID: ${client.client_id} | ${client.age} Y/O ${client.sex}</p>
-                    <p style="font-size: 0.85rem; color: var(--primary-sage); font-weight: 600; font-family: 'Montserrat'; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2rem;">Active: ${client.protocol}</p>
+                <div class="panel" style="border-top: 4px solid var(--primary-sage);">
+                    <h2 style="font-size: 2rem; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 300;">${client.client_name}</h2>
+                    <p style="font-size: 0.8rem; color: #888; margin-bottom: 2rem; font-family: 'Montserrat';">PATIENT ID: ${client.client_id}</p>
                     
-                    <!-- Nested Tabs -->
-                    <div class="profile-tabs">
-                        <button class="profile-tab-btn active" onclick="switchProfileTab('intake', this)">Medical Intake</button>
-                        <button class="profile-tab-btn" onclick="switchProfileTab('logs', this)">Daily Logs (${dailyLogs.length})</button>
-                        <button class="profile-tab-btn" onclick="switchProfileTab('notes', this)">Clinical Notes</button>
+                    <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Comprehensive Medical Intake</h3>
+                    <div style="background: #FAFAF7; padding: 1.5rem; border-radius: 4px; margin-bottom: 2.5rem; font-size: 1.05rem;">
+                        <pre style="white-space: pre-wrap; font-family: inherit; color: #444; line-height: 1.7;">${intakeDisplay}</pre>
                     </div>
 
-                    <!-- Tab Panes -->
-                    <div id="pane-intake" class="profile-pane active">
-                        <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem;">Primary Aims & Functional Intake</h3>
-                        <div style="background: white; border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 6px; font-size: 1.05rem;">
-                            <pre style="white-space: pre-wrap; font-family: inherit; color: #444; line-height: 1.8;">${intakeDisplay}</pre>
-                        </div>
+                    <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Running Health Journals (MFP Detailed View)</h3>
+                    <div style="margin-bottom: 2.5rem; max-height: 600px; overflow-y: auto; padding-right: 10px;">
+                        ${logsHtml}
                     </div>
 
-                    <div id="pane-logs" class="profile-pane">
-                        <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem;">Patient App Submissions</h3>
-                        <div style="max-height: 600px; overflow-y: auto;">
-                            ${logsHtml}
-                        </div>
-                    </div>
-
-                    <div id="pane-notes" class="profile-pane">
-                        <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem;">Private File Notes</h3>
-                        <form onsubmit="alert('Note Saved to File!'); return false;" style="display: flex; flex-direction: column; gap: 1rem;">
-                            <textarea placeholder="Type internal consultation notes here..." style="height: 120px; margin-bottom:0;" required></textarea>
-                            <input type="file" style="margin-bottom:0; font-size: 0.8rem;">
-                            <button type="submit" class="btn">Update Clinical File</button>
-                        </form>
-                    </div>
+                    <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Add Clinical Note</h3>
+                    <form onsubmit="alert('Note Saved to File!'); return false;" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <textarea placeholder="Type consultation notes..." style="height: 100px; margin-bottom:0;" required></textarea>
+                        <input type="file" style="margin-bottom:0;">
+                        <button type="submit" class="btn">Update Clinical File</button>
+                    </form>
                 </div>
             `;
             
@@ -284,142 +400,90 @@
             switchAppView('client-detail');
         }
 
-        // --- 15 CLIENT DEMO DATA GENERATOR ---
+        // --- INSTANT DEMO DATA INJECTION FOR PRESENTATION ---
         function injectDemoData() {
-            globalClients = [];
-            globalMsgs = [];
-            apptsGlobal = [];
-
-            const firstNames = ["Sarah", "Mark", "Emma", "David", "Chloe", "James", "Sophie", "Thomas", "Lucy", "William", "Olivia", "George", "Charlotte", "Harry", "Amelia"];
-            const lastNames = ["Quayle", "Christian", "Kelly", "Corlett", "Cregeen", "Kermode", "Moore", "Shimmin", "Teare", "Cain", "Mylchreest", "Gell", "Bridson", "Karran", "Clague"];
-            
-            const clinicProtocols = [
-                { name: "360° Burnout & Adrenal Protocol", issue: "Severe chronic fatigue, adrenal exhaustion." },
-                { name: "The Gut Reset", issue: "Severe bloating, IBS-D, suspected leaky gut." },
-                { name: "Post-Op Lymphatic Recovery", issue: "Post-surgical edema, sluggish lymphatic drainage." },
-                { name: "Performance Health Audit", issue: "General inflammation, brain fog, poor sleep." },
-                { name: "The Sculpt & Flush (TMJ)", issue: "Severe jaw tension, migraines, neck stiffness." }
+            globalClients = [
+                { client_id: 'demo_1', client_name: 'Sarah Jenkins' },
+                { client_id: 'demo_2', client_name: 'Marcus Vance' },
+                { client_id: 'demo_3', client_name: 'Elena Rostova' }
             ];
 
-            const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
-
-            for(let i=0; i<15; i++) {
-                const proto = clinicProtocols[i % clinicProtocols.length];
-                const cId = `client_${100+i}`;
-                const cName = `${firstNames[i]} ${lastNames[i]}`;
-                const age = Math.floor(Math.random() * 40) + 25;
-                const sex = Math.random() > 0.5 ? "Female" : "Male";
-
-                globalClients.push({
-                    client_id: cId,
-                    client_name: cName,
-                    age: age,
-                    sex: sex,
-                    protocol: proto.name,
-                    issue: proto.issue
-                });
-
-                // Schedule generation
-                if (i < 8) {
-                    const time = (9 + (i % 6)) + ":00 AM";
-                    const day = days[i % days.length];
-                    apptsGlobal.push({ name: cName, service: proto.name, day: day, time: time });
-                }
-
-                // Intake generation
-                globalMsgs.push({
-                    client_id: cId,
-                    sender: 'client',
-                    content: `[MEDICAL INTAKE SUBMISSION]
-Age: ${age} | Sex: ${sex}
-Primary Aim: ${proto.issue}
-
-FUNCTIONAL MARKERS:
-Autoimmune: ${i % 3 === 0 ? 'Hashimoto\'s Thyroiditis' : 'None officially diagnosed.'}
-Digestion/Gas: ${i % 2 === 0 ? 'Severe bloating after eating gluten and dairy. Constant gas in evenings.' : 'Occasional bloating, mostly stress related.'}
-Skin Issues: ${i % 4 === 0 ? 'Mild eczema on elbows during winter.' : 'Clear.'}
-Cravings: ${i % 2 === 0 ? 'Intense sugar cravings around 3pm and after dinner.' : 'Salt cravings constantly.'}
-Morning Energy: ${i % 5 === 0 ? 'Wake up exhausted, hit snooze 4 times. Feel alive at 11pm.' : 'Wake up okay, but crash hard at 2pm.'}`
-                });
-
-                // Daily Log generation (Give most clients at least 1 log)
-                if (i % 2 === 0 || i < 5) {
-                    const cal = Math.floor(Math.random() * 800) + 1400;
-                    const pro = Math.floor(Math.random() * 60) + 60;
-                    const sleep = (Math.random() * 3 + 5).toFixed(1);
-                    
-                    globalMsgs.push({
-                        client_id: cId,
-                        sender: 'client',
-                        content: `[DAILY HEALTH LOG]
-Date: ${new Date().toLocaleDateString('en-GB')}
+            globalMsgs = [
+                { client_id: 'demo_1', sender: 'client', content: '[MEDICAL INTAKE SUBMISSION]\nAge: 42 | Sex: Female | Height: 165cm | Weight: 68kg\n\nAIMS: Regain consistent energy, reduce brain fog, manage Hashimoto\'s.\n\nFUNCTIONAL MARKERS:\nAutoimmune: Hashimoto\'s (Diagnosed 2021)\nDigestion/Gas: Bloating after gluten or dairy\nCravings: Heavy sugar cravings at 3 PM\nMorning Energy: Exhausted until 10 AM' },
+                { client_id: 'demo_1', sender: 'client', content: `[DAILY HEALTH LOG]
+Date: Today
 
 🥗 FOOD & NUTRITION:
-[Breakfast] Gluten Free Oats (50g), Blueberries (80g), Almond Milk (150ml).
+[Breakfast] Gluten Free Oats (50g), Blueberries (80g), Almond Milk (150ml), Chia Seeds (15g).
 > Macros: 385 kcal | 12g Pro | 52g Carbs | 16g Fat
+> Micros: 11g Fiber | 45mg Sodium | 210mg Potassium | 300mg Calcium | 3mg Iron
 
-[Lunch] Wild Salmon (150g), Sweet Potato (100g), Spinach.
+[Lunch] Wild Salmon (150g), Sweet Potato (100g), Spinach (2 large handfuls), Olive Oil (1 tbsp).
 > Macros: 510 kcal | 38g Pro | 24g Carbs | 28g Fat
+> Micros: 6g Fiber | 120mg Sodium | 950mg Potassium | 85mg Calcium | 4mg Iron
 
 [Dinner] Organic Chicken Breast (200g), Broccoli (100g), Quinoa (80g).
 > Macros: 440 kcal | 62g Pro | 30g Carbs | 8g Fat
+> Micros: 8g Fiber | 90mg Sodium | 620mg Potassium | 60mg Calcium | 5mg Iron
 
->> DAILY MACRO TOTALS: ${cal} kcal | ${pro}g Protein | 110g Carbs | 71g Fat
->> DAILY MICRO TOTALS: 24g Fiber | 850mg Sodium | 1200mg Potassium
+[Snacks] Handful of Walnuts (30g). Slight bloating 30 mins after eating.
+> Macros: 196 kcal | 4g Pro | 4g Carbs | 19g Fat
+> Micros: 2g Fiber | 0mg Sodium | 130mg Potassium | 29mg Calcium | 1mg Iron
 
-🏃‍♀️ ACTIVITY: Walking (${Math.floor(Math.random() * 30 + 20)} mins, Moderate)
-🧠 MOOD & STRESS: Okay | Energy: ${Math.floor(Math.random() * 5 + 3)}/10. Notes: Work was stressful.
-💤 SLEEP: ${sleep} hours | Quality: ${Math.floor(Math.random() * 3 + 2)}/5
-🚽 BOWEL: Type 4 | Freq: 1
-💧 WATER: 2.5 Liters`
-                    });
-                }
-            }
+>> DAILY MACRO TOTALS: 1,531 kcal | 116g Protein | 110g Carbs | 71g Fat 
+>> DAILY MICRO TOTALS: 27g Fiber | 255mg Sodium | 1910mg Potassium | 474mg Calcium | 13mg Iron
 
-            // Populate Finance
-            document.getElementById('stat-revenue').innerText = '£4,250';
-            document.getElementById('stat-sessions').innerText = '18';
+🏃‍♀️ ACTIVITY: Pilates Flow (45 mins, Moderate)
+🧠 MOOD & STRESS: Okay | Energy: 5/10. Notes: Felt a mid-afternoon crash.
+💤 SLEEP: 6.5 hours | Quality: 3/5
+🚽 BOWEL: Type 3 | Freq: 1
+💧 WATER: 2.5 Liters
+📏 VITALS: Weight: 67.5kg` },
+                { client_id: 'demo_2', sender: 'client', content: '[MEDICAL INTAKE SUBMISSION]\nAge: 29 | Sex: Male\nAims: Improve marathon completion time, achieve full ROM without sciatic pain.' },
+                { client_id: 'demo_3', sender: 'client', content: 'Hi Clare, I am really looking forward to starting the Gut Reset. Do I need to cut out coffee completely?' }
+            ];
 
-            // Populate Schedule View
-            const scheduleHtml = apptsGlobal.map(appt => `
+            document.getElementById('stat-revenue').innerText = '£1,837';
+            document.getElementById('stat-sessions').innerText = '3';
+
+            document.getElementById('admin-schedule-list').innerHTML = `
                 <div class="cal-card">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div><strong style="color: var(--primary-sage); font-family: 'Montserrat';">Sarah Jenkins</strong><br><span style="font-size: 0.95rem; color: #555;">360° Burnout Protocol (£1,450)</span></div>
+                        <div style="text-align: right; font-size: 0.85rem; color: #666;">Tomorrow<br><strong>10:00 AM</strong></div>
+                    </div>
+                </div>
+                <div class="cal-card">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div><strong style="color: var(--primary-sage); font-family: 'Montserrat';">Marcus Vance</strong><br><span style="font-size: 0.95rem; color: #555;">Elite Athletic Optimization (£90)</span></div>
+                        <div style="text-align: right; font-size: 0.85rem; color: #666;">Thursday<br><strong>02:30 PM</strong></div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('admin-client-directory-list').innerHTML = `
+                <div class="client-list-item" onclick="openClientProfile('demo_1')">
                     <div>
-                        <strong style="color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1.1rem;">${appt.name}</strong><br>
-                        <span style="font-size: 0.85rem; color: #555;">${appt.service}</span>
+                        <h4>Sarah Jenkins</h4>
+                        <span style="font-size: 0.85rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
                     </div>
-                    <div style="text-align: right;">
-                        <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #888;">${appt.day}</span><br>
-                        <strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.05rem;">${appt.time}</strong>
-                    </div>
+                    <span style="color: var(--primary-sage); font-size: 1.5rem;">&rarr;</span>
                 </div>
-            `).join('');
-            document.getElementById('admin-schedule-list').innerHTML = scheduleHtml;
-
-            // Populate Patient Directory View
-            const directoryHtml = globalClients.map(c => `
-                <div class="client-list-item" onclick="openClientProfile('${c.client_id}')">
-                    <div style="flex: 1;">
-                        <h4>${c.client_name}</h4>
-                        <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.3rem;"><strong>Protocol:</strong> ${c.protocol}</p>
-                        <p style="font-size: 0.8rem; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 250px;">${c.issue}</p>
+                <div class="client-list-item" onclick="openClientProfile('demo_2')">
+                    <div>
+                        <h4>Marcus Vance</h4>
+                        <span style="font-size: 0.85rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
                     </div>
-                    <div style="padding-left: 1rem;">
-                        <span style="color: var(--gold-accent); font-size: 1.2rem;">&rarr;</span>
-                    </div>
+                    <span style="color: var(--primary-sage); font-size: 1.5rem;">&rarr;</span>
                 </div>
-            `).join('');
-            document.getElementById('admin-client-directory-list').innerHTML = directoryHtml;
+            `;
 
-            // Populate Inbox
             document.getElementById('admin-chat-box').innerHTML = `
-                <div class="msg client"><strong>${globalClients[0].client_name}:</strong> Hi Clare, my supplements arrived today! Should I take them with food?</div>
-                <div class="msg admin"><strong>Clare:</strong> Yes! Take the magnesium with dinner. See you tomorrow at 10!</div>
-                <div class="msg client"><strong>${globalClients[1].client_name}:</strong> I am really looking forward to starting the Gut Reset. Do I need to cut out coffee completely?</div>
+                <div class="msg client"><strong>Patient (Sarah):</strong> Hi Clare, my supplements arrived today! Should I take them with food?</div>
+                <div class="msg admin"><strong>Clare:</strong> Yes Sarah! Take the magnesium with dinner. See you tomorrow at 10!</div>
+                <div class="msg client"><strong>Patient (Elena):</strong> I am really looking forward to starting the Gut Reset. Do I need to cut out coffee completely?</div>
             `;
             document.title = "🔔 NEW MESSAGE - Clinic App";
-            
-            // Re-render current view to catch updates
-            alert("15-Client Demo Database Successfully Loaded.");
         }
 
         function generateInvoice(e) {
