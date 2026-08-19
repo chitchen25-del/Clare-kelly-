@@ -73,7 +73,7 @@
         
         .image-arch-container { position: relative; border-radius: 200px 200px 10px 10px; overflow: hidden; box-shadow: 0 35px 70px rgba(9, 93, 40, 0.15); border: 1px solid var(--secondary-sand); background-color: var(--secondary-sand); }
         .image-arch { width: 100%; height: 500px; object-fit: cover; display: block; }
-        .image-floating-badge { position: absolute; bottom: 25px; left: 25px; right: 25px; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(12px); padding: 1.3rem 1.6rem; border-radius: 6px; border: 1px solid var(--secondary-sand); }
+        .image-floating-badge { position: absolute; bottom: 25px; left: 25px; right: 25px; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(12px); padding: 1.3rem 1.6rem; border-radius: 6px; border: 1px solid rgba(239, 236, 230, 0.8); }
         .image-floating-badge span { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); display: block; margin-bottom: 0.3rem; font-weight: 700; }
         .image-floating-badge p { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--text-main); font-style: italic; margin: 0; }
         
@@ -245,7 +245,6 @@
     </script>
 
     <nav>
-        <!-- NEW PREMIUM BRAND LOGO -->
         <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="openScreen('screen-home')">
         
         <div class="desktop-nav-links">
@@ -276,6 +275,34 @@
             <h1>Healing From The Inside Out</h1>
             <p>"Imagine Life Without Pain."</p>
             <button type="button" class="btn" onclick="openScreen('screen-register')">Make An Appointment</button>
+        </section>
+
+        <section class="section">
+            <div class="section-image-wrapper">
+                <div class="image-arch-container">
+                    <!-- RESTORED UNSPLASH PHOTO -->
+                    <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Hands holding flower - natural healing" class="image-arch">
+                    <div class="image-floating-badge">
+                        <span>Evidence-Informed Care</span>
+                        <p>Root-cause functional protocols designed for rapid, sustainable recovery.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-text">
+                <span class="section-subtitle">Our Philosophy</span>
+                <h2>Results in a Realistic Timeframe</h2>
+                <p style="margin-bottom: 1.5rem; color: var(--sage-hover);">The main aim of my clinic is to get results, in a quick and realistic timeframe. If you suffer from pain or discomfort, then I am here to help.</p>
+                <p style="color: var(--sage-hover); margin-bottom: 2.5rem;">I offer a holistic approach to modern-day aches and pains. The Natural Healing Clinic is complementary to mainstream medical protocols.</p>
+                <h4 style="margin-bottom: 1rem; color: var(--primary-sage); font-family: 'Montserrat', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;">Do You Need Help With:</h4>
+                <ul class="help-list">
+                    <li>Pain Management & Muscular Pain</li>
+                    <li>Neck, Shoulder or Back Pain</li>
+                    <li>Chronic Fatigue & Long Covid</li>
+                    <li>Fibromyalgia & Sports Injuries</li>
+                    <li>Migraines & Digestive Complaints</li>
+                </ul>
+            </div>
         </section>
 
         <!-- THE CLINICAL PATHWAY SECTION -->
@@ -419,7 +446,6 @@
         </div>
         <section class="section">
             <div class="section-image-wrapper">
-                <!-- VIDEO PLAYER -->
                 <video width="100%" controls playsinline style="border-radius: 12px; box-shadow: 0 25px 60px rgba(9, 93, 40, 0.15); object-fit: cover; max-height: 600px; background: var(--text-main);">
                     <source src="./clare-video.mp4.MOV">
                     Your browser does not support the video tag.
@@ -557,6 +583,7 @@
                                 <h5>1. Breakfast</h5>
                                 <textarea id="log-brk-desc" placeholder="Exact foods & weights"></textarea>
                                 
+                                <!-- 4-Column Macro Grid -->
                                 <div class="macro-grid">
                                     <div><label>KCAL</label><input type="number" id="log-brk-cal" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                     <div><label>PRO (g)</label><input type="number" id="log-brk-pro" placeholder="0" oninput="window.updateDailyTotals()"></div>
@@ -564,6 +591,7 @@
                                     <div><label>FAT (g)</label><input type="number" id="log-brk-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                 </div>
                                 
+                                <!-- Expandable 5-Column Micro Grid (With Fiber) -->
                                 <details style="outline: none;">
                                     <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: var(--sage-hover); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 700;">+ Edit Fiber & Micronutrients</summary>
                                     <div class="micro-grid">
