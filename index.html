@@ -12,6 +12,8 @@
     <link rel="apple-touch-icon" href="./logo.png">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
+    <!-- Barcode Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -70,7 +72,6 @@
         .section-text { flex: 1.2; min-width: 280px; }
         .section-image-wrapper { flex: 1; min-width: 280px; position: relative; }
         
-        /* RESTORED HANDS & FLOWER PHOTO */
         .image-arch-container { position: relative; border-radius: 200px 200px 2px 2px; overflow: hidden; box-shadow: 0 40px 80px rgba(9, 93, 40, 0.1); border: 1px solid var(--secondary-sand); background-color: var(--secondary-sand); }
         .image-arch { width: 100%; height: 550px; object-fit: cover; display: block; }
         
@@ -166,6 +167,9 @@
         .premium-list-item:hover { background-color: var(--bg-color); border-color: var(--primary-sage); }
         .premium-list-item strong { color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1rem; font-weight: 600;}
         .premium-list-item span { font-size: 0.8rem; color: #666; font-family: 'Montserrat'; display: block; margin-top: 0.4rem; line-height: 1.5; }
+
+        /* SCANNER WINDOW */
+        #reader { width: 100%; display: none; margin-bottom: 1.5rem; border-radius: 8px; overflow: hidden; border: 1px solid var(--primary-sage); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.1); }
 
         footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); color: #555; background: var(--card-bg); display: flex; flex-direction: column; text-align: center; gap: 2.5rem; max-width: 1300px; margin: 0 auto; }
         .footer-logo-wrapper { width: 100%; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 3rem; margin-bottom: 3rem; margin-top: 4rem; text-align: center; }
@@ -450,21 +454,25 @@
                 <!-- LUXURY MFP STYLE HEALTH JOURNAL -->
                 <div class="dash-card">
                     <h3>Daily Health Journal</h3>
-                    <p style="font-size: 0.95rem; color: #555; margin-bottom: 2.5rem;">Log your daily metrics. Search the live database to track precise food weights, macronutrients, and key micronutrients.</p>
+                    <p style="font-size: 0.95rem; color: #555; margin-bottom: 2.5rem;">Log your daily metrics. Search the database or scan a barcode to automatically track exact macros and key micronutrients.</p>
                     
                     <form onsubmit="return submitDailyLog(event)">
                         
-                        <!-- Food (Live Database & Responsive Matrix) -->
+                        <!-- Food (Live Database, Barcode & Responsive Matrix) -->
                         <div class="journal-accordion" onclick="toggleAccordion('journal-food')"><span>🥗 Advanced Nutrition Tracker</span> <span class="icon">+</span></div>
                         <div class="journal-panel" id="journal-food">
                             
-                            <!-- Live API Search Tool -->
+                            <!-- Live API Search Tool & Barcode Scanner -->
                             <div style="background: var(--bg-color); padding: 2rem 1.5rem; border-radius: 2px; border: 1px solid var(--secondary-sand); margin-bottom: 3rem; margin-top: 1rem;">
-                                <h4 style="font-family: 'Montserrat'; font-size: 0.85rem; color: var(--text-main); margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: 2px;">Live Food Database Search</h4>
-                                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                                    <input type="text" id="food-search-query" placeholder="Search database (e.g. Oats, Salmon)..." style="margin-bottom: 0; background: white;">
+                                <h4 style="font-family: 'Montserrat'; font-size: 0.85rem; color: var(--text-main); margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: 2px;">Live Food Database & Barcode</h4>
+                                
+                                <div style="display: flex; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                                    <input type="text" id="food-search-query" placeholder="Search database (e.g. Oats)..." style="margin-bottom: 0; background: white; flex: 1; min-width: 180px;">
                                     <button type="button" class="btn" style="padding: 0 1.5rem;" onclick="window.searchFood()">Search</button>
+                                    <button type="button" class="btn btn-outline" style="padding: 0 1.5rem; background: white;" onclick="window.startBarcodeScanner()">📷 Scan Barcode</button>
                                 </div>
+                                
+                                <div id="reader"></div>
                                 <div id="food-search-results" style="max-height: 250px; overflow-y: auto;"></div>
                                 <div id="food-selection-panel" style="display: none;"></div>
                             </div>
@@ -801,7 +809,63 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
             return false;
         };
 
-        // --- OPEN FOOD FACTS API INTEGRATION (MACROS + MICROS + FIBER) ---
+        // --- OPEN FOOD FACTS API INTEGRATION & BARCODE SCANNER ---
+        window.startBarcodeScanner = function() {
+            const readerDiv = document.getElementById('reader');
+            if(readerDiv.style.display === 'block') {
+                if(window.html5QrCode) {
+                    window.html5QrCode.stop().then(() => { readerDiv.style.display = 'none'; });
+                }
+                return;
+            }
+            
+            readerDiv.style.display = 'block';
+            window.html5QrCode = new Html5Qrcode("reader");
+            window.html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: {width: 250, height: 150} },
+                (decodedText) => {
+                    window.html5QrCode.stop().then(() => {
+                        readerDiv.style.display = 'none';
+                        window.lookupBarcode(decodedText);
+                    });
+                },
+                (errorMessage) => { /* ignore minor scan errors */ }
+            ).catch(err => {
+                alert("Camera access error. Ensure you are on HTTPS and have granted permissions.");
+                readerDiv.style.display = 'none';
+            });
+        };
+
+        window.lookupBarcode = async function(barcode) {
+            const resBox = document.getElementById('food-search-results');
+            resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Looking up barcode...</p>';
+            try {
+                const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`);
+                const data = await res.json();
+                if(data.status === 1 && data.product) {
+                    const p = data.product;
+                    const name = p.product_name || 'Unknown Food';
+                    const kcal = p.nutriments ? (p.nutriments['energy-kcal_100g'] || 0) : 0;
+                    const pro = p.nutriments ? (p.nutriments.proteins_100g || 0) : 0;
+                    const car = p.nutriments ? (p.nutriments.carbohydrates_100g || 0) : 0;
+                    const fat = p.nutriments ? (p.nutriments.fat_100g || 0) : 0;
+                    const fib = p.nutriments ? (p.nutriments.fiber_100g || 0) : 0;
+                    const sod = p.nutriments ? ((p.nutriments.sodium_100g || 0) * 1000) : 0;
+                    const pot = p.nutriments ? ((p.nutriments.potassium_100g || 0) * 1000) : 0;
+                    const calc = p.nutriments ? ((p.nutriments.calcium_100g || 0) * 1000) : 0;
+                    const iron = p.nutriments ? ((p.nutriments.iron_100g || 0) * 1000) : 0;
+                    
+                    const safeName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                    window.selectFood(safeName, kcal, pro, car, fat, fib, sod, pot, calc, iron);
+                } else {
+                    resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Product not found in database.</p>';
+                }
+            } catch(err) {
+                resBox.innerHTML = '<p style="color:red; font-size:0.9rem;">Error connecting to food database.</p>';
+            }
+        };
+
         window.searchFood = async function() {
             const query = document.getElementById('food-search-query').value.trim();
             if(!query) return;
