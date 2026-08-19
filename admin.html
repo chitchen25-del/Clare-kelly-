@@ -273,7 +273,7 @@
         async function loadSchedule(db) {
             const container = document.getElementById('admin-schedule-list');
             const { data: appts } = await db.from('appointments').select('*').order('appointment_time', { ascending: true });
-            if(!appts || appts.length === 0) { container.innerHTML = '<p style="color: #666; font-size: 1rem;">No upcoming bookings found.</p>'; return; }
+            if(!appts || appts.length === 0) { container.innerHTML = '<p style="color: #666; font-size: 0.95rem;">No upcoming bookings found.</p>'; return; }
 
             container.innerHTML = appts.map(a => `
                 <div class="cal-card">
