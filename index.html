@@ -12,11 +12,11 @@
     <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=180&h=180&fit=crop">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* VIBRANT GREEN PALETTE */
+            /* VIBRANT GREEN LUXURY PALETTE */
             --bg-color: #f3f1ef;         
             --card-bg: #ffffff;          
             --text-main: #095d28;        
@@ -29,195 +29,171 @@
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Cormorant Garamond', serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.8; font-size: 1.15rem; overflow-x: hidden; }
-        h1, h2, h3, h4, .btn, .price-amount { font-family: 'Montserrat', sans-serif; }
+        
+        /* Editorial Typography */
+        h1, h2 { font-family: 'Cormorant Garamond', serif; font-weight: 400; color: var(--text-main); line-height: 1.2; }
+        h3, h4, h5, .btn, .price-amount, .section-subtitle, label { font-family: 'Montserrat', sans-serif; }
         
         /* Luxury Navigation */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--secondary-sand); box-shadow: 0 4px 30px rgba(9, 93, 40, 0.03); }
+        .nav-brand-logo { height: 50px; width: auto; cursor: pointer; transition: opacity 0.3s ease; object-fit: contain; }
+        .nav-brand-logo:hover { opacity: 0.8; }
         
-        /* Premium Logo Styling */
-        .nav-brand-logo { height: 60px; width: auto; cursor: pointer; transition: opacity 0.3s ease, transform 0.3s ease; object-fit: contain; }
-        .nav-brand-logo:hover { opacity: 0.85; transform: scale(0.98); }
-        .portal-logo { height: 70px; margin: 0 auto 2rem auto; display: block; object-fit: contain; }
-        .footer-logo-wrapper { width: 100%; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 3rem; margin-bottom: 3rem; text-align: center; }
-        .footer-brand-logo { height: 85px; object-fit: contain; opacity: 0.9; }
-
-        .desktop-nav-links { display: none; align-items: center; gap: 1.5rem; }
-        .nav-link-text { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); cursor: pointer; transition: color 0.3s; }
-        .nav-link-text:hover { color: var(--gold-accent); }
+        .desktop-nav-links { display: none; align-items: center; gap: 2rem; }
+        .nav-link-text { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); cursor: pointer; transition: color 0.3s; }
+        .nav-link-text:hover { color: var(--primary-sage); }
         .mobile-menu-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 6px; padding: 0.5rem; z-index: 102; }
-        .mobile-menu-btn span { display: block; width: 26px; height: 2px; background-color: var(--primary-sage); transition: transform 0.3s ease; }
+        .mobile-menu-btn span { display: block; width: 30px; height: 1px; background-color: var(--text-main); transition: transform 0.3s ease; }
 
-        .mobile-drawer { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background-color: var(--bg-color); z-index: 101; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2rem; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding: 2rem; border-left: 1px solid var(--secondary-sand); }
+        .mobile-drawer { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background-color: var(--card-bg); z-index: 101; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2.5rem; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding: 2rem; border-left: 1px solid var(--secondary-sand); }
         .mobile-drawer.open { right: 0; }
-        .mobile-drawer-link { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 500; text-transform: uppercase; letter-spacing: 3px; color: var(--primary-sage); text-decoration: none; cursor: pointer; transition: color 0.3s; }
-        .mobile-drawer-link:hover { color: var(--gold-accent); }
+        .mobile-drawer-link { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 500; text-transform: uppercase; letter-spacing: 3px; color: var(--text-main); text-decoration: none; cursor: pointer; transition: color 0.3s; }
+        .mobile-drawer-link:hover { color: var(--primary-sage); }
 
-        .btn { display: inline-block; padding: 1rem 2.2rem; text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border-radius: 6px; cursor: pointer; border: none; background-color: var(--primary-sage); color: white; transition: all 0.3s ease; text-align: center; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(13, 155, 70, 0.2); }
-        .btn:active { background-color: var(--sage-hover); transform: scale(0.98); }
-        .btn-outline { border: 1px solid var(--primary-sage); color: var(--primary-sage); background: transparent; box-shadow: none; }
-        .btn-outline:active { background-color: var(--primary-sage); color: white; }
+        /* Premium Buttons */
+        .btn { display: inline-block; padding: 1.1rem 2.5rem; text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border-radius: 2px; cursor: pointer; border: 1px solid var(--primary-sage); background-color: var(--primary-sage); color: white; transition: all 0.3s ease; text-align: center; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(13, 155, 70, 0.15); }
+        .btn:hover { background-color: var(--sage-hover); border-color: var(--sage-hover); color: white; transform: translateY(-2px); box-shadow: 0 15px 35px rgba(9, 93, 40, 0.2); }
+        .btn-outline { background-color: transparent; color: var(--text-main); border-color: var(--secondary-sand); box-shadow: none; }
+        .btn-outline:hover { border-color: var(--primary-sage); color: var(--primary-sage); background: transparent; box-shadow: none; }
 
-        .page-screen { display: none; animation: fadeIn 0.4s ease; }
+        .page-screen { display: none; animation: fadeIn 0.5s ease; }
         .page-screen.visible { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Cinematic Hero Section */
-        .hero { text-align: center; padding: 9rem 6%; background: linear-gradient(rgba(243, 241, 239, 0.92), rgba(243, 241, 239, 0.98)), url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover; border-bottom: 1px solid var(--secondary-sand); }
-        .hero h1 { font-size: 3rem; font-weight: 400; margin-bottom: 1.2rem; letter-spacing: -0.5px; color: var(--text-main); line-height: 1.2; }
-        .hero p { font-size: 1.3rem; margin-bottom: 2.5rem; color: var(--primary-sage); max-width: 650px; margin-left: auto; margin-right: auto; font-style: italic; }
+        .hero { text-align: center; padding: 10rem 6%; background: linear-gradient(rgba(243, 241, 239, 0.93), rgba(243, 241, 239, 0.98)), url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover; border-bottom: 1px solid var(--secondary-sand); }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1.2rem; letter-spacing: -0.5px; }
+        .hero p { font-size: 1.3rem; margin-bottom: 3rem; color: var(--primary-sage); max-width: 650px; margin-left: auto; margin-right: auto; font-style: italic; }
 
         /* Layouts & Images */
-        .section { padding: 7rem 6%; display: flex; flex-wrap: wrap; align-items: center; gap: 4rem; max-width: 1250px; margin: 0 auto; }
+        .section { padding: 8rem 6%; display: flex; flex-wrap: wrap; align-items: center; gap: 5rem; max-width: 1250px; margin: 0 auto; }
         .section-text { flex: 1.2; min-width: 280px; }
         .section-image-wrapper { flex: 1; min-width: 280px; position: relative; }
         
-        .image-arch-container { position: relative; border-radius: 200px 200px 10px 10px; overflow: hidden; box-shadow: 0 35px 70px rgba(9, 93, 40, 0.15); border: 1px solid var(--secondary-sand); background-color: var(--secondary-sand); }
-        .image-arch { width: 100%; height: 500px; object-fit: cover; display: block; }
-        .image-floating-badge { position: absolute; bottom: 25px; left: 25px; right: 25px; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(12px); padding: 1.3rem 1.6rem; border-radius: 6px; border: 1px solid rgba(239, 236, 230, 0.8); }
-        .image-floating-badge span { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); display: block; margin-bottom: 0.3rem; font-weight: 700; }
-        .image-floating-badge p { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--text-main); font-style: italic; margin: 0; }
+        /* RESTORED HANDS & FLOWER PHOTO */
+        .image-arch-container { position: relative; border-radius: 200px 200px 2px 2px; overflow: hidden; box-shadow: 0 40px 80px rgba(9, 93, 40, 0.1); border: 1px solid var(--secondary-sand); background-color: var(--secondary-sand); }
+        .image-arch { width: 100%; height: 550px; object-fit: cover; display: block; }
         
-        .section-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 3px; color: var(--gold-accent); margin-bottom: 1.2rem; display: block; font-weight: 700; }
-        h2 { font-size: 2.5rem; font-weight: 400; margin-bottom: 1.5rem; line-height: 1.2; color: var(--text-main); }
+        .image-floating-badge { position: absolute; bottom: -20px; left: 25px; right: 25px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px); padding: 1.8rem; border-radius: 2px; border: 1px solid var(--secondary-sand); box-shadow: 0 15px 40px rgba(9, 93, 40, 0.05); }
+        .image-floating-badge span { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); display: block; margin-bottom: 0.5rem; font-weight: 700; }
+        .image-floating-badge p { font-size: 1.1rem; color: var(--text-main); font-style: italic; margin: 0; }
         
+        .section-subtitle { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--primary-sage); margin-bottom: 1.2rem; display: block; font-weight: 600; border-bottom: 1px solid var(--gold-accent); display: inline-block; padding-bottom: 0.3rem;}
+        h2 { font-size: 2.8rem; margin-bottom: 1.5rem; }
+        
+        .help-list { column-count: 1; list-style: none; color: var(--text-main); font-size: 1.1rem; margin-top: 2rem; }
+        .help-list li { margin-bottom: 1rem; position: relative; padding-left: 2rem; }
+        .help-list li::before { content: "—"; position: absolute; left: 0; color: var(--gold-accent); font-weight: bold; }
+
         /* The Clinical Pathway Section */
-        .pathway-section { padding: 7rem 6%; background-color: var(--card-bg); border-top: 1px solid var(--secondary-sand); }
-        .pathway-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; max-width: 1200px; margin: 0 auto; }
-        .pathway-card { padding: 2.5rem; border: 1px solid var(--secondary-sand); border-radius: 8px; transition: transform 0.3s ease, border-color 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.01); background: var(--bg-color); }
-        .pathway-card:hover { border-color: var(--primary-sage); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(9, 93, 40, 0.08); }
-        .pathway-card h4 { color: var(--text-main); font-size: 1.15rem; margin-bottom: 0.8rem; line-height: 1.4; font-weight: 700; }
-        .pathway-card p { color: var(--sage-hover); font-size: 0.95rem; line-height: 1.6; margin: 0;}
-        .pathway-number { font-family: 'Montserrat'; font-size: 0.75rem; color: var(--gold-accent); font-weight: 700; letter-spacing: 2px; margin-bottom: 1rem; display: block; }
+        .pathway-section { padding: 8rem 6%; background-color: var(--card-bg); border-top: 1px solid var(--secondary-sand); }
+        .pathway-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 0 auto; }
+        .pathway-card { padding: 3rem 2.5rem; border: 1px solid var(--secondary-sand); border-radius: 2px; transition: transform 0.4s ease, border-color 0.4s ease; background: var(--card-bg); position: relative; }
+        .pathway-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: transparent; transition: background 0.4s; }
+        .pathway-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(9, 93, 40, 0.05); }
+        .pathway-card:hover::before { background: var(--primary-sage); }
+        .pathway-card h4 { color: var(--text-main); font-size: 1.2rem; margin-bottom: 1rem; line-height: 1.4; font-weight: 600; letter-spacing: 0.5px; }
+        .pathway-card p { color: #555; font-size: 1rem; line-height: 1.7; margin: 0;}
+        .pathway-number { font-family: 'Cormorant Garamond'; font-size: 2.5rem; color: var(--secondary-sand); margin-bottom: 1rem; display: block; line-height: 1; font-style: italic; }
 
         /* Pricing */
-        .pricing-section { padding: 7rem 6%; border-top: 1px solid var(--secondary-sand); background-color: var(--bg-color); }
+        .pricing-section { padding: 8rem 6%; border-top: 1px solid var(--secondary-sand); background-color: var(--bg-color); }
         .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 4rem auto 0 auto; }
-        .price-card { background: var(--card-bg); border: 1px solid var(--secondary-sand); border-radius: 12px; padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 15px 40px rgba(9, 93, 40, 0.05); }
-        .price-card.featured { border-color: var(--primary-sage); box-shadow: 0 25px 60px rgba(9, 93, 40, 0.1); }
-        .featured-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--primary-sage); color: white; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; padding: 0.4rem 1.5rem; border-radius: 20px; font-family: 'Montserrat', sans-serif; white-space: nowrap; font-weight: 600; }
-        .guarantee-badge { display: block; margin: 1.8rem auto; padding: 1rem; background: rgba(16, 211, 88, 0.1); border-radius: 6px; font-size: 0.95rem; color: var(--text-main); font-style: italic; border: 1px dashed var(--primary-sage); }
+        .price-card { background: var(--card-bg); border: 1px solid var(--secondary-sand); border-radius: 2px; padding: 4rem 3rem; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 15px 40px rgba(9, 93, 40, 0.02); }
+        .price-card.featured { border-color: var(--primary-sage); box-shadow: 0 30px 60px rgba(9, 93, 40, 0.08); }
+        .featured-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: white; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; padding: 0.5rem 1.5rem; border-radius: 2px; font-family: 'Montserrat', sans-serif; font-weight: 600; }
         .price-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
-        .price-duration { font-size: 0.75rem; color: var(--primary-sage); margin-bottom: 1.8rem; text-transform: uppercase; letter-spacing: 2px; font-family: 'Montserrat', sans-serif; font-weight: 500; }
-        .price-amount { font-size: 2.8rem; font-weight: 400; color: var(--text-main); margin-bottom: 2rem; }
-        .price-amount span { font-size: 1rem; color: var(--primary-sage); text-decoration: line-through; margin-left: 0.5rem; font-family: 'Montserrat', sans-serif; }
-        .price-features { list-style: none; text-align: left; margin-bottom: 3rem; font-size: 1.05rem; color: var(--sage-hover); }
-        .price-features li { margin-bottom: 1.2rem; padding-left: 1.8rem; position: relative; line-height: 1.5; }
-        .price-features li::before { content: "—"; position: absolute; left: 0; color: var(--gold-accent); font-weight: bold; }
-
-        /* Service Menu */
-        .service-menu-section { padding: 7rem 6%; background-color: var(--card-bg); border-top: 1px solid var(--secondary-sand); }
-        .menu-category-title { font-size: 1.8rem; font-weight: 400; margin-bottom: 3rem; color: var(--text-main); text-align: center; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1.2rem; max-width: 900px; margin-left: auto; margin-right: auto; }
-        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; max-width: 1100px; margin: 0 auto 4rem auto; }
-        .menu-item { border-bottom: 1px solid var(--secondary-sand); padding-bottom: 2rem; }
-        .menu-header { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
-        .menu-header h4 { font-size: 1.2rem; font-weight: 700; color: var(--text-main); font-family: 'Montserrat', sans-serif; }
-        .menu-price { font-family: 'Montserrat', sans-serif; font-weight: 600; color: var(--primary-sage); font-size: 1.1rem; }
-        .menu-item p { color: var(--sage-hover); font-size: 1.05rem; line-height: 1.7; }
-
-        /* Journal Grid */
-        .news-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 0 auto; }
-        .news-card { background: var(--card-bg); border: 1px solid var(--secondary-sand); border-radius: 8px; padding: 3rem 2.2rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 15px 35px rgba(9, 93, 40, 0.04); transition: transform 0.3s ease; }
-        .news-card:hover { transform: translateY(-5px); border-color: var(--primary-sage); }
-        .news-meta { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-accent); margin-bottom: 1.2rem; font-family: 'Montserrat', sans-serif; font-weight: 700; }
-        .news-title { font-size: 1.5rem; font-weight: 500; margin-bottom: 1rem; line-height: 1.4; color: var(--text-main); }
-        .news-excerpt { font-size: 1.05rem; color: var(--sage-hover); margin-bottom: 2.5rem; line-height: 1.7; }
-        .news-link { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); text-decoration: none; display: inline-block; }
+        .price-duration { font-size: 0.75rem; color: var(--primary-sage); margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+        .price-amount { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--text-main); margin-bottom: 2.5rem; line-height: 1; }
+        .price-amount span { font-size: 1.2rem; color: #aaa; text-decoration: line-through; margin-left: 0.8rem; font-family: 'Montserrat', sans-serif; }
+        .price-features { list-style: none; text-align: left; margin-bottom: 3.5rem; font-size: 1.05rem; color: #555; }
+        .price-features li { margin-bottom: 1.2rem; padding-left: 1.8rem; position: relative; line-height: 1.6; }
+        .price-features li::before { content: "—"; position: absolute; left: 0; color: var(--primary-sage); }
 
         /* Forms Container */
-        .form-container { max-width: 100%; margin: 3rem 5%; background: var(--card-bg); padding: 4rem 2.5rem; border-radius: 12px; box-shadow: 0 25px 60px rgba(9, 93, 40, 0.08); border: 1px solid var(--secondary-sand); }
-        .form-container h2 { text-align: center; margin-bottom: 0.8rem; font-size: 2rem; font-weight: 400; color: var(--text-main); }
+        .form-container { max-width: 100%; margin: 3rem 5%; background: var(--card-bg); padding: 5rem 3rem; border-radius: 2px; box-shadow: 0 30px 70px rgba(9, 93, 40, 0.05); border: 1px solid var(--secondary-sand); }
+        .form-container h2 { text-align: center; margin-bottom: 1rem; }
         .form-row, .form-row.three { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
-        label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); margin-bottom: 0.6rem; font-family: 'Montserrat', sans-serif; font-weight: 700;}
+        label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); margin-bottom: 0.8rem; font-weight: 600;}
         
         /* PREMIUM INPUT STYLING */
-        input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 1.5rem; border: 1px solid transparent; border-radius: 6px; background: #F4F3EE; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
-        input:focus, select:focus, textarea:focus { background: white; border: 1px solid var(--primary-sage); box-shadow: 0 4px 15px rgba(13, 155, 70, 0.1); outline: none; }
-        textarea { resize: vertical; height: 100px; }
+        input, select, textarea { width: 100%; padding: 1.2rem; margin-bottom: 2rem; border: 1px solid var(--secondary-sand); border-radius: 2px; background: transparent; font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-sage); outline: none; box-shadow: 0 0 0 1px var(--primary-sage); }
+        textarea { resize: vertical; height: 120px; }
 
         /* Client Dashboard */
-        .dashboard-container { max-width: 1300px; margin: 3rem auto; padding: 0 5%; display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
-        .dash-card { background: var(--card-bg); padding: 3rem 2rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 40px rgba(9, 93, 40, 0.05); margin-bottom: 2.5rem; }
-        .dash-card h3 { color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-size: 1.35rem; font-weight: 500; }
+        .dashboard-container { max-width: 1300px; margin: 4rem auto; padding: 0 5%; display: grid; grid-template-columns: 1fr; gap: 3rem; }
+        .dash-card { background: var(--card-bg); padding: 3.5rem 2.5rem; border-radius: 2px; border: 1px solid var(--secondary-sand); box-shadow: 0 15px 50px rgba(9, 93, 40, 0.03); margin-bottom: 3rem; }
+        .dash-card h3 { color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem; font-size: 1.4rem; font-weight: 600; }
         
-        .chat-box { height: 260px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg-color); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; border: 1px solid var(--secondary-sand); }
-        .msg { padding: 1rem 1.2rem; border-radius: 8px; max-width: 85%; font-size: 1rem; line-height: 1.5; }
+        .chat-box { height: 300px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg-color); padding: 1.5rem; border-radius: 2px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 1rem; border: 1px solid var(--secondary-sand); }
+        .msg { padding: 1.2rem; border-radius: 2px; max-width: 85%; font-size: 1.05rem; line-height: 1.6; }
         .msg.client { background: var(--primary-sage); color: white; align-self: flex-end; }
-        .msg.admin { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; box-shadow: 0 4px 10px rgba(9, 93, 40, 0.05); color: var(--text-main); }
-
-        /* PREMIUM APP PROMO CARD */
-        .app-promo-card { background: linear-gradient(135deg, var(--primary-sage), var(--sage-hover)); color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; box-shadow: 0 15px 40px rgba(13, 155, 70, 0.25); }
-        .app-promo-card h4 { font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 0.4rem; font-weight: 600; letter-spacing: 1px; color: white; }
+        .msg.admin { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; box-shadow: 0 4px 15px rgba(9, 93, 40, 0.03); color: var(--text-main); }
 
         /* LUXURY ACCORDION STYLES */
-        .journal-accordion { background-color: white; color: var(--text-main); cursor: pointer; padding: 1.2rem 1.5rem; width: 100%; border: 1px solid var(--secondary-sand); border-radius: 8px; text-align: left; font-size: 0.9rem; font-family: 'Montserrat', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; transition: all 0.3s; box-shadow: 0 2px 10px rgba(9, 93, 40, 0.03); }
+        .journal-accordion { background-color: var(--bg-color); color: var(--text-main); cursor: pointer; padding: 1.5rem; width: 100%; border: 1px solid var(--secondary-sand); border-radius: 2px; text-align: left; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; transition: all 0.3s; }
         .journal-accordion:hover { border-color: var(--primary-sage); }
-        .journal-accordion.active { background-color: var(--primary-sage); color: white; border-color: var(--primary-sage); border-radius: 8px 8px 0 0; }
-        .journal-panel { padding: 0 1.5rem; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; border-left: 1px solid var(--secondary-sand); border-right: 1px solid var(--secondary-sand); margin-top: -0.8rem; margin-bottom: 1.5rem; border-radius: 0 0 8px 8px; border-bottom: 1px solid transparent; }
-        .journal-panel.show { padding: 2rem 1.5rem; max-height: 4000px; border-bottom: 1px solid var(--secondary-sand); box-shadow: 0 12px 30px rgba(9, 93, 40, 0.05); overflow: visible; }
+        .journal-accordion.active { background-color: var(--primary-sage); color: white; border-color: var(--primary-sage); }
+        .journal-panel { padding: 0 1.5rem; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; border-left: 1px solid var(--secondary-sand); border-right: 1px solid var(--secondary-sand); margin-top: -1rem; margin-bottom: 2rem; border-bottom: 1px solid transparent; }
+        .journal-panel.show { padding: 2.5rem 1.5rem; max-height: 4000px; border-bottom: 1px solid var(--secondary-sand); overflow: visible; }
         
         /* RESPONSIVE MFP MACRO & MICRO MATRIX */
         .macro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
         .macro-grid div { display: flex; flex-direction: column; }
-        .macro-grid label { font-size: 0.65rem; text-align: left; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 0.4rem; font-weight: 700; padding-left: 0.2rem; }
-        .macro-grid input { padding: 0.9rem 0.8rem; font-size: 1rem; text-align: left; margin-bottom: 0; font-family: 'Montserrat'; font-weight: 600; background: white; border: 1px solid var(--secondary-sand); border-radius: 6px; }
-        .macro-grid input:focus { border-color: var(--primary-sage); }
+        .macro-grid label { font-size: 0.65rem; text-align: left; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 0.5rem; font-weight: 700; }
+        .macro-grid input { padding: 0.9rem 0.8rem; font-size: 1rem; text-align: left; margin-bottom: 0; font-weight: 500; }
         
         .micro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.2rem; margin-bottom: 1.5rem; }
         .micro-grid div { display: flex; flex-direction: column; }
-        .micro-grid label { font-size: 0.6rem; text-align: left; letter-spacing: 1px; color: var(--sage-hover); margin-bottom: 0.4rem; font-weight: 600; padding-left: 0.2rem; }
-        .micro-grid input { padding: 0.8rem; font-size: 0.95rem; text-align: left; margin-bottom: 0; font-family: 'Montserrat'; background-color: var(--bg-color); border: 1px solid var(--secondary-sand); border-radius: 6px; color: var(--text-main); }
-        .micro-grid input:focus { border-color: var(--primary-sage); }
+        .micro-grid label { font-size: 0.6rem; text-align: left; letter-spacing: 1px; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 600; }
+        .micro-grid input { padding: 0.8rem; font-size: 0.95rem; text-align: left; margin-bottom: 0; background-color: var(--bg-color); }
 
-        .meal-section { border-bottom: 1px dashed var(--secondary-sand); padding-bottom: 2rem; margin-bottom: 2rem; }
-        .meal-section h5 { font-family: 'Montserrat'; font-size: 0.95rem; color: var(--primary-sage); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+        .meal-section { border-bottom: 1px solid var(--secondary-sand); padding-bottom: 2rem; margin-bottom: 2rem; }
+        .meal-section h5 { font-family: 'Montserrat'; font-size: 0.95rem; color: var(--text-main); margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 
         /* DAILY TOTALS DASHBOARDS */
-        .daily-totals-macro { background: var(--sage-hover); color: white; padding: 1.8rem 1.5rem; border-radius: 8px 8px 0 0; margin-top: 1rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; font-family: 'Montserrat'; }
+        .daily-totals-macro { background: var(--text-main); color: white; padding: 2rem; border-radius: 2px; margin-top: 1rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; font-family: 'Montserrat'; }
         .daily-totals-macro div { text-align: left; }
-        .daily-totals-macro span { font-size: 0.65rem; color: var(--secondary-sand); letter-spacing: 1.5px; display: block; margin-bottom: 0.4rem; font-weight: 600; }
+        .daily-totals-macro span { font-size: 0.65rem; color: var(--secondary-sand); letter-spacing: 2px; display: block; margin-bottom: 0.4rem; font-weight: 600; }
         
-        .daily-totals-micro { background: rgba(16, 211, 88, 0.05); color: var(--text-main); padding: 1.8rem 1.5rem; border-radius: 0 0 8px 8px; margin-bottom: 2rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; font-family: 'Montserrat'; border: 1px solid var(--primary-sage); border-top: none; }
+        .daily-totals-micro { background: var(--bg-color); color: var(--text-main); padding: 2rem; border-radius: 2px; margin-bottom: 2rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; font-family: 'Montserrat'; border: 1px solid var(--secondary-sand); border-top: none; }
         .daily-totals-micro div { text-align: left; }
-        .daily-totals-micro span { font-size: 0.65rem; color: var(--sage-hover); letter-spacing: 1px; display: block; margin-bottom: 0.3rem; font-weight: 600; }
+        .daily-totals-micro span { font-size: 0.65rem; color: var(--text-main); letter-spacing: 1.5px; display: block; margin-bottom: 0.4rem; font-weight: 600; }
 
         /* LIVE DATABASE DROPDOWN UI */
-        .premium-list-item { padding: 1.2rem; border-bottom: 1px solid var(--secondary-sand); cursor: pointer; transition: background 0.2s; border-radius: 6px; margin-bottom: 0.4rem; }
-        .premium-list-item:hover { background-color: var(--bg-color); }
-        .premium-list-item strong { color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1rem; font-weight: 700;}
-        .premium-list-item span { font-size: 0.8rem; color: var(--sage-hover); font-family: 'Montserrat'; display: block; margin-top: 0.4rem; line-height: 1.5; font-weight: 500; }
+        .premium-list-item { padding: 1.2rem; border-bottom: 1px solid var(--secondary-sand); cursor: pointer; transition: background 0.2s; border-radius: 2px; margin-bottom: 0.4rem; }
+        .premium-list-item:hover { background-color: var(--bg-color); border-color: var(--primary-sage); }
+        .premium-list-item strong { color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1rem; font-weight: 600;}
+        .premium-list-item span { font-size: 0.8rem; color: #666; font-family: 'Montserrat'; display: block; margin-top: 0.4rem; line-height: 1.5; }
 
-        footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); color: var(--sage-hover); background: var(--card-bg); display: flex; flex-direction: column; text-align: center; gap: 2.5rem; max-width: 1300px; margin: 0 auto; }
-        .footer-col h4 { color: var(--primary-sage); margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
-        .footer-col p { font-size: 1.05rem; margin-bottom: 0.5rem; }
+        footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); color: #555; background: var(--card-bg); display: flex; flex-direction: column; text-align: center; gap: 2.5rem; max-width: 1300px; margin: 0 auto; }
+        .footer-logo-wrapper { width: 100%; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 3rem; margin-bottom: 3rem; margin-top: 4rem; text-align: center; }
+        .footer-brand-logo { height: 90px; object-fit: contain; }
+        .footer-col h4 { color: var(--text-main); margin-bottom: 1rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
 
-        /* Desktop Layout Snap-Backs */
+        /* Desktop Layouts */
         @media (min-width: 768px) {
             .pathway-grid { grid-template-columns: repeat(2, 1fr); }
             .macro-grid { grid-template-columns: repeat(4, 1fr); }
             .micro-grid { grid-template-columns: repeat(5, 1fr); }
             .macro-grid label, .micro-grid label { text-align: center; padding-left: 0; }
             .macro-grid input, .micro-grid input { text-align: center; }
-            .daily-totals-macro { display: flex; justify-content: space-between; }
-            .daily-totals-macro div { text-align: center; }
-            .daily-totals-micro { display: flex; justify-content: space-between; }
-            .daily-totals-micro div { text-align: center; }
+            .daily-totals-macro, .daily-totals-micro { display: flex; justify-content: space-between; }
+            .daily-totals-macro div, .daily-totals-micro div { text-align: center; }
         }
 
         @media (min-width: 900px) {
-            .nav-brand-logo { height: 75px; } 
+            .nav-brand-logo { height: 65px; } 
             .mobile-menu-btn { display: none; }
             .desktop-nav-links { display: flex; }
             .pathway-grid { grid-template-columns: repeat(3, 1fr); }
             .pricing-grid { grid-template-columns: repeat(3, 1fr); max-width: 1300px; }
-            .menu-grid { grid-template-columns: repeat(2, 1fr); max-width: 1100px; }
-            .news-grid { grid-template-columns: repeat(3, 1fr); max-width: 1300px; }
-            .form-container { max-width: 580px; margin: 6rem auto; padding: 5rem 4rem; }
+            .form-container { max-width: 580px; margin: 8rem auto; padding: 5rem 4rem; }
             .form-row { grid-template-columns: 1fr 1fr; }
             .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
-            .dashboard-container { grid-template-columns: 2fr 1fr; padding: 0 6%; margin: 5rem auto; gap: 3rem; }
-            .dash-card { padding: 3rem 2.5rem; }
-            .menu-header { flex-direction: row; justify-content: space-between; align-items: baseline; }
-            footer { flex-direction: row; text-align: left; justify-content: space-between; padding: 0 6% 5rem 6%; }
+            .dashboard-container { grid-template-columns: 2fr 1fr; padding: 0 6%; margin: 6rem auto; gap: 4rem; }
+            footer { flex-direction: row; text-align: left; justify-content: space-between; padding: 0 6% 6rem 6%; }
         }
     </style>
 </head>
@@ -239,9 +215,6 @@
             btn.classList.toggle('active');
             btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
         }
-        function promptInstall() {
-            alert("To install this app on your iPhone:\n\n1. Tap the Share icon (square with an upward arrow) at the bottom of Safari.\n2. Scroll down and tap 'Add to Home Screen'.\n3. Tap 'Add'.");
-        }
     </script>
 
     <nav>
@@ -250,7 +223,7 @@
         <div class="desktop-nav-links">
             <span class="nav-link-text" onclick="openScreen('screen-about')">About Clare</span>
             <span class="nav-link-text" onclick="openScreen('screen-news')">Journal & Research</span>
-            <button type="button" id="nav-portal-btn" class="btn btn-outline" onclick="openScreen('screen-login')">Client Portal</button>
+            <button type="button" id="nav-portal-btn" class="btn btn-outline" onclick="openScreen('screen-login')">Patient Portal</button>
             <button type="button" id="nav-book-btn" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
             <button type="button" id="nav-logout-btn" class="btn btn-outline" style="display: none;" onclick="window.processLogout()">Sign Out</button>
         </div>
@@ -260,11 +233,11 @@
     </nav>
 
     <div class="mobile-drawer" id="mobile-drawer">
-        <span style="position: absolute; top: 1.5rem; right: 2rem; font-size: 1.8rem; cursor: pointer; color: var(--primary-sage);" onclick="toggleMobileMenu()">✕</span>
+        <span style="position: absolute; top: 1.5rem; right: 2rem; font-size: 2rem; cursor: pointer; color: var(--text-main);" onclick="toggleMobileMenu()">✕</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-home')">Home</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-about')">About Clare</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-news')">Journal & Research</span>
-        <span class="mobile-drawer-link" onclick="openScreen('screen-login')" id="mobile-portal-link">Client Portal</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-login')" id="mobile-portal-link">Patient Portal</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-register')" id="mobile-book-link">Register & Book</span>
         <span class="mobile-drawer-link" onclick="window.processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
     </div>
@@ -280,7 +253,6 @@
         <section class="section">
             <div class="section-image-wrapper">
                 <div class="image-arch-container">
-                    <!-- RESTORED UNSPLASH PHOTO -->
                     <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Hands holding flower - natural healing" class="image-arch">
                     <div class="image-floating-badge">
                         <span>Evidence-Informed Care</span>
@@ -292,9 +264,9 @@
             <div class="section-text">
                 <span class="section-subtitle">Our Philosophy</span>
                 <h2>Results in a Realistic Timeframe</h2>
-                <p style="margin-bottom: 1.5rem; color: var(--sage-hover);">The main aim of my clinic is to get results, in a quick and realistic timeframe. If you suffer from pain or discomfort, then I am here to help.</p>
-                <p style="color: var(--sage-hover); margin-bottom: 2.5rem;">I offer a holistic approach to modern-day aches and pains. The Natural Healing Clinic is complementary to mainstream medical protocols.</p>
-                <h4 style="margin-bottom: 1rem; color: var(--primary-sage); font-family: 'Montserrat', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;">Do You Need Help With:</h4>
+                <p style="margin-bottom: 1.5rem;">The main aim of my clinic is to get results, in a quick and realistic timeframe. If you suffer from pain or discomfort, then I am here to help.</p>
+                <p style="margin-bottom: 2.5rem;">I offer a holistic approach to modern-day aches and pains. The Natural Healing Clinic is complementary to mainstream medical protocols.</p>
+                <h4 style="margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;">Do You Need Help With:</h4>
                 <ul class="help-list">
                     <li>Pain Management & Muscular Pain</li>
                     <li>Neck, Shoulder or Back Pain</li>
@@ -310,7 +282,7 @@
             <div style="text-align: center; max-width: 800px; margin: 0 auto 4rem auto;">
                 <span class="section-subtitle">Our Clinical Pathway</span>
                 <h2>Comprehensive Functional Care</h2>
-                <p style="color: var(--sage-hover);">A meticulously structured approach designed to map your physiology and orchestrate profound, lasting healing.</p>
+                <p style="color: #555;">A meticulously structured approach designed to map your physiology and orchestrate profound, lasting healing.</p>
             </div>
             
             <div class="pathway-grid">
@@ -351,7 +323,7 @@
             <div style="text-align: center; max-width: 700px; margin: 0 auto;">
                 <span class="section-subtitle">Pillar 1: Deep Transformation</span>
                 <h2>Functional Medicine</h2>
-                <p style="color: var(--sage-hover);">Comprehensive, root-cause investigation and structured restorative pathways.</p>
+                <p style="color: #555;">Comprehensive, root-cause investigation and structured restorative pathways.</p>
             </div>
             
             <div class="pricing-grid">
@@ -380,7 +352,6 @@
                             <li>Bi-weekly hands-on Vagal/Bowen resets</li>
                             <li>Curated functional supplementation blueprint</li>
                         </ul>
-                        <div class="guarantee-badge">Designed for severe fatigue and executive burnout.</div>
                     </div>
                     <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Apply For Protocol</button>
                 </div>
@@ -400,62 +371,26 @@
                 </div>
             </div>
         </section>
-
-        <section class="service-menu-section">
-            <div style="text-align: center; max-width: 700px; margin: 0 auto 4rem auto;">
-                <span class="section-subtitle">Targeted Interventions</span>
-                <h2>Specialized Clinical Therapy</h2>
-                <p style="color: var(--sage-hover);">Expert, hands-on protocols tailored to specific systemic needs.</p>
-            </div>
-
-            <h3 class="menu-category-title">Advanced Lymphatic & Fluid Dynamics</h3>
-            <div class="menu-grid">
-                <div class="menu-item">
-                    <div class="menu-header"><h4>Post-Op Lymphatic Recovery</h4><span class="menu-price">£95 / £450 (Course of 5)</span></div>
-                    <p>Ultra-gentle drainage vital for clients recovering from surgeries to accelerate healing.</p>
-                </div>
-                <div class="menu-item">
-                    <div class="menu-header"><h4>The Sculpt & Flush (TMJ)</h4><span class="menu-price">£85</span></div>
-                    <p>Relieves jaw tension (TMJ), clears sinus congestion, and sculpts facial tissues.</p>
-                </div>
-            </div>
-
-            <h3 class="menu-category-title">Nervous System & Soft-Tissue Reset</h3>
-            <div class="menu-grid">
-                <div class="menu-item">
-                    <div class="menu-header"><h4>The Vagal Reset</h4><span class="menu-price">£85</span></div>
-                    <p>Stimulating the Vagus nerve to pull the body out of chronic 'fight or flight'.</p>
-                </div>
-                <div class="menu-item">
-                    <div class="menu-header"><h4>Elite Athletic Optimization</h4><span class="menu-price">£90</span></div>
-                    <p>Combining deep fascial release with structural realignment for athletes.</p>
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 3rem;">
-                <button type="button" class="btn" onclick="openScreen('screen-register')">Book A Session</button>
-            </div>
-        </section>
     </div>
 
-    <!-- ================= SCREEN 2: ABOUT CLARE (WITH VIDEO) ================= -->
+    <!-- ================= SCREEN 2: ABOUT CLARE ================= -->
     <div id="screen-about" class="page-screen">
-        <div style="background-color: var(--card-bg); padding: 4rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
+        <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
             <span class="section-subtitle">Clinical Leadership</span>
-            <h1 style="font-size: 2.5rem; font-weight: 300; margin-top: 0.5rem; color: var(--text-main);">About Clare Kelly</h1>
+            <h1 style="margin-top: 0.5rem;">About Clare Kelly</h1>
         </div>
         <section class="section">
             <div class="section-image-wrapper">
-                <video width="100%" controls playsinline style="border-radius: 12px; box-shadow: 0 25px 60px rgba(9, 93, 40, 0.15); object-fit: cover; max-height: 600px; background: var(--text-main);">
-                    <source src="./clare-video.mp4.MOV">
+                <video width="100%" controls playsinline style="border-radius: 2px; box-shadow: 0 25px 60px rgba(9, 93, 40, 0.08); object-fit: cover; max-height: 600px; background: var(--secondary-sand);">
+                    <source src="./clare-video.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
             <div class="section-text">
                 <span class="section-subtitle">Practitioner Profile</span>
-                <h2 style="font-size: 2.2rem; color: var(--text-main);">Bridging Functional Medicine & Soft-Tissue Therapy</h2>
-                <p style="margin-bottom: 1.5rem; color: var(--sage-hover); line-height: 1.9;">Clare Kelly is a leading functional health and soft-tissue practitioner based in Castletown, Isle of Man. With decades of clinical experience, Clare established <strong>The Natural Healing Clinic</strong> with a singular mission: to provide patients suffering from chronic pain, systemic inflammation, and deep-seated physical trauma with clear, sustainable results in a realistic timeframe.</p>
-                <p style="margin-bottom: 1.5rem; color: var(--sage-hover); line-height: 1.9;">Her clinical methodology is strictly evidence-informed, drawing from advanced training in Bowen Therapy, Manual Lymphatic Drainage (MLD), and Functional Medicine frameworks. Clare works closely alongside mainstream medical protocols, investigating the root causes of musculoskeletal disorders, autoimmune flare-ups, and nervous system dysregulation rather than merely masking symptoms.</p>
+                <h2 style="font-size: 2.2rem;">Bridging Functional Medicine & Soft-Tissue Therapy</h2>
+                <p style="margin-bottom: 1.5rem; color: #555;">Clare Kelly is a leading functional health and soft-tissue practitioner based in Castletown, Isle of Man. With decades of clinical experience, Clare established <strong>The Natural Healing Clinic</strong> with a singular mission: to provide patients suffering from chronic pain, systemic inflammation, and deep-seated physical trauma with clear, sustainable results in a realistic timeframe.</p>
+                <p style="margin-bottom: 2.5rem; color: #555;">Her clinical methodology is strictly evidence-informed, drawing from advanced training in Bowen Therapy, Manual Lymphatic Drainage (MLD), and Functional Medicine frameworks. Clare works closely alongside mainstream medical protocols, investigating the root causes of musculoskeletal disorders, autoimmune flare-ups, and nervous system dysregulation rather than merely masking symptoms.</p>
                 <button type="button" class="btn" onclick="openScreen('screen-register')">Book Your Initial Consultation</button>
             </div>
         </section>
@@ -463,9 +398,9 @@
 
     <!-- ================= SCREEN 3: JOURNAL & RESEARCH ================= -->
     <div id="screen-news" class="page-screen">
-        <div style="background-color: var(--card-bg); padding: 4rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
+        <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
             <span class="section-subtitle">Clinical Journal</span>
-            <h1 style="font-size: 2.5rem; font-weight: 300; margin-top: 0.5rem; color: var(--text-main);">Research & Evidence Library</h1>
+            <h1 style="margin-top: 0.5rem;">Research & Evidence Library</h1>
         </div>
 
         <section style="padding: 6rem 6%; background-color: var(--bg-color);">
@@ -500,26 +435,26 @@
 
     <!-- ================= SCREEN 4: LOGIN ================= -->
     <div id="screen-login" class="page-screen">
-        <div class="form-container" style="max-width: 480px; margin: 6rem auto;">
+        <div class="form-container" style="max-width: 480px;">
             <img src="./logo.png" alt="The Natural Healing Clinic" class="portal-logo">
-            <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem;">Client Portal</h2>
-            <p style="text-align: center; color: var(--sage-hover); margin-bottom: 2.5rem;">Access your files, daily journal, and messages.</p>
+            <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; font-family: 'Montserrat'; font-weight: 600;">Patient Portal</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2.5rem; font-size: 0.95rem;">Access your clinical files, health journals, and messages.</p>
             <form onsubmit="return window.processClientLogin(event)">
                 <label>Email Address</label><input type="email" id="login-email" required>
                 <label>Password</label><input type="password" id="login-password" required>
-                <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Sign In</button>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Secure Login</button>
             </form>
             <div style="margin-top: 2.5rem; text-align: center;">
-                <a href="#" style="font-size: 0.75rem; color: var(--primary-sage); text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;">Forgot password?</a>
+                <a href="#" style="font-size: 0.75rem; color: var(--text-main); text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Forgot password?</a>
             </div>
         </div>
     </div>
 
     <!-- ================= SCREEN 5: REGISTRATION ================= -->
     <div id="screen-register" class="page-screen">
-        <div class="form-container" style="max-width: 580px; margin: 6rem auto;">
+        <div class="form-container" style="max-width: 580px;">
             <img src="./logo.png" alt="The Natural Healing Clinic" class="portal-logo">
-            <h2 style="font-size: 1.8rem; margin-bottom: 2.5rem;">Client Registration</h2>
+            <h2 style="font-size: 1.8rem; margin-bottom: 2.5rem; font-family: 'Montserrat'; font-weight: 600;">Patient Registration</h2>
             <form onsubmit="return window.processRegistration(event)">
                 <label>Full Name</label><input type="text" id="reg-name" required>
                 <label>Email Address</label><input type="email" id="reg-email" required>
@@ -538,28 +473,22 @@
 
     <!-- ================= SCREEN 6: LUXURY CLIENT DASHBOARD ================= -->
     <div id="screen-dashboard" class="page-screen">
-        <div style="background-color: var(--card-bg); padding: 3rem 6%; border-bottom: 1px solid var(--secondary-sand);">
-            <div style="max-width: 1300px; margin: 0 auto;">
-                <h1 id="portal-welcome-title" style="font-size: 2.2rem; font-weight: 300; color: var(--text-main);">Patient Portal</h1>
-                <p style="color: var(--sage-hover); font-style: italic;">Manage your health journey.</p>
+        <div style="background-color: var(--card-bg); padding: 4rem 6%; border-bottom: 1px solid var(--secondary-sand);">
+            <div style="max-width: 1300px; margin: 0 auto; display: flex; align-items: center; gap: 2rem;">
+                <img src="./logo.png" alt="Logo" style="height: 60px;">
+                <div>
+                    <h1 id="portal-welcome-title" style="font-size: 2.2rem; margin-bottom: 0;">Patient Portal</h1>
+                    <p style="color: #666; font-style: italic; margin: 0;">Manage your clinical health journey.</p>
+                </div>
             </div>
         </div>
 
         <div class="dashboard-container">
             <div>
-                <!-- Premium App Install Prompt -->
-                <div class="app-promo-card">
-                    <div>
-                        <h4>Install the Clinic App</h4>
-                        <p style="font-size: 0.95rem; opacity: 0.9; margin:0;">Add this portal to your Home Screen for one-tap daily journaling.</p>
-                    </div>
-                    <button class="btn" style="background: white; color: var(--primary-sage); box-shadow: none; border-radius: 8px;" onclick="promptInstall()">How to Install</button>
-                </div>
-
                 <!-- LUXURY MFP STYLE HEALTH JOURNAL -->
                 <div class="dash-card">
                     <h3>Daily Health Journal</h3>
-                    <p style="font-size: 0.95rem; color: var(--sage-hover); margin-bottom: 2rem;">Log your daily metrics. Search the live database to track precise food weights, macronutrients, and key micronutrients.</p>
+                    <p style="font-size: 0.95rem; color: #555; margin-bottom: 2.5rem;">Log your daily metrics. Search the live database to track precise food weights, macronutrients, and key micronutrients.</p>
                     
                     <form onsubmit="return submitDailyLog(event)">
                         
@@ -568,9 +497,9 @@
                         <div class="journal-panel" id="journal-food">
                             
                             <!-- Live API Search Tool -->
-                            <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand); margin-bottom: 2.5rem; margin-top: 1rem;">
-                                <h4 style="font-family: 'Montserrat'; font-size: 0.95rem; color: var(--text-main); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">Live Food Database Search</h4>
-                                <div style="display: flex; gap: 0.8rem; margin-bottom: 1rem;">
+                            <div style="background: var(--bg-color); padding: 2rem 1.5rem; border-radius: 2px; border: 1px solid var(--secondary-sand); margin-bottom: 3rem; margin-top: 1rem;">
+                                <h4 style="font-family: 'Montserrat'; font-size: 0.85rem; color: var(--text-main); margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: 2px;">Live Food Database Search</h4>
+                                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
                                     <input type="text" id="food-search-query" placeholder="Search database (e.g. Oats, Salmon)..." style="margin-bottom: 0; background: white;">
                                     <button type="button" class="btn" style="padding: 0 1.5rem;" onclick="window.searchFood()">Search</button>
                                 </div>
@@ -583,7 +512,6 @@
                                 <h5>1. Breakfast</h5>
                                 <textarea id="log-brk-desc" placeholder="Exact foods & weights"></textarea>
                                 
-                                <!-- 4-Column Macro Grid -->
                                 <div class="macro-grid">
                                     <div><label>KCAL</label><input type="number" id="log-brk-cal" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                     <div><label>PRO (g)</label><input type="number" id="log-brk-pro" placeholder="0" oninput="window.updateDailyTotals()"></div>
@@ -591,9 +519,8 @@
                                     <div><label>FAT (g)</label><input type="number" id="log-brk-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                 </div>
                                 
-                                <!-- Expandable 5-Column Micro Grid (With Fiber) -->
                                 <details style="outline: none;">
-                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: var(--sage-hover); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 700;">+ Edit Fiber & Micronutrients</summary>
+                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 600;">+ Edit Fiber & Micronutrients</summary>
                                     <div class="micro-grid">
                                         <div><label>FIBER (g)</label><input type="number" id="log-brk-fib" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                         <div><label>SOD (mg)</label><input type="number" id="log-brk-sod" placeholder="0" oninput="window.updateDailyTotals()"></div>
@@ -615,7 +542,7 @@
                                     <div><label>FAT (g)</label><input type="number" id="log-lun-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                 </div>
                                 <details style="outline: none;">
-                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: var(--sage-hover); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 700;">+ Edit Fiber & Micronutrients</summary>
+                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 600;">+ Edit Fiber & Micronutrients</summary>
                                     <div class="micro-grid">
                                         <div><label>FIBER (g)</label><input type="number" id="log-lun-fib" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                         <div><label>SOD (mg)</label><input type="number" id="log-lun-sod" placeholder="0" oninput="window.updateDailyTotals()"></div>
@@ -637,7 +564,7 @@
                                     <div><label>FAT (g)</label><input type="number" id="log-din-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                 </div>
                                 <details style="outline: none;">
-                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: var(--sage-hover); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 700;">+ Edit Fiber & Micronutrients</summary>
+                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 600;">+ Edit Fiber & Micronutrients</summary>
                                     <div class="micro-grid">
                                         <div><label>FIBER (g)</label><input type="number" id="log-din-fib" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                         <div><label>SOD (mg)</label><input type="number" id="log-din-sod" placeholder="0" oninput="window.updateDailyTotals()"></div>
@@ -659,7 +586,7 @@
                                     <div><label>FAT (g)</label><input type="number" id="log-snk-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                 </div>
                                 <details style="outline: none;">
-                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: var(--sage-hover); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 700;">+ Edit Fiber & Micronutrients</summary>
+                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 600;">+ Edit Fiber & Micronutrients</summary>
                                     <div class="micro-grid">
                                         <div><label>FIBER (g)</label><input type="number" id="log-snk-fib" placeholder="0" oninput="window.updateDailyTotals()"></div>
                                         <div><label>SOD (mg)</label><input type="number" id="log-snk-sod" placeholder="0" oninput="window.updateDailyTotals()"></div>
@@ -678,7 +605,7 @@
                                 <div><span>FAT</span><strong id="tot-fat" style="font-size:1.3rem;">0g</strong></div>
                             </div>
                             <div class="daily-totals-micro">
-                                <div><span>FIBER</span><strong id="tot-fib" style="font-size:1.1rem; color:var(--primary-sage);">0g</strong></div>
+                                <div><span>FIBER</span><strong id="tot-fib" style="font-size:1.1rem; color:var(--text-main);">0g</strong></div>
                                 <div><span>SODIUM</span><strong id="tot-sod" style="font-size:1.1rem;">0mg</strong></div>
                                 <div><span>POTASSIUM</span><strong id="tot-pot" style="font-size:1.1rem;">0mg</strong></div>
                                 <div><span>CALCIUM</span><strong id="tot-calc" style="font-size:1.1rem;">0mg</strong></div>
@@ -738,7 +665,7 @@
                 <!-- COMPREHENSIVE MEDICAL INTAKE -->
                 <div class="dash-card">
                     <h3>Comprehensive Medical Intake</h3>
-                    <p style="font-size: 0.95rem; color: var(--sage-hover); margin-bottom: 2rem;">Please complete this detailed functional health profile prior to your initial consultation.</p>
+                    <p style="font-size: 0.95rem; color: #555; margin-bottom: 2rem;">Please complete this detailed functional health profile prior to your initial consultation.</p>
                     
                     <form onsubmit="return window.submitMedicalIntake(event)">
                         <div class="form-row">
@@ -752,8 +679,8 @@
                         <label>Primary Treatment Aims</label>
                         <textarea id="intake-aims" style="height:80px;" required></textarea>
 
-                        <div style="margin: 2.5rem 0; border-top: 1px solid var(--secondary-sand); padding-top: 2rem;">
-                            <h4 style="color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.2rem;">1. Immune & Digestion Systems</h4>
+                        <div style="margin: 3rem 0; border-top: 1px solid var(--secondary-sand); padding-top: 2rem;">
+                            <h4 style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.2rem;">1. Immune & Digestion Systems</h4>
                             <label>Have you ever been diagnosed with an autoimmune disease?</label>
                             <input type="text" id="fm-immune-1" placeholder="Specify disease and when diagnosed">
                             
@@ -764,8 +691,8 @@
                             <input type="text" id="fm-digest-2" placeholder="Specify skin conditions">
                         </div>
 
-                        <div style="margin: 2.5rem 0; border-top: 1px solid var(--secondary-sand); padding-top: 2rem;">
-                            <h4 style="color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.2rem;">2. Hormones, Thyroid & Blood Sugar</h4>
+                        <div style="margin: 3rem 0; border-top: 1px solid var(--secondary-sand); padding-top: 2rem;">
+                            <h4 style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.2rem;">2. Hormones, Thyroid & Blood Sugar</h4>
                             <label>Do you get cravings for sugar OR salt?</label>
                             <input type="text" id="fm-hormone-1" placeholder="Specify cravings">
                             
@@ -779,11 +706,11 @@
                             <input type="text" id="fm-blood-1" placeholder="Describe post-meal energy">
                         </div>
 
-                        <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 1.8rem; border-radius: 8px; margin-bottom: 2rem; margin-top: 1rem;">
-                            <h4 style="font-family: 'Montserrat', sans-serif; color: var(--primary-sage); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;">Functional Medicine Informed Consent</h4>
-                            <p style="font-size: 0.95rem; color: var(--sage-hover); line-height: 1.7; margin-bottom: 1rem;">I understand in the practice of functional medicine, some treatments are considered "alternative" by the conventional medical community. I understand Functional Medicine is not a substitute for treatment from a primary care physician.</p>
-                            <p style="font-size: 0.95rem; color: var(--sage-hover); line-height: 1.7; margin-bottom: 1rem;">Because of specific risks regarding internet communication, Functional Medicine Services will use reasonable means to protect security but cannot guarantee the confidentiality of e-mail communication.</p>
-                            <div style="display: flex; align-items: flex-start; gap: 1rem; margin-top: 1.5rem; background: white; padding: 1rem; border-radius: 6px; border: 1px solid var(--secondary-sand);">
+                        <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 2rem; border-radius: 2px; margin-bottom: 2.5rem; margin-top: 1rem;">
+                            <h4 style="font-family: 'Montserrat', sans-serif; color: var(--text-main); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;">Functional Medicine Informed Consent</h4>
+                            <p style="font-size: 0.95rem; color: #555; line-height: 1.7; margin-bottom: 1rem;">I understand in the practice of functional medicine, some treatments are considered "alternative" by the conventional medical community. I understand Functional Medicine is not a substitute for treatment from a primary care physician.</p>
+                            <p style="font-size: 0.95rem; color: #555; line-height: 1.7; margin-bottom: 1rem;">Because of specific risks regarding internet communication, Functional Medicine Services will use reasonable means to protect security but cannot guarantee the confidentiality of e-mail communication.</p>
+                            <div style="display: flex; align-items: flex-start; gap: 1rem; margin-top: 1.5rem; background: white; padding: 1.5rem; border-radius: 2px; border: 1px solid var(--secondary-sand);">
                                 <input type="checkbox" id="fm-consent" required style="width: 24px; height: 24px; margin: 0; flex-shrink: 0;">
                                 <label style="text-transform: none; letter-spacing: 0; font-family: 'Montserrat'; font-size: 0.9rem; color: var(--text-main); font-weight: 500; margin: 0; line-height: 1.5;">I acknowledge I have carefully read and understand the above consent. I authorize medical treatment and use of e-mail correspondence.</label>
                             </div>
@@ -820,7 +747,7 @@
                     <div class="chat-box" id="client-chat-box"></div>
                     <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 1rem;">
                         <input type="text" id="client-msg-input" placeholder="Type message..." style="margin-bottom: 0; flex: 1;" required>
-                        <button type="submit" class="btn" style="padding: 0 1.5rem; border-radius: 6px;">Send</button>
+                        <button type="submit" class="btn" style="padding: 0 1.5rem; border-radius: 2px;">Send</button>
                     </form>
                 </div>
             </div>
@@ -959,14 +886,14 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
             const panel = document.getElementById('food-selection-panel');
             panel.style.display = 'block';
             panel.innerHTML = `
-                <div style="background: white; padding: 1.5rem; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--primary-sage); box-shadow: 0 4px 15px rgba(13,155,70,0.08);">
-                    <h5 style="margin-bottom:0.8rem; color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1.1rem;">${name}</h5>
-                    <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1.2rem;">
+                <div style="background: white; padding: 1.5rem; border-radius: 2px; margin-top: 1rem; border: 1px solid var(--primary-sage); box-shadow: 0 10px 30px rgba(13,155,70,0.08);">
+                    <h5 style="margin-bottom:0.8rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; text-transform: none;">${name}</h5>
+                    <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1.5rem;">
                         <label style="margin:0; font-size: 0.85rem;">Portion (grams):</label>
-                        <input type="number" id="food-grams" value="100" style="width: 120px; padding:0.8rem; margin:0;" oninput="window.updatePreviewMacros(${k}, ${p}, ${c}, ${f}, ${fib}, ${sod}, ${pot}, ${calc}, ${iron})">
+                        <input type="number" id="food-grams" value="100" style="width: 120px; padding:0.8rem; margin:0; background: var(--bg-color);" oninput="window.updatePreviewMacros(${k}, ${p}, ${c}, ${f}, ${fib}, ${sod}, ${pot}, ${calc}, ${iron})">
                     </div>
-                    <div id="food-macro-preview" style="font-size:0.95rem; color:#555; margin-bottom:1.5rem; font-family: 'Montserrat'; line-height: 1.6;">
-                        <strong style="color:var(--primary-sage); font-size: 1.1rem;">${k} kcal</strong> | ${p}g Pro | ${c}g Carbs | ${f}g Fat <br>
+                    <div id="food-macro-preview" style="font-size:0.95rem; color:#555; margin-bottom:1.5rem; font-family: 'Montserrat'; line-height: 1.6; padding-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand);">
+                        <strong style="color:var(--text-main); font-size: 1.1rem;">${k} kcal</strong> | ${p}g Pro | ${c}g Carbs | ${f}g Fat <br>
                         <span style="font-size:0.8rem; color:#888;">${fib}g Fiber | ${sod}mg Sodium | ${pot}mg Potassium | ${calc}mg Calcium | ${iron}mg Iron</span>
                     </div>
                     <div style="display:flex; gap:0.8rem; flex-wrap: wrap;">
@@ -986,7 +913,7 @@ CONSENT: Patient has digitally signed the Functional Medicine Informed Consent w
         window.updatePreviewMacros = function(k, p, c, f, fib, sod, pot, calc, iron) {
             const g = document.getElementById('food-grams').value || 0;
             const r = g / 100;
-            document.getElementById('food-macro-preview').innerHTML = `<strong style="color:var(--primary-sage); font-size: 1.1rem;">${Math.round(k*r)} kcal</strong> | ${Math.round(p*r)}g Pro | ${Math.round(c*r)}g Carbs | ${Math.round(f*r)}g Fat <br>
+            document.getElementById('food-macro-preview').innerHTML = `<strong style="color:var(--text-main); font-size: 1.1rem;">${Math.round(k*r)} kcal</strong> | ${Math.round(p*r)}g Pro | ${Math.round(c*r)}g Carbs | ${Math.round(f*r)}g Fat <br>
             <span style="font-size:0.8rem; color:#888;">${Math.round(fib*r)}g Fiber | ${Math.round(sod*r)}mg Sodium | ${Math.round(pot*r)}mg Potassium | ${Math.round(calc*r)}mg Calcium | ${Math.round(iron*r)}mg Iron</span>`;
         };
 
@@ -1128,7 +1055,7 @@ Date: ${new Date().toLocaleDateString('en-GB')}
             const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
             list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => `
                 <div style="padding: 1rem 0; border-bottom: 1px solid var(--secondary-sand); display: flex; justify-content: space-between; align-items: center;">
-                    <div><strong style="color: var(--primary-sage); font-family: 'Montserrat';">${new Date(a.appointment_time).toLocaleString('en-GB')}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
+                    <div><strong style="color: var(--text-main); font-family: 'Montserrat';">${new Date(a.appointment_time).toLocaleString('en-GB')}</strong><br><span style="font-size:0.95rem; color:#555;">${a.service_name}</span></div>
                     <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; color: #a94442; border-color: #a94442;" onclick="window.cancelAppointment('${a.id}')">Cancel</button>
                 </div>`).join('');
 
