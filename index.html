@@ -17,14 +17,14 @@
     <style>
         :root {
             /* NEW VIBRANT GREEN PALETTE */
-            --bg-color: #f3f1ef;         /* Light off-white/cream background */
-            --card-bg: #ffffff;          /* Pure white for cards */
-            --text-main: #095d28;        /* Deepest dark green for text */
-            --primary-sage: #0d9b46;     /* Main mid-green for buttons/headers */
-            --sage-hover: #095d28;       /* Deep green for hover states */
-            --gold-accent: #10d358;      /* Bright green accent (replaced gold) */
-            --bright-accent: #12db14;    /* Extra bright neon green for badges/highlights */
-            --secondary-sand: #d1dcd4;   /* Soft greenish-grey for borders */
+            --bg-color: #f3f1ef;         
+            --card-bg: #ffffff;          
+            --text-main: #095d28;        
+            --primary-sage: #0d9b46;     
+            --sage-hover: #095d28;       
+            --gold-accent: #10d358;      
+            --bright-accent: #12db14;    
+            --secondary-sand: #d1dcd4;   
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -117,14 +117,14 @@
         label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); margin-bottom: 0.6rem; font-family: 'Montserrat', sans-serif; font-weight: 700;}
         
         /* PREMIUM INPUT STYLING */
-        input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 6px; background: var(--bg-color); font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
-        input:focus, select:focus, textarea:focus { background: white; border: 1px solid var(--primary-sage); box-shadow: 0 4px 15px rgba(13, 155, 70, 0.1); outline: none; }
+        input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 1.5rem; border: 1px solid transparent; border-radius: 6px; background: #F4F3EE; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
+        input:focus, select:focus, textarea:focus { background: white; border: 1px solid var(--primary-sage); box-shadow: 0 4px 15px rgba(74,89,77,0.06); outline: none; }
         textarea { resize: vertical; height: 100px; }
 
         /* Client Dashboard */
         .dashboard-container { max-width: 1300px; margin: 3rem auto; padding: 0 5%; display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
-        .dash-card { background: var(--card-bg); padding: 3rem 2rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 40px rgba(9, 93, 40, 0.05); margin-bottom: 2.5rem; }
-        .dash-card h3 { color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-size: 1.35rem; font-weight: 600; }
+        .dash-card { background: white; padding: 3rem 2rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 40px rgba(9, 93, 40, 0.05); margin-bottom: 2.5rem; }
+        .dash-card h3 { color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-size: 1.35rem; font-weight: 500; }
         
         .chat-box { height: 260px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg-color); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; border: 1px solid var(--secondary-sand); }
         .msg { padding: 1rem 1.2rem; border-radius: 8px; max-width: 85%; font-size: 1rem; line-height: 1.5; }
@@ -177,6 +177,7 @@
         .footer-col h4 { color: var(--primary-sage); margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
         .footer-col p { font-size: 1.05rem; margin-bottom: 0.5rem; }
 
+        /* Desktop Layout Snap-Backs */
         @media (min-width: 768px) {
             .macro-grid { grid-template-columns: repeat(4, 1fr); }
             .micro-grid { grid-template-columns: repeat(5, 1fr); }
@@ -222,6 +223,10 @@
             btn.classList.toggle('active');
             btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
         }
+        function toggleAI() {
+            const win = document.getElementById('ai-window');
+            win.style.display = win.style.display === 'block' ? 'none' : 'block';
+        }
         function promptInstall() {
             alert("To install this app on your iPhone:\n\n1. Tap the Share icon (square with an upward arrow) at the bottom of Safari.\n2. Scroll down and tap 'Add to Home Screen'.\n3. Tap 'Add'.");
         }
@@ -249,6 +254,20 @@
         <span class="mobile-drawer-link" onclick="openScreen('screen-login')" id="mobile-portal-link">Client Portal</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-register')" id="mobile-book-link">Register & Book</span>
         <span class="mobile-drawer-link" onclick="window.processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
+    </div>
+
+    <!-- AI AGENT WIDGET -->
+    <div class="ai-fab" onclick="toggleAI()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    </div>
+
+    <div class="ai-window" id="ai-window">
+        <div class="ai-header"><span>Clinic AI Assistant</span><span style="cursor: pointer;" onclick="toggleAI()">✖</span></div>
+        <div class="ai-body" id="ai-chat-body"><div class="msg admin">Hi there! I'm the Natural Healing Clinic's AI Assistant. How can I help you today?</div></div>
+        <form class="ai-input" onsubmit="return handleAIQuery(event)">
+            <input type="text" id="ai-input-text" placeholder="Type your question..." required>
+            <button type="submit">></button>
+        </form>
     </div>
 
     <!-- ================= SCREEN 1: THE HOME PAGE ================= -->
@@ -377,7 +396,7 @@
         </section>
     </div>
 
-    <!-- ================= SCREEN 2: ABOUT CLARE (WITH VIDEO) ================= -->
+    <!-- ================= SCREEN 2: ABOUT CLARE ================= -->
     <div id="screen-about" class="page-screen">
         <div style="background-color: var(--card-bg); padding: 4rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
             <span class="section-subtitle">Clinical Leadership</span>
@@ -385,9 +404,9 @@
         </div>
         <section class="section">
             <div class="section-image-wrapper">
-                <!-- VIDEO PLAYER INSERTED HERE -->
+                <!-- NEW VIDEO PLAYER WITH EXACT FILE NAME -->
                 <video width="100%" controls playsinline style="border-radius: 12px; box-shadow: 0 25px 60px rgba(9, 93, 40, 0.15); object-fit: cover; max-height: 600px; background: var(--text-main);">
-                    <source src="./clare-video.mp4" type="video/mp4">
+                    <source src="./clare-video.mp4.MOV">
                     Your browser does not support the video tag.
                 </video>
             </div>
@@ -786,6 +805,16 @@
         function getSupabase() {
             if(!window.supabase) return null;
             return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
+
+        function handleAIQuery(e) {
+            e.preventDefault();
+            const input = document.getElementById('ai-input-text');
+            const body = document.getElementById('ai-chat-body');
+            body.innerHTML += `<div class="msg client">${input.value}</div>`;
+            input.value = '';
+            setTimeout(() => body.innerHTML += `<div class="msg admin">In Functional Medicine, we look at root causes. Would you like to book a consultation?</div>`, 800);
+            return false;
         }
 
         window.processClientLogin = async function(e) {
