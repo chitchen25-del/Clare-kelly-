@@ -29,11 +29,15 @@
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Cormorant Garamond', serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.8; font-size: 1.15rem; overflow-x: hidden; }
-        h1, h2, h3, h4, .nav-logo, .btn, .price-amount { font-family: 'Montserrat', sans-serif; }
+        h1, h2, h3, h4, .btn, .price-amount { font-family: 'Montserrat', sans-serif; }
         
         /* Luxury Navigation */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; background-color: rgba(243, 241, 239, 0.95); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--secondary-sand); }
-        .nav-logo { font-size: 0.9rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; color: var(--primary-sage); }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5%; background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        
+        /* Premium Logo Styling */
+        .nav-brand-logo { height: 50px; width: auto; cursor: pointer; transition: opacity 0.3s ease, transform 0.3s ease; object-fit: contain; }
+        .nav-brand-logo:hover { opacity: 0.85; transform: scale(0.98); }
+        
         .desktop-nav-links { display: none; align-items: center; gap: 1.5rem; }
         .nav-link-text { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); cursor: pointer; transition: color 0.3s; }
         .nav-link-text:hover { color: var(--gold-accent); }
@@ -117,13 +121,13 @@
         label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); margin-bottom: 0.6rem; font-family: 'Montserrat', sans-serif; font-weight: 700;}
         
         /* PREMIUM INPUT STYLING */
-        input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 1.5rem; border: 1px solid transparent; border-radius: 6px; background: #F4F3EE; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
-        input:focus, select:focus, textarea:focus { background: white; border: 1px solid var(--primary-sage); box-shadow: 0 4px 15px rgba(74,89,77,0.06); outline: none; }
+        input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 6px; background: var(--bg-color); font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
+        input:focus, select:focus, textarea:focus { background: white; border: 1px solid var(--primary-sage); box-shadow: 0 4px 15px rgba(13, 155, 70, 0.1); outline: none; }
         textarea { resize: vertical; height: 100px; }
 
         /* Client Dashboard */
         .dashboard-container { max-width: 1300px; margin: 3rem auto; padding: 0 5%; display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
-        .dash-card { background: white; padding: 3rem 2rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 40px rgba(9, 93, 40, 0.05); margin-bottom: 2.5rem; }
+        .dash-card { background: var(--card-bg); padding: 3rem 2rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 40px rgba(9, 93, 40, 0.05); margin-bottom: 2.5rem; }
         .dash-card h3 { color: var(--primary-sage); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-size: 1.35rem; font-weight: 500; }
         
         .chat-box { height: 260px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg-color); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; border: 1px solid var(--secondary-sand); }
@@ -177,7 +181,6 @@
         .footer-col h4 { color: var(--primary-sage); margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
         .footer-col p { font-size: 1.05rem; margin-bottom: 0.5rem; }
 
-        /* Desktop Layout Snap-Backs */
         @media (min-width: 768px) {
             .macro-grid { grid-template-columns: repeat(4, 1fr); }
             .micro-grid { grid-template-columns: repeat(5, 1fr); }
@@ -190,6 +193,7 @@
         }
 
         @media (min-width: 900px) {
+            .nav-brand-logo { height: 60px; } /* Slightly larger logo on desktop */
             .mobile-menu-btn { display: none; }
             .desktop-nav-links { display: flex; }
             .pricing-grid { grid-template-columns: repeat(3, 1fr); max-width: 1300px; }
@@ -233,7 +237,9 @@
     </script>
 
     <nav>
-        <div class="nav-logo" onclick="openScreen('screen-home')">The Natural Healing Clinic</div>
+        <!-- NEW PREMIUM BRAND LOGO -->
+        <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="openScreen('screen-home')">
+        
         <div class="desktop-nav-links">
             <span class="nav-link-text" onclick="openScreen('screen-about')">About Clare</span>
             <span class="nav-link-text" onclick="openScreen('screen-news')">Journal & Research</span>
@@ -396,7 +402,7 @@
         </section>
     </div>
 
-    <!-- ================= SCREEN 2: ABOUT CLARE ================= -->
+    <!-- ================= SCREEN 2: ABOUT CLARE (WITH VIDEO) ================= -->
     <div id="screen-about" class="page-screen">
         <div style="background-color: var(--card-bg); padding: 4rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
             <span class="section-subtitle">Clinical Leadership</span>
@@ -404,7 +410,7 @@
         </div>
         <section class="section">
             <div class="section-image-wrapper">
-                <!-- NEW VIDEO PLAYER WITH EXACT FILE NAME -->
+                <!-- VIDEO PLAYER INSERTED HERE -->
                 <video width="100%" controls playsinline style="border-radius: 12px; box-shadow: 0 25px 60px rgba(9, 93, 40, 0.15); object-fit: cover; max-height: 600px; background: var(--text-main);">
                     <source src="./clare-video.mp4.MOV">
                     Your browser does not support the video tag.
