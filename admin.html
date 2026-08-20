@@ -7,8 +7,11 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Clinic EMR">
+    
+    <!-- Supabase loaded immediately -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root { 
             --bg-color: #f3f1ef;         
@@ -28,10 +31,11 @@
         h3, h4, h5, .btn, .app-nav-item, label, .tab-btn { font-family: 'Montserrat', sans-serif; }
         
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5%; background: var(--card-bg); border-bottom: 1px solid var(--secondary-sand); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(9, 93, 40, 0.04);}
-        .nav-brand-logo { height: 45px; width: auto; object-fit: contain; cursor: pointer; }
+        .nav-brand-logo { height: 45px; width: auto; object-fit: contain; cursor: pointer; transition: opacity 0.3s ease; }
+        .nav-brand-logo:hover { opacity: 0.8; }
         .portal-logo { height: 60px; margin: 0 auto 2rem auto; display: block; object-fit: contain; }
 
-        .btn { padding: 1rem 1.5rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 6px; cursor: pointer; border: 1px solid var(--primary-sage); background: var(--primary-sage); color: white; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 4px 15px rgba(13, 155, 70, 0.15); }
+        .btn { padding: 1rem 1.5rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 2px; cursor: pointer; border: 1px solid var(--primary-sage); background: var(--primary-sage); color: white; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 4px 15px rgba(13, 155, 70, 0.15); }
         .btn:active { transform: scale(0.98); }
         .btn-outline { background: transparent; border: 1px solid var(--secondary-sand); color: var(--text-main); box-shadow: none; }
         .btn-secondary { background: var(--text-main); border-color: var(--text-main); }
@@ -50,7 +54,6 @@
         .panel { background: var(--card-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem; box-shadow: 0 8px 30px rgba(9, 93, 40, 0.03); }
         .panel h3 { font-size: 1.2rem; color: var(--text-main); margin-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-weight: 700; }
         
-        /* Mobile-friendly grids */
         .finance-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1.5rem; }
         .metric-card { background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 8px; text-align: center; }
         .metric-card span { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); display: block; margin-bottom: 0.5rem; font-weight: 700;}
@@ -204,13 +207,14 @@
         </div>
     </div>
 
+    <!-- MAIN JAVASCRIPT -->
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
         
         // =========================================================================
-        // SECURITY CONFIGURATION
-        // Enter Clare's exact email address below. Anyone else will be blocked!
+        // STRICT CLINICAL SECURITY
+        // MUST BE THE EXACT EMAIL YOU USE TO REGISTER IN SUPABASE AS ADMIN
         // =========================================================================
         const PRACTITIONER_EMAIL = "clare@thenaturalhealingclinic.co.uk"; 
         
@@ -259,7 +263,6 @@
                 const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
                 if (error) throw new Error(error.message);
                 
-                // THE BOUNCER: Strict Security Check
                 if (data.user.email.toLowerCase() !== PRACTITIONER_EMAIL.toLowerCase()) {
                     await db.auth.signOut();
                     throw new Error("UNAUTHORIZED: Client accounts cannot access the Practitioner EMR.");
@@ -410,7 +413,7 @@
             } catch(err) { if(!isPolling) chatBox.innerHTML = `<p style="color:#a94442;">Error: ${err.message}</p>`; }
         }
 
-        // --- NEW TABBED PATIENT PROFILE ---
+        // --- TABBED PATIENT PROFILE ---
         function switchTab(tabId) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
