@@ -8,8 +8,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Clinic EMR">
     
-    <!-- Supabase loaded immediately -->
+    <!-- Supabase & Chart.js loaded immediately -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -102,6 +103,9 @@
         .pin-list-item { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; background: white; border: 1px solid var(--secondary-sand); border-radius: 8px; margin-bottom: 0.8rem; }
         .pin-list-dot { width: 12px; height: 12px; background: var(--gold-accent); border-radius: 50%; margin-top: 4px; flex-shrink: 0;}
 
+        /* PROGRESS CHART CONTAINER */
+        .chart-container { position: relative; height: 280px; width: 100%; }
+
         .app-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--secondary-sand); display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -4px 20px rgba(9, 93, 40, 0.04); }
         .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: #888; cursor: pointer; width: 20%; height: 100%; font-weight: 600;}
         .app-nav-item.active { color: var(--primary-sage); }
@@ -115,7 +119,8 @@
     <nav>
         <img src="./logo.png" alt="Clinic Logo" class="nav-brand-logo" onclick="location.reload();">
         <div style="display: flex; gap: 1rem; align-items: center;">
-            <button id="btn-logout" class="btn btn-outline" style="display: none; padding: 0.5rem 1rem; font-size: 0.6rem; min-height: 35px;" onclick="location.reload()">Sign Out</button>
+            <button id="btn-demo" class="btn btn-outline" style="display: none; padding: 0.5rem 1rem; font-size: 0.6rem; min-height: 35px;" onclick="injectDemoData()">Demo Data</button>
+            <button id="btn-logout" class="btn btn-outline" style="display: none; padding: 0.5rem 1rem; font-size: 0.6rem; min-height: 35px;" onclick="processLogout()">Sign Out</button>
         </div>
     </nav>
 
@@ -129,12 +134,11 @@
                 <input type="email" id="admin-email" placeholder="Enter clinical email" required>
                 <label>Secure Password</label>
                 <input type="password" id="admin-password" placeholder="Enter secure password" required>
-                <button type="submit" id="admin-login-btn" class="btn" style="width: 100%; margin-top: 1rem;">Authenticate via Supabase</button>
+                <button type="submit" id="admin-login-btn" class="btn" style="width: 100%; margin-top: 1rem;">Authenticate</button>
             </form>
             
-            <!-- BYPASS SO YOU CAN SEE THE FEATURES -->
             <button type="button" class="btn btn-bypass" onclick="bypassLogin()">DEVELOPER BYPASS (SKIP LOGIN)</button>
-            <p style="font-size: 0.7rem; color: #888; margin-top: 1rem;">Click above to skip the database lock and immediately see the Body Map, tabs, and prescriber tools.</p>
+            <p style="font-size: 0.7rem; color: #888; margin-top: 1rem;">Click above to quickly test the Body Map, Progress Chart, and Prescriber tools.</p>
         </div>
     </div>
 
@@ -179,12 +183,12 @@
                     <h3 style="margin: 0; border: none;">Patient Directory</h3>
                     <button class="btn" style="padding: 0.5rem 1rem; min-height: 35px; font-size: 0.65rem;" onclick="openClientModal()">+ Add</button>
                 </div>
-                <p style="font-size: 1rem; color: #666; margin-bottom: 2.5rem;">Tap a patient to access their clinical history, Body Map, and SOAP charts.</p>
+                <p style="font-size: 1rem; color: #666; margin-bottom: 2.5rem;">Tap a patient to access their progress charts, Body Map, and SOAP notes.</p>
                 <div id="admin-client-directory-list"><p style="color: #888; font-size: 0.95rem;">Loading client records...</p></div>
             </div>
         </div>
 
-        <!-- PATIENT DETAIL -->
+        <!-- PATIENT DETAIL (TABBED UI) -->
         <div id="view-client-detail" class="app-view">
             <button class="btn btn-outline" style="margin-bottom: 1.5rem; padding: 0.5rem 1rem; min-height: 35px; font-size: 0.65rem;" onclick="switchAppView('clients')">&larr; Back to Directory</button>
             <div id="client-detail-content"></div>
@@ -247,6 +251,7 @@
         let globalClients = [];
         let globalMsgs = [];
         let bypassMode = false;
+        let activeChart = null; // Store chart instance to destroy/re-render cleanly
 
         function getSupabase() {
             if(!window.supabase) return null;
@@ -280,7 +285,7 @@
             bypassMode = true;
             document.getElementById('admin-login').style.display = 'none';
             document.getElementById('admin-dashboard').style.display = 'block';
-            document.getElementById('btn-logout').style.display = 'inline-block';
+            document.getElementById('btn-demo').style.display = 'inline-block';
             document.getElementById('app-bottom-nav').style.display = window.innerWidth < 900 ? 'flex' : 'none';
             injectDemoData();
         }
@@ -439,7 +444,7 @@
             } catch(err) {}
         }
 
-        // --- TABBED PATIENT PROFILE WITH INTERACTIVE BODY MAP ---
+        // --- TABBED PATIENT PROFILE ---
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -481,6 +486,29 @@
                 pinListHtml = '<p style="color:#888; font-size:0.85rem;">No pins dropped yet. Tap the map to start.</p>';
             }
 
+            // CHART.JS PROGRESS ANALYTICS LOGIC
+            let logStats = [];
+            dailyLogs.forEach(log => {
+                const dateMatch = log.content.match(/Date:\s*(.+)/);
+                const energyMatch = log.content.match(/Energy:\s*(\d+)/);
+                const sleepMatch = log.content.match(/Quality:\s*(\d+)/);
+                
+                if (dateMatch && (energyMatch || sleepMatch)) {
+                    logStats.push({
+                        date: dateMatch[1].trim(),
+                        energy: energyMatch ? parseInt(energyMatch[1]) : null,
+                        sleep: sleepMatch ? parseInt(sleepMatch[1]) : null
+                    });
+                }
+            });
+            
+            // Reverse so oldest log is on the left of the graph
+            logStats.reverse();
+            const chartLabels = logStats.map(stat => stat.date);
+            const energyData = logStats.map(stat => stat.energy);
+            // Multiply sleep quality out of 5 by 2 to map it elegantly on a 1-10 scale
+            const sleepData = logStats.map(stat => stat.sleep ? stat.sleep * 2 : null);
+
             const html = `
                 <div class="panel" style="padding: 2rem 1.5rem;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
@@ -488,6 +516,9 @@
                             <h2 style="font-size: 1.8rem; margin-bottom: 0.2rem;">${client.client_name}</h2>
                             <p style="font-size: 0.7rem; color: #888; font-family: 'Montserrat';">ID: ${client.client_id}</p>
                         </div>
+                        <select id="client-stage-${clientId}" style="background: white; padding: 0.5rem 1rem; width: auto; min-width: 150px; margin: 0; font-size: 0.8rem;" onchange="alert('Stage updated!')">
+                            <option>01. Intake Review</option><option>02. Active Protocol</option><option>03. Maintenance</option>
+                        </select>
                     </div>
 
                     <div class="tab-container">
@@ -498,52 +529,44 @@
                         <button class="tab-btn" id="btn-logs" onclick="switchTab('logs')">Daily Logs</button>
                     </div>
 
+                    <!-- NEW PROGRESS CHART ON OVERVIEW TAB -->
                     <div id="tab-overview" class="tab-content active">
+                        <h4 style="margin-bottom: 1rem; color: var(--text-main);">Clinical Progress (Vitals)</h4>
+                        <div class="data-block" style="padding: 1rem; background: white; margin-bottom: 2rem;">
+                            ${chartLabels.length > 0 ? 
+                                '<div class="chart-container"><canvas id="progressChart"></canvas></div>' : 
+                                '<p style="color:#888; font-size:0.85rem;">Not enough log data to generate progress charts.</p>'
+                            }
+                        </div>
+                        
                         <h4 style="margin-bottom: 1rem; color: var(--text-main);">Medical Intake Summary</h4>
                         <div class="data-block"><pre style="white-space: pre-wrap; font-family: inherit; font-size: 0.9rem;">${intakeDisplay}</pre></div>
                     </div>
 
-                    <!-- NEW BODY MAP TAB -->
                     <div id="tab-bodymap" class="tab-content">
                         <div style="text-align: center; margin-bottom: 1.5rem;">
                             <h4 style="margin: 0 0 0.5rem 0; color: var(--text-main);">Interactive Anatomical Mapping</h4>
                             <p style="font-size: 0.8rem; color: #888; margin: 0;">Tap anywhere on the body to drop a clinical pin.</p>
                         </div>
-                        
                         <div class="body-map-container" onclick="addBodyMapPin(event, '${clientId}')">
-                            <!-- Abstract SVG Human Body (Front & Back) -->
                             <svg class="body-map-svg" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
-                                <!-- FRONT -->
                                 <g transform="translate(50, 20)">
-                                    <circle cx="50" cy="30" r="25" /> <!-- Head -->
-                                    <path d="M 50,55 L 50,90" /> <!-- Neck -->
-                                    <path d="M 15,90 Q 50,70 85,90" /> <!-- Shoulders -->
-                                    <path d="M 15,90 Q 0,150 10,220" /> <!-- Left Arm -->
-                                    <path d="M 85,90 Q 100,150 90,220" /> <!-- Right Arm -->
-                                    <path d="M 25,90 L 25,250 Q 50,270 75,250 L 75,90" /> <!-- Torso -->
-                                    <path d="M 25,250 L 20,420" /> <!-- Left Leg -->
-                                    <path d="M 75,250 L 80,420" /> <!-- Right Leg -->
+                                    <circle cx="50" cy="30" r="25" /> <path d="M 50,55 L 50,90" />
+                                    <path d="M 15,90 Q 50,70 85,90" /> <path d="M 15,90 Q 0,150 10,220" />
+                                    <path d="M 85,90 Q 100,150 90,220" /> <path d="M 25,90 L 25,250 Q 50,270 75,250 L 75,90" />
+                                    <path d="M 25,250 L 20,420" /> <path d="M 75,250 L 80,420" />
                                 </g>
-                                <!-- BACK -->
                                 <g transform="translate(250, 20)">
-                                    <circle cx="50" cy="30" r="25" />
-                                    <path d="M 50,55 L 50,90" />
-                                    <path d="M 15,90 Q 50,70 85,90" />
-                                    <path d="M 15,90 Q 0,150 10,220" />
-                                    <path d="M 85,90 Q 100,150 90,220" />
-                                    <path d="M 25,90 L 25,250 Q 50,270 75,250 L 75,90" />
-                                    <path d="M 50,90 L 50,250" stroke-dasharray="4" /> <!-- Spine indicator -->
-                                    <path d="M 25,250 L 20,420" />
-                                    <path d="M 75,250 L 80,420" />
+                                    <circle cx="50" cy="30" r="25" /> <path d="M 50,55 L 50,90" />
+                                    <path d="M 15,90 Q 50,70 85,90" /> <path d="M 15,90 Q 0,150 10,220" />
+                                    <path d="M 85,90 Q 100,150 90,220" /> <path d="M 25,90 L 25,250 Q 50,270 75,250 L 75,90" />
+                                    <path d="M 50,90 L 50,250" stroke-dasharray="4" /> <path d="M 25,250 L 20,420" /> <path d="M 75,250 L 80,420" />
                                 </g>
                                 <text x="100" y="470" font-family="Montserrat" font-size="12" fill="#888" text-anchor="middle">ANTERIOR</text>
                                 <text x="300" y="470" font-family="Montserrat" font-size="12" fill="#888" text-anchor="middle">POSTERIOR</text>
                             </svg>
-                            
-                            <!-- Injected Pins go here -->
                             ${pinsHtml}
                         </div>
-
                         <h4 style="margin-bottom: 1rem;">Clinical Notes Ledger</h4>
                         ${pinListHtml}
                     </div>
@@ -586,10 +609,62 @@
             
             document.getElementById('client-detail-content').innerHTML = html;
             switchAppView('client-detail');
+            
+            // Render Chart.js if data exists
+            if (chartLabels.length > 0) {
+                setTimeout(() => {
+                    const ctx = document.getElementById('progressChart').getContext('2d');
+                    if(activeChart) activeChart.destroy();
+                    
+                    activeChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: chartLabels,
+                            datasets: [
+                                { 
+                                    label: 'Energy (1-10)', 
+                                    data: energyData, 
+                                    borderColor: '#0d9b46', // Primary Sage
+                                    backgroundColor: 'rgba(13, 155, 70, 0.1)', 
+                                    tension: 0.4, 
+                                    fill: true,
+                                    borderWidth: 2,
+                                    pointBackgroundColor: '#095d28'
+                                },
+                                { 
+                                    label: 'Sleep Quality (Scaled 1-10)', 
+                                    data: sleepData, 
+                                    borderColor: '#10d358', // Gold/Bright Accent
+                                    backgroundColor: 'transparent', 
+                                    tension: 0.4, 
+                                    fill: false, 
+                                    borderDash: [5, 5],
+                                    borderWidth: 2,
+                                    pointBackgroundColor: '#10d358'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true, 
+                            maintainAspectRatio: false,
+                            plugins: { 
+                                legend: { 
+                                    display: true, 
+                                    position: 'bottom',
+                                    labels: { font: { family: 'Montserrat', size: 10 } }
+                                } 
+                            },
+                            scales: { 
+                                y: { beginAtZero: true, max: 10, grid: { color: '#eee' } },
+                                x: { grid: { display: false } }
+                            }
+                        }
+                    });
+                }, 100);
+            }
         }
 
         window.addBodyMapPin = async function(e, clientId) {
-            // Prevent dropping pins if clicking on an existing pin
             if(e.target.classList.contains('map-pin')) return; 
 
             const rect = e.currentTarget.getBoundingClientRect();
@@ -670,13 +745,26 @@
 
         function injectDemoData() {
             globalClients = [ { client_id: 'demo_1', client_name: 'Sarah Jenkins' }, { client_id: 'demo_2', client_name: 'Marcus Vance' } ];
+            
+            // Injecting 4 weeks of historical daily logs to build the progress chart!
             globalMsgs = [
                 { client_id: 'demo_1', sender: 'client', content: '[MEDICAL INTAKE SUBMISSION]\nAge: 42 | Sex: Female | Height: 165cm | Weight: 68kg\n\nAIMS: Regain consistent energy, reduce brain fog.\n\nFUNCTIONAL MARKERS:\nAutoimmune: Hashimoto\'s' },
                 { client_id: 'demo_1', sender: 'admin', content: '[BODY MAP PIN] {"x":"21.60","y":"16.50","note":"Severe TMJ tension & lymphatic stagnation"}' },
                 { client_id: 'demo_1', sender: 'admin', content: '[BODY MAP PIN] {"x":"75.40","y":"50.10","note":"Lumbar compression (L4/L5)"}' },
                 { client_id: 'demo_1', sender: 'admin', content: '[SUPPLEMENT PROTOCOL]\nPrescribed: Today\n• Item: Magnesium Bisglycinate 400mg\n• Dosage: 2 capsules daily\n• Instructions: Take with dinner' },
-                { client_id: 'demo_1', sender: 'admin', content: '[CLINICAL SOAP NOTE]\nDate: Today\n- Subjective: Client reports improved morning sleep.\n- Objective: Vagal tone testing normal.\n- Assessment: Adrenal protocol yielding positive indicators.\n- Plan: Maintain dosage.' }
+                
+                // Week 1 Log (Low energy)
+                { client_id: 'demo_1', sender: 'client', content: `[DAILY HEALTH LOG]\nDate: 01/08/2026\n🏃‍♀️ ACTIVITY: None (0 mins) | Intensity: -\n🧠 MOOD: Low | Energy: 3/10 | Notes: Very tired today.\n💤 SLEEP: 5 hours | Quality: 2/5\n🚽 BOWEL: Type 2 | Freq: 1\n💧 WATER: 1.5 Liters\n📏 VITALS: Weight: 68.5kg | BP: -` },
+                // Week 2 Log (Slight improvement)
+                { client_id: 'demo_1', sender: 'client', content: `[DAILY HEALTH LOG]\nDate: 08/08/2026\n🏃‍♀️ ACTIVITY: Walking (20 mins) | Intensity: Light\n🧠 MOOD: Okay | Energy: 5/10 | Notes: Feeling a bit better after starting supplements.\n💤 SLEEP: 6.5 hours | Quality: 3/5\n🚽 BOWEL: Type 3 | Freq: 1\n💧 WATER: 2 Liters\n📏 VITALS: Weight: 68.0kg | BP: -` },
+                // Week 3 Log (Steady progress)
+                { client_id: 'demo_1', sender: 'client', content: `[DAILY HEALTH LOG]\nDate: 15/08/2026\n🏃‍♀️ ACTIVITY: Yoga (45 mins) | Intensity: Light\n🧠 MOOD: Good | Energy: 7/10 | Notes: No afternoon crash!\n💤 SLEEP: 7 hours | Quality: 4/5\n🚽 BOWEL: Type 4 | Freq: 1\n💧 WATER: 2.5 Liters\n📏 VITALS: Weight: 67.8kg | BP: -` },
+                // Week 4 Log (Feeling great)
+                { client_id: 'demo_1', sender: 'client', content: `[DAILY HEALTH LOG]\nDate: Today\n🏃‍♀️ ACTIVITY: Pilates Flow (45 mins) | Intensity: Moderate\n🧠 MOOD: Great | Energy: 9/10 | Notes: Best I have felt in months.\n💤 SLEEP: 8 hours | Quality: 5/5\n🚽 BOWEL: Type 4 | Freq: 1\n💧 WATER: 2.5 Liters\n📏 VITALS: Weight: 67.5kg | BP: 120/80` }
             ];
+
+            // Because the script naturally parses newest to oldest based on database timestamps, reverse our manually pushed demo logs so the chart flows left-to-right correctly.
+            globalMsgs.reverse();
 
             document.getElementById('admin-schedule-list').innerHTML = `
                 <div class="cal-card">
