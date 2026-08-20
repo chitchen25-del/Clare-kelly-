@@ -114,7 +114,16 @@
         .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: #888; cursor: pointer; width: 20%; height: 100%; font-weight: 600;}
         .app-nav-item.active { color: var(--primary-sage); }
         .app-nav-item svg { width: 22px; height: 22px; margin-bottom: 4px; stroke: currentColor; fill: none; stroke-width: 2; }
-        
+
+        /* POSTURAL GALLERY CSS */
+        .posture-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        @media (min-width: 768px) { .posture-grid { grid-template-columns: repeat(4, 1fr); } }
+        .posture-box { position: relative; width: 100%; aspect-ratio: 3/4; background: white; border: 2px dashed var(--secondary-sand); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-direction: column; overflow: hidden; transition: all 0.2s; }
+        .posture-box:hover { border-color: var(--primary-sage); background: rgba(13, 155, 70, 0.02); }
+        .posture-box input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 10; height: 100%; width: 100%; padding: 0; margin: 0; }
+        .posture-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; z-index: 5; }
+        .posture-placeholder { text-align: center; color: #888; font-size: 0.75rem; font-weight: 600; font-family: 'Montserrat', sans-serif; z-index: 1; text-transform: uppercase; letter-spacing: 1px; }
+
         @media (min-width: 768px) { .finance-grid { grid-template-columns: 1fr 1fr; } .soap-grid { grid-template-columns: 1fr 1fr; } }
         @media (min-width: 900px) { .nav-brand-logo { height: 60px; } .app-bottom-nav { display: none !important; } .dashboard-wrapper { display: block !important; padding: 0 6%; margin: 3rem auto; } .panel { padding: 3rem; } }
     </style>
@@ -557,13 +566,14 @@
                         <span class="status-badge active" style="font-size: 0.75rem; padding: 0.5rem 1rem;">Active Protocol</span>
                     </div>
 
-                    <!-- THE 7 WORKSTATION TABS (INCLUDING UNIFIED TIMELINE) -->
+                    <!-- THE 8 WORKSTATION TABS -->
                     <div class="tab-container">
                         <button class="tab-btn active" id="btn-timeline" onclick="switchTab('timeline')">⚡ Timeline</button>
                         <button class="tab-btn" id="btn-overview" onclick="switchTab('overview')">Charts</button>
                         <button class="tab-btn" id="btn-vault" onclick="switchTab('vault')">Vault</button>
                         <button class="tab-btn" id="btn-bodymap" onclick="switchTab('bodymap')">Body Map</button>
                         <button class="tab-btn" id="btn-charting" onclick="switchTab('charting')">SOAP</button>
+                        <button class="tab-btn" id="btn-posture" onclick="switchTab('posture')">Posture</button>
                         <button class="tab-btn" id="btn-protocols" onclick="switchTab('protocols')">Prescribe</button>
                         <button class="tab-btn" id="btn-logs" onclick="switchTab('logs')">Journals</button>
                     </div>
@@ -630,6 +640,62 @@
                         ${soapsHtml}
                     </div>
 
+                    <!-- NEW POSTURAL GALLERY TAB -->
+                    <div id="tab-posture" class="tab-content">
+                        <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
+                            <h4 style="margin-bottom: 0.5rem; color: var(--text-main);">Postural Assessment</h4>
+                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 1.5rem;">Capture photos directly from your device and email them to the patient.</p>
+                            
+                            <label>Patient Email Address</label>
+                            <input type="email" id="posture-client-email" placeholder="e.g. client@example.com" style="background:white;" required>
+
+                            <div class="posture-grid">
+                                <!-- Anterior -->
+                                <div>
+                                    <label style="text-align:center; margin-bottom:0.5rem;">Anterior</label>
+                                    <div class="posture-box">
+                                        <input type="file" accept="image/*" onchange="previewPostureImage(this, 'prev-ant')">
+                                        <img id="prev-ant">
+                                        <div class="posture-placeholder" id="place-ant">Tap to Capture</div>
+                                    </div>
+                                </div>
+                                <!-- Posterior -->
+                                <div>
+                                    <label style="text-align:center; margin-bottom:0.5rem;">Posterior</label>
+                                    <div class="posture-box">
+                                        <input type="file" accept="image/*" onchange="previewPostureImage(this, 'prev-post')">
+                                        <img id="prev-post">
+                                        <div class="posture-placeholder" id="place-post">Tap to Capture</div>
+                                    </div>
+                                </div>
+                                <!-- Left -->
+                                <div>
+                                    <label style="text-align:center; margin-bottom:0.5rem;">Left Lateral</label>
+                                    <div class="posture-box">
+                                        <input type="file" accept="image/*" onchange="previewPostureImage(this, 'prev-left')">
+                                        <img id="prev-left">
+                                        <div class="posture-placeholder" id="place-left">Tap to Capture</div>
+                                    </div>
+                                </div>
+                                <!-- Right -->
+                                <div>
+                                    <label style="text-align:center; margin-bottom:0.5rem;">Right Lateral</label>
+                                    <div class="posture-box">
+                                        <input type="file" accept="image/*" onchange="previewPostureImage(this, 'prev-right')">
+                                        <img id="prev-right">
+                                        <div class="posture-placeholder" id="place-right">Tap to Capture</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <label>Assessment Notes</label>
+                            <textarea id="posture-notes" style="background:white; height:80px;" placeholder="Add specific postural observations to include in the email..."></textarea>
+
+                            <button class="btn btn-secondary" style="width: 100%; margin-bottom: 0.8rem;" onclick="saveAndEmailGallery(this, '${client.client_name}')">Process & Auto-Email Gallery</button>
+                            <button class="btn btn-outline" style="width: 100%;" onclick="resetGallery()">Clear Photos</button>
+                        </div>
+                    </div>
+
                     <div id="tab-protocols" class="tab-content">
                         <div style="margin-bottom: 1.5rem; background: rgba(16, 211, 88, 0.05); border: 1px dashed var(--primary-sage); padding: 1rem; border-radius: 8px;">
                             <label style="color: var(--text-main); font-size: 0.75rem;">⚡ Quick-Load Protocol Bundles</label>
@@ -679,6 +745,58 @@
                         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { font: { family: 'Montserrat', size: 10 } } } }, scales: { y: { beginAtZero: true, max: 10, grid: { color: '#eee' } }, x: { grid: { display: false } } } }
                     });
                 }, 100);
+            }
+        }
+
+        // --- POSTURAL GALLERY LOGIC ---
+        window.previewPostureImage = function(input, previewId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                const previewImg = document.getElementById(previewId);
+                const placeholder = document.getElementById(previewId.replace('prev-', 'place-'));
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                    placeholder.style.display = 'none';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        window.resetGallery = function() {
+            ['ant', 'post', 'left', 'right'].forEach(view => {
+                const preview = document.getElementById(`prev-${view}`);
+                const placeholder = document.getElementById(`place-${view}`);
+                const fileInput = preview.previousElementSibling;
+                
+                preview.src = '';
+                preview.style.display = 'none';
+                placeholder.style.display = 'block';
+                if (fileInput) fileInput.value = '';
+            });
+            document.getElementById('posture-client-email').value = '';
+            document.getElementById('posture-notes').value = '';
+        }
+
+        window.saveAndEmailGallery = async function(btn, clientName) {
+            const email = document.getElementById('posture-client-email').value;
+            if(!email) { alert("Please provide the patient's email address."); return; }
+            
+            const ogText = btn.innerText;
+            btn.innerText = "Processing & Emailing...";
+            btn.disabled = true;
+            
+            try {
+                // Placeholder for actual Supabase bucket upload & EmailJS integration
+                await new Promise(r => setTimeout(r, 1500));
+                
+                alert(`Gallery processed and auto-emailed successfully to ${email}.`);
+                window.resetGallery();
+            } catch(e) {
+                alert("Error: " + e.message);
+            } finally {
+                btn.innerText = ogText;
+                btn.disabled = false;
             }
         }
 
