@@ -2,15 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Clare's Clinic | Practitioner Workstation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Natural Healing Clinic | Isle of Man</title>
+    
+    <!-- PWA Installation Tags for Clients -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Clinic Admin">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta name="apple-mobile-web-app-title" content="My Clinic">
+    <link rel="apple-touch-icon" href="./logo.png">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async defer></script>
+    <!-- Barcode Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        :root { 
+        :root {
             /* VIBRANT GREEN LUXURY PALETTE */
             --bg-color: #f3f1ef;         
             --card-bg: #ffffff;          
@@ -19,591 +26,1098 @@
             --sage-hover: #095d28;       
             --gold-accent: #10d358;      
             --bright-accent: #12db14;    
-            --secondary-sand: #d1dcd4;
-            --safe-bottom: env(safe-area-inset-bottom); 
+            --secondary-sand: #d1dcd4;   
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Cormorant Garamond', serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; font-size: 1.1rem; overflow-x: hidden; padding-bottom: calc(75px + var(--safe-bottom)); }
+        body { font-family: 'Cormorant Garamond', serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.8; font-size: 1.15rem; overflow-x: hidden; }
         
         /* Editorial Typography */
         h1, h2 { font-family: 'Cormorant Garamond', serif; font-weight: 400; color: var(--text-main); line-height: 1.2; }
-        h3, h4, h5, .btn, .app-nav-item { font-family: 'Montserrat', sans-serif; }
+        h3, h4, h5, .btn, .price-amount, .section-subtitle, label { font-family: 'Montserrat', sans-serif; }
         
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; background: var(--card-bg); border-bottom: 1px solid var(--secondary-sand); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 30px rgba(9, 93, 40, 0.03);}
-        
-        /* Premium Logo Styling */
+        /* Luxury Navigation */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--secondary-sand); box-shadow: 0 4px 30px rgba(9, 93, 40, 0.03); }
         .nav-brand-logo { height: 50px; width: auto; cursor: pointer; transition: opacity 0.3s ease; object-fit: contain; }
         .nav-brand-logo:hover { opacity: 0.8; }
-        .portal-logo { height: 70px; margin: 0 auto 2.5rem auto; display: block; object-fit: contain; }
-
-        .btn { padding: 0.9rem 1.8rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; border-radius: 2px; cursor: pointer; border: 1px solid var(--primary-sage); background: var(--primary-sage); color: white; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(13, 155, 70, 0.15); }
-        .btn:hover { background: var(--sage-hover); border-color: var(--sage-hover); transform: translateY(-2px); box-shadow: 0 12px 35px rgba(9, 93, 40, 0.2); }
-        .btn-outline { background: transparent; border: 1px solid var(--secondary-sand); color: var(--text-main); box-shadow: none; }
-        .btn-outline:hover { background: transparent; border-color: var(--primary-sage); color: var(--primary-sage); box-shadow: none; }
-        .btn-secondary { background: var(--text-main); border-color: var(--text-main); }
-
-        .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 1.5rem; }
-        .form-container { width: 100%; max-width: 450px; background: var(--card-bg); padding: 4rem 3rem; border-radius: 2px; border: 1px solid var(--secondary-sand); text-align: center; box-shadow: 0 30px 70px rgba(9, 93, 40, 0.05); }
-        label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); margin-bottom: 0.8rem; text-align: left; font-weight: 600; }
-        input, select, textarea { width: 100%; padding: 1.1rem; margin-bottom: 2rem; border: 1px solid var(--secondary-sand); border-radius: 2px; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; background: transparent; appearance: none; -webkit-appearance: none; color: var(--text-main); transition: 0.3s; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-sage); box-shadow: 0 0 0 1px var(--primary-sage); }
         
-        .dashboard-wrapper { display: none; max-width: 1200px; margin: 2.5rem auto; padding: 0 5%; }
-        .app-view { display: none; }
-        .app-view.active-view { display: block; animation: fadeIn 0.5s ease; }
+        .desktop-nav-links { display: none; align-items: center; gap: 2rem; }
+        .nav-link-text { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); cursor: pointer; transition: color 0.3s; }
+        .nav-link-text:hover { color: var(--primary-sage); }
+        .mobile-menu-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 6px; padding: 0.5rem; z-index: 102; }
+        .mobile-menu-btn span { display: block; width: 30px; height: 1px; background-color: var(--text-main); transition: transform 0.3s ease; }
+
+        .mobile-drawer { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background-color: var(--card-bg); z-index: 101; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2.5rem; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding: 2rem; border-left: 1px solid var(--secondary-sand); }
+        .mobile-drawer.open { right: 0; }
+        .mobile-drawer-link { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 500; text-transform: uppercase; letter-spacing: 3px; color: var(--text-main); text-decoration: none; cursor: pointer; transition: color 0.3s; }
+        .mobile-drawer-link:hover { color: var(--primary-sage); }
+
+        /* Premium Buttons */
+        .btn { display: inline-block; padding: 1.1rem 2.5rem; text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border-radius: 2px; cursor: pointer; border: 1px solid var(--primary-sage); background-color: var(--primary-sage); color: white; transition: all 0.3s ease; text-align: center; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(13, 155, 70, 0.15); }
+        .btn:hover { background-color: var(--sage-hover); border-color: var(--sage-hover); color: white; transform: translateY(-2px); box-shadow: 0 15px 35px rgba(9, 93, 40, 0.2); }
+        .btn-outline { background-color: transparent; color: var(--text-main); border-color: var(--secondary-sand); box-shadow: none; }
+        .btn-outline:hover { border-color: var(--primary-sage); color: var(--primary-sage); background: transparent; box-shadow: none; }
+
+        .page-screen { display: none; animation: fadeIn 0.5s ease; }
+        .page-screen.visible { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Cinematic Hero Section */
+        .hero { text-align: center; padding: 10rem 6%; background: linear-gradient(rgba(243, 241, 239, 0.93), rgba(243, 241, 239, 0.98)), url('./clinical-herb.jpeg') center/cover; border-bottom: 1px solid var(--secondary-sand); }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1.2rem; letter-spacing: -0.5px; }
+        .hero p { font-size: 1.3rem; margin-bottom: 3rem; color: var(--primary-sage); max-width: 650px; margin-left: auto; margin-right: auto; font-style: italic; }
+
+        /* Layouts & Images */
+        .section { padding: 8rem 6%; display: flex; flex-wrap: wrap; align-items: center; gap: 5rem; max-width: 1250px; margin: 0 auto; }
+        .section-text { flex: 1.2; min-width: 280px; }
+        .section-image-wrapper { flex: 1; min-width: 280px; position: relative; }
         
-        .panel { background: var(--card-bg); padding: 2.5rem 2rem; border-radius: 2px; border: 1px solid var(--secondary-sand); margin-bottom: 2.5rem; box-shadow: 0 15px 50px rgba(9, 93, 40, 0.03); }
-        .panel h3 { font-size: 1.3rem; color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem; font-weight: 600; }
+        .image-arch-container { position: relative; border-radius: 200px 200px 2px 2px; overflow: hidden; box-shadow: 0 40px 80px rgba(9, 93, 40, 0.1); border: 1px solid var(--secondary-sand); background-color: var(--secondary-sand); }
+        .image-arch { width: 100%; height: 550px; object-fit: cover; display: block; }
         
-        .finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
-        .metric-card { background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 2rem 1.5rem; border-radius: 2px; text-align: center; }
-        .metric-card span { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); font-family: 'Montserrat'; display: block; margin-bottom: 0.5rem; font-weight: 600;}
-        .metric-card h4 { font-size: 2.2rem; font-weight: 300; color: var(--primary-sage); font-family: 'Cormorant Garamond', serif; line-height: 1; }
+        .image-floating-badge { position: absolute; bottom: -20px; left: 25px; right: 25px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px); padding: 1.8rem; border-radius: 2px; border: 1px solid var(--secondary-sand); box-shadow: 0 15px 40px rgba(9, 93, 40, 0.05); }
+        .image-floating-badge span { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); display: block; margin-bottom: 0.5rem; font-weight: 700; }
+        .image-floating-badge p { font-size: 1.1rem; color: var(--text-main); font-style: italic; margin: 0; }
         
-        .chat-box { height: 350px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg-color); padding: 1.5rem; border-radius: 2px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 1rem; border: 1px solid var(--secondary-sand); }
-        .msg { padding: 1.2rem; border-radius: 2px; max-width: 85%; font-size: 1.05rem; }
-        .msg.client { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; color: var(--text-main); box-shadow: 0 4px 15px rgba(9, 93, 40, 0.03);}
-        .msg.admin { background: var(--primary-sage); color: white; align-self: flex-end; }
+        .section-subtitle { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--primary-sage); margin-bottom: 1.2rem; display: block; font-weight: 600; border-bottom: 1px solid var(--gold-accent); display: inline-block; padding-bottom: 0.3rem;}
+        h2 { font-size: 2.8rem; margin-bottom: 1.5rem; }
         
-        /* Master-Detail Client List */
-        .client-list-item { background: white; border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 2px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(9, 93, 40, 0.02); }
-        .client-list-item:hover { border-color: var(--primary-sage); transform: translateY(-2px); box-shadow: 0 10px 25px rgba(9, 93, 40, 0.05); }
-        .client-list-item:active { transform: scale(0.98); background: var(--bg-color); }
-        .client-list-item h4 { color: var(--text-main); font-size: 1.2rem; margin-bottom: 0.4rem; font-weight: 600;}
+        .help-list { column-count: 1; list-style: none; color: var(--text-main); font-size: 1.1rem; margin-top: 2rem; }
+        .help-list li { margin-bottom: 1rem; position: relative; padding-left: 2rem; }
+        .help-list li::before { content: "—"; position: absolute; left: 0; color: var(--gold-accent); font-weight: bold; }
+
+        /* The Clinical Pathway Section */
+        .pathway-section { padding: 8rem 6%; background-color: var(--card-bg); border-top: 1px solid var(--secondary-sand); }
+        .pathway-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 0 auto; }
+        .pathway-card { padding: 3rem 2.5rem; border: 1px solid var(--secondary-sand); border-radius: 2px; transition: transform 0.4s ease, border-color 0.4s ease; background: var(--card-bg); position: relative; }
+        .pathway-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: transparent; transition: background 0.4s; }
+        .pathway-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(9, 93, 40, 0.05); }
+        .pathway-card:hover::before { background: var(--primary-sage); }
+        .pathway-card h4 { color: var(--text-main); font-size: 1.2rem; margin-bottom: 1rem; line-height: 1.4; font-weight: 600; letter-spacing: 0.5px; }
+        .pathway-card p { color: #555; font-size: 1rem; line-height: 1.7; margin: 0;}
+        .pathway-number { font-family: 'Cormorant Garamond'; font-size: 2.5rem; color: var(--secondary-sand); margin-bottom: 1rem; display: block; line-height: 1; font-style: italic; }
+
+        /* Pricing */
+        .pricing-section { padding: 8rem 6%; border-top: 1px solid var(--secondary-sand); background-color: var(--bg-color); }
+        .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 4rem auto 0 auto; }
+        .price-card { background: var(--card-bg); border: 1px solid var(--secondary-sand); border-radius: 2px; padding: 4rem 3rem; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 15px 40px rgba(9, 93, 40, 0.02); }
+        .price-card.featured { border-color: var(--primary-sage); box-shadow: 0 30px 60px rgba(9, 93, 40, 0.08); }
+        .featured-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: white; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; padding: 0.5rem 1.5rem; border-radius: 2px; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+        .price-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
+        .price-duration { font-size: 0.75rem; color: var(--primary-sage); margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+        .price-amount { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--text-main); margin-bottom: 2.5rem; line-height: 1; }
+        .price-amount span { font-size: 1.2rem; color: #aaa; text-decoration: line-through; margin-left: 0.8rem; font-family: 'Montserrat', sans-serif; }
+        .price-features { list-style: none; text-align: left; margin-bottom: 3.5rem; font-size: 1.05rem; color: #555; }
+        .price-features li { margin-bottom: 1.2rem; padding-left: 1.8rem; position: relative; line-height: 1.6; }
+        .price-features li::before { content: "—"; position: absolute; left: 0; color: var(--primary-sage); }
+
+        /* Forms Container */
+        .form-container { max-width: 100%; margin: 3rem 5%; background: var(--card-bg); padding: 5rem 3rem; border-radius: 2px; box-shadow: 0 30px 70px rgba(9, 93, 40, 0.05); border: 1px solid var(--secondary-sand); }
+        .form-container h2 { text-align: center; margin-bottom: 1rem; }
+        .form-row, .form-row.three { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); margin-bottom: 0.8rem; font-weight: 600;}
         
-        /* Clinical Note Grid helper */
-        .soap-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        /* PREMIUM INPUT STYLING */
+        input, select, textarea { width: 100%; padding: 1.2rem; margin-bottom: 2rem; border: 1px solid var(--secondary-sand); border-radius: 2px; background: transparent; font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-sage); outline: none; box-shadow: 0 0 0 1px var(--primary-sage); }
+        textarea { resize: vertical; height: 120px; }
+
+        /* Client Dashboard */
+        .dashboard-container { max-width: 1300px; margin: 4rem auto; padding: 0 5%; display: grid; grid-template-columns: 1fr; gap: 3rem; }
+        .dash-card { background: var(--card-bg); padding: 3.5rem 2.5rem; border-radius: 2px; border: 1px solid var(--secondary-sand); box-shadow: 0 15px 50px rgba(9, 93, 40, 0.03); margin-bottom: 3rem; }
+        .dash-card h3 { color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem; font-size: 1.4rem; font-weight: 600; }
         
-        .app-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); border-top: 1px solid var(--secondary-sand); display: none; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -4px 30px rgba(9, 93, 40, 0.03); }
-        .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #777; cursor: pointer; width: 20%; height: 100%; font-weight: 600;}
-        .app-nav-item.active { color: var(--primary-sage); }
-        .app-nav-item svg { width: 22px; height: 22px; margin-bottom: 4px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .chat-box { height: 300px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg-color); padding: 1.5rem; border-radius: 2px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 1rem; border: 1px solid var(--secondary-sand); }
+        .msg { padding: 1.2rem; border-radius: 2px; max-width: 85%; font-size: 1.05rem; line-height: 1.6; }
+        .msg.client { background: var(--primary-sage); color: white; align-self: flex-end; }
+        .msg.admin { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; box-shadow: 0 4px 15px rgba(9, 93, 40, 0.03); color: var(--text-main); }
+
+        /* LUXURY ACCORDION STYLES */
+        .journal-accordion { background-color: var(--bg-color); color: var(--text-main); cursor: pointer; padding: 1.5rem; width: 100%; border: 1px solid var(--secondary-sand); border-radius: 2px; text-align: left; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; transition: all 0.3s; }
+        .journal-accordion:hover { border-color: var(--primary-sage); }
+        .journal-accordion.active { background-color: var(--primary-sage); color: white; border-color: var(--primary-sage); }
+        .journal-panel { padding: 0 1.5rem; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; border-left: 1px solid var(--secondary-sand); border-right: 1px solid var(--secondary-sand); margin-top: -1rem; margin-bottom: 2rem; border-bottom: 1px solid transparent; }
+        .journal-panel.show { padding: 2.5rem 1.5rem; max-height: 4000px; border-bottom: 1px solid var(--secondary-sand); overflow: visible; }
         
-        .cal-card { background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 2px; margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 1rem; transition: transform 0.3s; }
-        .cal-card:hover { transform: translateY(-2px); border-color: var(--primary-sage); }
+        /* RESPONSIVE MFP MACRO & MICRO MATRIX */
+        .macro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .macro-grid div { display: flex; flex-direction: column; }
+        .macro-grid label { font-size: 0.65rem; text-align: left; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 0.5rem; font-weight: 700; }
+        .macro-grid input { padding: 0.9rem 0.8rem; font-size: 1rem; text-align: left; margin-bottom: 0; font-weight: 500; }
         
+        .micro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.2rem; margin-bottom: 1.5rem; }
+        .micro-grid div { display: flex; flex-direction: column; }
+        .micro-grid label { font-size: 0.6rem; text-align: left; letter-spacing: 1px; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 600; }
+        .micro-grid input { padding: 0.8rem; font-size: 0.95rem; text-align: left; margin-bottom: 0; background-color: var(--bg-color); }
+
+        .meal-section { border-bottom: 1px solid var(--secondary-sand); padding-bottom: 2rem; margin-bottom: 2rem; }
+        .meal-section h5 { font-family: 'Montserrat'; font-size: 0.95rem; color: var(--text-main); margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+
+        /* DAILY TOTALS DASHBOARDS */
+        .daily-totals-macro { background: var(--text-main); color: white; padding: 2rem; border-radius: 2px; margin-top: 1rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; font-family: 'Montserrat'; }
+        .daily-totals-macro div { text-align: left; }
+        .daily-totals-macro span { font-size: 0.65rem; color: var(--secondary-sand); letter-spacing: 2px; display: block; margin-bottom: 0.4rem; font-weight: 600; }
+        
+        .daily-totals-micro { background: var(--bg-color); color: var(--text-main); padding: 2rem; border-radius: 2px; margin-bottom: 2rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; font-family: 'Montserrat'; border: 1px solid var(--secondary-sand); border-top: none; }
+        .daily-totals-micro div { text-align: left; }
+        .daily-totals-micro span { font-size: 0.65rem; color: var(--text-main); letter-spacing: 1.5px; display: block; margin-bottom: 0.4rem; font-weight: 600; }
+
+        /* LIVE DATABASE DROPDOWN UI */
+        .premium-list-item { padding: 1.2rem; border-bottom: 1px solid var(--secondary-sand); cursor: pointer; transition: background 0.2s; border-radius: 2px; margin-bottom: 0.4rem; }
+        .premium-list-item:hover { background-color: var(--bg-color); border-color: var(--primary-sage); }
+        .premium-list-item strong { color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1rem; font-weight: 600;}
+        .premium-list-item span { font-size: 0.8rem; color: #666; font-family: 'Montserrat'; display: block; margin-top: 0.4rem; line-height: 1.5; }
+
+        /* SCANNER WINDOW */
+        #reader { width: 100%; display: none; margin-bottom: 1.5rem; border-radius: 8px; overflow: hidden; border: 1px solid var(--primary-sage); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.1); }
+
+        footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); color: #555; background: var(--card-bg); display: flex; flex-direction: column; text-align: center; gap: 2.5rem; max-width: 1300px; margin: 0 auto; }
+        .footer-logo-wrapper { width: 100%; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 3rem; margin-bottom: 3rem; margin-top: 4rem; text-align: center; }
+        .footer-brand-logo { height: 90px; object-fit: contain; }
+        .footer-col h4 { color: var(--text-main); margin-bottom: 1rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+
+        /* Desktop Layouts */
         @media (min-width: 768px) {
-            .soap-grid { grid-template-columns: 1fr 1fr; }
+            .pathway-grid { grid-template-columns: repeat(2, 1fr); }
+            .macro-grid { grid-template-columns: repeat(4, 1fr); }
+            .micro-grid { grid-template-columns: repeat(5, 1fr); }
+            .macro-grid label, .micro-grid label { text-align: center; padding-left: 0; }
+            .macro-grid input, .micro-grid input { text-align: center; }
+            .daily-totals-macro, .daily-totals-micro { display: flex; justify-content: space-between; }
+            .daily-totals-macro div, .daily-totals-micro div { text-align: center; }
         }
 
-        @media (min-width: 900px) { 
-            .nav-brand-logo { height: 60px; } 
-            .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; } 
-            .app-bottom-nav { display: none !important; } 
-            .dashboard-wrapper { display: block !important; padding: 0 6%; } 
-            .app-view { display: block !important; } 
-            .finance-grid { grid-template-columns: repeat(3, 1fr); } 
-            .panel { padding: 4rem 3rem; }
+        @media (min-width: 900px) {
+            .nav-brand-logo { height: 65px; } 
+            .mobile-menu-btn { display: none; }
+            .desktop-nav-links { display: flex; }
+            .pathway-grid { grid-template-columns: repeat(3, 1fr); }
+            .pricing-grid { grid-template-columns: repeat(3, 1fr); max-width: 1300px; }
+            .form-container { max-width: 580px; margin: 8rem auto; padding: 5rem 4rem; }
+            .form-row { grid-template-columns: 1fr 1fr; }
+            .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+            .dashboard-container { grid-template-columns: 2fr 1fr; padding: 0 6%; margin: 6rem auto; gap: 4rem; }
+            footer { flex-direction: row; text-align: left; justify-content: space-between; padding: 0 6% 6rem 6%; }
         }
     </style>
 </head>
 <body>
+
+    <script>
+        window.openScreen = function(screenId) {
+            document.querySelectorAll('.page-screen').forEach(el => el.classList.remove('visible'));
+            document.getElementById(screenId).classList.add('visible');
+            const drawer = document.getElementById('mobile-drawer');
+            if(drawer) drawer.classList.remove('open');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function toggleMobileMenu() { document.getElementById('mobile-drawer').classList.toggle('open'); }
+        function toggleAccordion(id) {
+            const panel = document.getElementById(id);
+            const btn = panel.previousElementSibling;
+            panel.classList.toggle('show');
+            btn.classList.toggle('active');
+            btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
+        }
+    </script>
+
     <nav>
-        <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="location.reload();">
+        <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="openScreen('screen-home')">
         
-        <div style="display: flex; gap: 1rem; align-items: center;">
-            <button id="btn-demo" class="btn" style="display: none; background-color: var(--text-main); border-color: var(--text-main); color: white; box-shadow: none;" onclick="injectDemoData()">Load Demo Data</button>
-            <button id="btn-logout" class="btn btn-outline" style="display: none;" onclick="location.reload();">Sign Out</button>
+        <div class="desktop-nav-links">
+            <span class="nav-link-text" onclick="openScreen('screen-about')">About Clare</span>
+            <button type="button" id="nav-portal-btn" class="btn btn-outline" onclick="openScreen('screen-login')">Patient Portal</button>
+            <button type="button" id="nav-book-btn" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
+            <button type="button" id="nav-logout-btn" class="btn btn-outline" style="display: none;" onclick="window.processLogout()">Sign Out</button>
         </div>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
 
-    <div id="admin-login" class="login-wrapper">
-        <div class="form-container">
+    <div class="mobile-drawer" id="mobile-drawer">
+        <span style="position: absolute; top: 1.5rem; right: 2rem; font-size: 2rem; cursor: pointer; color: var(--text-main);" onclick="toggleMobileMenu()">✕</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-home')">Home</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-about')">About Clare</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-login')" id="mobile-portal-link">Patient Portal</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-register')" id="mobile-book-link">Register & Book</span>
+        <span class="mobile-drawer-link" onclick="window.processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
+    </div>
+
+    <!-- ================= SCREEN 1: THE HOME PAGE ================= -->
+    <div id="screen-home" class="page-screen visible">
+        <section class="hero">
+            <h1>Healing From The Inside Out</h1>
+            <p>"Imagine Life Without Pain."</p>
+            <button type="button" class="btn" onclick="openScreen('screen-register')">Make An Appointment</button>
+        </section>
+
+        <section class="section">
+            <div class="section-image-wrapper">
+                <div class="image-arch-container">
+                    <!-- RESTORED LOCAL CLINICAL HERB PHOTO -->
+                    <img src="./clinical-herb.jpeg" alt="Hands holding flower" class="image-arch">
+                    <div class="image-floating-badge">
+                        <span>Evidence-Informed Care</span>
+                        <p>Root-cause functional protocols designed for rapid, sustainable recovery.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-text">
+                <span class="section-subtitle">Our Philosophy</span>
+                <h2>Results in a Realistic Timeframe</h2>
+                <p style="margin-bottom: 1.5rem;">The main aim of my clinic is to get results, in a quick and realistic timeframe. If you suffer from pain or discomfort, then I am here to help.</p>
+                <p style="margin-bottom: 2.5rem;">I offer a holistic approach to modern-day aches and pains. The Natural Healing Clinic is complementary to mainstream medical protocols.</p>
+                <h4 style="margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;">Do You Need Help With:</h4>
+                <ul class="help-list">
+                    <li>Pain Management & Muscular Pain</li>
+                    <li>Neck, Shoulder or Back Pain</li>
+                    <li>Chronic Fatigue & Long Covid</li>
+                    <li>Fibromyalgia & Sports Injuries</li>
+                    <li>Migraines & Digestive Complaints</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- THE CLINICAL PATHWAY SECTION -->
+        <section class="pathway-section">
+            <div style="text-align: center; max-width: 800px; margin: 0 auto 4rem auto;">
+                <span class="section-subtitle">Our Clinical Pathway</span>
+                <h2>Comprehensive Functional Care</h2>
+                <p style="color: #555;">A meticulously structured approach designed to map your physiology and orchestrate profound, lasting healing.</p>
+            </div>
+            
+            <div class="pathway-grid">
+                <div class="pathway-card">
+                    <span class="pathway-number">01.</span>
+                    <h4>Full Symptom Assessment & Medical History Review</h4>
+                    <p>An exhaustive clinical deep-dive into your physiological timeline to map the origin and progression of your condition.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">02.</span>
+                    <h4>Lifestyle & Metabolic Assessment</h4>
+                    <p>Evaluating the critical pillars of your health, including nutrition, sleep architecture, stress load, and metabolic function.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">03.</span>
+                    <h4>Identifying the Root Cause of Your Symptoms</h4>
+                    <p>Moving beyond symptom management to isolate the underlying systemic dysfunctions driving your discomfort.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">04.</span>
+                    <h4>Personalised Treatment Plan</h4>
+                    <p>A bespoke, evidence-informed protocol tailored precisely to your unique biology and treatment goals.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">05.</span>
+                    <h4>Progress Tracking</h4>
+                    <p>Continuous monitoring via your secure Patient Portal to ensure your protocol adapts as your body heals.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">06.</span>
+                    <h4>Lymphatic Treatments</h4>
+                    <p>Advanced hands-on therapies to clear systemic inflammation, reduce edema, and accelerate tissue recovery.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="pricing-section">
+            <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+                <span class="section-subtitle">Pillar 1: Deep Transformation</span>
+                <h2>Functional Medicine</h2>
+                <p style="color: #555;">Comprehensive, root-cause investigation and structured restorative pathways.</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div>
+                        <div class="price-title">Performance Health Audit</div>
+                        <div class="price-duration">Functional Kickstart</div>
+                        <div class="price-amount">£175</div>
+                        <ul class="price-features">
+                            <li>90-minute deep-dive functional consultation</li>
+                            <li>Full symptom timeline review</li>
+                            <li>Top 3 root-cause priorities identified</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Health Audit</button>
+                </div>
+
+                <div class="price-card featured">
+                    <div class="featured-badge">Comprehensive Protocol</div>
+                    <div>
+                        <div class="price-title">360° Burnout & Adrenal Protocol</div>
+                        <div class="price-duration">12-Week Executive Program</div>
+                        <div class="price-amount">£1,450</div>
+                        <ul class="price-features">
+                            <li>Complete root-cause functional health investigation</li>
+                            <li>Bi-weekly hands-on Vagal/Bowen resets</li>
+                            <li>Curated functional supplementation blueprint</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Apply For Protocol</button>
+                </div>
+
+                <div class="price-card">
+                    <div>
+                        <div class="price-title">The Gut Reset</div>
+                        <div class="price-duration">21-Day Programme</div>
+                        <div class="price-amount">£297 <span>£500</span></div>
+                        <ul class="price-features">
+                            <li>60-min functional gut assessment</li>
+                            <li>Personalised 21-day protocol</li>
+                            <li>Curated supplement guidance</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Gut Reset</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= SCREEN 2: ABOUT CLARE ================= -->
+    <div id="screen-about" class="page-screen">
+        <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
+            <span class="section-subtitle">Clinical Leadership</span>
+            <h1 style="margin-top: 0.5rem;">About Clare Kelly</h1>
+        </div>
+        <section class="section">
+            <div class="section-image-wrapper">
+                <video width="100%" controls playsinline style="border-radius: 2px; box-shadow: 0 25px 60px rgba(9, 93, 40, 0.08); object-fit: cover; max-height: 600px; background: var(--secondary-sand);">
+                    <source src="./clare-video.mp4.MOV" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="section-text">
+                <span class="section-subtitle">Practitioner Profile</span>
+                <h2 style="font-size: 2.2rem;">Bridging Functional Medicine & Soft-Tissue Therapy</h2>
+                <p style="margin-bottom: 1.5rem; color: #555;">Clare Kelly is a leading functional health and soft-tissue practitioner based in Castletown, Isle of Man. With decades of clinical experience, Clare established <strong>The Natural Healing Clinic</strong> with a singular mission: to provide patients suffering from chronic pain, systemic inflammation, and deep-seated physical trauma with clear, sustainable results in a realistic timeframe.</p>
+                <p style="margin-bottom: 2.5rem; color: #555;">Her clinical methodology is strictly evidence-informed, drawing from advanced training in Bowen Therapy, Manual Lymphatic Drainage (MLD), and Functional Medicine frameworks. Clare works closely alongside mainstream medical protocols, investigating the root causes of musculoskeletal disorders, autoimmune flare-ups, and nervous system dysregulation rather than merely masking symptoms.</p>
+                <button type="button" class="btn" onclick="openScreen('screen-register')">Book Your Initial Consultation</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= SCREEN 4: LOGIN ================= -->
+    <div id="screen-login" class="page-screen">
+        <div class="form-container" style="max-width: 480px;">
             <img src="./logo.png" alt="The Natural Healing Clinic" class="portal-logo">
-            <h2 style="color: var(--text-main); margin-bottom: 2rem; font-weight: 300;">Practitioner Workstation</h2>
-            <form onsubmit="return processAdminLogin(event)">
-                <label>Admin Email</label><input type="text" id="admin-email" placeholder="Enter clinical email" required>
-                <label>Password</label><input type="password" id="admin-password" placeholder="Enter secure password" required>
-                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Authenticate</button>
+            <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; font-family: 'Montserrat'; font-weight: 600;">Patient Portal</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2.5rem; font-size: 0.95rem;">Access your clinical files, health journals, and messages.</p>
+            <form onsubmit="return window.processClientLogin(event)">
+                <label>Email Address</label><input type="email" id="login-email" required>
+                <label>Password</label><input type="password" id="login-password" required>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Secure Login</button>
+            </form>
+            <div style="margin-top: 2.5rem; text-align: center;">
+                <a href="#" style="font-size: 0.75rem; color: var(--text-main); text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Forgot password?</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SCREEN 5: REGISTRATION ================= -->
+    <div id="screen-register" class="page-screen">
+        <div class="form-container" style="max-width: 580px;">
+            <img src="./logo.png" alt="The Natural Healing Clinic" class="portal-logo">
+            <h2 style="font-size: 1.8rem; margin-bottom: 2.5rem; font-family: 'Montserrat'; font-weight: 600;">Patient Registration</h2>
+            <form onsubmit="return window.processRegistration(event)">
+                <label>Full Name</label><input type="text" id="reg-name" required>
+                <label>Email Address</label><input type="email" id="reg-email" required>
+                <label>Create Password</label><input type="password" id="reg-password" required>
+                <label>Treatment Pathway</label>
+                <select id="reg-service">
+                    <option value="Initial Consultation (£85)">Initial Consultation (£85)</option>
+                    <option value="Performance Health Audit (£175)">Performance Health Audit (£175)</option>
+                    <option value="360 Burnout Protocol (£1,450)">360° Burnout Protocol (£1,450)</option>
+                </select>
+                <label>First Session Date & Time</label><input type="datetime-local" id="reg-date" required>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Complete Booking</button>
             </form>
         </div>
     </div>
 
-    <div id="admin-dashboard" class="dashboard-wrapper">
-        <div style="margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="font-size: 2.2rem; font-weight: 300; color: var(--text-main);" id="app-header-title">Master Schedule</h1>
-            <span id="live-badge" style="font-size: 0.75rem; background: transparent; color: var(--primary-sage); border: 1px solid var(--primary-sage); padding: 0.5rem 1.2rem; border-radius: 2px; font-family: 'Montserrat'; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;">● Live Sync</span>
-        </div>
-
-        <!-- VIEW 1: SCHEDULE -->
-        <div id="view-schedule" class="app-view active-view">
-            <div class="panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <h3>Upcoming Appointments</h3>
-                    <button class="btn" onclick="openNewBookingModal()">+ Manual Booking</button>
+    <!-- ================= SCREEN 6: LUXURY CLIENT DASHBOARD ================= -->
+    <div id="screen-dashboard" class="page-screen">
+        <div style="background-color: var(--card-bg); padding: 4rem 6%; border-bottom: 1px solid var(--secondary-sand);">
+            <div style="max-width: 1300px; margin: 0 auto; display: flex; align-items: center; gap: 2rem;">
+                <img src="./logo.png" alt="Logo" style="height: 60px;">
+                <div>
+                    <h1 id="portal-welcome-title" style="font-size: 2.2rem; margin-bottom: 0;">Patient Portal</h1>
+                    <p style="color: #666; font-style: italic; margin: 0;">Manage your clinical health journey.</p>
                 </div>
-                <div id="admin-schedule-list"><p style="color: #888; font-size: 0.95rem;">Loading schedule...</p></div>
             </div>
         </div>
 
-        <!-- VIEW 2: CLIENT DIRECTORY (MASTER LIST) -->
-        <div id="view-clients" class="app-view">
-            <div class="panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                    <h3>Patient Directory</h3>
-                    <button class="btn" onclick="openClientModal()">+ Add Client</button>
-                </div>
-                <p style="font-size: 1rem; color: #666; margin-bottom: 2.5rem;">Select a patient to access their clinical charting, workflow pipeline, and supplement prescriber.</p>
-                <div id="admin-client-directory-list"><p style="color: #888; font-size: 0.95rem;">Loading client records...</p></div>
-            </div>
-        </div>
+        <div class="dashboard-container">
+            <div>
+                <!-- LUXURY MFP STYLE HEALTH JOURNAL -->
+                <div class="dash-card">
+                    <h3>Daily Health Journal</h3>
+                    <p style="font-size: 0.95rem; color: #555; margin-bottom: 2.5rem;">Log your daily metrics. Search the database or scan a barcode to automatically track exact macros and key micronutrients.</p>
+                    
+                    <form onsubmit="return submitDailyLog(event)">
+                        
+                        <!-- Food (Live Database, Barcode & Responsive Matrix) -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-food')"><span>🥗 Advanced Nutrition Tracker</span> <span class="icon">+</span></div>
+                        <div class="journal-panel" id="journal-food">
+                            
+                            <!-- Live API Search Tool & Barcode Scanner -->
+                            <div style="background: var(--bg-color); padding: 2rem 1.5rem; border-radius: 2px; border: 1px solid var(--secondary-sand); margin-bottom: 3rem; margin-top: 1rem;">
+                                <h4 style="font-family: 'Montserrat'; font-size: 0.85rem; color: var(--text-main); margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: 2px;">Live Food Database & Barcode</h4>
+                                
+                                <div style="display: flex; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                                    <input type="text" id="food-search-query" placeholder="Search database (e.g. Oats)..." style="margin-bottom: 0; background: white; flex: 1; min-width: 180px;">
+                                    <button type="button" class="btn" style="padding: 0 1.5rem;" onclick="window.searchFood()">Search</button>
+                                    <button type="button" class="btn btn-outline" style="padding: 0 1.5rem; background: white;" onclick="window.startBarcodeScanner()">📷 Scan Barcode</button>
+                                </div>
+                                
+                                <div id="reader"></div>
+                                <div id="food-search-results" style="max-height: 250px; overflow-y: auto;"></div>
+                                <div id="food-selection-panel" style="display: none;"></div>
+                            </div>
 
-        <!-- DEDICATED CLIENT PROFILE (DETAIL PAGE WITH SOAP NOTES & PROTOCOLS) -->
-        <div id="view-client-detail" class="app-view">
-            <button class="btn btn-outline" style="margin-bottom: 2rem;" onclick="switchAppView('clients')">&larr; Back to Directory</button>
-            <div id="client-detail-content">
-                <!-- Dynamically populated by JS -->
-            </div>
-        </div>
+                            <!-- Breakfast -->
+                            <div class="meal-section">
+                                <h5>1. Breakfast</h5>
+                                <textarea id="log-brk-desc" placeholder="Exact foods & weights"></textarea>
+                                
+                                <div class="macro-grid">
+                                    <div><label>KCAL</label><input type="number" id="log-brk-cal" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>PRO (g)</label><input type="number" id="log-brk-pro" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>CARB (g)</label><input type="number" id="log-brk-car" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>FAT (g)</label><input type="number" id="log-brk-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                </div>
+                                
+                                <details style="outline: none;">
+                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 600;">+ Edit Fiber & Micronutrients</summary>
+                                    <div class="micro-grid">
+                                        <div><label>FIBER (g)</label><input type="number" id="log-brk-fib" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>SOD (mg)</label><input type="number" id="log-brk-sod" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>POT (mg)</label><input type="number" id="log-brk-pot" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>CALC (mg)</label><input type="number" id="log-brk-calc" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>IRON (mg)</label><input type="number" id="log-brk-iron" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    </div>
+                                </details>
+                            </div>
 
-        <!-- VIEW 3: FINANCE -->
-        <div id="view-finance" class="app-view">
-            <div class="panel">
-                <h3>Clinic Income & Professional Invoicing</h3>
-                <div class="finance-grid">
-                    <div class="metric-card"><span>Month Revenue</span><h4 id="stat-revenue">£0</h4></div>
-                    <div class="metric-card"><span>Sessions Booked</span><h4 id="stat-sessions">0</h4></div>
+                            <!-- Lunch -->
+                            <div class="meal-section">
+                                <h5>2. Lunch</h5>
+                                <textarea id="log-lun-desc" placeholder="Exact foods & weights"></textarea>
+                                <div class="macro-grid">
+                                    <div><label>KCAL</label><input type="number" id="log-lun-cal" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>PRO (g)</label><input type="number" id="log-lun-pro" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>CARB (g)</label><input type="number" id="log-lun-car" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>FAT (g)</label><input type="number" id="log-lun-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                </div>
+                                <details style="outline: none;">
+                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 600;">+ Edit Fiber & Micronutrients</summary>
+                                    <div class="micro-grid">
+                                        <div><label>FIBER (g)</label><input type="number" id="log-lun-fib" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>SOD (mg)</label><input type="number" id="log-lun-sod" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>POT (mg)</label><input type="number" id="log-lun-pot" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>CALC (mg)</label><input type="number" id="log-lun-calc" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>IRON (mg)</label><input type="number" id="log-lun-iron" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    </div>
+                                </details>
+                            </div>
+
+                            <!-- Dinner -->
+                            <div class="meal-section">
+                                <h5>3. Dinner</h5>
+                                <textarea id="log-din-desc" placeholder="Exact foods & weights"></textarea>
+                                <div class="macro-grid">
+                                    <div><label>KCAL</label><input type="number" id="log-din-cal" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>PRO (g)</label><input type="number" id="log-din-pro" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>CARB (g)</label><input type="number" id="log-din-car" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>FAT (g)</label><input type="number" id="log-din-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                </div>
+                                <details style="outline: none;">
+                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 600;">+ Edit Fiber & Micronutrients</summary>
+                                    <div class="micro-grid">
+                                        <div><label>FIBER (g)</label><input type="number" id="log-din-fib" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>SOD (mg)</label><input type="number" id="log-din-sod" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>POT (mg)</label><input type="number" id="log-din-pot" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>CALC (mg)</label><input type="number" id="log-din-calc" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>IRON (mg)</label><input type="number" id="log-din-iron" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    </div>
+                                </details>
+                            </div>
+
+                            <!-- Snacks -->
+                            <div class="meal-section" style="border-bottom: none; margin-bottom: 0;">
+                                <h5>4. Snacks & Supplements</h5>
+                                <textarea id="log-snk-desc" placeholder="Exact foods, supplements, and any digestive symptoms"></textarea>
+                                <div class="macro-grid">
+                                    <div><label>KCAL</label><input type="number" id="log-snk-cal" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>PRO (g)</label><input type="number" id="log-snk-pro" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>CARB (g)</label><input type="number" id="log-snk-car" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    <div><label>FAT (g)</label><input type="number" id="log-snk-fat" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                </div>
+                                <details style="outline: none;">
+                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 600;">+ Edit Fiber & Micronutrients</summary>
+                                    <div class="micro-grid">
+                                        <div><label>FIBER (g)</label><input type="number" id="log-snk-fib" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>SOD (mg)</label><input type="number" id="log-snk-sod" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>POT (mg)</label><input type="number" id="log-snk-pot" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>CALC (mg)</label><input type="number" id="log-snk-calc" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                        <div><label>IRON (mg)</label><input type="number" id="log-snk-iron" placeholder="0" oninput="window.updateDailyTotals()"></div>
+                                    </div>
+                                </details>
+                            </div>
+
+                            <!-- LUXURY DAILY TOTALS DASHBOARD -->
+                            <div class="daily-totals-macro">
+                                <div><span>CALORIES</span><strong id="tot-cal" style="font-size:1.8rem;">0</strong></div>
+                                <div><span>PROTEIN</span><strong id="tot-pro" style="font-size:1.3rem;">0g</strong></div>
+                                <div><span>CARBS</span><strong id="tot-car" style="font-size:1.3rem;">0g</strong></div>
+                                <div><span>FAT</span><strong id="tot-fat" style="font-size:1.3rem;">0g</strong></div>
+                            </div>
+                            <div class="daily-totals-micro">
+                                <div><span>FIBER</span><strong id="tot-fib" style="font-size:1.1rem; color:var(--text-main);">0g</strong></div>
+                                <div><span>SODIUM</span><strong id="tot-sod" style="font-size:1.1rem;">0mg</strong></div>
+                                <div><span>POTASSIUM</span><strong id="tot-pot" style="font-size:1.1rem;">0mg</strong></div>
+                                <div><span>CALCIUM</span><strong id="tot-calc" style="font-size:1.1rem;">0mg</strong></div>
+                                <div><span>IRON</span><strong id="tot-iron" style="font-size:1.1rem;">0mg</strong></div>
+                            </div>
+
+                        </div>
+
+                        <!-- Remaining Logs -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-activity')"><span>🏃‍♀️ Activity & Movement</span> <span class="icon">+</span></div>
+                        <div class="journal-panel" id="journal-activity">
+                            <label>Workout / Activity Type</label><input type="text" id="log-activity-type" placeholder="e.g. Walking, Yoga, Cycling">
+                            <label>Duration (Minutes)</label><input type="number" id="log-activity-dur" placeholder="e.g. 45">
+                            <label>Intensity</label>
+                            <select id="log-activity-int"><option value="">Select...</option><option value="Light">Light</option><option value="Moderate">Moderate</option><option value="Vigorous">Vigorous</option></select>
+                        </div>
+
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-mood')"><span>🧠 Mood & Stress</span> <span class="icon">+</span></div>
+                        <div class="journal-panel" id="journal-mood">
+                            <label>Overall Mood</label>
+                            <select id="log-mood-rating"><option value="">Select...</option><option value="Great">Great</option><option value="Good">Good</option><option value="Okay">Okay</option><option value="Low">Low</option><option value="Anxious/Stressed">Anxious/Stressed</option></select>
+                            <label>Energy Level (1-10)</label><input type="number" id="log-energy" placeholder="10 = High Energy" min="1" max="10">
+                            <label>Emotional Notes</label><input type="text" id="log-mood-notes" placeholder="Any specific triggers today?">
+                        </div>
+
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-sleep')"><span>💤 Sleep</span> <span class="icon">+</span></div>
+                        <div class="journal-panel" id="journal-sleep">
+                            <label>Hours Slept</label><input type="number" step="0.5" id="log-sleep-hours" placeholder="e.g. 7.5">
+                            <label>Sleep Quality (1-5)</label>
+                            <select id="log-sleep-quality"><option value="">Select...</option><option value="5">5 - Excellent</option><option value="4">4 - Good</option><option value="3">3 - Fair</option><option value="2">2 - Poor</option><option value="1">1 - Terrible</option></select>
+                        </div>
+
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-bowel')"><span>🚽 Bowel Movements</span> <span class="icon">+</span></div>
+                        <div class="journal-panel" id="journal-bowel">
+                            <label>Type (Bristol Scale)</label>
+                            <select id="log-bowel-type">
+                                <option value="">Select type...</option><option value="Type 1: Separate hard lumps">Type 1: Separate hard lumps</option><option value="Type 2: Sausage-shaped, lumpy">Type 2: Sausage-shaped, lumpy</option><option value="Type 3: Like a sausage but with cracks">Type 3: Like a sausage but with cracks</option><option value="Type 4: Like a sausage, smooth & soft">Type 4: Like a sausage, smooth & soft (Ideal)</option><option value="Type 5: Soft blobs with clear cut edges">Type 5: Soft blobs</option><option value="Type 6: Fluffy pieces with ragged edges">Type 6: Fluffy/Mushy</option><option value="Type 7: Watery, no solid pieces">Type 7: Watery/Liquid</option>
+                            </select>
+                            <label>Frequency Today</label><input type="number" id="log-bowel-freq" placeholder="How many times today?">
+                        </div>
+
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-water')"><span>💧 Hydration</span> <span class="icon">+</span></div>
+                        <div class="journal-panel" id="journal-water">
+                            <label>Water Intake</label><input type="text" id="log-water" placeholder="e.g. 2 Liters or 8 Glasses">
+                        </div>
+
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-meas')"><span>📏 Measurements & Vitals</span> <span class="icon">+</span></div>
+                        <div class="journal-panel" id="journal-meas">
+                            <label>Weight</label><input type="text" id="log-meas-weight" placeholder="e.g. 72 kg or 11.3 st">
+                            <label>Blood Pressure / Pulse (Optional)</label><input type="text" id="log-meas-bp" placeholder="e.g. 120/80">
+                        </div>
+
+                        <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Save & Submit Daily Log</button>
+                    </form>
                 </div>
-                <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 2.5rem; border-radius: 2px; margin-top: 3rem;">
-                    <h4 style="font-family: 'Montserrat'; font-size: 1.1rem; color: var(--text-main); margin-bottom: 1.5rem; font-weight: 600;">Create Invoice</h4>
-                    <form onsubmit="return generateInvoice(event)">
-                        <label>Client Full Name</label><input type="text" id="inv-client" required style="background: white;">
-                        <label>Client Postal Address</label><textarea id="inv-address" style="height: 80px; background: white;" required></textarea>
-                        <label>Select Treatment</label>
-                        <select id="inv-service-select" style="background: white;">
-                            <option value="Initial Consultation (£85)">Initial Consultation - £85</option>
-                            <option value="Standard Follow-Up Session (£75)">Standard Follow-Up Session - £75</option>
-                            <option value="360 Burnout Protocol (£1,450)">360° Burnout Protocol - £1,450</option>
+
+                <!-- COMPREHENSIVE MEDICAL INTAKE -->
+                <div class="dash-card">
+                    <h3>Comprehensive Medical Intake</h3>
+                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">Please complete this detailed functional health profile prior to your initial consultation.</p>
+                    
+                    <form onsubmit="return window.submitMedicalIntake(event)">
+                        <div class="form-row">
+                            <div><label>Age</label><input type="number" id="intake-age" required></div>
+                            <div><label>Sex</label><select id="intake-sex" required><option value="">Select</option><option value="Female">Female</option><option value="Male">Male</option></select></div>
+                        </div>
+                        <div class="form-row">
+                            <div><label>Height</label><input type="text" id="intake-height" required></div>
+                            <div><label>Weight</label><input type="text" id="intake-weight" required></div>
+                        </div>
+                        <label>Primary Treatment Aims</label>
+                        <textarea id="intake-aims" style="height:80px;" required></textarea>
+
+                        <div style="margin: 3rem 0; border-top: 1px solid var(--secondary-sand); padding-top: 2rem;">
+                            <h4 style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.2rem;">1. Immune & Digestion Systems</h4>
+                            <label>Have you ever been diagnosed with an autoimmune disease?</label>
+                            <input type="text" id="fm-immune-1" placeholder="Specify disease and when diagnosed">
+                            
+                            <label>Do you experience gas and/or bloating after eating? Any foods in particular?</label>
+                            <input type="text" id="fm-digest-1" placeholder="Specify triggers">
+                            
+                            <label>Do you experience skin itching, psoriasis, eczema, rosacea, or acne?</label>
+                            <input type="text" id="fm-digest-2" placeholder="Specify skin conditions">
+                        </div>
+
+                        <div style="margin: 3rem 0; border-top: 1px solid var(--secondary-sand); padding-top: 2rem;">
+                            <h4 style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.2rem;">2. Hormones, Thyroid & Blood Sugar</h4>
+                            <label>Do you get cravings for sugar OR salt?</label>
+                            <input type="text" id="fm-hormone-1" placeholder="Specify cravings">
+                            
+                            <label>When you wake up, do you feel energised or do you want to sleep longer?</label>
+                            <input type="text" id="fm-hormone-2" placeholder="Describe morning energy">
+                            
+                            <label>Do you get cold hands/feet, easily gain weight, or have constipation?</label>
+                            <input type="text" id="fm-thyroid-1" placeholder="Specify symptoms">
+                            
+                            <label>Do you feel tired/fatigued after a meal, or energized?</label>
+                            <input type="text" id="fm-blood-1" placeholder="Describe post-meal energy">
+                        </div>
+
+                        <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 2rem; border-radius: 2px; margin-bottom: 2.5rem; margin-top: 1rem;">
+                            <h4 style="font-family: 'Montserrat', sans-serif; color: var(--text-main); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;">Functional Medicine Informed Consent</h4>
+                            <p style="font-size: 0.95rem; color: #555; line-height: 1.7; margin-bottom: 1rem;">I understand in the practice of functional medicine, some treatments are considered "alternative" by the conventional medical community. I understand Functional Medicine is not a substitute for treatment from a primary care physician.</p>
+                            <p style="font-size: 0.95rem; color: #555; line-height: 1.7; margin-bottom: 1rem;">Because of specific risks regarding internet communication, Functional Medicine Services will use reasonable means to protect security but cannot guarantee the confidentiality of e-mail communication.</p>
+                            <div style="display: flex; align-items: flex-start; gap: 1rem; margin-top: 1.5rem; background: white; padding: 1.5rem; border-radius: 2px; border: 1px solid var(--secondary-sand);">
+                                <input type="checkbox" id="fm-consent" required style="width: 24px; height: 24px; margin: 0; flex-shrink: 0;">
+                                <label style="text-transform: none; letter-spacing: 0; font-family: 'Montserrat'; font-size: 0.9rem; color: var(--text-main); font-weight: 500; margin: 0; line-height: 1.5;">I acknowledge I have carefully read and understand the above consent. I authorize medical treatment and use of e-mail correspondence.</label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn" style="width: 100%;">Sign & Submit Intake File</button>
+                    </form>
+                </div>
+
+                <div class="dash-card" id="new-booking-card">
+                    <h3>Book Another Session</h3>
+                    <form onsubmit="return window.bookNewSession(event)">
+                        <label>Treatment Pathway</label>
+                        <select id="portal-service">
+                            <option value="Initial Consultation (£85)">Initial Consultation (£85)</option>
+                            <option value="Performance Health Audit (£175)">Performance Health Audit (£175)</option>
+                            <option value="360 Burnout Protocol (£1,450)">360° Burnout Protocol (£1,450)</option>
                         </select>
-                        <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Generate Printable Invoice</button>
+                        <label>Date & Time</label>
+                        <input type="datetime-local" id="portal-date" required>
+                        <button type="submit" class="btn" style="width: 100%;">Confirm Booking</button>
+                    </form>
+                </div>
+            </div>
+
+            <div>
+                <div class="dash-card">
+                    <h3>Your Appointments</h3>
+                    <div id="client-appointments-list"><p style="color: #888; font-size: 0.95rem;">Loading schedule...</p></div>
+                </div>
+
+                <div class="dash-card">
+                    <h3>Secure Messaging</h3>
+                    <div class="chat-box" id="client-chat-box"></div>
+                    <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 1rem;">
+                        <input type="text" id="client-msg-input" placeholder="Type message..." style="margin-bottom: 0; flex: 1;" required>
+                        <button type="submit" class="btn" style="padding: 0 1.5rem; border-radius: 2px;">Send</button>
                     </form>
                 </div>
             </div>
         </div>
-
-        <!-- VIEW 4: LIVE INBOX -->
-        <div id="view-inbox" class="app-view">
-            <div class="panel">
-                <h3>Live Patient Inbox</h3>
-                <div class="chat-box" id="admin-chat-box"><p style="color: #888; font-size: 0.95rem;">Loading messages...</p></div>
-            </div>
-        </div>
-
-        <!-- VIEW 5: BROADCAST -->
-        <div id="view-tools" class="app-view">
-            <div class="panel">
-                <h3>Send Advice & Files</h3>
-                <form onsubmit="alert('Dispatched!'); return false;">
-                    <label>Send To</label><select><option value="all">All Clients (Mass Broadcast)</option></select>
-                    <label>Title</label><input type="text" required>
-                    <label>Content</label><textarea style="height: 120px;" required></textarea>
-                    <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Dispatch Protocol</button>
-                </form>
-            </div>
-        </div>
     </div>
 
-    <!-- BOTTOM NAV -->
-    <div class="app-bottom-nav" id="app-bottom-nav">
-        <div class="app-nav-item active" onclick="switchAppView('schedule', this)">
-            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>Schedule
+    <footer>
+        <div class="footer-logo-wrapper">
+            <img src="./logo.png" alt="The Natural Healing Clinic" class="footer-brand-logo">
         </div>
-        <div class="app-nav-item" onclick="switchAppView('clients', this)">
-            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>Clients
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; width: 100%;">
+            <div class="footer-col" style="text-align: left;">
+                <h4>The Natural Healing Clinic</h4>
+                <p>13 Cronk Drine, Union Mills</p>
+                <p>Isle of Man, IM4 4NG</p>
+            </div>
+            <div class="footer-col" style="text-align: right;">
+                <h4>Contact & Hours</h4>
+                <p>Tel: 07624 202 121</p>
+                <p>Mon & Fri: 10:00 - 15:00</p>
+            </div>
         </div>
-        <div class="app-nav-item" onclick="switchAppView('finance', this)">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>Finance
-        </div>
-        <div class="app-nav-item" onclick="switchAppView('inbox', this)">
-            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>Inbox
-        </div>
-        <div class="app-nav-item" onclick="switchAppView('tools', this)">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9c0 .69.41 1.32 1.05 1.51H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Tools
-        </div>
-    </div>
+    </footer>
 
-    <!-- JS LOGIC WITH NEW CLINICAL FEATURES -->
+    <!-- JS LOGIC -->
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
-        let globalClients = [];
-        let globalMsgs = [];
 
         function getSupabase() {
             if(!window.supabase) return null;
             return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         }
 
-        function switchAppView(viewName, element) {
-            document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active-view'));
-            document.querySelectorAll('.app-nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`view-${viewName}`).classList.add('active-view');
-            if(element) element.classList.add('active');
-            
-            const titles = { schedule: 'Master Schedule', clients: 'Patient Directory', 'client-detail': 'Clinical Profile', finance: 'Income & Invoicing', inbox: 'Live Patient Inbox', tools: 'Clinic Tools' };
-            document.getElementById('app-header-title').innerText = titles[viewName] || 'Dashboard';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function processAdminLogin(e) {
+        window.processClientLogin = async function(e) {
             e.preventDefault();
-            const email = document.getElementById('admin-email').value.trim();
-            const pass = document.getElementById('admin-password').value.trim();
-            
-            if (email === 'test' && pass === 'test') { 
-                initDashboard(); 
-                return false; 
-            }
-            
             const db = getSupabase();
-            const { error } = await db.auth.signInWithPassword({ email, password: pass });
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-password').value.trim();
+            const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
             if (error) alert('Login failed: ' + error.message);
-            else initDashboard();
+            else { updateNavState(true); openScreen('screen-dashboard'); loadClientDashboard(db, data.user); }
             return false;
-        }
+        };
 
-        function initDashboard() {
-            document.getElementById('admin-login').style.display = 'none';
-            document.getElementById('admin-dashboard').style.display = 'block';
-            document.getElementById('btn-logout').style.display = 'inline-block';
-            document.getElementById('btn-demo').style.display = 'inline-block';
-            if(window.innerWidth < 900) { document.getElementById('app-bottom-nav').style.display = 'flex'; }
-            
+        window.processRegistration = async function(e) {
+            e.preventDefault();
             const db = getSupabase();
-            loadSchedule(db); 
-            loadClientDirectory(db); 
-            loadAdminInbox(db); 
-            loadFinanceMetrics(db);
-            setInterval(() => loadAdminInbox(db, true), 10000);
-        }
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass = document.getElementById('reg-password').value.trim();
+            const service = document.getElementById('reg-service').value;
+            const date = document.getElementById('reg-date').value;
 
-        async function loadSchedule(db) {
-            const container = document.getElementById('admin-schedule-list');
-            const { data: appts } = await db.from('appointments').select('*').order('appointment_time', { ascending: true });
-            if(!appts || appts.length === 0) { container.innerHTML = '<p style="color: #666; font-size: 0.95rem;">No upcoming bookings found.</p>'; return; }
+            const { data: authData, error } = await db.auth.signUp({ email, password: pass, options: { data: { full_name: name } } });
+            if (error) { alert('Error: ' + error.message); return false; }
+            if (authData.user) {
+                await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
+            }
+            alert('Registered successfully!'); updateNavState(true); openScreen('screen-dashboard'); loadClientDashboard(db, authData.user);
+            return false;
+        };
 
-            container.innerHTML = appts.map(a => `
-                <div class="cal-card">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <div>
-                            <strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.15rem;">${a.client_name}</strong><br>
-                            <span style="font-size: 0.95rem; color: #555; font-weight: 500;">${a.service_name}</span>
-                        </div>
-                        <div style="text-align: right; font-size: 0.85rem; color: #666;">
-                            ${new Date(a.appointment_time).toLocaleDateString('en-GB', {weekday: 'short', month: 'short', day: 'numeric'})}<br>
-                            <strong style="color: var(--primary-sage); font-size: 1.05rem;">${new Date(a.appointment_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</strong>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 1rem; border-top: 1px solid var(--secondary-sand); padding-top: 1.2rem; margin-top: 1rem;">
-                        <input type="datetime-local" id="resched-${a.id}" style="margin-bottom:0; font-size:0.95rem; padding: 0.8rem; flex: 1; background: white;" required>
-                        <button class="btn" style="padding: 0 1.5rem; font-size:0.75rem;" onclick="rescheduleBooking('${a.id}')">Reschedule</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function rescheduleBooking(apptId) {
-            const newTime = document.getElementById(`resched-${apptId}`).value;
-            if(!newTime) { alert("Please select a new date and time."); return; }
+        window.submitMedicalIntake = async function(e) {
+            e.preventDefault();
             const db = getSupabase();
-            await db.from('appointments').update({ appointment_time: newTime }).eq('id', apptId);
-            alert("Rescheduled!"); loadSchedule(db);
-        }
+            const { data: { user } } = await db.auth.getUser();
+            if(!user) return false;
 
-        async function openNewBookingModal() {
-            const clientName = prompt("Enter Patient Full Name:");
-            if(!clientName) return;
-            const service = prompt("Enter Treatment/Service:", "Initial Consultation (£85)");
-            if(!service) return;
-            const dateInput = prompt("Enter Date & Time (YYYY-MM-DD HH:MM):", new Date().toISOString().slice(0,16).replace('T', ' '));
-            if(!dateInput) return;
-            
-            const db = getSupabase();
-            await db.from('appointments').insert([{ 
-                client_id: 'manual_' + Date.now(), 
-                client_name: clientName, 
-                service_name: service, 
-                appointment_time: new Date(dateInput).toISOString(), 
-                status: 'confirmed' 
-            }]);
-            alert("Patient successfully booked!"); 
-            loadSchedule(db);
-            loadClientDirectory(db);
-        }
+            const summary = `[MEDICAL INTAKE SUBMISSION]
+Age: ${document.getElementById('intake-age').value} | Sex: ${document.getElementById('intake-sex').value}
+Height: ${document.getElementById('intake-height').value} | Weight: ${document.getElementById('intake-weight').value}
 
-        async function openClientModal() {
-            const name = prompt("Enter Patient Full Name to Onboard:");
-            if(!name) return;
-            
-            const db = getSupabase();
-            await db.from('appointments').insert([{ 
-                client_id: 'client_' + Date.now(), 
-                client_name: name, 
-                service_name: 'Existing Record Transferred', 
-                appointment_time: new Date().toISOString(), 
-                status: 'confirmed' 
-            }]);
-            alert("Patient profile created!"); 
-            loadClientDirectory(db);
-        }
+AIMS: ${document.getElementById('intake-aims').value}
 
-        async function loadClientDirectory(db) {
-            const container = document.getElementById('admin-client-directory-list');
-            const { data: appts } = await db.from('appointments').select('*');
-            const { data: msgs } = await db.from('messages').select('*').order('created_at', { ascending: false });
+FUNCTIONAL MARKERS:
+Autoimmune: ${document.getElementById('fm-immune-1').value || 'N/A'}
+Digestion/Gas: ${document.getElementById('fm-digest-1').value || 'N/A'}
+Skin Issues: ${document.getElementById('fm-digest-2').value || 'N/A'}
+Cravings: ${document.getElementById('fm-hormone-1').value || 'N/A'}
+Morning Energy: ${document.getElementById('fm-hormone-2').value || 'N/A'}
+Thyroid Markers: ${document.getElementById('fm-thyroid-1').value || 'N/A'}
+Blood Sugar: ${document.getElementById('fm-blood-1').value || 'N/A'}
 
-            if(!appts || appts.length === 0) { 
-                container.innerHTML = '<p style="color: #666; font-size: 1rem;">No clients found in database.</p>'; 
-                return; 
+CONSENT: Patient has digitally signed the Functional Medicine Informed Consent waiver.`;
+
+            await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: summary }]);
+            alert("Comprehensive Medical Intake questionnaire successfully submitted to Clare!");
+            return false;
+        };
+
+        // --- OPEN FOOD FACTS API INTEGRATION & BARCODE SCANNER ---
+        window.startBarcodeScanner = function() {
+            const readerDiv = document.getElementById('reader');
+            if(readerDiv.style.display === 'block') {
+                if(window.html5QrCode) {
+                    window.html5QrCode.stop().then(() => { readerDiv.style.display = 'none'; });
+                }
+                return;
             }
             
-            globalClients = Array.from(new Set(appts.map(a => a.client_id))).map(id => appts.find(a => a.client_id === id));
-            globalMsgs = msgs || [];
-
-            container.innerHTML = globalClients.map(client => `
-                <div class="client-list-item" onclick="openClientProfile('${client.client_id}')">
-                    <div>
-                        <h4>${client.client_name}</h4>
-                        <span style="font-size: 0.9rem; color: #666;">View clinical charting, workflow pipeline, & supplement prescriber</span>
-                    </div>
-                    <span style="color: var(--primary-sage); font-size: 1.5rem;">&rarr;</span>
-                </div>
-            `).join('');
-        }
-
-        async function loadFinanceMetrics(db) {
-            const { data: appts } = await db.from('appointments').select('*');
-            if(!appts) return;
-            let totalRevenue = 0;
-            appts.forEach(a => {
-                if(a.service_name.includes('£85')) totalRevenue += 85;
-                else if(a.service_name.includes('£175')) totalRevenue += 175;
-                else if(a.service_name.includes('£297')) totalRevenue += 297;
-                else if(a.service_name.includes('£1,450')) totalRevenue += 1450;
-                else if(a.service_name.includes('£90')) totalRevenue += 90;
-                else if(a.service_name.includes('£95')) totalRevenue += 95;
-                else totalRevenue += 75;
+            readerDiv.style.display = 'block';
+            window.html5QrCode = new Html5Qrcode("reader");
+            window.html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: {width: 250, height: 150} },
+                (decodedText) => {
+                    window.html5QrCode.stop().then(() => {
+                        readerDiv.style.display = 'none';
+                        window.lookupBarcode(decodedText);
+                    });
+                },
+                (errorMessage) => { /* ignore minor scan errors */ }
+            ).catch(err => {
+                alert("Camera access error. Ensure you are on HTTPS and have granted permissions.");
+                readerDiv.style.display = 'none';
             });
-            document.getElementById('stat-revenue').innerText = `£${totalRevenue.toLocaleString()}`;
-            document.getElementById('stat-sessions').innerText = appts.length;
-        }
+        };
 
-        async function loadAdminInbox(db, isPolling = false) {
-            const chatBox = document.getElementById('admin-chat-box');
-            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
-            if(!data || data.length === 0) { chatBox.innerHTML = '<p style="color: #888; font-size: 1rem;">No messages yet.</p>'; return; }
-
-            const chatMsgs = data.filter(m => !m.content.includes('[DAILY HEALTH LOG]') && !m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
-            if (isPolling && chatMsgs.length > window.lastMessageCount && window.lastMessageCount > 0) {
-                document.title = "🔔 NEW MESSAGE - Clinic App";
+        window.lookupBarcode = async function(barcode) {
+            const resBox = document.getElementById('food-search-results');
+            resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Looking up barcode...</p>';
+            try {
+                const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`);
+                const data = await res.json();
+                if(data.status === 1 && data.product) {
+                    const p = data.product;
+                    const name = p.product_name || 'Unknown Food';
+                    const kcal = p.nutriments ? (p.nutriments['energy-kcal_100g'] || 0) : 0;
+                    const pro = p.nutriments ? (p.nutriments.proteins_100g || 0) : 0;
+                    const car = p.nutriments ? (p.nutriments.carbohydrates_100g || 0) : 0;
+                    const fat = p.nutriments ? (p.nutriments.fat_100g || 0) : 0;
+                    const fib = p.nutriments ? (p.nutriments.fiber_100g || 0) : 0;
+                    const sod = p.nutriments ? ((p.nutriments.sodium_100g || 0) * 1000) : 0;
+                    const pot = p.nutriments ? ((p.nutriments.potassium_100g || 0) * 1000) : 0;
+                    const calc = p.nutriments ? ((p.nutriments.calcium_100g || 0) * 1000) : 0;
+                    const iron = p.nutriments ? ((p.nutriments.iron_100g || 0) * 1000) : 0;
+                    
+                    const safeName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                    window.selectFood(safeName, kcal, pro, car, fat, fib, sod, pot, calc, iron);
+                } else {
+                    resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Product not found in database.</p>';
+                }
+            } catch(err) {
+                resBox.innerHTML = '<p style="color:red; font-size:0.9rem;">Error connecting to food database.</p>';
             }
-            window.lastMessageCount = chatMsgs.length;
+        };
 
-            chatBox.innerHTML = chatMsgs.map(m => `<div class="msg ${m.sender}"><strong>${m.sender === 'client' ? 'Patient' : 'Clare'}:</strong> ${m.content}</div>`).join('');
-        }
+        window.searchFood = async function() {
+            const query = document.getElementById('food-search-query').value.trim();
+            if(!query) return;
+            const resBox = document.getElementById('food-search-results');
+            resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Searching database...</p>';
+            try {
+                const res = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10`);
+                const data = await res.json();
+                if(data.products && data.products.length > 0) {
+                    let html = '<div style="margin-top: 1rem;">';
+                    data.products.forEach((p) => {
+                        const name = p.product_name || 'Unknown Food';
+                        const brand = p.brands ? `(${p.brands})` : '';
+                        
+                        const kcal = p.nutriments ? (p.nutriments['energy-kcal_100g'] || 0) : 0;
+                        const pro = p.nutriments ? (p.nutriments.proteins_100g || 0) : 0;
+                        const car = p.nutriments ? (p.nutriments.carbohydrates_100g || 0) : 0;
+                        const fat = p.nutriments ? (p.nutriments.fat_100g || 0) : 0;
+                        const fib = p.nutriments ? (p.nutriments.fiber_100g || 0) : 0;
 
-        // --- MASTER DETAIL PROFILE VIEW WITH SOAP NOTES & SUPPLEMENT PRESCRIBER ---
-        function openClientProfile(clientId) {
-            const client = globalClients.find(c => c.client_id === clientId) || { client_name: 'Unknown Client', client_id: clientId };
-            const clientMsgs = globalMsgs.filter(m => m.client_id === clientId);
+                        const sod = p.nutriments ? ((p.nutriments.sodium_100g || 0) * 1000) : 0;
+                        const pot = p.nutriments ? ((p.nutriments.potassium_100g || 0) * 1000) : 0;
+                        const calc = p.nutriments ? ((p.nutriments.calcium_100g || 0) * 1000) : 0;
+                        const iron = p.nutriments ? ((p.nutriments.iron_100g || 0) * 1000) : 0;
+                        
+                        const safeName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        
+                        html += `<div class="premium-list-item" onclick="window.selectFood('${safeName}', ${kcal}, ${pro}, ${car}, ${fat}, ${fib}, ${sod}, ${pot}, ${calc}, ${iron})">
+                            <strong>${name} ${brand}</strong>
+                            <span>Per 100g: ${kcal} kcal | ${pro}g Pro | ${car}g Carb | ${fat}g Fat | ${fib}g Fiber</span>
+                        </div>`;
+                    });
+                    html += '</div>';
+                    resBox.innerHTML = html;
+                } else {
+                    resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">No results found. Try another search.</p>';
+                }
+            } catch(err) {
+                resBox.innerHTML = '<p style="color:red; font-size:0.9rem;">Error connecting to food database.</p>';
+            }
+        };
 
-            const intakeMsg = clientMsgs.find(m => m.content && m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
-            let intakeDisplay = intakeMsg ? intakeMsg.content.replace('[MEDICAL INTAKE SUBMISSION]', '').trim() : 'Questionnaire not yet completed.';
-
-            const soapNotes = clientMsgs.filter(m => m.content && m.content.includes('[CLINICAL SOAP NOTE]'));
-            let soapsHtml = soapNotes.length ? soapNotes.map(s => `<div style="background: white; padding: 1.5rem; margin-bottom: 1rem; border-left: 4px solid var(--primary-sage); border: 1px solid var(--secondary-sand);"><pre style="white-space: pre-wrap; font-family: inherit; font-size: 0.95rem;">${s.content.replace('[CLINICAL SOAP NOTE]', '').trim()}</pre></div>`).join('') : '<p style="color:#888; font-size:0.95rem;">No clinical SOAP notes recorded yet.</p>';
-
-            const protocols = clientMsgs.filter(m => m.content && m.content.includes('[SUPPLEMENT PROTOCOL]'));
-            let protocolsHtml = protocols.length ? protocols.map(p => `<div style="background: #E6EFE8; padding: 1.5rem; margin-bottom: 1rem; border: 1px solid var(--primary-sage); border-radius: 4px;"><pre style="white-space: pre-wrap; font-family: inherit; font-size: 0.95rem; color: var(--text-main);">${p.content.replace('[SUPPLEMENT PROTOCOL]', '').trim()}</pre></div>`).join('') : '<p style="color:#888; font-size:0.95rem;">No active supplement protocol prescribed.</p>';
-
-            const dailyLogs = clientMsgs.filter(m => m.content && m.content.includes('[DAILY HEALTH LOG]'));
-            let logsHtml = dailyLogs.length ? dailyLogs.map(log => `<div style="background: white; padding: 1.5rem; margin-bottom: 1rem; border-radius: 4px; border: 1px solid var(--secondary-sand);"><pre style="white-space: pre-wrap; font-family: inherit; font-size: 0.95rem; color: #333;">${log.content.replace('[DAILY HEALTH LOG]', '').trim()}</pre></div>`).join('') : '<p style="color:#888; font-size:0.95rem;">No daily journals logged yet.</p>';
-
-            const html = `
-                <div class="panel" style="border-top: 4px solid var(--primary-sage);">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
-                        <div>
-                            <h2 style="font-size: 2.2rem; color: var(--text-main); margin-bottom: 0.3rem; font-weight: 300;">${client.client_name}</h2>
-                            <p style="font-size: 0.8rem; color: #888; font-family: 'Montserrat'; letter-spacing: 2px;">PATIENT ID: ${client.client_id}</p>
-                        </div>
-                        <div>
-                            <label style="margin-bottom: 0.3rem;">Workflow Pipeline Stage</label>
-                            <select id="client-stage-${clientId}" style="background: white; padding: 0.6rem 1rem; margin-bottom: 0;" onchange="updateClientStage('${clientId}')">
-                                <option value="Initial Intake Review">01. Initial Intake Review</option>
-                                <option value="Active 360 Protocol">02. Active 360 Protocol</option>
-                                <option value="Gut Reset Phase">03. Gut Reset Phase</option>
-                                <option value="Maintenance & Monitoring">04. Maintenance & Monitoring</option>
-                            </select>
-                        </div>
+        window.selectFood = function(name, k, p, c, f, fib, sod, pot, calc, iron) {
+            const panel = document.getElementById('food-selection-panel');
+            panel.style.display = 'block';
+            panel.innerHTML = `
+                <div style="background: white; padding: 1.5rem; border-radius: 2px; margin-top: 1rem; border: 1px solid var(--primary-sage); box-shadow: 0 10px 30px rgba(13,155,70,0.08);">
+                    <h5 style="margin-bottom:0.8rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; text-transform: none;">${name}</h5>
+                    <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1.5rem;">
+                        <label style="margin:0; font-size: 0.85rem;">Portion (grams):</label>
+                        <input type="number" id="food-grams" value="100" style="width: 120px; padding:0.8rem; margin:0; background: var(--bg-color);" oninput="window.updatePreviewMacros(${k}, ${p}, ${c}, ${f}, ${fib}, ${sod}, ${pot}, ${calc}, ${iron})">
                     </div>
-
-                    <!-- 1. CLINICAL SOAP CHARTING -->
-                    <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Clinical SOAP Notes Charting</h3>
-                    <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 4px; border: 1px solid var(--secondary-sand); margin-bottom: 2.5rem;">
-                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
-                            <button type="button" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.65rem;" onclick="prefillSoap('Subjective: Client reports 40% reduction in lower back tension.\nObjective: Palpable relaxation along erector spinae. Vagal tone improved.\nAssessment: Responding exceptionally well to Bowen protocol.\nPlan: Continue bi-weekly sessions and magnesium supplementation.')">Pre-fill: Bowen Session</button>
-                            <button type="button" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.65rem;" onclick="prefillSoap('Subjective: Reduced post-op edema in right ankle.\nObjective: Interstitial fluid clearance accelerated following MLD.\nAssessment: Lymphatic drainage functioning optimally.\nPlan: Course of 5 MLD sessions complete. Maintenance monthly.')">Pre-fill: MLD Session</button>
-                        </div>
-                        <form onsubmit="saveSoapNote(event, '${clientId}')">
-                            <div class="soap-grid">
-                                <div><label>Subjective (Patient Report)</label><textarea id="soap-s" placeholder="Symptoms, client feedback..." style="background:white; height:90px;" required></textarea></div>
-                                <div><label>Objective (Clinical Findings)</label><textarea id="soap-o" placeholder="Palpation, posture, observations..." style="background:white; height:90px;" required></textarea></div>
-                            </div>
-                            <div class="soap-grid">
-                                <div><label>Assessment (Clinical Judgment)</label><textarea id="soap-a" placeholder="Progress evaluation..." style="background:white; height:90px;" required></textarea></div>
-                                <div><label>Plan (Next Steps & Protocol)</label><textarea id="soap-p" placeholder="Frequency, exercises, actions..." style="background:white; height:90px;" required></textarea></div>
-                            </div>
-                            <button type="submit" class="btn" style="width: 100%;">Save SOAP Note to File</button>
-                        </form>
-                        <div style="margin-top: 1.5rem;"><h5 style="font-family:'Montserrat'; font-size:0.85rem; margin-bottom:0.8rem;">Past SOAP Notes:</h5>${soapsHtml}</div>
+                    <div id="food-macro-preview" style="font-size:0.95rem; color:#555; margin-bottom:1.5rem; font-family: 'Montserrat'; line-height: 1.6; padding-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand);">
+                        <strong style="color:var(--text-main); font-size: 1.1rem;">${k} kcal</strong> | ${p}g Pro | ${c}g Carbs | ${f}g Fat <br>
+                        <span style="font-size:0.8rem; color:#888;">${fib}g Fiber | ${sod}mg Sodium | ${pot}mg Potassium | ${calc}mg Calcium | ${iron}mg Iron</span>
                     </div>
-
-                    <!-- 2. SUPPLEMENT PRESCRIBER -->
-                    <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Supplement & Protocol Prescriber</h3>
-                    <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 4px; border: 1px solid var(--secondary-sand); margin-bottom: 2.5rem;">
-                        <form onsubmit="saveSupplementProtocol(event, '${clientId}')">
-                            <label>Supplement / Formula Name</label><input type="text" id="sup-name" placeholder="e.g. Magnesium Bisglycinate 400mg" style="background:white;" required>
-                            <div class="soap-grid">
-                                <div><label>Dosage / Frequency</label><input type="text" id="sup-dose" placeholder="e.g. 2 capsules daily" style="background:white;" required></div>
-                                <div><label>Timing / Instructions</label><input type="text" id="sup-timing" placeholder="e.g. Take with dinner" style="background:white;" required></div>
-                            </div>
-                            <button type="submit" class="btn btn-secondary" style="width: 100%;">Issue Supplement Prescription</button>
-                        </form>
-                        <div style="margin-top: 1.5rem;"><h5 style="font-family:'Montserrat'; font-size:0.85rem; margin-bottom:0.8rem;">Active Prescriptions:</h5>${protocolsHtml}</div>
-                    </div>
-
-                    <!-- 3. INTAKE & JOURNALS -->
-                    <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Medical Intake Questionnaire</h3>
-                    <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 4px; margin-bottom: 2.5rem; font-size: 1.05rem; border: 1px solid var(--secondary-sand);">
-                        <pre style="white-space: pre-wrap; font-family: inherit; color: var(--text-main); line-height: 1.7;">${intakeDisplay}</pre>
-                    </div>
-
-                    <h3 style="font-size: 1.1rem; color: var(--primary-sage); margin-bottom: 1rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Running Health Journals (MFP Detailed View)</h3>
-                    <div style="max-height: 600px; overflow-y: auto; padding-right: 10px;">
-                        ${logsHtml}
+                    <div style="display:flex; gap:0.8rem; flex-wrap: wrap;">
+                        <select id="food-meal-target" style="padding:0.8rem; margin:0; flex:1; background: var(--bg-color);">
+                            <option value="brk">Breakfast</option>
+                            <option value="lun">Lunch</option>
+                            <option value="din">Dinner</option>
+                            <option value="snk">Snacks & Supplements</option>
+                        </select>
+                        <button type="button" class="btn" style="padding:0 1.5rem; min-height:45px;" onclick="window.addFoodToLog('${name.replace(/'/g, "\\'")}', ${k}, ${p}, ${c}, ${f}, ${fib}, ${sod}, ${pot}, ${calc}, ${iron})">Add to Meal</button>
                     </div>
                 </div>
             `;
+            document.getElementById('food-search-results').innerHTML = '';
+        };
+
+        window.updatePreviewMacros = function(k, p, c, f, fib, sod, pot, calc, iron) {
+            const g = document.getElementById('food-grams').value || 0;
+            const r = g / 100;
+            document.getElementById('food-macro-preview').innerHTML = `<strong style="color:var(--text-main); font-size: 1.1rem;">${Math.round(k*r)} kcal</strong> | ${Math.round(p*r)}g Pro | ${Math.round(c*r)}g Carbs | ${Math.round(f*r)}g Fat <br>
+            <span style="font-size:0.8rem; color:#888;">${Math.round(fib*r)}g Fiber | ${Math.round(sod*r)}mg Sodium | ${Math.round(pot*r)}mg Potassium | ${Math.round(calc*r)}mg Calcium | ${Math.round(iron*r)}mg Iron</span>`;
+        };
+
+        window.addFoodToLog = function(name, k, p, c, f, fib, sod, pot, calc, iron) {
+            const g = document.getElementById('food-grams').value || 0;
+            const r = g / 100;
+            const meal = document.getElementById('food-meal-target').value;
             
-            document.getElementById('client-detail-content').innerHTML = html;
-            switchAppView('client-detail');
-        }
+            const descInput = document.getElementById(`log-${meal}-desc`);
+            const entryText = `${name} (${g}g)\n`;
+            descInput.value = descInput.value ? descInput.value + entryText : entryText;
 
-        function prefillSoap(text) {
-            const parts = text.split('\n');
-            document.getElementById('soap-s').value = parts[0].replace('Subjective: ', '');
-            document.getElementById('soap-o').value = parts[1].replace('Objective: ', '');
-            document.getElementById('soap-a').value = parts[2].replace('Assessment: ', '');
-            document.getElementById('soap-p').value = parts[3].replace('Plan: ', '');
-        }
+            document.getElementById(`log-${meal}-cal`).value = Math.round((Number(document.getElementById(`log-${meal}-cal`).value) || 0) + (k * r));
+            document.getElementById(`log-${meal}-pro`).value = Math.round((Number(document.getElementById(`log-${meal}-pro`).value) || 0) + (p * r));
+            document.getElementById(`log-${meal}-car`).value = Math.round((Number(document.getElementById(`log-${meal}-car`).value) || 0) + (c * r));
+            document.getElementById(`log-${meal}-fat`).value = Math.round((Number(document.getElementById(`log-${meal}-fat`).value) || 0) + (f * r));
+            document.getElementById(`log-${meal}-fib`).value = Math.round((Number(document.getElementById(`log-${meal}-fib`).value) || 0) + (fib * r));
 
-        async function saveSoapNote(e, clientId) {
+            document.getElementById(`log-${meal}-sod`).value = Math.round((Number(document.getElementById(`log-${meal}-sod`).value) || 0) + (sod * r));
+            document.getElementById(`log-${meal}-pot`).value = Math.round((Number(document.getElementById(`log-${meal}-pot`).value) || 0) + (pot * r));
+            document.getElementById(`log-${meal}-calc`).value = Math.round((Number(document.getElementById(`log-${meal}-calc`).value) || 0) + (calc * r));
+            document.getElementById(`log-${meal}-iron`).value = Math.round((Number(document.getElementById(`log-${meal}-iron`).value) || 0) + (iron * r));
+
+            document.getElementById('food-selection-panel').style.display = 'none';
+            document.getElementById('food-search-query').value = '';
+            
+            window.updateDailyTotals();
+            alert(`${name} (${g}g) added to your log!`);
+        };
+
+        window.updateDailyTotals = function() {
+            const meals = ['brk', 'lun', 'din', 'snk'];
+            let tCal=0, tPro=0, tCar=0, tFat=0, tFib=0, tSod=0, tPot=0, tCalc=0, tIron=0;
+            meals.forEach(m => {
+                tCal += Number(document.getElementById(`log-${m}-cal`).value) || 0;
+                tPro += Number(document.getElementById(`log-${m}-pro`).value) || 0;
+                tCar += Number(document.getElementById(`log-${m}-car`).value) || 0;
+                tFat += Number(document.getElementById(`log-${m}-fat`).value) || 0;
+                tFib += Number(document.getElementById(`log-${m}-fib`).value) || 0;
+                tSod += Number(document.getElementById(`log-${m}-sod`).value) || 0;
+                tPot += Number(document.getElementById(`log-${m}-pot`).value) || 0;
+                tCalc += Number(document.getElementById(`log-${m}-calc`).value) || 0;
+                tIron += Number(document.getElementById(`log-${m}-iron`).value) || 0;
+            });
+            document.getElementById('tot-cal').innerText = tCal;
+            document.getElementById('tot-pro').innerText = tPro + 'g';
+            document.getElementById('tot-car').innerText = tCar + 'g';
+            document.getElementById('tot-fat').innerText = tFat + 'g';
+            document.getElementById('tot-fib').innerText = tFib + 'g';
+            document.getElementById('tot-sod').innerText = tSod + 'mg';
+            document.getElementById('tot-pot').innerText = tPot + 'mg';
+            document.getElementById('tot-calc').innerText = tCalc + 'mg';
+            document.getElementById('tot-iron').innerText = tIron + 'mg';
+        };
+
+        window.submitDailyLog = async function(e) {
             e.preventDefault();
             const db = getSupabase();
-            const noteText = `[CLINICAL SOAP NOTE]
+            const { data: { user } } = await db.auth.getUser();
+            if(!user) return false;
+
+            const tCal = document.getElementById('tot-cal').innerText;
+            const tPro = document.getElementById('tot-pro').innerText;
+            const tCar = document.getElementById('tot-car').innerText;
+            const tFat = document.getElementById('tot-fat').innerText;
+            const tFib = document.getElementById('tot-fib').innerText;
+
+            const logData = `[DAILY HEALTH LOG]
 Date: ${new Date().toLocaleDateString('en-GB')}
-- Subjective: ${document.getElementById('soap-s').value}
-- Objective: ${document.getElementById('soap-o').value}
-- Assessment: ${document.getElementById('soap-a').value}
-- Plan: ${document.getElementById('soap-p').value}`;
-
-            await db.from('messages').insert([{ client_id: clientId, sender: 'admin', content: noteText }]);
-            alert("SOAP Note successfully saved to client file!");
-            openClientProfile(clientId);
-            return false;
-        }
-
-        async function saveSupplementProtocol(e, clientId) {
-            e.preventDefault();
-            const db = getSupabase();
-            const supText = `[SUPPLEMENT PROTOCOL]
-Prescribed: ${new Date().toLocaleDateString('en-GB')}
-• Item: ${document.getElementById('sup-name').value}
-• Dosage: ${document.getElementById('sup-dose').value}
-• Instructions: ${document.getElementById('sup-timing').value}`;
-
-            await db.from('messages').insert([{ client_id: clientId, sender: 'admin', content: supText }]);
-            alert("Supplement protocol prescribed and synced to patient portal!");
-            openClientProfile(clientId);
-            return false;
-        }
-
-        function updateClientStage(clientId) {
-            const val = document.getElementById(`client-stage-${clientId}`).value;
-            alert(`Patient workflow stage updated to: ${val}`);
-        }
-
-        // --- INSTANT DEMO DATA INJECTION FOR PRESENTATION ---
-        function injectDemoData() {
-            globalClients = [
-                { client_id: 'demo_1', client_name: 'Sarah Jenkins' },
-                { client_id: 'demo_2', client_name: 'Marcus Vance' },
-                { client_id: 'demo_3', client_name: 'Elena Rostova' }
-            ];
-
-            globalMsgs = [
-                { client_id: 'demo_1', sender: 'client', content: '[MEDICAL INTAKE SUBMISSION]\nAge: 42 | Sex: Female | Height: 165cm | Weight: 68kg\n\nAIMS: Regain consistent energy, reduce brain fog, manage Hashimoto\'s.\n\nFUNCTIONAL MARKERS:\nAutoimmune: Hashimoto\'s (Diagnosed 2021)\nDigestion/Gas: Bloating after gluten or dairy\nCravings: Heavy sugar cravings at 3 PM\nMorning Energy: Exhausted until 10 AM' },
-                { client_id: 'demo_1', sender: 'admin', content: '[SUPPLEMENT PROTOCOL]\nPrescribed: Today\n• Item: Magnesium Bisglycinate 400mg\n• Dosage: 2 capsules daily\n• Instructions: Take with dinner' },
-                { client_id: 'demo_1', sender: 'admin', content: '[CLINICAL SOAP NOTE]\nDate: Today\n- Subjective: Client reports improved morning sleep quality.\n- Objective: Vagal tone testing shows normal baseline variability.\n- Assessment: Adrenal protocol yielding positive early indicators.\n- Plan: Maintain current supplement dosage.' },
-                { client_id: 'demo_1', sender: 'client', content: `[DAILY HEALTH LOG]
-Date: Today
 
 🥗 FOOD & NUTRITION:
-[Breakfast] Gluten Free Oats (50g), Blueberries (80g), Almond Milk (150ml).
-> Macros: 385 kcal | 12g Pro | 52g Carbs | 16g Fat
-> Micros: 11g Fiber | 45mg Sodium | 210mg Potassium | 300mg Calcium | 3mg Iron
+[Breakfast] ${document.getElementById('log-brk-desc').value || '-'}
+> Macros: ${document.getElementById('log-brk-cal').value||0}kcal | ${document.getElementById('log-brk-pro').value||0}g Pro | ${document.getElementById('log-brk-car').value||0}g Carb | ${document.getElementById('log-brk-fat').value||0}g Fat
+> Micros: ${document.getElementById('log-brk-fib').value||0}g Fiber | ${document.getElementById('log-brk-sod').value||0}mg Sodium | ${document.getElementById('log-brk-pot').value||0}mg Potassium | ${document.getElementById('log-brk-calc').value||0}mg Calcium | ${document.getElementById('log-brk-iron').value||0}mg Iron
 
->> DAILY MACRO TOTALS: 1,350 kcal | 95g Protein | 110g Carbs | 60g Fat 
->> DAILY MICRO TOTALS: 22g Fiber | 210mg Sodium | 1600mg Potassium | 400mg Calcium | 11mg Iron` }
-            ];
+[Lunch] ${document.getElementById('log-lun-desc').value || '-'}
+> Macros: ${document.getElementById('log-lun-cal').value||0}kcal | ${document.getElementById('log-lun-pro').value||0}g Pro | ${document.getElementById('log-lun-car').value||0}g Carb | ${document.getElementById('log-lun-fat').value||0}g Fat
+> Micros: ${document.getElementById('log-lun-fib').value||0}g Fiber | ${document.getElementById('log-lun-sod').value||0}mg Sodium | ${document.getElementById('log-lun-pot').value||0}mg Potassium | ${document.getElementById('log-lun-calc').value||0}mg Calcium | ${document.getElementById('log-lun-iron').value||0}mg Iron
 
-            document.getElementById('stat-revenue').innerText = '£1,837';
-            document.getElementById('stat-sessions').innerText = '3';
+[Dinner] ${document.getElementById('log-din-desc').value || '-'}
+> Macros: ${document.getElementById('log-din-cal').value||0}kcal | ${document.getElementById('log-din-pro').value||0}g Pro | ${document.getElementById('log-din-car').value||0}g Carb | ${document.getElementById('log-din-fat').value||0}g Fat
+> Micros: ${document.getElementById('log-din-fib').value||0}g Fiber | ${document.getElementById('log-din-sod').value||0}mg Sodium | ${document.getElementById('log-din-pot').value||0}mg Potassium | ${document.getElementById('log-din-calc').value||0}mg Calcium | ${document.getElementById('log-din-iron').value||0}mg Iron
 
-            document.getElementById('admin-schedule-list').innerHTML = `
-                <div class="cal-card">
-                    <div style="display: flex; justify-content: space-between;">
-                        <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.15rem;">Sarah Jenkins</strong><br><span style="font-size: 0.95rem; color: #555;">360° Burnout Protocol (£1,450)</span></div>
-                        <div style="text-align: right; font-size: 0.85rem; color: #666;">Tomorrow<br><strong style="color: var(--primary-sage); font-size: 1.05rem;">10:00 AM</strong></div>
-                    </div>
-                </div>
-            `;
+[Snacks] ${document.getElementById('log-snk-desc').value || '-'}
+> Macros: ${document.getElementById('log-snk-cal').value||0}kcal | ${document.getElementById('log-snk-pro').value||0}g Pro | ${document.getElementById('log-snk-car').value||0}g Carb | ${document.getElementById('log-snk-fat').value||0}g Fat
+> Micros: ${document.getElementById('log-snk-fib').value||0}g Fiber | ${document.getElementById('log-snk-sod').value||0}mg Sodium | ${document.getElementById('log-snk-pot').value||0}mg Potassium | ${document.getElementById('log-snk-calc').value||0}mg Calcium | ${document.getElementById('log-snk-iron').value||0}mg Iron
 
-            document.getElementById('admin-client-directory-list').innerHTML = `
-                <div class="client-list-item" onclick="openClientProfile('demo_1')">
-                    <div>
-                        <h4>Sarah Jenkins</h4>
-                        <span style="font-size: 0.9rem; color: #666;">View clinical charting, workflow pipeline, & supplement prescriber</span>
-                    </div>
-                    <span style="color: var(--primary-sage); font-size: 1.8rem;">&rarr;</span>
-                </div>
-            `;
+>> DAILY MACRO TOTALS: ${tCal} kcal | ${tPro} Protein | ${tCar} Carbs | ${tFat} Fat 
+>> DAILY MICRO TOTALS: ${tFib} Fiber | ${document.getElementById('tot-sod').innerText} Sodium | ${document.getElementById('tot-pot').innerText} Potassium | ${document.getElementById('tot-calc').innerText} Calcium | ${document.getElementById('tot-iron').innerText} Iron
 
-            document.getElementById('admin-chat-box').innerHTML = `
-                <div class="msg client"><strong>Patient (Sarah):</strong> Hi Clare, my supplements arrived today! Should I take them with food?</div>
-                <div class="msg admin"><strong>Clare:</strong> Yes Sarah! Take the magnesium with dinner. See you tomorrow at 10!</div>
-            `;
-            document.title = "🔔 NEW MESSAGE - Clinic App";
+🏃‍♀️ ACTIVITY: ${document.getElementById('log-activity-type').value || '-'} (${document.getElementById('log-activity-dur').value || '0'} mins, ${document.getElementById('log-activity-int').value || '-'})
+
+🧠 MOOD & STRESS: ${document.getElementById('log-mood-rating').value || '-'} | Energy: ${document.getElementById('log-energy').value || '-'}/10
+- Notes: ${document.getElementById('log-mood-notes').value || '-'}
+
+💤 SLEEP: ${document.getElementById('log-sleep-hours').value || '-'} hours | Quality: ${document.getElementById('log-sleep-quality').value || '-'}/5
+
+🚽 BOWEL: ${document.getElementById('log-bowel-type').value || '-'} | Freq: ${document.getElementById('log-bowel-freq').value || '-'}
+
+💧 WATER: ${document.getElementById('log-water').value || '-'}
+
+📏 VITALS: Weight: ${document.getElementById('log-meas-weight').value || '-'} | BP: ${document.getElementById('log-meas-bp').value || '-'}`;
+
+            await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: logData }]);
+            alert("Daily Health Log saved successfully to your practitioner file!");
+            
+            e.target.reset();
+            window.updateDailyTotals();
+            document.querySelectorAll('.journal-panel').forEach(p => p.classList.remove('show'));
+            document.querySelectorAll('.journal-accordion').forEach(a => {
+                a.classList.remove('active');
+                a.querySelector('.icon').innerText = '+';
+            });
+            return false;
+        };
+
+        window.bookNewSession = async function(e) {
+            e.preventDefault();
+            const db = getSupabase();
+            const { data: { user } } = await db.auth.getUser();
+            await db.from('appointments').insert([{ client_id: user.id, client_name: user.user_metadata?.full_name || user.email, service_name: document.getElementById('portal-service').value, appointment_time: document.getElementById('portal-date').value, status: 'confirmed' }]);
+            alert("Appointment booked!"); loadClientDashboard(db, user);
+            return false;
+        };
+
+        window.cancelAppointment = async function(id) {
+            if(!confirm("Cancel appointment?")) return;
+            const db = getSupabase();
+            await db.from('appointments').delete().eq('id', id);
+            const { data: { user } } = await db.auth.getUser();
+            loadClientDashboard(db, user);
+        };
+
+        async function loadClientDashboard(db, user) {
+            const list = document.getElementById('client-appointments-list');
+            const chatBox = document.getElementById('client-chat-box');
+            document.getElementById('portal-welcome-title').innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
+
+            const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
+            list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => `
+                <div style="padding: 1rem 0; border-bottom: 1px solid var(--secondary-sand); display: flex; justify-content: space-between; align-items: center;">
+                    <div><strong style="color: var(--text-main); font-family: 'Montserrat';">${new Date(a.appointment_time).toLocaleString('en-GB')}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
+                    <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; color: #a94442; border-color: #a94442;" onclick="window.cancelAppointment('${a.id}')">Cancel</button>
+                </div>`).join('');
+
+            const { data: msgs } = await db.from('messages').select('*').eq('client_id', user.id).order('created_at', { ascending: true });
+            if(msgs) {
+                const chatMsgs = msgs.filter(m => !m.content.includes('[DAILY HEALTH LOG]') && !m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
+                chatBox.innerHTML = chatMsgs.map(m => `<div class="msg ${m.sender}"><strong>${m.sender === 'client' ? 'You' : 'Clare'}:</strong> ${m.content}</div>`).join('');
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
         }
 
-        function generateInvoice(e) {
+        async function handleClientMessage(e) {
             e.preventDefault();
-            const client = document.getElementById('inv-client').value;
-            const address = document.getElementById('inv-address').value;
-            const selectVal = document.getElementById('inv-service-select').value;
-            const invNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000);
-
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write('<html><head><title>Invoice ' + invNumber + '</title><style>body{font-family:sans-serif;padding:40px;}</style></head><body>');
-            printWindow.document.write('<h2 style="color:#095d28;">THE NATURAL HEALING CLINIC</h2><p>13 Cronk Drine<br>Union Mills, IM4 4NG<br>Tel: 07624 202 121</p><p>Invoice No: ' + invNumber + '</p><hr>');
-            printWindow.document.write('<p><strong>Billed To:</strong> ' + client + '<br>' + address + '</p>');
-            printWindow.document.write('<h3>Service: ' + selectVal + '</h3>');
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            setTimeout(() => { printWindow.print(); }, 500);
+            const db = getSupabase();
+            const input = document.getElementById('client-msg-input');
+            const { data: { user } } = await db.auth.getUser();
+            await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: input.value.trim() }]);
+            document.getElementById('client-chat-box').innerHTML += `<div class="msg client"><strong>You:</strong> ${input.value}</div>`;
+            input.value = '';
+            document.getElementById('client-chat-box').scrollTop = document.getElementById('client-chat-box').scrollHeight;
             return false;
+        }
+
+        window.processLogout = async function() {
+            const db = getSupabase();
+            if(db) await db.auth.signOut();
+            updateNavState(false); openScreen('screen-home');
+        };
+
+        function updateNavState(isLoggedIn) {
+            document.getElementById('nav-portal-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+            document.getElementById('nav-book-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+            document.getElementById('nav-logout-btn').style.display = isLoggedIn ? 'inline-block' : 'none';
+            document.getElementById('mobile-portal-link').style.display = isLoggedIn ? 'none' : 'block';
+            document.getElementById('mobile-book-link').style.display = isLoggedIn ? 'none' : 'block';
+            document.getElementById('mobile-logout-link').style.display = isLoggedIn ? 'block' : 'none';
         }
     </script>
 </body>
