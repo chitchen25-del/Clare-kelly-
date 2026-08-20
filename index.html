@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>The Natural Healing Clinic | Isle of Man</title>
     
+    <!-- PWA Installation Tags for Clients -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="My Clinic">
@@ -30,9 +31,11 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Cormorant Garamond', serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.8; font-size: 1.15rem; overflow-x: hidden; }
         
+        /* Editorial Typography */
         h1, h2 { font-family: 'Cormorant Garamond', serif; font-weight: 400; color: var(--text-main); line-height: 1.2; }
         h3, h4, h5, .btn, .price-amount, .section-subtitle, label { font-family: 'Montserrat', sans-serif; }
         
+        /* Luxury Navigation */
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--secondary-sand); box-shadow: 0 4px 30px rgba(9, 93, 40, 0.03); }
         .nav-brand-logo { height: 50px; width: auto; cursor: pointer; transition: opacity 0.3s ease; object-fit: contain; }
         .nav-brand-logo:hover { opacity: 0.8; }
@@ -48,6 +51,7 @@
         .mobile-drawer-link { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 500; text-transform: uppercase; letter-spacing: 3px; color: var(--text-main); text-decoration: none; cursor: pointer; transition: color 0.3s; }
         .mobile-drawer-link:hover { color: var(--primary-sage); }
 
+        /* Premium Buttons */
         .btn { display: inline-block; padding: 1.1rem 2.5rem; text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border-radius: 2px; cursor: pointer; border: 1px solid var(--primary-sage); background-color: var(--primary-sage); color: white; transition: all 0.3s ease; text-align: center; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(13, 155, 70, 0.15); }
         .btn:hover { background-color: var(--sage-hover); border-color: var(--sage-hover); color: white; transform: translateY(-2px); box-shadow: 0 15px 35px rgba(9, 93, 40, 0.2); }
         .btn-outline { background-color: transparent; color: var(--text-main); border-color: var(--secondary-sand); box-shadow: none; }
@@ -57,10 +61,12 @@
         .page-screen.visible { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Cinematic Hero Section */
         .hero { text-align: center; padding: 10rem 6%; background: linear-gradient(rgba(243, 241, 239, 0.93), rgba(243, 241, 239, 0.98)), url('./clinical-herb.jpeg') center/cover; border-bottom: 1px solid var(--secondary-sand); }
         .hero h1 { font-size: 3.5rem; margin-bottom: 1.2rem; letter-spacing: -0.5px; }
         .hero p { font-size: 1.3rem; margin-bottom: 3rem; color: var(--primary-sage); max-width: 650px; margin-left: auto; margin-right: auto; font-style: italic; }
 
+        /* Layouts & Images */
         .section { padding: 8rem 6%; display: flex; flex-wrap: wrap; align-items: center; gap: 5rem; max-width: 1250px; margin: 0 auto; }
         .section-text { flex: 1.2; min-width: 280px; }
         .section-image-wrapper { flex: 1; min-width: 280px; position: relative; }
@@ -79,6 +85,7 @@
         .help-list li { margin-bottom: 1rem; position: relative; padding-left: 2rem; }
         .help-list li::before { content: "—"; position: absolute; left: 0; color: var(--gold-accent); font-weight: bold; }
 
+        /* The Clinical Pathway Section */
         .pathway-section { padding: 8rem 6%; background-color: var(--card-bg); border-top: 1px solid var(--secondary-sand); }
         .pathway-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 0 auto; }
         .pathway-card { padding: 3rem 2.5rem; border: 1px solid var(--secondary-sand); border-radius: 2px; transition: transform 0.4s ease, border-color 0.4s ease; background: var(--card-bg); position: relative; }
@@ -89,6 +96,7 @@
         .pathway-card p { color: #555; font-size: 1rem; line-height: 1.7; margin: 0;}
         .pathway-number { font-family: 'Cormorant Garamond'; font-size: 2.5rem; color: var(--secondary-sand); margin-bottom: 1rem; display: block; line-height: 1; font-style: italic; }
 
+        /* Pricing */
         .pricing-section { padding: 8rem 6%; border-top: 1px solid var(--secondary-sand); background-color: var(--bg-color); }
         .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 4rem auto 0 auto; }
         .price-card { background: var(--card-bg); border: 1px solid var(--secondary-sand); border-radius: 2px; padding: 4rem 3rem; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 15px 40px rgba(9, 93, 40, 0.02); }
@@ -102,41 +110,49 @@
         .price-features li { margin-bottom: 1.2rem; padding-left: 1.8rem; position: relative; line-height: 1.6; }
         .price-features li::before { content: "—"; position: absolute; left: 0; color: var(--primary-sage); }
 
+        /* Forms Container */
         .form-container { max-width: 100%; margin: 3rem 5%; background: var(--card-bg); padding: 5rem 3rem; border-radius: 2px; box-shadow: 0 30px 70px rgba(9, 93, 40, 0.05); border: 1px solid var(--secondary-sand); }
         .form-container h2 { text-align: center; margin-bottom: 1rem; }
         .form-row, .form-row.three { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        
+        /* PREMIUM INPUT STYLING (Matches Admin exactly) */
         label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); margin-bottom: 0.8rem; font-weight: 600;}
-        input, select, textarea { width: 100%; padding: 1.2rem; margin-bottom: 2rem; border: 1px solid var(--secondary-sand); border-radius: 2px; background: transparent; font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary-sage); outline: none; box-shadow: 0 0 0 1px var(--primary-sage); }
+        input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 2px; background: var(--bg-color); font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-sage); outline: none; background: white; box-shadow: 0 0 0 1px var(--primary-sage); }
         textarea { resize: vertical; height: 120px; }
 
+        /* Client Dashboard */
         .dashboard-container { max-width: 1300px; margin: 4rem auto; padding: 0 5%; display: grid; grid-template-columns: 1fr; gap: 3rem; }
         .dash-card { background: var(--card-bg); padding: 3.5rem 2.5rem; border-radius: 2px; border: 1px solid var(--secondary-sand); box-shadow: 0 15px 50px rgba(9, 93, 40, 0.03); margin-bottom: 3rem; }
         .dash-card h3 { color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem; font-size: 1.4rem; font-weight: 600; }
+        
         .chat-box { height: 300px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg-color); padding: 1.5rem; border-radius: 2px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 1rem; border: 1px solid var(--secondary-sand); }
         .msg { padding: 1.2rem; border-radius: 2px; max-width: 85%; font-size: 1.05rem; line-height: 1.6; }
         .msg.client { background: var(--primary-sage); color: white; align-self: flex-end; }
         .msg.admin { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; box-shadow: 0 4px 15px rgba(9, 93, 40, 0.03); color: var(--text-main); }
 
+        /* LUXURY ACCORDION STYLES */
         .journal-accordion { background-color: var(--bg-color); color: var(--text-main); cursor: pointer; padding: 1.5rem; width: 100%; border: 1px solid var(--secondary-sand); border-radius: 2px; text-align: left; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; transition: all 0.3s; }
         .journal-accordion:hover { border-color: var(--primary-sage); }
         .journal-accordion.active { background-color: var(--primary-sage); color: white; border-color: var(--primary-sage); }
         .journal-panel { padding: 0 1.5rem; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; border-left: 1px solid var(--secondary-sand); border-right: 1px solid var(--secondary-sand); margin-top: -1rem; margin-bottom: 2rem; border-bottom: 1px solid transparent; }
         .journal-panel.show { padding: 2.5rem 1.5rem; max-height: 4000px; border-bottom: 1px solid var(--secondary-sand); overflow: visible; }
         
+        /* RESPONSIVE MFP MACRO & MICRO MATRIX */
         .macro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
         .macro-grid div { display: flex; flex-direction: column; }
-        .macro-grid label { font-size: 0.65rem; text-align: left; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 0.5rem; font-weight: 700; }
+        .macro-grid label { font-size: 0.65rem; text-align: left; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 0.5rem; font-weight: 700; border: none; padding: 0;}
         .macro-grid input { padding: 0.9rem 0.8rem; font-size: 1rem; text-align: left; margin-bottom: 0; font-weight: 500; }
         
         .micro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.2rem; margin-bottom: 1.5rem; }
         .micro-grid div { display: flex; flex-direction: column; }
-        .micro-grid label { font-size: 0.6rem; text-align: left; letter-spacing: 1px; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 600; }
+        .micro-grid label { font-size: 0.6rem; text-align: left; letter-spacing: 1px; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 600; border: none; padding: 0;}
         .micro-grid input { padding: 0.8rem; font-size: 0.95rem; text-align: left; margin-bottom: 0; background-color: var(--bg-color); }
 
         .meal-section { border-bottom: 1px solid var(--secondary-sand); padding-bottom: 2rem; margin-bottom: 2rem; }
         .meal-section h5 { font-family: 'Montserrat'; font-size: 0.95rem; color: var(--text-main); margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 
+        /* DAILY TOTALS DASHBOARDS */
         .daily-totals-macro { background: var(--text-main); color: white; padding: 2rem; border-radius: 2px; margin-top: 1rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; font-family: 'Montserrat'; }
         .daily-totals-macro div { text-align: left; }
         .daily-totals-macro span { font-size: 0.65rem; color: var(--secondary-sand); letter-spacing: 2px; display: block; margin-bottom: 0.4rem; font-weight: 600; }
@@ -145,11 +161,13 @@
         .daily-totals-micro div { text-align: left; }
         .daily-totals-micro span { font-size: 0.65rem; color: var(--text-main); letter-spacing: 1.5px; display: block; margin-bottom: 0.4rem; font-weight: 600; }
 
+        /* LIVE DATABASE DROPDOWN UI */
         .premium-list-item { padding: 1.2rem; border-bottom: 1px solid var(--secondary-sand); cursor: pointer; transition: background 0.2s; border-radius: 2px; margin-bottom: 0.4rem; }
         .premium-list-item:hover { background-color: var(--bg-color); border-color: var(--primary-sage); }
         .premium-list-item strong { color: var(--primary-sage); font-family: 'Montserrat'; font-size: 1rem; font-weight: 600;}
         .premium-list-item span { font-size: 0.8rem; color: #666; font-family: 'Montserrat'; display: block; margin-top: 0.4rem; line-height: 1.5; }
 
+        /* BARCODE SCANNER WINDOW */
         #reader { width: 100%; display: none; margin-bottom: 1.5rem; border-radius: 2px; overflow: hidden; border: 1px solid var(--primary-sage); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.1); }
 
         footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); color: #555; background: var(--card-bg); display: flex; flex-direction: column; text-align: center; gap: 2.5rem; max-width: 1300px; margin: 0 auto; }
@@ -157,6 +175,7 @@
         .footer-brand-logo { height: 90px; object-fit: contain; }
         .footer-col h4 { color: var(--text-main); margin-bottom: 1rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
 
+        /* Desktop Layouts */
         @media (min-width: 768px) {
             .pathway-grid { grid-template-columns: repeat(2, 1fr); }
             .macro-grid { grid-template-columns: repeat(4, 1fr); }
@@ -185,11 +204,16 @@
 
     <script>
         window.openScreen = function(screenId) {
-            document.querySelectorAll('.page-screen').forEach(el => el.classList.remove('visible'));
-            document.getElementById(screenId).classList.add('visible');
-            const drawer = document.getElementById('mobile-drawer');
-            if(drawer) drawer.classList.remove('open');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            try {
+                document.querySelectorAll('.page-screen').forEach(el => el.classList.remove('visible'));
+                const target = document.getElementById(screenId);
+                if(target) {
+                    target.classList.add('visible');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                const drawer = document.getElementById('mobile-drawer');
+                if(drawer) drawer.classList.remove('open');
+            } catch (err) { alert("Error: " + err.message); }
         }
         function toggleMobileMenu() { document.getElementById('mobile-drawer').classList.toggle('open'); }
         function toggleAccordion(id) {
@@ -203,6 +227,7 @@
 
     <nav>
         <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="openScreen('screen-home')">
+        
         <div class="desktop-nav-links">
             <span class="nav-link-text" onclick="openScreen('screen-about')">About Clare</span>
             <button type="button" id="nav-portal-btn" class="btn btn-outline" onclick="openScreen('screen-login')">Patient Portal</button>
@@ -258,19 +283,45 @@
             </div>
         </section>
 
+        <!-- THE CLINICAL PATHWAY SECTION -->
         <section class="pathway-section">
             <div style="text-align: center; max-width: 800px; margin: 0 auto 4rem auto;">
                 <span class="section-subtitle">Our Clinical Pathway</span>
                 <h2>Comprehensive Functional Care</h2>
                 <p style="color: #555;">A meticulously structured approach designed to map your physiology and orchestrate profound, lasting healing.</p>
             </div>
+            
             <div class="pathway-grid">
-                <div class="pathway-card"><span class="pathway-number">01.</span><h4>Full Symptom Assessment & Medical History Review</h4><p>An exhaustive clinical deep-dive into your physiological timeline to map the origin and progression of your condition.</p></div>
-                <div class="pathway-card"><span class="pathway-number">02.</span><h4>Lifestyle & Metabolic Assessment</h4><p>Evaluating the critical pillars of your health, including nutrition, sleep architecture, stress load, and metabolic function.</p></div>
-                <div class="pathway-card"><span class="pathway-number">03.</span><h4>Identifying the Root Cause of Your Symptoms</h4><p>Moving beyond symptom management to isolate the underlying systemic dysfunctions driving your discomfort.</p></div>
-                <div class="pathway-card"><span class="pathway-number">04.</span><h4>Personalised Treatment Plan</h4><p>A bespoke, evidence-informed protocol tailored precisely to your unique biology and treatment goals.</p></div>
-                <div class="pathway-card"><span class="pathway-number">05.</span><h4>Progress Tracking</h4><p>Continuous monitoring via your secure Patient Portal to ensure your protocol adapts as your body heals.</p></div>
-                <div class="pathway-card"><span class="pathway-number">06.</span><h4>Lymphatic Treatments</h4><p>Advanced hands-on therapies to clear systemic inflammation, reduce edema, and accelerate tissue recovery.</p></div>
+                <div class="pathway-card">
+                    <span class="pathway-number">01.</span>
+                    <h4>Full Symptom Assessment & Medical History Review</h4>
+                    <p>An exhaustive clinical deep-dive into your physiological timeline to map the origin and progression of your condition.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">02.</span>
+                    <h4>Lifestyle & Metabolic Assessment</h4>
+                    <p>Evaluating the critical pillars of your health, including nutrition, sleep architecture, stress load, and metabolic function.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">03.</span>
+                    <h4>Identifying the Root Cause of Your Symptoms</h4>
+                    <p>Moving beyond symptom management to isolate the underlying systemic dysfunctions driving your discomfort.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">04.</span>
+                    <h4>Personalised Treatment Plan</h4>
+                    <p>A bespoke, evidence-informed protocol tailored precisely to your unique biology and treatment goals.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">05.</span>
+                    <h4>Progress Tracking</h4>
+                    <p>Continuous monitoring via your secure Patient Portal to ensure your protocol adapts as your body heals.</p>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-number">06.</span>
+                    <h4>Lymphatic Treatments</h4>
+                    <p>Advanced hands-on therapies to clear systemic inflammation, reduce edema, and accelerate tissue recovery.</p>
+                </div>
             </div>
         </section>
 
@@ -293,6 +344,7 @@
                     </div>
                     <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Health Audit</button>
                 </div>
+
                 <div class="price-card featured">
                     <div class="featured-badge">Comprehensive Protocol</div>
                     <div>
@@ -307,6 +359,7 @@
                     </div>
                     <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Apply For Protocol</button>
                 </div>
+
                 <div class="price-card">
                     <div>
                         <div class="price-title">The Gut Reset</div>
@@ -342,7 +395,7 @@
                 <span class="section-subtitle">Practitioner Profile</span>
                 <h2 style="font-size: 2.2rem;">Bridging Functional Medicine & Soft-Tissue Therapy</h2>
                 <p style="margin-bottom: 1.5rem; color: #555;">Clare Kelly is a leading functional health and soft-tissue practitioner based in Castletown, Isle of Man. With decades of clinical experience, Clare established <strong>The Natural Healing Clinic</strong> with a singular mission: to provide patients suffering from chronic pain, systemic inflammation, and deep-seated physical trauma with clear, sustainable results in a realistic timeframe.</p>
-                <p style="margin-bottom: 2.5rem; color: #555;">Her clinical methodology is strictly evidence-informed, drawing from advanced training in Bowen Therapy, Manual Lymphatic Drainage (MLD), and Functional Medicine frameworks. Clare works closely alongside mainstream medical protocols.</p>
+                <p style="margin-bottom: 2.5rem; color: #555;">Her clinical methodology is strictly evidence-informed, drawing from advanced training in Bowen Therapy, Manual Lymphatic Drainage (MLD), and Functional Medicine frameworks. Clare works closely alongside mainstream medical protocols, investigating the root causes of musculoskeletal disorders, autoimmune flare-ups, and nervous system dysregulation rather than merely masking symptoms.</p>
                 <button type="button" class="btn" onclick="openScreen('screen-register')">Book Consultation</button>
             </div>
         </section>
@@ -355,10 +408,15 @@
             <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; font-family: 'Montserrat'; font-weight: 600;">Patient Portal</h2>
             <p style="text-align: center; color: #666; margin-bottom: 2.5rem; font-size: 0.95rem;">Access your clinical files, health journals, and messages.</p>
             <form onsubmit="return processClientLogin(event)">
-                <label>Email Address</label><input type="email" id="login-email" required>
-                <label>Password</label><input type="password" id="login-password" required>
-                <button type="submit" class="btn" id="client-login-btn" style="width: 100%; margin-top: 1.5rem;">Secure Login</button>
+                <label>Email Address</label>
+                <input type="email" id="login-email" placeholder="Enter your email" required>
+                <label>Password</label>
+                <input type="password" id="login-password" placeholder="Enter your password" required>
+                <button type="submit" id="client-login-btn" class="btn" style="width: 100%; margin-top: 1.5rem;">Secure Login</button>
             </form>
+            <div style="margin-top: 2.5rem; text-align: center;">
+                <a href="#" style="font-size: 0.75rem; color: var(--text-main); text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Forgot password?</a>
+            </div>
         </div>
     </div>
 
@@ -404,6 +462,7 @@
                     
                     <form onsubmit="return submitDailyLog(event)">
                         
+                        <!-- 1. FOOD & NUTRITION -->
                         <div class="journal-accordion" onclick="toggleAccordion('journal-food')"><span>🥗 Advanced Nutrition Tracker</span> <span class="icon">+</span></div>
                         <div class="journal-panel" id="journal-food">
                             
@@ -482,6 +541,27 @@
                                 </details>
                             </div>
 
+                            <div class="meal-section" style="border-bottom: none; margin-bottom: 0;">
+                                <h5>4. Snacks & Supplements</h5>
+                                <textarea id="log-snk-desc" placeholder="Exact foods, supplements, and any digestive symptoms"></textarea>
+                                <div class="macro-grid">
+                                    <div><label>KCAL</label><input type="number" id="log-snk-cal" placeholder="0" oninput="updateDailyTotals()"></div>
+                                    <div><label>PRO (g)</label><input type="number" id="log-snk-pro" placeholder="0" oninput="updateDailyTotals()"></div>
+                                    <div><label>CARB (g)</label><input type="number" id="log-snk-car" placeholder="0" oninput="updateDailyTotals()"></div>
+                                    <div><label>FAT (g)</label><input type="number" id="log-snk-fat" placeholder="0" oninput="updateDailyTotals()"></div>
+                                </div>
+                                <details style="outline: none;">
+                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 600;">+ Edit Fiber & Micros</summary>
+                                    <div class="micro-grid">
+                                        <div><label>FIBER (g)</label><input type="number" id="log-snk-fib" placeholder="0" oninput="updateDailyTotals()"></div>
+                                        <div><label>SOD (mg)</label><input type="number" id="log-snk-sod" placeholder="0" oninput="updateDailyTotals()"></div>
+                                        <div><label>POT (mg)</label><input type="number" id="log-snk-pot" placeholder="0" oninput="updateDailyTotals()"></div>
+                                        <div><label>CALC (mg)</label><input type="number" id="log-snk-calc" placeholder="0" oninput="updateDailyTotals()"></div>
+                                        <div><label>IRON (mg)</label><input type="number" id="log-snk-iron" placeholder="0" oninput="updateDailyTotals()"></div>
+                                    </div>
+                                </details>
+                            </div>
+
                             <div class="daily-totals-macro">
                                 <div><span>CALORIES</span><strong id="tot-cal" style="font-size:1.8rem;">0</strong></div>
                                 <div><span>PROTEIN</span><strong id="tot-pro" style="font-size:1.3rem;">0g</strong></div>
@@ -495,16 +575,62 @@
                                 <div><span>CALCIUM</span><strong id="tot-calc" style="font-size:1.1rem;">0mg</strong></div>
                                 <div><span>IRON</span><strong id="tot-iron" style="font-size:1.1rem;">0mg</strong></div>
                             </div>
-
                         </div>
 
-                        <!-- Remaining Logs -->
-                        <div class="journal-accordion" onclick="toggleAccordion('journal-activity')"><span>🏃‍♀️ Activity & Mood</span> <span class="icon">+</span></div>
+                        <!-- 2. ACTIVITY -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-activity')"><span>🏃‍♀️ Activity & Movement</span> <span class="icon">+</span></div>
                         <div class="journal-panel" id="journal-activity">
-                            <label>Activity Type</label><input type="text" id="log-activity-type">
-                            <label>Duration (Mins)</label><input type="number" id="log-activity-dur">
+                            <label>Workout / Activity Type</label><input type="text" id="log-activity-type" placeholder="e.g. Walking, Yoga, Cycling">
+                            <label>Duration (Minutes)</label><input type="number" id="log-activity-dur" placeholder="e.g. 45">
+                            <label>Intensity</label>
+                            <select id="log-activity-int"><option value="">Select...</option><option value="Light">Light</option><option value="Moderate">Moderate</option><option value="Vigorous">Vigorous</option></select>
+                        </div>
+
+                        <!-- 3. MOOD -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-mood')"><span>🧠 Mood & Stress</span> <span class="icon">+</span></div>
+                        <div class="journal-panel" id="journal-mood">
                             <label>Overall Mood</label>
                             <select id="log-mood-rating"><option value="">Select...</option><option value="Great">Great</option><option value="Good">Good</option><option value="Okay">Okay</option><option value="Low">Low</option><option value="Anxious/Stressed">Anxious/Stressed</option></select>
+                            <label>Energy Level (1-10)</label><input type="number" id="log-energy" placeholder="10 = High Energy" min="1" max="10">
+                            <label>Emotional Notes</label><input type="text" id="log-mood-notes" placeholder="Any specific triggers today?">
+                        </div>
+
+                        <!-- 4. SLEEP -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-sleep')"><span>💤 Sleep</span> <span class="icon">+</span></div>
+                        <div class="journal-panel" id="journal-sleep">
+                            <label>Hours Slept</label><input type="number" step="0.5" id="log-sleep-hours" placeholder="e.g. 7.5">
+                            <label>Sleep Quality (1-5)</label>
+                            <select id="log-sleep-quality"><option value="">Select...</option><option value="5">5 - Excellent</option><option value="4">4 - Good</option><option value="3">3 - Fair</option><option value="2">2 - Poor</option><option value="1">1 - Terrible</option></select>
+                        </div>
+
+                        <!-- 5. BOWEL -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-bowel')"><span>🚽 Bowel Movements</span> <span class="icon">+</span></div>
+                        <div class="journal-panel" id="journal-bowel">
+                            <label>Type (Bristol Scale)</label>
+                            <select id="log-bowel-type">
+                                <option value="">Select type...</option>
+                                <option value="Type 1: Separate hard lumps">Type 1: Separate hard lumps</option>
+                                <option value="Type 2: Sausage-shaped, lumpy">Type 2: Sausage-shaped, lumpy</option>
+                                <option value="Type 3: Like a sausage but with cracks">Type 3: Like a sausage but with cracks</option>
+                                <option value="Type 4: Like a sausage, smooth & soft">Type 4: Like a sausage, smooth & soft (Ideal)</option>
+                                <option value="Type 5: Soft blobs with clear cut edges">Type 5: Soft blobs</option>
+                                <option value="Type 6: Fluffy pieces with ragged edges">Type 6: Fluffy/Mushy</option>
+                                <option value="Type 7: Watery, no solid pieces">Type 7: Watery/Liquid</option>
+                            </select>
+                            <label>Frequency Today</label><input type="number" id="log-bowel-freq" placeholder="How many times today?">
+                        </div>
+
+                        <!-- 6. HYDRATION -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-water')"><span>💧 Hydration</span> <span class="icon">+</span></div>
+                        <div class="journal-panel" id="journal-water">
+                            <label>Water Intake</label><input type="text" id="log-water" placeholder="e.g. 2 Liters or 8 Glasses">
+                        </div>
+
+                        <!-- 7. VITALS -->
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-meas')"><span>📏 Measurements & Vitals</span> <span class="icon">+</span></div>
+                        <div class="journal-panel" id="journal-meas">
+                            <label>Weight</label><input type="text" id="log-meas-weight" placeholder="e.g. 72 kg or 11.3 st">
+                            <label>Blood Pressure / Pulse (Optional)</label><input type="text" id="log-meas-bp" placeholder="e.g. 120/80">
                         </div>
 
                         <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Save & Submit Daily Log</button>
@@ -531,19 +657,28 @@
                         <div style="margin: 3rem 0; border-top: 1px solid var(--secondary-sand); padding-top: 2rem;">
                             <h4 style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.2rem;">1. Immune & Digestion Systems</h4>
                             <label>Have you ever been diagnosed with an autoimmune disease?</label>
-                            <input type="text" id="fm-immune-1">
+                            <input type="text" id="fm-immune-1" placeholder="Specify disease and when diagnosed">
+                            
                             <label>Do you experience gas and/or bloating after eating? Any foods in particular?</label>
-                            <input type="text" id="fm-digest-1">
+                            <input type="text" id="fm-digest-1" placeholder="Specify triggers">
+                            
                             <label>Do you experience skin itching, psoriasis, eczema, rosacea, or acne?</label>
-                            <input type="text" id="fm-digest-2">
+                            <input type="text" id="fm-digest-2" placeholder="Specify skin conditions">
                         </div>
 
                         <div style="margin: 3rem 0; border-top: 1px solid var(--secondary-sand); padding-top: 2rem;">
                             <h4 style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.2rem;">2. Hormones, Thyroid & Blood Sugar</h4>
                             <label>Do you get cravings for sugar OR salt?</label>
-                            <input type="text" id="fm-hormone-1">
+                            <input type="text" id="fm-hormone-1" placeholder="Specify cravings">
+                            
                             <label>When you wake up, do you feel energised or do you want to sleep longer?</label>
-                            <input type="text" id="fm-hormone-2">
+                            <input type="text" id="fm-hormone-2" placeholder="Describe morning energy">
+                            
+                            <label>Do you get cold hands/feet, easily gain weight, or have constipation?</label>
+                            <input type="text" id="fm-thyroid-1" placeholder="Specify symptoms">
+                            
+                            <label>Do you feel tired/fatigued after a meal, or energized?</label>
+                            <input type="text" id="fm-blood-1" placeholder="Describe post-meal energy">
                         </div>
 
                         <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 2rem; border-radius: 2px; margin-bottom: 2.5rem; margin-top: 1rem;">
@@ -611,7 +746,7 @@
         </div>
     </footer>
 
-    <!-- JS LOGIC -->
+    <!-- JS LOGIC WITH STRICT SECURITY & ERROR HANDLING -->
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
@@ -632,29 +767,46 @@
                         loadClientDashboard(db, session.user);
                     }
                 }
-            } catch(err) {}
+            } catch(err) {
+                console.log("No active session found.");
+            }
         };
 
         async function processClientLogin(e) {
             e.preventDefault();
             const btn = document.getElementById('client-login-btn');
-            const og = btn.innerText; btn.innerText = "Authenticating...";
+            const originalText = btn.innerText;
+            btn.innerText = "Authenticating...";
+
             try {
                 const email = document.getElementById('login-email').value.trim();
                 const pass = document.getElementById('login-password').value.trim();
+                
                 const db = getSupabase();
+                if(!db) throw new Error("Cannot connect to Database. Please check your internet connection.");
+
                 const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
-                if (error) throw error;
-                if (data.user) { updateNavState(true); openScreen('screen-dashboard'); loadClientDashboard(db, data.user); }
-            } catch (err) { alert('Login failed: ' + err.message); }
-            finally { btn.innerText = og; }
+                if (error) throw new Error(error.message);
+                
+                if (data.user) {
+                    updateNavState(true); 
+                    openScreen('screen-dashboard'); 
+                    loadClientDashboard(db, data.user);
+                }
+            } catch (err) {
+                alert("Login Failed: " + err.message);
+            } finally {
+                btn.innerText = originalText;
+            }
             return false;
-        };
+        }
 
         async function processRegistration(e) {
             e.preventDefault();
             try {
                 const db = getSupabase();
+                if(!db) throw new Error("Database connection failed.");
+
                 const name = document.getElementById('reg-name').value.trim();
                 const email = document.getElementById('reg-email').value.trim();
                 const pass = document.getElementById('reg-password').value.trim();
@@ -662,21 +814,29 @@
                 const date = document.getElementById('reg-date').value;
 
                 const { data: authData, error } = await db.auth.signUp({ email, password: pass, options: { data: { full_name: name } } });
-                if (error) throw error;
+                if (error) throw new Error(error.message);
+                
                 if (authData.user) {
-                    await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
+                    const { error: apptError } = await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
+                    if(apptError) throw new Error(apptError.message);
                 }
-                alert('Registered successfully!'); updateNavState(true); openScreen('screen-dashboard'); loadClientDashboard(db, authData.user);
-            } catch(err) { alert("Registration error: " + err.message); }
+                
+                alert('Registered successfully!'); 
+                updateNavState(true); 
+                openScreen('screen-dashboard'); 
+                loadClientDashboard(db, authData.user);
+            } catch(err) {
+                alert("Registration Error: " + err.message);
+            }
             return false;
-        };
+        }
 
         async function submitMedicalIntake(e) {
             e.preventDefault();
             try {
                 const db = getSupabase();
                 const { data: { user } } = await db.auth.getUser();
-                if(!user) throw new Error("Please log in.");
+                if(!user) throw new Error("You must be logged in to submit a file.");
 
                 const summary = `[MEDICAL INTAKE SUBMISSION]
 Age: ${document.getElementById('intake-age').value} | Sex: ${document.getElementById('intake-sex').value}
@@ -684,28 +844,38 @@ Height: ${document.getElementById('intake-height').value} | Weight: ${document.g
 
 AIMS: ${document.getElementById('intake-aims').value}
 
+FUNCTIONAL MARKERS:
 Autoimmune: ${document.getElementById('fm-immune-1').value || 'N/A'}
 Digestion/Gas: ${document.getElementById('fm-digest-1').value || 'N/A'}
 Skin Issues: ${document.getElementById('fm-digest-2').value || 'N/A'}
 Cravings: ${document.getElementById('fm-hormone-1').value || 'N/A'}
 Morning Energy: ${document.getElementById('fm-hormone-2').value || 'N/A'}
 Thyroid Markers: ${document.getElementById('fm-thyroid-1').value || 'N/A'}
-Blood Sugar: ${document.getElementById('fm-blood-1').value || 'N/A'}`;
+Blood Sugar: ${document.getElementById('fm-blood-1').value || 'N/A'}
 
-                await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: summary }]);
-                alert("Comprehensive Medical Intake successfully submitted to Clare!");
-            } catch(err) { alert("Error: " + err.message); }
+CONSENT: Patient has digitally signed the Functional Medicine Informed Consent waiver.`;
+
+                const { error } = await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: summary }]);
+                if(error) throw new Error(error.message);
+
+                alert("Comprehensive Medical Intake questionnaire successfully submitted to Clare!");
+            } catch (err) {
+                alert("Error submitting intake: " + err.message);
+            }
             return false;
-        };
+        }
 
         // --- OPEN FOOD FACTS API INTEGRATION & BARCODE SCANNER ---
         window.startBarcodeScanner = function() {
             try {
                 const readerDiv = document.getElementById('reader');
                 if(readerDiv.style.display === 'block') {
-                    if(window.html5QrCode) window.html5QrCode.stop().then(() => { readerDiv.style.display = 'none'; });
+                    if(window.html5QrCode) {
+                        window.html5QrCode.stop().then(() => { readerDiv.style.display = 'none'; });
+                    }
                     return;
                 }
+                
                 readerDiv.style.display = 'block';
                 window.html5QrCode = new Html5Qrcode("reader");
                 window.html5QrCode.start(
@@ -717,12 +887,14 @@ Blood Sugar: ${document.getElementById('fm-blood-1').value || 'N/A'}`;
                             lookupBarcode(decodedText);
                         });
                     },
-                    (errorMessage) => { /* ignore */ }
+                    (errorMessage) => { /* ignore minor scan errors */ }
                 ).catch(err => {
                     alert("Camera access error. Ensure you have granted permissions.");
                     readerDiv.style.display = 'none';
                 });
-            } catch (err) { alert("Scanner error: " + err.message); }
+            } catch (err) {
+                alert("Scanner error: " + err.message);
+            }
         };
 
         window.lookupBarcode = async function(barcode) {
@@ -749,7 +921,9 @@ Blood Sugar: ${document.getElementById('fm-blood-1').value || 'N/A'}`;
                 } else {
                     resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Product not found in database.</p>';
                 }
-            } catch(err) { resBox.innerHTML = '<p style="color:#a94442; font-size:0.9rem;">Error connecting to food database.</p>'; }
+            } catch(err) {
+                resBox.innerHTML = '<p style="color:#a94442; font-size:0.9rem;">Error connecting to food database.</p>';
+            }
         };
 
         window.searchFood = async function() {
@@ -785,8 +959,12 @@ Blood Sugar: ${document.getElementById('fm-blood-1').value || 'N/A'}`;
                     });
                     html += '</div>';
                     resBox.innerHTML = html;
-                } else { resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">No results found.</p>'; }
-            } catch(err) { resBox.innerHTML = `<p style="color:#a94442; font-size:0.9rem;">Error connecting to food database. ${err.message}</p>`; }
+                } else {
+                    resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">No results found. Try another search.</p>';
+                }
+            } catch(err) {
+                resBox.innerHTML = `<p style="color:#a94442; font-size:0.9rem;">Error connecting to database. ${err.message}</p>`;
+            }
         };
 
         window.selectFood = function(name, k, p, c, f, fib, sod, pot, calc, iron) {
@@ -899,18 +1077,35 @@ Date: ${new Date().toLocaleDateString('en-GB')}
 > Macros: ${document.getElementById('log-din-cal').value||0}kcal | ${document.getElementById('log-din-pro').value||0}g Pro | ${document.getElementById('log-din-car').value||0}g Carb | ${document.getElementById('log-din-fat').value||0}g Fat
 > Micros: ${document.getElementById('log-din-fib').value||0}g Fiber | ${document.getElementById('log-din-sod').value||0}mg Sodium | ${document.getElementById('log-din-pot').value||0}mg Potassium | ${document.getElementById('log-din-calc').value||0}mg Calcium | ${document.getElementById('log-din-iron').value||0}mg Iron
 
+[Snacks] ${document.getElementById('log-snk-desc').value || '-'}
+> Macros: ${document.getElementById('log-snk-cal').value||0}kcal | ${document.getElementById('log-snk-pro').value||0}g Pro | ${document.getElementById('log-snk-car').value||0}g Carb | ${document.getElementById('log-snk-fat').value||0}g Fat
+> Micros: ${document.getElementById('log-snk-fib').value||0}g Fiber | ${document.getElementById('log-snk-sod').value||0}mg Sodium | ${document.getElementById('log-snk-pot').value||0}mg Potassium | ${document.getElementById('log-snk-calc').value||0}mg Calcium | ${document.getElementById('log-snk-iron').value||0}mg Iron
+
 >> DAILY MACRO TOTALS: ${document.getElementById('tot-cal').innerText} kcal | ${document.getElementById('tot-pro').innerText} Protein | ${document.getElementById('tot-car').innerText} Carbs | ${document.getElementById('tot-fat').innerText} Fat 
+>> DAILY MICRO TOTALS: ${document.getElementById('tot-fib').innerText} Fiber | ${document.getElementById('tot-sod').innerText} Sodium | ${document.getElementById('tot-pot').innerText} Potassium | ${document.getElementById('tot-calc').innerText} Calcium | ${document.getElementById('tot-iron').innerText} Iron
 
 🏃‍♀️ ACTIVITY: ${document.getElementById('log-activity-type').value || '-'} (${document.getElementById('log-activity-dur').value || '0'} mins) | Intensity: ${document.getElementById('log-activity-int').value || '-'}
-🧠 MOOD: ${document.getElementById('log-mood-rating').value || '-'} | Energy: ${document.getElementById('log-energy').value || '-'}/10`;
+🧠 MOOD: ${document.getElementById('log-mood-rating').value || '-'} | Energy: ${document.getElementById('log-energy').value || '-'}/10 | Notes: ${document.getElementById('log-mood-notes').value || '-'}
+💤 SLEEP: ${document.getElementById('log-sleep-hours').value || '-'} hours | Quality: ${document.getElementById('log-sleep-quality').value || '-'}/5
+🚽 BOWEL: ${document.getElementById('log-bowel-type').value || '-'} | Freq: ${document.getElementById('log-bowel-freq').value || '-'}
+💧 WATER: ${document.getElementById('log-water').value || '-'}
+📏 VITALS: Weight: ${document.getElementById('log-meas-weight').value || '-'} | BP: ${document.getElementById('log-meas-bp').value || '-'}`;
 
                 const { error } = await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: logData }]);
                 if(error) throw error;
 
                 alert("Daily Health Log saved successfully to your practitioner file!");
-                e.target.reset(); updateDailyTotals();
+                
+                e.target.reset();
+                updateDailyTotals();
                 document.querySelectorAll('.journal-panel').forEach(p => p.classList.remove('show'));
-            } catch(err) { alert("Error saving log: " + err.message); }
+                document.querySelectorAll('.journal-accordion').forEach(a => {
+                    a.classList.remove('active');
+                    a.querySelector('.icon').innerText = '+';
+                });
+            } catch(err) {
+                alert("Error saving log: " + err.message);
+            }
             return false;
         };
 
@@ -924,8 +1119,11 @@ Date: ${new Date().toLocaleDateString('en-GB')}
                 const { error } = await db.from('appointments').insert([{ client_id: user.id, client_name: user.user_metadata?.full_name || user.email, service_name: document.getElementById('portal-service').value, appointment_time: document.getElementById('portal-date').value, status: 'confirmed' }]);
                 if(error) throw error;
 
-                alert("Appointment booked!"); loadClientDashboard(db, user);
-            } catch(err) { alert("Error booking session: " + err.message); }
+                alert("Appointment booked!"); 
+                loadClientDashboard(db, user);
+            } catch(err) {
+                alert("Error booking session: " + err.message);
+            }
             return false;
         };
 
@@ -935,9 +1133,12 @@ Date: ${new Date().toLocaleDateString('en-GB')}
                 const db = getSupabase();
                 const { error } = await db.from('appointments').delete().eq('id', id);
                 if(error) throw error;
+
                 const { data: { user } } = await db.auth.getUser();
                 loadClientDashboard(db, user);
-            } catch(err) { alert("Error cancelling appointment: " + err.message); }
+            } catch(err) {
+                alert("Error cancelling appointment: " + err.message);
+            }
         };
 
         async function loadClientDashboard(db, user) {
@@ -950,7 +1151,7 @@ Date: ${new Date().toLocaleDateString('en-GB')}
                 if(apptError) throw apptError;
 
                 list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => `
-                    <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 2px; border: 1px solid var(--secondary-sand); display: flex; justify-content: space-between; align-items: center; background: white;">
+                    <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 4px; border: 1px solid var(--secondary-sand); display: flex; justify-content: space-between; align-items: center; background: white;">
                         <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${new Date(a.appointment_time).toLocaleString('en-GB')}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
                         <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1.5rem; color: #a94442; border-color: #a94442;" onclick="cancelAppointment('${a.id}')">Cancel</button>
                     </div>`).join('');
@@ -963,7 +1164,9 @@ Date: ${new Date().toLocaleDateString('en-GB')}
                     chatBox.innerHTML = chatMsgs.map(m => `<div class="msg ${m.sender}"><strong>${m.sender === 'client' ? 'You' : 'Clare'}:</strong> ${m.content}</div>`).join('');
                     chatBox.scrollTop = chatBox.scrollHeight;
                 }
-            } catch(err) { list.innerHTML = `<p style="color: #a94442; font-size: 0.9rem;">Database Error: ${err.message}</p>`; }
+            } catch(err) {
+                list.innerHTML = `<p style="color: #a94442; font-size: 0.9rem;">Database Error: ${err.message}</p>`;
+            }
         }
 
         async function handleClientMessage(e) {
@@ -979,7 +1182,9 @@ Date: ${new Date().toLocaleDateString('en-GB')}
                 document.getElementById('client-chat-box').innerHTML += `<div class="msg client"><strong>You:</strong> ${input.value}</div>`;
                 input.value = '';
                 document.getElementById('client-chat-box').scrollTop = document.getElementById('client-chat-box').scrollHeight;
-            } catch(err) { alert("Error sending message: " + err.message); }
+            } catch(err) {
+                alert("Error sending message: " + err.message);
+            }
             return false;
         }
 
@@ -987,8 +1192,12 @@ Date: ${new Date().toLocaleDateString('en-GB')}
             try {
                 const db = getSupabase();
                 if(db) await db.auth.signOut();
+                updateNavState(false); 
+                openScreen('screen-home');
                 location.reload();
-            } catch(err) { alert("Error signing out: " + err.message); }
+            } catch(err) {
+                alert("Error signing out: " + err.message);
+            }
         }
 
         function updateNavState(isLoggedIn) {
