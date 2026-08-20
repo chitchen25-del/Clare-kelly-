@@ -2,547 +2,176 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Clare's Clinic | Practitioner App</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Clinic Admin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clare's Admin Portal</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root { 
-            /* VIBRANT GREEN LUXURY PALETTE */
-            --bg-color: #f3f1ef;         
-            --card-bg: #ffffff;          
-            --text-main: #095d28;        
-            --primary-sage: #0d9b46;     
-            --sage-hover: #095d28;       
-            --gold-accent: #10d358;      
-            --bright-accent: #12db14;    
-            --secondary-sand: #d1dcd4;
-            --safe-bottom: env(safe-area-inset-bottom); 
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Cormorant Garamond', serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; font-size: 1.1rem; overflow-x: hidden; padding-bottom: calc(75px + var(--safe-bottom)); }
-        
-        /* Editorial Typography */
-        h1, h2 { font-family: 'Cormorant Garamond', serif; font-weight: 400; color: var(--text-main); line-height: 1.2; }
-        h3, h4, h5, .btn, .app-nav-item { font-family: 'Montserrat', sans-serif; }
-        
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; background: var(--card-bg); border-bottom: 1px solid var(--secondary-sand); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 30px rgba(9, 93, 40, 0.03);}
-        
-        /* Premium Logo Styling */
-        .nav-brand-logo { height: 50px; width: auto; cursor: pointer; transition: opacity 0.3s ease; object-fit: contain; }
-        .nav-brand-logo:hover { opacity: 0.8; }
-        .portal-logo { height: 70px; margin: 0 auto 2.5rem auto; display: block; object-fit: contain; }
-
-        .btn { padding: 0.9rem 1.8rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; border-radius: 2px; cursor: pointer; border: 1px solid var(--primary-sage); background: var(--primary-sage); color: white; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(13, 155, 70, 0.15); }
-        .btn:hover { background: var(--sage-hover); border-color: var(--sage-hover); transform: translateY(-2px); box-shadow: 0 12px 35px rgba(9, 93, 40, 0.2); }
-        .btn-outline { background: transparent; border: 1px solid var(--secondary-sand); color: var(--text-main); box-shadow: none; }
-        .btn-outline:hover { background: transparent; border-color: var(--primary-sage); color: var(--primary-sage); box-shadow: none; }
-
-        .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 1.5rem; }
-        .form-container { width: 100%; max-width: 450px; background: var(--card-bg); padding: 4rem 3rem; border-radius: 2px; border: 1px solid var(--secondary-sand); text-align: center; box-shadow: 0 30px 70px rgba(9, 93, 40, 0.05); }
-        label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); margin-bottom: 0.8rem; text-align: left; font-weight: 600; }
-        input, select, textarea { width: 100%; padding: 1.1rem; margin-bottom: 2rem; border: 1px solid var(--secondary-sand); border-radius: 2px; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; background: transparent; appearance: none; -webkit-appearance: none; color: var(--text-main); transition: 0.3s; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-sage); box-shadow: 0 0 0 1px var(--primary-sage); }
-        
-        .dashboard-wrapper { display: none; max-width: 1200px; margin: 2.5rem auto; padding: 0 5%; }
-        .app-view { display: none; }
-        .app-view.active-view { display: block; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .panel { background: var(--card-bg); padding: 2.5rem 2rem; border-radius: 2px; border: 1px solid var(--secondary-sand); margin-bottom: 2.5rem; box-shadow: 0 15px 50px rgba(9, 93, 40, 0.03); }
-        .panel h3 { font-size: 1.3rem; color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem; font-weight: 600; }
-        
-        .finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
-        .metric-card { background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 2rem 1.5rem; border-radius: 2px; text-align: center; }
-        .metric-card span { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); font-family: 'Montserrat'; display: block; margin-bottom: 0.5rem; font-weight: 600;}
-        .metric-card h4 { font-size: 2.2rem; font-weight: 300; color: var(--primary-sage); font-family: 'Cormorant Garamond', serif; line-height: 1; }
-        
-        .chat-box { height: 350px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg-color); padding: 1.5rem; border-radius: 2px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 1rem; border: 1px solid var(--secondary-sand); }
-        .msg { padding: 1.2rem; border-radius: 2px; max-width: 85%; font-size: 1.05rem; }
-        .msg.client { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; color: var(--text-main); box-shadow: 0 4px 15px rgba(9, 93, 40, 0.03);}
-        .msg.admin { background: var(--primary-sage); color: white; align-self: flex-end; }
-        
-        /* Master-Detail Client List */
-        .client-list-item { background: white; border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 2px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(9, 93, 40, 0.02); }
-        .client-list-item:hover { border-color: var(--primary-sage); transform: translateY(-2px); box-shadow: 0 10px 25px rgba(9, 93, 40, 0.05); }
-        .client-list-item:active { transform: scale(0.98); background: var(--bg-color); }
-        .client-list-item h4 { color: var(--text-main); font-size: 1.2rem; margin-bottom: 0.4rem; font-weight: 600;}
-        
-        .app-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); border-top: 1px solid var(--secondary-sand); display: none; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -4px 30px rgba(9, 93, 40, 0.03); }
-        .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #777; cursor: pointer; width: 20%; height: 100%; font-weight: 600;}
-        .app-nav-item.active { color: var(--primary-sage); }
-        .app-nav-item svg { width: 22px; height: 22px; margin-bottom: 4px; stroke: currentColor; fill: none; stroke-width: 2; }
-        
-        .cal-card { background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 2px; margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 1rem; transition: transform 0.3s; }
-        .cal-card:hover { transform: translateY(-2px); border-color: var(--primary-sage); }
-        
-        @media (min-width: 900px) { 
-            .nav-brand-logo { height: 60px; } 
-            .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; } 
-            .app-bottom-nav { display: none !important; } 
-            .dashboard-wrapper { display: block !important; padding: 0 6%; } 
-            .app-view { display: block !important; } 
-            .finance-grid { grid-template-columns: repeat(3, 1fr); } 
-            .panel { padding: 4rem 3rem; }
-        }
-    </style>
 </head>
-<body>
-    <nav>
-        <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="location.reload();">
-        
-        <div style="display: flex; gap: 1rem; align-items: center;">
-            <button id="btn-demo" class="btn" style="display: none; background-color: var(--text-main); border-color: var(--text-main); color: white; box-shadow: none;" onclick="injectDemoData()">Load Demo Data</button>
-            <button id="btn-logout" class="btn btn-outline" style="display: none;" onclick="location.reload();">Sign Out</button>
+<body class="bg-gray-50 text-gray-800 font-sans flex h-screen overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <nav class="w-72 bg-white border-r border-gray-200 flex flex-col shadow-sm z-10">
+        <div class="p-6 border-b border-gray-100">
+            <h1 class="text-2xl font-bold text-teal-600 tracking-tight">Portal Admin</h1>
+            <p class="text-sm text-gray-500 mt-1">Practitioner Workspace</p>
+        </div>
+        <div class="flex-col flex flex-grow p-4 space-y-2 overflow-y-auto">
+            <button onclick="switchAdminTab('tier1')" id="btn-tier1" class="text-left px-4 py-3 rounded-lg bg-teal-50 text-teal-700 font-medium transition-colors">1. Dashboard (Essentials)</button>
+            <button onclick="switchAdminTab('tier2')" id="btn-tier2" class="text-left px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">2. Client Workflow</button>
+            <button onclick="switchAdminTab('tier3')" id="btn-tier3" class="text-left px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">3. Business Polish</button>
+            
+            <div class="pt-4 pb-1 text-xs font-bold text-gray-400 uppercase tracking-wider pl-4">Clinical Tools</div>
+            <button onclick="switchAdminTab('prescriber')" id="btn-prescriber" class="text-left px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">Supplement Prescriber</button>
         </div>
     </nav>
 
-    <div id="admin-login" class="login-wrapper">
-        <div class="form-container">
-            <img src="./logo.png" alt="The Natural Healing Clinic" class="portal-logo">
-            <h2 style="color: var(--text-main); margin-bottom: 2rem; font-weight: 300;">Practitioner Access</h2>
-            <form onsubmit="return processAdminLogin(event)">
-                <label>Admin Email</label><input type="text" id="admin-email" placeholder="Enter clinical email" required>
-                <label>Password</label><input type="password" id="admin-password" placeholder="Enter secure password" required>
-                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Authenticate</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="admin-dashboard" class="dashboard-wrapper">
-        <div style="margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="font-size: 2.2rem; font-weight: 300; color: var(--text-main);" id="app-header-title">Master Schedule</h1>
-            <span id="live-badge" style="font-size: 0.75rem; background: transparent; color: var(--primary-sage); border: 1px solid var(--primary-sage); padding: 0.5rem 1.2rem; border-radius: 2px; font-family: 'Montserrat'; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;">● Live Sync</span>
-        </div>
-
-        <!-- VIEW 1: SCHEDULE -->
-        <div id="view-schedule" class="app-view active-view">
-            <div class="panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <h3>Upcoming Appointments</h3>
-                    <button class="btn" onclick="openNewBookingModal()">+ Manual Booking</button>
+    <!-- Main Content Area -->
+    <main class="flex-1 p-8 overflow-y-auto relative">
+        
+        <!-- TIER 1: ESSENTIALS -->
+        <div id="panel-tier1" class="block animate-fade-in">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-800">Today's Overview</h2>
+                    <p class="text-gray-500 mt-1">Manage your daily schedule and essential services.</p>
                 </div>
-                <div id="admin-schedule-list"><p style="color: #888; font-size: 0.95rem;">Loading schedule...</p></div>
-            </div>
-        </div>
-
-        <!-- VIEW 2: CLIENT DIRECTORY (MASTER LIST) -->
-        <div id="view-clients" class="app-view">
-            <div class="panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                    <h3>Patient Directory</h3>
-                    <button class="btn" onclick="openClientModal()">+ Add Client</button>
+                <div class="space-x-3">
+                    <button class="px-5 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 font-medium shadow-sm transition-colors">+ Add Booking</button>
+                    <button class="px-5 py-2.5 bg-white border border-red-200 text-red-600 rounded-lg hover:bg-red-50 font-medium shadow-sm transition-colors">Block Time</button>
                 </div>
-                <p style="font-size: 1rem; color: #666; margin-bottom: 2.5rem;">Select a patient to view their clinical history and journals.</p>
-                <div id="admin-client-directory-list"><p style="color: #888; font-size: 0.95rem;">Loading client records...</p></div>
             </div>
-        </div>
-
-        <!-- DEDICATED CLIENT PROFILE (DETAIL PAGE) -->
-        <div id="view-client-detail" class="app-view">
-            <button class="btn btn-outline" style="margin-bottom: 2rem;" onclick="switchAppView('clients')">&larr; Back to Directory</button>
-            <div id="client-detail-content">
-                <!-- Dynamically populated by JS -->
-            </div>
-        </div>
-
-        <!-- VIEW 3: FINANCE -->
-        <div id="view-finance" class="app-view">
-            <div class="panel">
-                <h3>Clinic Income & Professional Invoicing</h3>
-                <div class="finance-grid">
-                    <div class="metric-card"><span>Month Revenue</span><h4 id="stat-revenue">£0</h4></div>
-                    <div class="metric-card"><span>Sessions Booked</span><h4 id="stat-sessions">0</h4></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <h3 class="text-gray-500 text-sm font-bold uppercase tracking-wide">Appointments Today</h3>
+                    <p class="text-4xl font-black mt-2 text-gray-800">4</p>
                 </div>
-                <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 2.5rem; border-radius: 2px; margin-top: 3rem;">
-                    <h4 style="font-family: 'Montserrat'; font-size: 1.1rem; color: var(--text-main); margin-bottom: 1.5rem; font-weight: 600;">Create Invoice</h4>
-                    <form onsubmit="return generateInvoice(event)">
-                        <label>Client Full Name</label><input type="text" id="inv-client" required style="background: white;">
-                        <label>Client Postal Address</label><textarea id="inv-address" style="height: 80px; background: white;" required></textarea>
-                        <label>Select Treatment</label>
-                        <select id="inv-service-select" style="background: white;">
-                            <option value="Initial Consultation (£85)">Initial Consultation - £85</option>
-                            <option value="Standard Follow-Up Session (£75)">Standard Follow-Up Session - £75</option>
-                            <option value="360 Burnout Protocol (£1,450)">360° Burnout Protocol - £1,450</option>
-                        </select>
-                        <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Generate Printable Invoice</button>
-                    </form>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <h3 class="text-gray-500 text-sm font-bold uppercase tracking-wide">Active Services</h3>
+                    <button class="mt-4 text-sm text-teal-600 hover:text-teal-800 font-medium text-left transition-colors">Manage Service Pricing & Durations &rarr;</button>
                 </div>
             </div>
         </div>
 
-        <!-- VIEW 4: LIVE INBOX -->
-        <div id="view-inbox" class="app-view">
-            <div class="panel">
-                <h3>Live Patient Inbox</h3>
-                <div class="chat-box" id="admin-chat-box"><p style="color: #888; font-size: 0.95rem;">Loading messages...</p></div>
+        <!-- TIER 2: CLIENT WORKFLOW -->
+        <div id="panel-tier2" class="hidden">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">Client Workflow</h2>
+                <p class="text-gray-500 mt-1">Log clinical notes and manage client histories.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6 max-w-3xl">
+                <h3 class="font-bold text-gray-800 text-lg mb-2">Private Session Notes</h3>
+                <p class="text-sm text-gray-500 mb-6">Select a client from today's roster to add secure clinical notes.</p>
+                <select class="w-full border border-gray-300 px-4 py-3 rounded-lg mb-4 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all">
+                    <option value="" disabled selected>Select Client...</option>
+                    <option>Jane Smith - 10:00 AM</option>
+                </select>
+                <textarea rows="5" class="w-full border border-gray-300 px-4 py-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all resize-none" placeholder="Enter treatment progress and clinical notes here..."></textarea>
+                <button class="mt-4 px-6 py-2.5 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors shadow-sm">Save Notes</button>
             </div>
         </div>
 
-        <!-- VIEW 5: BROADCAST -->
-        <div id="view-tools" class="app-view">
-            <div class="panel">
-                <h3>Send Advice & Files</h3>
-                <form onsubmit="alert('Dispatched!'); return false;">
-                    <label>Send To</label><select><option value="all">All Clients (Mass Broadcast)</option></select>
-                    <label>Title</label><input type="text" required>
-                    <label>Content</label><textarea style="height: 120px;" required></textarea>
-                    <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Dispatch Protocol</button>
+        <!-- TIER 3: BUSINESS POLISH -->
+        <div id="panel-tier3" class="hidden">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">Business Automation</h2>
+                <p class="text-gray-500 mt-1">Configure automated messaging and policies.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 max-w-3xl">
+                <h3 class="font-bold text-gray-800 text-lg mb-2">Automated Messaging Templates</h3>
+                <p class="text-sm text-gray-500 mb-6">Edit the text clients receive in their 24-hour reminder emails.</p>
+                <textarea rows="4" class="w-full border border-gray-300 px-4 py-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all resize-none">Hi [Name], this is a reminder for your appointment tomorrow at [Time] with Clare. We look forward to seeing you!</textarea>
+                <button class="mt-4 px-6 py-2.5 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors shadow-sm">Update Template</button>
+            </div>
+        </div>
+
+        <!-- SUPPLEMENT PRESCRIBER -->
+        <div id="panel-prescriber" class="hidden">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">Supplement Prescriber</h2>
+                <p class="text-gray-500 mt-1">Assign supplements and dosages directly to client profiles.</p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 max-w-2xl">
+                <form id="prescriber-form" class="space-y-5" onsubmit="event.preventDefault(); savePrescription();">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Client Name</label>
+                        <input type="text" id="client-name" required class="w-full border border-gray-300 px-4 py-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all" placeholder="e.g. John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Supplement Name</label>
+                        <input type="text" id="supplement-name" required class="w-full border border-gray-300 px-4 py-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all" placeholder="e.g. Magnesium Glycinate 400mg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Dosage & Instructions</label>
+                        <textarea id="dosage-instructions" required rows="4" class="w-full border border-gray-300 px-4 py-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all resize-none" placeholder="Take 2 capsules before bed with water..."></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-teal-600 text-white font-bold py-3.5 rounded-lg hover:bg-teal-700 transition-colors shadow-sm mt-2">Save Prescription to Database</button>
+                    
+                    <!-- Status Message -->
+                    <div id="prescriber-status" class="hidden mt-4 p-3 rounded-lg text-sm text-center font-medium"></div>
                 </form>
             </div>
         </div>
-    </div>
 
-    <!-- BOTTOM NAV -->
-    <div class="app-bottom-nav" id="app-bottom-nav">
-        <div class="app-nav-item active" onclick="switchAppView('schedule', this)">
-            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>Schedule
-        </div>
-        <div class="app-nav-item" onclick="switchAppView('clients', this)">
-            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>Clients
-        </div>
-        <div class="app-nav-item" onclick="switchAppView('finance', this)">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>Finance
-        </div>
-        <div class="app-nav-item" onclick="switchAppView('inbox', this)">
-            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>Inbox
-        </div>
-        <div class="app-nav-item" onclick="switchAppView('tools', this)">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9c0 .69.41 1.32 1.05 1.51H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Tools
-        </div>
-    </div>
+    </main>
 
+    <!-- Application Logic -->
     <script>
-        const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
-        let globalClients = [];
-        let globalMsgs = [];
+        // 1. Initialize Supabase (REPLACE WITH YOUR KEYS)
+        const supabaseUrl = 'YOUR_SUPABASE_URL';
+        const supabaseKey = 'YOUR_ANON_KEY';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        function getSupabase() {
-            if(!window.supabase) return null;
-            return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        }
-
-        function switchAppView(viewName, element) {
-            document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active-view'));
-            document.querySelectorAll('.app-nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`view-${viewName}`).classList.add('active-view');
-            if(element) element.classList.add('active');
-            
-            const titles = { schedule: 'Master Schedule', clients: 'Patient Directory', 'client-detail': 'Clinical Profile', finance: 'Income & Invoicing', inbox: 'Live Patient Inbox', tools: 'Clinic Tools' };
-            document.getElementById('app-header-title').innerText = titles[viewName] || 'Dashboard';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function processAdminLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('admin-email').value.trim();
-            const pass = document.getElementById('admin-password').value.trim();
-            
-            if (email === 'test' && pass === 'test') { 
-                initDashboard(); 
-                return false; 
-            }
-            
-            const db = getSupabase();
-            const { error } = await db.auth.signInWithPassword({ email, password: pass });
-            if (error) alert('Login failed: ' + error.message);
-            else initDashboard();
-            return false;
-        }
-
-        function initDashboard() {
-            document.getElementById('admin-login').style.display = 'none';
-            document.getElementById('admin-dashboard').style.display = 'block';
-            document.getElementById('btn-logout').style.display = 'inline-block';
-            document.getElementById('btn-demo').style.display = 'inline-block';
-            if(window.innerWidth < 900) { document.getElementById('app-bottom-nav').style.display = 'flex'; }
-            
-            const db = getSupabase();
-            loadSchedule(db); 
-            loadClientDirectory(db); 
-            loadAdminInbox(db); 
-            loadFinanceMetrics(db);
-            setInterval(() => loadAdminInbox(db, true), 10000);
-        }
-
-        async function loadSchedule(db) {
-            const container = document.getElementById('admin-schedule-list');
-            const { data: appts } = await db.from('appointments').select('*').order('appointment_time', { ascending: true });
-            if(!appts || appts.length === 0) { container.innerHTML = '<p style="color: #666; font-size: 0.95rem;">No upcoming bookings found.</p>'; return; }
-
-            container.innerHTML = appts.map(a => `
-                <div class="cal-card">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <div>
-                            <strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.15rem;">${a.client_name}</strong><br>
-                            <span style="font-size: 0.95rem; color: #555; font-weight: 500;">${a.service_name}</span>
-                        </div>
-                        <div style="text-align: right; font-size: 0.85rem; color: #666;">
-                            ${new Date(a.appointment_time).toLocaleDateString('en-GB', {weekday: 'short', month: 'short', day: 'numeric'})}<br>
-                            <strong style="color: var(--primary-sage); font-size: 1.05rem;">${new Date(a.appointment_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</strong>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 1rem; border-top: 1px solid var(--secondary-sand); padding-top: 1.2rem; margin-top: 1rem;">
-                        <input type="datetime-local" id="resched-${a.id}" style="margin-bottom:0; font-size:0.95rem; padding: 0.8rem; flex: 1; background: white;" required>
-                        <button class="btn" style="padding: 0 1.5rem; font-size:0.75rem;" onclick="rescheduleBooking('${a.id}')">Reschedule</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function rescheduleBooking(apptId) {
-            const newTime = document.getElementById(`resched-${apptId}`).value;
-            if(!newTime) { alert("Please select a new date and time."); return; }
-            const db = getSupabase();
-            await db.from('appointments').update({ appointment_time: newTime }).eq('id', apptId);
-            alert("Rescheduled!"); loadSchedule(db);
-        }
-
-        async function openNewBookingModal() {
-            const clientName = prompt("Enter Patient Full Name:");
-            if(!clientName) return;
-            const service = prompt("Enter Treatment/Service:", "Initial Consultation (£85)");
-            if(!service) return;
-            const dateInput = prompt("Enter Date & Time (YYYY-MM-DD HH:MM):", new Date().toISOString().slice(0,16).replace('T', ' '));
-            if(!dateInput) return;
-            
-            const db = getSupabase();
-            await db.from('appointments').insert([{ 
-                client_id: 'manual_' + Date.now(), 
-                client_name: clientName, 
-                service_name: service, 
-                appointment_time: new Date(dateInput).toISOString(), 
-                status: 'confirmed' 
-            }]);
-            alert("Patient successfully booked!"); 
-            loadSchedule(db);
-            loadClientDirectory(db);
-        }
-
-        async function openClientModal() {
-            const name = prompt("Enter Patient Full Name to Onboard:");
-            if(!name) return;
-            
-            const db = getSupabase();
-            await db.from('appointments').insert([{ 
-                client_id: 'client_' + Date.now(), 
-                client_name: name, 
-                service_name: 'Existing Record Transferred', 
-                appointment_time: new Date().toISOString(), 
-                status: 'confirmed' 
-            }]);
-            alert("Patient profile created!"); 
-            loadClientDirectory(db);
-        }
-
-        async function loadClientDirectory(db) {
-            const container = document.getElementById('admin-client-directory-list');
-            const { data: appts } = await db.from('appointments').select('*');
-            const { data: msgs } = await db.from('messages').select('*').order('created_at', { ascending: false });
-
-            if(!appts || appts.length === 0) { 
-                container.innerHTML = '<p style="color: #666; font-size: 1rem;">No clients found in database.</p>'; 
-                return; 
-            }
-            
-            globalClients = Array.from(new Set(appts.map(a => a.client_id))).map(id => appts.find(a => a.client_id === id));
-            globalMsgs = msgs || [];
-
-            container.innerHTML = globalClients.map(client => `
-                <div class="client-list-item" onclick="openClientProfile('${client.client_id}')">
-                    <div>
-                        <h4>${client.client_name}</h4>
-                        <span style="font-size: 0.9rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
-                    </div>
-                    <span style="color: var(--primary-sage); font-size: 1.5rem;">&rarr;</span>
-                </div>
-            `).join('');
-        }
-
-        async function loadFinanceMetrics(db) {
-            const { data: appts } = await db.from('appointments').select('*');
-            if(!appts) return;
-            let totalRevenue = 0;
-            appts.forEach(a => {
-                if(a.service_name.includes('£85')) totalRevenue += 85;
-                else if(a.service_name.includes('£175')) totalRevenue += 175;
-                else if(a.service_name.includes('£297')) totalRevenue += 297;
-                else if(a.service_name.includes('£1,450')) totalRevenue += 1450;
-                else if(a.service_name.includes('£90')) totalRevenue += 90;
-                else if(a.service_name.includes('£95')) totalRevenue += 95;
-                else totalRevenue += 75;
+        // 2. Tab Switching Logic
+        function switchAdminTab(tabId) {
+            // Hide all panels
+            const panels = ['tier1', 'tier2', 'tier3', 'prescriber'];
+            panels.forEach(id => {
+                document.getElementById('panel-' + id).style.display = 'none';
+                
+                // Reset button styles to default state
+                document.getElementById('btn-' + id).className = "text-left px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors";
             });
-            document.getElementById('stat-revenue').innerText = `£${totalRevenue.toLocaleString()}`;
-            document.getElementById('stat-sessions').innerText = appts.length;
-        }
 
-        async function loadAdminInbox(db, isPolling = false) {
-            const chatBox = document.getElementById('admin-chat-box');
-            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
-            if(!data || data.length === 0) { chatBox.innerHTML = '<p style="color: #888; font-size: 1rem;">No messages yet.</p>'; return; }
-
-            const chatMsgs = data.filter(m => !m.content.includes('[DAILY HEALTH LOG]') && !m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
-            if (isPolling && chatMsgs.length > window.lastMessageCount && window.lastMessageCount > 0) {
-                document.title = "🔔 NEW MESSAGE - Clinic App";
-            }
-            window.lastMessageCount = chatMsgs.length;
-
-            chatBox.innerHTML = chatMsgs.map(m => `<div class="msg ${m.sender}"><strong>${m.sender === 'client' ? 'Patient' : 'Clare'}:</strong> ${m.content}</div>`).join('');
-        }
-
-        function openClientProfile(clientId) {
-            const client = globalClients.find(c => c.client_id === clientId) || { client_name: 'Unknown Client', client_id: clientId };
-            const clientMsgs = globalMsgs.filter(m => m.client_id === clientId);
-
-            const intakeMsg = clientMsgs.find(m => m.content && m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
-            let intakeDisplay = intakeMsg ? intakeMsg.content.replace('[MEDICAL INTAKE SUBMISSION]', '').trim() : 'Questionnaire not yet completed.';
-
-            const dailyLogs = clientMsgs.filter(m => m.content && m.content.includes('[DAILY HEALTH LOG]'));
-            let logsHtml = '<p style="font-size:1rem; color:#888;">No daily journals logged yet.</p>';
-            if(dailyLogs.length > 0) {
-                logsHtml = dailyLogs.map(log => {
-                    const cleanContent = log.content.replace('[DAILY HEALTH LOG]', '').trim();
-                    return `<div style="background: white; padding: 2rem; margin-bottom: 2rem; border-radius: 2px; box-shadow: 0 10px 30px rgba(9,93,40,0.04); border: 1px solid var(--secondary-sand); border-left: 4px solid var(--primary-sage);">
-                        <pre style="white-space: pre-wrap; font-family: inherit; font-size: 1.05rem; color: #333; line-height: 1.7;">${cleanContent}</pre>
-                    </div>`;
-                }).join('');
-            }
-
-            const html = `
-                <div class="panel" style="border-top: 4px solid var(--primary-sage);">
-                    <h2 style="font-size: 2.5rem; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 300;">${client.client_name}</h2>
-                    <p style="font-size: 0.85rem; color: #888; margin-bottom: 3rem; font-family: 'Montserrat'; letter-spacing: 2px;">PATIENT ID: ${client.client_id}</p>
-                    
-                    <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-weight: 700;">Comprehensive Medical Intake</h3>
-                    <div style="background: var(--bg-color); padding: 2.5rem; border-radius: 2px; margin-bottom: 4rem; font-size: 1.1rem; border: 1px solid var(--secondary-sand);">
-                        <pre style="white-space: pre-wrap; font-family: inherit; color: var(--text-main); line-height: 1.8;">${intakeDisplay}</pre>
-                    </div>
-
-                    <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-weight: 700;">Running Health Journals (MFP Detailed View)</h3>
-                    <div style="margin-bottom: 4rem; max-height: 800px; overflow-y: auto; padding-right: 15px;">
-                        ${logsHtml}
-                    </div>
-
-                    <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-weight: 700;">Add Clinical Note</h3>
-                    <form onsubmit="alert('Note Saved to File!'); return false;" style="display: flex; flex-direction: column; gap: 1rem;">
-                        <textarea placeholder="Type consultation notes..." style="height: 150px; margin-bottom:0; background: var(--bg-color);" required></textarea>
-                        <input type="file" style="margin-bottom:0; background: white;">
-                        <button type="submit" class="btn">Update Clinical File</button>
-                    </form>
-                </div>
-            `;
+            // Show the selected panel
+            document.getElementById('panel-' + tabId).style.display = 'block';
             
-            document.getElementById('client-detail-content').innerHTML = html;
-            switchAppView('client-detail');
+            // Highlight the active button
+            document.getElementById('btn-' + tabId).className = "text-left px-4 py-3 rounded-lg bg-teal-50 text-teal-700 font-medium transition-colors shadow-sm";
         }
 
-        // --- INSTANT DEMO DATA INJECTION FOR PRESENTATION ---
-        function injectDemoData() {
-            globalClients = [
-                { client_id: 'demo_1', client_name: 'Sarah Jenkins' },
-                { client_id: 'demo_2', client_name: 'Marcus Vance' },
-                { client_id: 'demo_3', client_name: 'Elena Rostova' }
-            ];
+        // 3. Save Prescription Logic
+        async function savePrescription() {
+            const statusDiv = document.getElementById('prescriber-status');
+            statusDiv.style.display = 'block';
+            statusDiv.className = "mt-4 p-3 rounded-lg text-sm text-center font-medium bg-gray-100 text-gray-600 animate-pulse";
+            statusDiv.textContent = "Saving to database...";
 
-            globalMsgs = [
-                { client_id: 'demo_1', sender: 'client', content: '[MEDICAL INTAKE SUBMISSION]\nAge: 42 | Sex: Female | Height: 165cm | Weight: 68kg\n\nAIMS: Regain consistent energy, reduce brain fog, manage Hashimoto\'s.\n\nFUNCTIONAL MARKERS:\nAutoimmune: Hashimoto\'s (Diagnosed 2021)\nDigestion/Gas: Bloating after gluten or dairy\nCravings: Heavy sugar cravings at 3 PM\nMorning Energy: Exhausted until 10 AM' },
-                { client_id: 'demo_1', sender: 'client', content: `[DAILY HEALTH LOG]
-Date: Today
+            const clientName = document.getElementById('client-name').value;
+            const supplement = document.getElementById('supplement-name').value;
+            const instructions = document.getElementById('dosage-instructions').value;
 
-🥗 FOOD & NUTRITION:
-[Breakfast] Gluten Free Oats (50g), Blueberries (80g), Almond Milk (150ml), Chia Seeds (15g).
-> Macros: 385 kcal | 12g Pro | 52g Carbs | 16g Fat
-> Micros: 11g Fiber | 45mg Sodium | 210mg Potassium | 300mg Calcium | 3mg Iron
+            // Insert data into Supabase
+            const { data, error } = await supabase
+                .from('prescriptions')
+                .insert([
+                    { 
+                        client_name: clientName, 
+                        supplement_name: supplement, 
+                        dosage_instructions: instructions 
+                    }
+                ]);
 
-[Lunch] Wild Salmon (150g), Sweet Potato (100g), Spinach (2 large handfuls), Olive Oil (1 tbsp).
-> Macros: 510 kcal | 38g Pro | 24g Carbs | 28g Fat
-> Micros: 6g Fiber | 120mg Sodium | 950mg Potassium | 85mg Calcium | 4mg Iron
-
-[Dinner] Organic Chicken Breast (200g), Broccoli (100g), Quinoa (80g).
-> Macros: 440 kcal | 62g Pro | 30g Carbs | 8g Fat
-> Micros: 8g Fiber | 90mg Sodium | 620mg Potassium | 60mg Calcium | 5mg Iron
-
-[Snacks] Handful of Walnuts (30g). Slight bloating 30 mins after eating.
-> Macros: 196 kcal | 4g Pro | 4g Carbs | 19g Fat
-> Micros: 2g Fiber | 0mg Sodium | 130mg Potassium | 29mg Calcium | 1mg Iron
-
->> DAILY MACRO TOTALS: 1,531 kcal | 116g Protein | 110g Carbs | 71g Fat 
->> DAILY MICRO TOTALS: 27g Fiber | 255mg Sodium | 1910mg Potassium | 474mg Calcium | 13mg Iron
-
-🏃‍♀️ ACTIVITY: Pilates Flow (45 mins, Moderate)
-🧠 MOOD & STRESS: Okay | Energy: 5/10. Notes: Felt a mid-afternoon crash.
-💤 SLEEP: 6.5 hours | Quality: 3/5
-🚽 BOWEL: Type 3 | Freq: 1
-💧 WATER: 2.5 Liters
-📏 VITALS: Weight: 67.5kg` },
-                { client_id: 'demo_2', sender: 'client', content: '[MEDICAL INTAKE SUBMISSION]\nAge: 29 | Sex: Male\nAims: Improve marathon completion time, achieve full ROM without sciatic pain.' },
-                { client_id: 'demo_3', sender: 'client', content: 'Hi Clare, I am really looking forward to starting the Gut Reset. Do I need to cut out coffee completely?' }
-            ];
-
-            document.getElementById('stat-revenue').innerText = '£1,837';
-            document.getElementById('stat-sessions').innerText = '3';
-
-            document.getElementById('admin-schedule-list').innerHTML = `
-                <div class="cal-card">
-                    <div style="display: flex; justify-content: space-between;">
-                        <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.15rem;">Sarah Jenkins</strong><br><span style="font-size: 0.95rem; color: #555;">360° Burnout Protocol (£1,450)</span></div>
-                        <div style="text-align: right; font-size: 0.85rem; color: #666;">Tomorrow<br><strong style="color: var(--primary-sage); font-size: 1.05rem;">10:00 AM</strong></div>
-                    </div>
-                </div>
-                <div class="cal-card">
-                    <div style="display: flex; justify-content: space-between;">
-                        <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.15rem;">Marcus Vance</strong><br><span style="font-size: 0.95rem; color: #555;">Elite Athletic Optimization (£90)</span></div>
-                        <div style="text-align: right; font-size: 0.85rem; color: #666;">Thursday<br><strong style="color: var(--primary-sage); font-size: 1.05rem;">02:30 PM</strong></div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('admin-client-directory-list').innerHTML = `
-                <div class="client-list-item" onclick="openClientProfile('demo_1')">
-                    <div>
-                        <h4>Sarah Jenkins</h4>
-                        <span style="font-size: 0.95rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
-                    </div>
-                    <span style="color: var(--primary-sage); font-size: 1.8rem;">&rarr;</span>
-                </div>
-                <div class="client-list-item" onclick="openClientProfile('demo_2')">
-                    <div>
-                        <h4>Marcus Vance</h4>
-                        <span style="font-size: 0.95rem; color: #666;">View full clinical profile, intake, & MFP journals</span>
-                    </div>
-                    <span style="color: var(--primary-sage); font-size: 1.8rem;">&rarr;</span>
-                </div>
-            `;
-
-            document.getElementById('admin-chat-box').innerHTML = `
-                <div class="msg client"><strong>Patient (Sarah):</strong> Hi Clare, my supplements arrived today! Should I take them with food?</div>
-                <div class="msg admin"><strong>Clare:</strong> Yes Sarah! Take the magnesium with dinner. See you tomorrow at 10!</div>
-                <div class="msg client"><strong>Patient (Elena):</strong> I am really looking forward to starting the Gut Reset. Do I need to cut out coffee completely?</div>
-            `;
-            document.title = "🔔 NEW MESSAGE - Clinic App";
-        }
-
-        function generateInvoice(e) {
-            e.preventDefault();
-            const client = document.getElementById('inv-client').value;
-            const address = document.getElementById('inv-address').value;
-            const selectVal = document.getElementById('inv-service-select').value;
-            const invNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000);
-
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write('<html><head><title>Invoice ' + invNumber + '</title><style>body{font-family:sans-serif;padding:40px;}</style></head><body>');
-            printWindow.document.write('<h2 style="color:#095d28;">THE NATURAL HEALING CLINIC</h2><p>13 Cronk Drine<br>Union Mills, IM4 4NG<br>Tel: 07624 202 121</p><p>Invoice No: ' + invNumber + '</p><hr>');
-            printWindow.document.write('<p><strong>Billed To:</strong> ' + client + '<br>' + address + '</p>');
-            printWindow.document.write('<h3>Service: ' + selectVal + '</h3>');
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            setTimeout(() => { printWindow.print(); }, 500);
-            return false;
+            if (error) {
+                statusDiv.textContent = "Error: " + error.message;
+                statusDiv.className = "mt-4 p-3 rounded-lg text-sm text-center font-medium bg-red-50 text-red-700 border border-red-200";
+                console.error(error);
+            } else {
+                statusDiv.textContent = "Prescription successfully saved for " + clientName + "!";
+                statusDiv.className = "mt-4 p-3 rounded-lg text-sm text-center font-medium bg-green-50 text-green-700 border border-green-200";
+                document.getElementById('prescriber-form').reset();
+            }
         }
     </script>
 </body>
