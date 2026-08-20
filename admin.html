@@ -6,8 +6,12 @@
     <title>Clare's Clinic | Practitioner EMR</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Clinic EMR">
+    
+    <!-- Supabase loaded immediately -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root { 
             --bg-color: #f3f1ef;         
@@ -27,7 +31,8 @@
         h3, h4, h5, .btn, .app-nav-item, label, .tab-btn { font-family: 'Montserrat', sans-serif; }
         
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5%; background: var(--card-bg); border-bottom: 1px solid var(--secondary-sand); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(9, 93, 40, 0.04);}
-        .nav-brand-logo { height: 45px; width: auto; object-fit: contain; cursor: pointer; }
+        .nav-brand-logo { height: 45px; width: auto; object-fit: contain; cursor: pointer; transition: opacity 0.3s ease; }
+        .nav-brand-logo:hover { opacity: 0.8; }
         .portal-logo { height: 60px; margin: 0 auto 2rem auto; display: block; object-fit: contain; }
 
         .btn { padding: 1rem 1.5rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 6px; cursor: pointer; border: 1px solid var(--primary-sage); background: var(--primary-sage); color: white; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 4px 15px rgba(13, 155, 70, 0.15); }
@@ -87,6 +92,16 @@
         .soap-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
         .data-block { background: var(--bg-color); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--secondary-sand); margin-bottom: 1rem; }
 
+        /* INTERACTIVE BODY MAP */
+        .body-map-container { position: relative; width: 100%; max-width: 320px; margin: 0 auto 2rem auto; background: white; border: 1px solid var(--secondary-sand); border-radius: 8px; cursor: crosshair; overflow: hidden; padding: 2rem 1rem; box-shadow: inset 0 0 20px rgba(0,0,0,0.02); }
+        .body-map-svg { width: 100%; height: auto; opacity: 0.6; pointer-events: none; stroke: var(--text-main); stroke-width: 2; fill: none; }
+        .map-pin { position: absolute; width: 16px; height: 16px; background: var(--gold-accent); border-radius: 50%; transform: translate(-50%, -50%); border: 3px solid white; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; z-index: 10; transition: transform 0.2s; }
+        .map-pin:hover { transform: translate(-50%, -50%) scale(1.3); background: var(--primary-sage); }
+        .map-pin::after { content: attr(data-note); position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: var(--text-main); color: white; padding: 0.4rem 0.8rem; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 600; border-radius: 4px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; margin-bottom: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 20;}
+        .map-pin:hover::after { opacity: 1; }
+        .pin-list-item { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; background: white; border: 1px solid var(--secondary-sand); border-radius: 8px; margin-bottom: 0.8rem; }
+        .pin-list-dot { width: 12px; height: 12px; background: var(--gold-accent); border-radius: 50%; margin-top: 4px; flex-shrink: 0;}
+
         .app-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--secondary-sand); display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -4px 20px rgba(9, 93, 40, 0.04); }
         .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: #888; cursor: pointer; width: 20%; height: 100%; font-weight: 600;}
         .app-nav-item.active { color: var(--primary-sage); }
@@ -100,7 +115,6 @@
     <nav>
         <img src="./logo.png" alt="Clinic Logo" class="nav-brand-logo" onclick="location.reload();">
         <div style="display: flex; gap: 1rem; align-items: center;">
-            <button id="btn-demo" class="btn btn-outline" style="display: none; padding: 0.5rem 1rem; font-size: 0.6rem; min-height: 35px;" onclick="injectDemoData()">Demo Data</button>
             <button id="btn-logout" class="btn btn-outline" style="display: none; padding: 0.5rem 1rem; font-size: 0.6rem; min-height: 35px;" onclick="location.reload()">Sign Out</button>
         </div>
     </nav>
@@ -118,9 +132,9 @@
                 <button type="submit" id="admin-login-btn" class="btn" style="width: 100%; margin-top: 1rem;">Authenticate via Supabase</button>
             </form>
             
-            <!-- TEMPORARY DEVELOPER BYPASS SO YOU CAN SEE THE FEATURES RIGHT NOW -->
+            <!-- BYPASS SO YOU CAN SEE THE FEATURES -->
             <button type="button" class="btn btn-bypass" onclick="bypassLogin()">DEVELOPER BYPASS (SKIP LOGIN)</button>
-            <p style="font-size: 0.7rem; color: #888; margin-top: 1rem;">Click above to skip the database lock and immediately see the new calendar, tabs, and prescriber tools.</p>
+            <p style="font-size: 0.7rem; color: #888; margin-top: 1rem;">Click above to skip the database lock and immediately see the Body Map, tabs, and prescriber tools.</p>
         </div>
     </div>
 
@@ -131,16 +145,12 @@
             <span id="live-badge" style="font-size: 0.65rem; background: rgba(16, 211, 88, 0.1); color: var(--primary-sage); padding: 0.4rem 0.8rem; border-radius: 20px; font-family: 'Montserrat'; font-weight: 700; letter-spacing: 1px;">LIVE SYNC</span>
         </div>
 
-        <!-- SCHEDULE (WITH NEW VISUAL CALENDAR) -->
+        <!-- SCHEDULE (WITH CALENDAR) -->
         <div id="view-schedule" class="app-view active-view">
             <div class="panel">
-                
-                <!-- NEW CALENDAR WIDGET -->
                 <div class="calendar-wrapper">
                     <div class="calendar-header">
-                        <span style="cursor: pointer; padding: 0.5rem;">&#10094;</span>
-                        <span>August 2026</span>
-                        <span style="cursor: pointer; padding: 0.5rem;">&#10095;</span>
+                        <span style="cursor: pointer; padding: 0.5rem;">&#10094;</span><span>August 2026</span><span style="cursor: pointer; padding: 0.5rem;">&#10095;</span>
                     </div>
                     <div class="calendar-days">
                         <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
@@ -169,12 +179,12 @@
                     <h3 style="margin: 0; border: none;">Patient Directory</h3>
                     <button class="btn" style="padding: 0.5rem 1rem; min-height: 35px; font-size: 0.65rem;" onclick="openClientModal()">+ Add</button>
                 </div>
-                <p style="font-size: 1rem; color: #666; margin-bottom: 2.5rem;">Tap a patient to access their tabbed clinical history, SOAP charts, and supplement prescriber.</p>
+                <p style="font-size: 1rem; color: #666; margin-bottom: 2.5rem;">Tap a patient to access their clinical history, Body Map, and SOAP charts.</p>
                 <div id="admin-client-directory-list"><p style="color: #888; font-size: 0.95rem;">Loading client records...</p></div>
             </div>
         </div>
 
-        <!-- PATIENT DETAIL (TABBED UI) -->
+        <!-- PATIENT DETAIL -->
         <div id="view-client-detail" class="app-view">
             <button class="btn btn-outline" style="margin-bottom: 1.5rem; padding: 0.5rem 1rem; min-height: 35px; font-size: 0.65rem;" onclick="switchAppView('clients')">&larr; Back to Directory</button>
             <div id="client-detail-content"></div>
@@ -232,14 +242,28 @@
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
+        const PRACTITIONER_EMAIL = "clare@thenaturalhealingclinic.co.uk"; 
         
         let globalClients = [];
         let globalMsgs = [];
+        let bypassMode = false;
 
         function getSupabase() {
             if(!window.supabase) return null;
             return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         }
+
+        window.onload = async function() {
+            try {
+                const db = getSupabase();
+                if(db) {
+                    const { data: { session } } = await db.auth.getSession();
+                    if(session && session.user.email.toLowerCase() === PRACTITIONER_EMAIL.toLowerCase()) {
+                        initDashboard();
+                    }
+                }
+            } catch(err) {}
+        };
 
         function switchAppView(viewName, element) {
             document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active-view'));
@@ -252,14 +276,12 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // --- DEVELOPER BYPASS ---
         function bypassLogin() {
+            bypassMode = true;
             document.getElementById('admin-login').style.display = 'none';
             document.getElementById('admin-dashboard').style.display = 'block';
-            document.getElementById('btn-demo').style.display = 'inline-block';
+            document.getElementById('btn-logout').style.display = 'inline-block';
             document.getElementById('app-bottom-nav').style.display = window.innerWidth < 900 ? 'flex' : 'none';
-            
-            // Instantly inject demo data so you can click around
             injectDemoData();
         }
 
@@ -276,6 +298,11 @@
                 
                 const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
                 if (error) throw new Error(error.message);
+                
+                if (data.user.email.toLowerCase() !== PRACTITIONER_EMAIL.toLowerCase()) {
+                    await db.auth.signOut();
+                    throw new Error("UNAUTHORIZED: Client accounts cannot access the Practitioner EMR.");
+                }
 
                 initDashboard();
             } catch(err) {
@@ -286,11 +313,20 @@
             return false;
         }
 
+        async function processLogout() {
+            try {
+                if(!bypassMode) {
+                    const db = getSupabase();
+                    if(db) await db.auth.signOut();
+                }
+                location.reload();
+            } catch(err) { alert(err.message); }
+        }
+
         function initDashboard() {
             document.getElementById('admin-login').style.display = 'none';
             document.getElementById('admin-dashboard').style.display = 'block';
             document.getElementById('btn-logout').style.display = 'inline-block';
-            document.getElementById('btn-demo').style.display = 'inline-block';
             document.getElementById('app-bottom-nav').style.display = window.innerWidth < 900 ? 'flex' : 'none';
             
             const db = getSupabase();
@@ -322,23 +358,8 @@
                                 <strong style="color:var(--primary-sage); font-size:0.95rem;">${new Date(a.appointment_time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</strong>
                             </div>
                         </div>
-                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-                            <input type="datetime-local" id="resched-${a.id}" style="margin:0; font-size:0.8rem; padding:0.5rem; flex:1; background:white;">
-                            <button class="btn" style="padding:0 1rem; min-height:35px; font-size:0.65rem;" onclick="rescheduleBooking('${a.id}')">Move</button>
-                        </div>
                     </div>`).join('');
-            } catch(err) { container.innerHTML = `<p style="color:#a94442;">Database Error: ${err.message}</p>`; }
-        }
-
-        async function rescheduleBooking(apptId) {
-            const newTime = document.getElementById(`resched-${apptId}`).value;
-            if(!newTime) { alert("Select a time."); return; }
-            try {
-                const db = getSupabase();
-                const { error } = await db.from('appointments').update({ appointment_time: newTime }).eq('id', apptId);
-                if(error) throw error;
-                alert("Rescheduled!"); loadSchedule(db);
-            } catch(err) { alert("Error: " + err.message); }
+            } catch(err) { container.innerHTML = `<p style="color:#a94442;">Error: ${err.message}</p>`; }
         }
 
         async function openNewBookingModal() {
@@ -347,8 +368,9 @@
                 const service = prompt("Treatment:", "Initial Consultation (£85)"); if(!service) return;
                 const dateInput = prompt("Date & Time (YYYY-MM-DD HH:MM):", new Date().toISOString().slice(0,16).replace('T', ' ')); if(!dateInput) return;
                 
+                if(bypassMode) { alert("Booked! (Bypass mode - not saved to DB)"); return; }
+
                 const db = getSupabase();
-                if(!db) { alert("You are in bypass mode. Database changes will not save."); return; }
                 const { error } = await db.from('appointments').insert([{ client_id: 'manual_'+Date.now(), client_name: clientName, service_name: service, appointment_time: new Date(dateInput).toISOString(), status: 'confirmed' }]);
                 if(error) throw error;
                 alert("Booked!"); loadSchedule(db); loadClientDirectory(db);
@@ -358,8 +380,9 @@
         async function openClientModal() {
             try {
                 const name = prompt("Patient Full Name:"); if(!name) return;
+                if(bypassMode) { alert("Added! (Bypass mode - not saved to DB)"); return; }
+
                 const db = getSupabase();
-                if(!db) { alert("You are in bypass mode. Database changes will not save."); return; }
                 const { error } = await db.from('appointments').insert([{ client_id: 'client_'+Date.now(), client_name: name, service_name: 'File Created', appointment_time: new Date().toISOString(), status: 'confirmed' }]);
                 if(error) throw error;
                 alert("Profile created!"); loadClientDirectory(db);
@@ -379,13 +402,44 @@
 
                 container.innerHTML = globalClients.map(c => `
                     <div class="client-list-item" onclick="openClientProfile('${c.client_id}')">
-                        <div><h4 style="margin:0;">${c.client_name}</h4><span style="font-size:0.75rem; color:#888;">Tap to open clinical file</span></div>
+                        <div><h4 style="margin:0;">${c.client_name}</h4><span style="font-size:0.75rem; color:#888;">ID: ${c.client_id.substring(0,8)}...</span></div>
                         <span style="color:var(--primary-sage); font-size:1.5rem;">&rarr;</span>
                     </div>`).join('');
-            } catch(err) { container.innerHTML = `<p style="color:#a94442;">Database Error: ${err.message}</p>`; }
+            } catch(err) { container.innerHTML = `<p style="color:#a94442;">Error: ${err.message}</p>`; }
         }
 
-        // --- NEW TABBED PATIENT PROFILE ---
+        async function loadFinanceMetrics(db) {
+            try {
+                const { data: appts } = await db.from('appointments').select('*');
+                if(!appts) return;
+                let rev = 0;
+                appts.forEach(a => {
+                    if(a.service_name.includes('£85')) rev += 85;
+                    else if(a.service_name.includes('£175')) rev += 175;
+                    else if(a.service_name.includes('£297')) rev += 297;
+                    else if(a.service_name.includes('£1,450')) rev += 1450;
+                    else if(a.service_name.includes('£90')) rev += 90;
+                    else if(a.service_name.includes('£95')) rev += 95;
+                    else rev += 75;
+                });
+                document.getElementById('stat-revenue').innerText = `£${rev.toLocaleString()}`;
+                document.getElementById('stat-sessions').innerText = appts.length;
+            } catch(err) {}
+        }
+
+        async function loadAdminInbox(db, isPolling = false) {
+            const chatBox = document.getElementById('admin-chat-box');
+            try {
+                const { data, error } = await db.from('messages').select('*').order('created_at', { ascending: true });
+                if(error) throw error;
+                if(!data || data.length === 0) return;
+
+                const chatMsgs = data.filter(m => !m.content.includes('[DAILY HEALTH LOG]') && !m.content.includes('[MEDICAL INTAKE SUBMISSION]') && !m.content.includes('[BODY MAP PIN]'));
+                chatBox.innerHTML = chatMsgs.map(m => `<div class="msg ${m.sender}"><strong>${m.sender === 'client' ? 'Patient' : 'Clare'}:</strong> ${m.content}</div>`).join('');
+            } catch(err) {}
+        }
+
+        // --- TABBED PATIENT PROFILE WITH INTERACTIVE BODY MAP ---
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -409,6 +463,24 @@
             const dailyLogs = clientMsgs.filter(m => m.content && m.content.includes('[DAILY HEALTH LOG]'));
             let logsHtml = dailyLogs.length ? dailyLogs.map(log => `<div class="data-block"><pre style="white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; color: #444;">${log.content.replace('[DAILY HEALTH LOG]', '').trim()}</pre></div>`).join('') : '<p style="color:#888; font-size:0.85rem;">No daily journals logged.</p>';
 
+            // BODY MAP LOGIC
+            const pinMsgs = clientMsgs.filter(m => m.content && m.content.includes('[BODY MAP PIN]'));
+            let pinsHtml = '';
+            let pinListHtml = '';
+            
+            if (pinMsgs.length > 0) {
+                pinMsgs.forEach(p => {
+                    try {
+                        const jsonStr = p.content.replace('[BODY MAP PIN]', '').trim();
+                        const pinData = JSON.parse(jsonStr);
+                        pinsHtml += `<div class="map-pin" style="left: ${pinData.x}%; top: ${pinData.y}%;" data-note="${pinData.note}"></div>`;
+                        pinListHtml += `<div class="pin-list-item"><div class="pin-list-dot"></div><div><strong style="color:var(--text-main); font-family:'Montserrat'; font-size:0.85rem;">Recorded Pin</strong><p style="margin:0; font-size:0.95rem; color:#555;">${pinData.note}</p></div></div>`;
+                    } catch(e) {}
+                });
+            } else {
+                pinListHtml = '<p style="color:#888; font-size:0.85rem;">No pins dropped yet. Tap the map to start.</p>';
+            }
+
             const html = `
                 <div class="panel" style="padding: 2rem 1.5rem;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
@@ -416,13 +488,11 @@
                             <h2 style="font-size: 1.8rem; margin-bottom: 0.2rem;">${client.client_name}</h2>
                             <p style="font-size: 0.7rem; color: #888; font-family: 'Montserrat';">ID: ${client.client_id}</p>
                         </div>
-                        <select id="client-stage-${clientId}" style="background: white; padding: 0.5rem 1rem; width: auto; min-width: 150px; margin: 0; font-size: 0.8rem;" onchange="alert('Stage updated!')">
-                            <option>01. Intake Review</option><option>02. Active Protocol</option><option>03. Maintenance</option>
-                        </select>
                     </div>
 
                     <div class="tab-container">
                         <button class="tab-btn active" id="btn-overview" onclick="switchTab('overview')">Overview</button>
+                        <button class="tab-btn" id="btn-bodymap" onclick="switchTab('bodymap')">Body Map</button>
                         <button class="tab-btn" id="btn-charting" onclick="switchTab('charting')">Charting</button>
                         <button class="tab-btn" id="btn-protocols" onclick="switchTab('protocols')">Protocols</button>
                         <button class="tab-btn" id="btn-logs" onclick="switchTab('logs')">Daily Logs</button>
@@ -433,10 +503,54 @@
                         <div class="data-block"><pre style="white-space: pre-wrap; font-family: inherit; font-size: 0.9rem;">${intakeDisplay}</pre></div>
                     </div>
 
+                    <!-- NEW BODY MAP TAB -->
+                    <div id="tab-bodymap" class="tab-content">
+                        <div style="text-align: center; margin-bottom: 1.5rem;">
+                            <h4 style="margin: 0 0 0.5rem 0; color: var(--text-main);">Interactive Anatomical Mapping</h4>
+                            <p style="font-size: 0.8rem; color: #888; margin: 0;">Tap anywhere on the body to drop a clinical pin.</p>
+                        </div>
+                        
+                        <div class="body-map-container" onclick="addBodyMapPin(event, '${clientId}')">
+                            <!-- Abstract SVG Human Body (Front & Back) -->
+                            <svg class="body-map-svg" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+                                <!-- FRONT -->
+                                <g transform="translate(50, 20)">
+                                    <circle cx="50" cy="30" r="25" /> <!-- Head -->
+                                    <path d="M 50,55 L 50,90" /> <!-- Neck -->
+                                    <path d="M 15,90 Q 50,70 85,90" /> <!-- Shoulders -->
+                                    <path d="M 15,90 Q 0,150 10,220" /> <!-- Left Arm -->
+                                    <path d="M 85,90 Q 100,150 90,220" /> <!-- Right Arm -->
+                                    <path d="M 25,90 L 25,250 Q 50,270 75,250 L 75,90" /> <!-- Torso -->
+                                    <path d="M 25,250 L 20,420" /> <!-- Left Leg -->
+                                    <path d="M 75,250 L 80,420" /> <!-- Right Leg -->
+                                </g>
+                                <!-- BACK -->
+                                <g transform="translate(250, 20)">
+                                    <circle cx="50" cy="30" r="25" />
+                                    <path d="M 50,55 L 50,90" />
+                                    <path d="M 15,90 Q 50,70 85,90" />
+                                    <path d="M 15,90 Q 0,150 10,220" />
+                                    <path d="M 85,90 Q 100,150 90,220" />
+                                    <path d="M 25,90 L 25,250 Q 50,270 75,250 L 75,90" />
+                                    <path d="M 50,90 L 50,250" stroke-dasharray="4" /> <!-- Spine indicator -->
+                                    <path d="M 25,250 L 20,420" />
+                                    <path d="M 75,250 L 80,420" />
+                                </g>
+                                <text x="100" y="470" font-family="Montserrat" font-size="12" fill="#888" text-anchor="middle">ANTERIOR</text>
+                                <text x="300" y="470" font-family="Montserrat" font-size="12" fill="#888" text-anchor="middle">POSTERIOR</text>
+                            </svg>
+                            
+                            <!-- Injected Pins go here -->
+                            ${pinsHtml}
+                        </div>
+
+                        <h4 style="margin-bottom: 1rem;">Clinical Notes Ledger</h4>
+                        ${pinListHtml}
+                    </div>
+
                     <div id="tab-charting" class="tab-content">
                         <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
                             <button type="button" class="btn btn-outline" style="padding: 0.4rem; font-size: 0.6rem; min-height: auto;" onclick="prefillSoap('Subjective: Reduced tension.\\nObjective: Vagal tone improved.\\nAssessment: Responding to Bowen.\\nPlan: Continue bi-weekly.')">Bowen Template</button>
-                            <button type="button" class="btn btn-outline" style="padding: 0.4rem; font-size: 0.6rem; min-height: auto;" onclick="prefillSoap('Subjective: Reduced edema.\\nObjective: Fluid clearance accelerated.\\nAssessment: Lymphatic draining optimal.\\nPlan: Maintenance monthly.')">MLD Template</button>
                         </div>
                         <form onsubmit="saveSoapNote(event, '${clientId}')" style="margin-bottom: 2rem;">
                             <div class="soap-grid">
@@ -474,6 +588,38 @@
             switchAppView('client-detail');
         }
 
+        window.addBodyMapPin = async function(e, clientId) {
+            // Prevent dropping pins if clicking on an existing pin
+            if(e.target.classList.contains('map-pin')) return; 
+
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            
+            const note = prompt("Enter clinical note for this specific point (e.g., 'C4 subluxation', 'TMJ tension'):");
+            if (!note) return;
+
+            try {
+                const pinData = JSON.stringify({ x: x.toFixed(2), y: y.toFixed(2), note: note });
+                const content = `[BODY MAP PIN] ${pinData}`;
+                
+                if(bypassMode) {
+                    globalMsgs.push({ client_id: clientId, sender: 'admin', content: content, created_at: new Date().toISOString() });
+                    openClientProfile(clientId);
+                    switchTab('bodymap');
+                    return;
+                }
+
+                const db = getSupabase();
+                const { error } = await db.from('messages').insert([{ client_id: clientId, sender: 'admin', content: content }]);
+                if (error) throw error;
+                
+                await loadClientDirectory(db);
+                openClientProfile(clientId);
+                switchTab('bodymap');
+            } catch (err) { alert("Error saving pin: " + err.message); }
+        }
+
         window.prefillSoap = function(text) {
             const parts = text.split('\n');
             document.getElementById('soap-s').value = parts[0].replace('Subjective: ', '');
@@ -485,9 +631,14 @@
         window.saveSoapNote = async function(e, clientId) {
             e.preventDefault();
             try {
-                const db = getSupabase();
-                if(!db) { alert("You are in bypass mode. This will not save."); return; }
                 const noteText = `[CLINICAL SOAP NOTE]\nDate: ${new Date().toLocaleDateString('en-GB')}\n- Subjective: ${document.getElementById('soap-s').value}\n- Objective: ${document.getElementById('soap-o').value}\n- Assessment: ${document.getElementById('soap-a').value}\n- Plan: ${document.getElementById('soap-p').value}`;
+                
+                if(bypassMode) {
+                    globalMsgs.push({ client_id: clientId, sender: 'admin', content: noteText, created_at: new Date().toISOString() });
+                    openClientProfile(clientId); switchTab('charting'); return;
+                }
+                
+                const db = getSupabase();
                 const { error } = await db.from('messages').insert([{ client_id: clientId, sender: 'admin', content: noteText }]);
                 if (error) throw error;
                 alert("SOAP Note saved!");
@@ -500,9 +651,14 @@
         window.saveSupplementProtocol = async function(e, clientId) {
             e.preventDefault();
             try {
-                const db = getSupabase();
-                if(!db) { alert("You are in bypass mode. This will not save."); return; }
                 const supText = `[SUPPLEMENT PROTOCOL]\nPrescribed: ${new Date().toLocaleDateString('en-GB')}\n• Item: ${document.getElementById('sup-name').value}\n• Dosage: ${document.getElementById('sup-dose').value}\n• Instructions: ${document.getElementById('sup-timing').value}`;
+                
+                if(bypassMode) {
+                    globalMsgs.push({ client_id: clientId, sender: 'admin', content: supText, created_at: new Date().toISOString() });
+                    openClientProfile(clientId); switchTab('protocols'); return;
+                }
+
+                const db = getSupabase();
                 const { error } = await db.from('messages').insert([{ client_id: clientId, sender: 'admin', content: supText }]);
                 if (error) throw error;
                 alert("Protocol prescribed!");
@@ -516,12 +672,11 @@
             globalClients = [ { client_id: 'demo_1', client_name: 'Sarah Jenkins' }, { client_id: 'demo_2', client_name: 'Marcus Vance' } ];
             globalMsgs = [
                 { client_id: 'demo_1', sender: 'client', content: '[MEDICAL INTAKE SUBMISSION]\nAge: 42 | Sex: Female | Height: 165cm | Weight: 68kg\n\nAIMS: Regain consistent energy, reduce brain fog.\n\nFUNCTIONAL MARKERS:\nAutoimmune: Hashimoto\'s' },
+                { client_id: 'demo_1', sender: 'admin', content: '[BODY MAP PIN] {"x":"21.60","y":"16.50","note":"Severe TMJ tension & lymphatic stagnation"}' },
+                { client_id: 'demo_1', sender: 'admin', content: '[BODY MAP PIN] {"x":"75.40","y":"50.10","note":"Lumbar compression (L4/L5)"}' },
                 { client_id: 'demo_1', sender: 'admin', content: '[SUPPLEMENT PROTOCOL]\nPrescribed: Today\n• Item: Magnesium Bisglycinate 400mg\n• Dosage: 2 capsules daily\n• Instructions: Take with dinner' },
                 { client_id: 'demo_1', sender: 'admin', content: '[CLINICAL SOAP NOTE]\nDate: Today\n- Subjective: Client reports improved morning sleep.\n- Objective: Vagal tone testing normal.\n- Assessment: Adrenal protocol yielding positive indicators.\n- Plan: Maintain dosage.' }
             ];
-
-            document.getElementById('stat-revenue').innerText = '£1,837';
-            document.getElementById('stat-sessions').innerText = '3';
 
             document.getElementById('admin-schedule-list').innerHTML = `
                 <div class="cal-card">
@@ -536,7 +691,6 @@
                     <div><h4 style="margin:0;">Sarah Jenkins</h4><span style="font-size:0.8rem; color:#888;">Tap to open clinical file</span></div>
                     <span style="color:var(--primary-sage); font-size:1.5rem;">&rarr;</span>
                 </div>`;
-            document.getElementById('admin-chat-box').innerHTML = `<div class="msg client"><strong>Sarah:</strong> Hi Clare, my supplements arrived!</div>`;
         }
 
         window.generateInvoice = function(e) {
