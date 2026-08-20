@@ -106,7 +106,6 @@
 
         /* PROGRESS CHART & VAULT UI */
         .chart-container { position: relative; height: 280px; width: 100%; }
-        .document-icon { font-size: 2rem; margin-right: 1rem; color: var(--primary-sage); }
 
         .app-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--secondary-sand); display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -4px 20px rgba(9, 93, 40, 0.04); }
         .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: #888; cursor: pointer; width: 20%; height: 100%; font-weight: 600;}
@@ -141,7 +140,7 @@
             
             <!-- BYPASS SO YOU CAN SEE THE FEATURES -->
             <button type="button" class="btn btn-bypass" onclick="bypassLogin()">DEVELOPER BYPASS (SKIP LOGIN)</button>
-            <p style="font-size: 0.7rem; color: #888; margin-top: 1rem;">Click above to skip the database lock and immediately explore the Body Map, Progress Charts, Prescriber, and the new <strong>Lab Vault</strong>.</p>
+            <p style="font-size: 0.7rem; color: #888; margin-top: 1rem;">Click above to skip the database lock and test the Body Map, Progress Chart, Lab Vault, and the new <strong>Bundle Prescriber</strong>.</p>
         </div>
     </div>
 
@@ -152,7 +151,7 @@
             <span id="live-badge" style="font-size: 0.65rem; background: rgba(16, 211, 88, 0.1); color: var(--primary-sage); padding: 0.4rem 0.8rem; border-radius: 20px; font-family: 'Montserrat'; font-weight: 700; letter-spacing: 1px;">LIVE SYNC</span>
         </div>
 
-        <!-- SCHEDULE (WITH CALENDAR) -->
+        <!-- SCHEDULE -->
         <div id="view-schedule" class="app-view active-view">
             <div class="panel">
                 <div class="calendar-wrapper">
@@ -246,14 +245,12 @@
         </div>
     </div>
 
+    <!-- MAIN LOGIC ENGINE -->
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
         
-        // =========================================================================
-        // SECURITY CONFIGURATION
         // Exact email needed to log in. Change if needed.
-        // =========================================================================
         const PRACTITIONER_EMAIL = "clare@thenaturalhealingclinic.co.uk"; 
         
         let globalClients = [];
@@ -371,8 +368,23 @@
                                 <strong style="color:var(--primary-sage); font-size:0.95rem;">${new Date(a.appointment_time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</strong>
                             </div>
                         </div>
+                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                            <input type="datetime-local" id="resched-${a.id}" style="margin:0; font-size:0.8rem; padding:0.5rem; flex:1; background:white;">
+                            <button class="btn" style="padding:0 1rem; min-height:35px; font-size:0.65rem;" onclick="rescheduleBooking('${a.id}')">Move</button>
+                        </div>
                     </div>`).join('');
             } catch(err) { container.innerHTML = `<p style="color:#a94442;">Error: ${err.message}</p>`; }
+        }
+
+        async function rescheduleBooking(apptId) {
+            const newTime = document.getElementById(`resched-${apptId}`).value;
+            if(!newTime) { alert("Select a time."); return; }
+            try {
+                const db = getSupabase();
+                const { error } = await db.from('appointments').update({ appointment_time: newTime }).eq('id', apptId);
+                if(error) throw error;
+                alert("Rescheduled!"); loadSchedule(db);
+            } catch(err) { alert("Error: " + err.message); }
         }
 
         async function openNewBookingModal() {
@@ -559,7 +571,7 @@
                         <div class="data-block"><pre style="white-space: pre-wrap; font-family: inherit; font-size: 0.9rem;">${intakeDisplay}</pre></div>
                     </div>
 
-                    <!-- NEW: LAB VAULT TAB -->
+                    <!-- LAB VAULT TAB -->
                     <div id="tab-vault" class="tab-content">
                         <form onsubmit="uploadLabDocument(event, '${clientId}')" style="margin-bottom: 2rem; background: var(--bg-color); padding: 1.5rem; border-radius: 8px;">
                             <label>Document / Test Title</label>
@@ -567,7 +579,6 @@
                             <label>Upload PDF Document</label>
                             <input type="file" id="lab-file" accept=".pdf,.jpg,.jpeg,.png" required>
                             <button type="submit" class="btn btn-secondary" style="width: 100%;">Securely Upload to Vault</button>
-                            <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem; text-align: center;">Note: In this bypass/prototype version, uploads simulate the database entry without requiring an external storage bucket.</p>
                         </form>
                         <h4 style="margin-bottom: 1rem;">Patient Document Vault</h4>
                         ${labsHtml}
@@ -607,14 +618,26 @@
                         ${soapsHtml}
                     </div>
 
+                    <!-- NEW: BUNDLE PRESCRIBER TAB -->
                     <div id="tab-protocols" class="tab-content">
+                        <div style="margin-bottom: 1.5rem; background: rgba(16, 211, 88, 0.05); border: 1px dashed var(--primary-sage); padding: 1rem; border-radius: 8px;">
+                            <label style="color: var(--text-main); font-size: 0.75rem;">⚡ Quick-Load Protocol Bundles</label>
+                            <select id="bundle-selector" style="background: white; border-color: var(--primary-sage); margin-bottom: 0;" onchange="window.loadProtocolBundle(this.value)">
+                                <option value="">-- Select a Clinical Bundle --</option>
+                                <option value="adrenal">360° Adrenal Support Bundle</option>
+                                <option value="gut">21-Day Gut Reset Bundle</option>
+                                <option value="lymph">Lymphatic Flush Protocol</option>
+                                <option value="tmj">TMJ & Fascial Recovery</option>
+                            </select>
+                        </div>
                         <form onsubmit="saveSupplementProtocol(event, '${clientId}')" style="margin-bottom: 2rem; background: var(--bg-color); padding: 1.5rem; border-radius: 8px;">
-                            <label>Supplement Name</label><input type="text" id="sup-name" style="background:white;" required>
+                            <label>Supplement / Protocol Focus</label>
+                            <input type="text" id="sup-name" style="background:white;" required>
                             <div class="soap-grid">
-                                <div><label>Dosage</label><input type="text" id="sup-dose" style="background:white;" required></div>
-                                <div><label>Timing</label><input type="text" id="sup-timing" style="background:white;" required></div>
+                                <div><label>Dosage</label><textarea id="sup-dose" style="background:white; height:80px;" required></textarea></div>
+                                <div><label>Timing & Instructions</label><textarea id="sup-timing" style="background:white; height:80px;" required></textarea></div>
                             </div>
-                            <button type="submit" class="btn btn-secondary" style="width: 100%;">Prescribe</button>
+                            <button type="submit" class="btn btn-secondary" style="width: 100%;">Issue Prescription</button>
                         </form>
                         <h4 style="margin-bottom: 1rem;">Active Prescriptions</h4>
                         ${protocolsHtml}
@@ -647,6 +670,32 @@
                 }, 100);
             }
         }
+
+        window.loadProtocolBundle = function(bundleType) {
+            const nameField = document.getElementById('sup-name');
+            const doseField = document.getElementById('sup-dose');
+            const timingField = document.getElementById('sup-timing');
+
+            if (bundleType === 'adrenal') {
+                nameField.value = '360° Adrenal Support Bundle (Magnesium, Ashwagandha, B-Complex)';
+                doseField.value = '• Magnesium Bisglycinate: 400mg\n• Ashwagandha Root: 500mg\n• B-Complex: 1 capsule';
+                timingField.value = '• B-Complex & Ashwagandha: AM with breakfast\n• Magnesium: PM with dinner';
+            } else if (bundleType === 'gut') {
+                nameField.value = '21-Day Gut Reset (L-Glutamine, Probiotic, Enzymes)';
+                doseField.value = '• L-Glutamine Powder: 5g\n• Broad-Spectrum Probiotic: 50B CFU\n• Digestive Enzymes: 1 capsule';
+                timingField.value = '• L-Glutamine & Probiotic: First thing in AM on empty stomach\n• Enzymes: 15 mins before heaviest meal';
+            } else if (bundleType === 'lymph') {
+                nameField.value = 'Lymphatic Flush Protocol (Dry Brushing & Lymphatic Drops)';
+                doseField.value = '• Lymphatic Herbal Drops: 2 pipettes\n• Dry Brushing Routine: 5 mins';
+                timingField.value = '• Drops: Mixed in water 2x daily\n• Dry Brushing: Before morning shower, working towards the heart';
+            } else if (bundleType === 'tmj') {
+                nameField.value = 'TMJ & Fascial Recovery (Magnesium & Topical Arnica)';
+                doseField.value = '• Magnesium Malate: 300mg\n• Topical Arnica Cream: Pea-sized amount';
+                timingField.value = '• Magnesium: Mid-afternoon\n• Arnica: Massaged gently into jaw hinge (masseter) before bed';
+            } else {
+                nameField.value = ''; doseField.value = ''; timingField.value = '';
+            }
+        };
 
         window.uploadLabDocument = async function(e, clientId) {
             e.preventDefault();
@@ -743,6 +792,7 @@
 
         function injectDemoData() {
             globalClients = [ { client_id: 'demo_1', client_name: 'Sarah Jenkins' }, { client_id: 'demo_2', client_name: 'Marcus Vance' } ];
+            
             globalMsgs = [
                 { client_id: 'demo_1', sender: 'client', content: '[MEDICAL INTAKE SUBMISSION]\nAge: 42 | Sex: Female | Height: 165cm | Weight: 68kg\n\nAIMS: Regain consistent energy, reduce brain fog.\n\nFUNCTIONAL MARKERS:\nAutoimmune: Hashimoto\'s' },
                 { client_id: 'demo_1', sender: 'admin', content: '[BODY MAP PIN] {"x":"21.60","y":"16.50","note":"Severe TMJ tension & lymphatic stagnation"}' },
