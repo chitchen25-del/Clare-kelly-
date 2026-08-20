@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <!-- TIER 2: CLIENT WORKFLOW -->
+        <!-- TIER 2: CLIENT WORKFLOW (Updated with functionality) -->
         <div id="panel-tier2" class="hidden">
             <div class="mb-8">
                 <h2 class="text-3xl font-bold text-gray-800">Client Workflow</h2>
@@ -63,12 +63,18 @@
             <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6 max-w-3xl">
                 <h3 class="font-bold text-gray-800 text-lg mb-2">Private Session Notes</h3>
                 <p class="text-sm text-gray-500 mb-6">Select a client from today's roster to add secure clinical notes.</p>
-                <select class="w-full border border-gray-300 px-4 py-3 rounded-lg mb-4 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all">
+                
+                <select id="note-client-name" class="w-full border border-gray-300 px-4 py-3 rounded-lg mb-4 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all">
                     <option value="" disabled selected>Select Client...</option>
-                    <option>Jane Smith - 10:00 AM</option>
+                    <option value="Jane Smith">Jane Smith - 10:00 AM</option>
                 </select>
-                <textarea rows="5" class="w-full border border-gray-300 px-4 py-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all resize-none" placeholder="Enter treatment progress and clinical notes here..."></textarea>
-                <button class="mt-4 px-6 py-2.5 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors shadow-sm">Save Notes</button>
+                
+                <textarea id="session-notes-text" rows="5" class="w-full border border-gray-300 px-4 py-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all resize-none" placeholder="Enter treatment progress and clinical notes here..."></textarea>
+                
+                <button onclick="saveSessionNote()" class="mt-4 px-6 py-2.5 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors shadow-sm">Save Notes</button>
+                
+                <!-- Notes Status Message -->
+                <div id="notes-status" class="hidden mt-4 p-3 rounded-lg text-sm text-center font-medium"></div>
             </div>
         </div>
 
@@ -108,7 +114,7 @@
                     </div>
                     <button type="submit" class="w-full bg-teal-600 text-white font-bold py-3.5 rounded-lg hover:bg-teal-700 transition-colors shadow-sm mt-2">Save Prescription to Database</button>
                     
-                    <!-- Status Message -->
+                    <!-- Prescriber Status Message -->
                     <div id="prescriber-status" class="hidden mt-4 p-3 rounded-lg text-sm text-center font-medium"></div>
                 </form>
             </div>
@@ -118,7 +124,7 @@
 
     <!-- Application Logic -->
     <script>
-        // 1. Initialize Supabase (REPLACE WITH YOUR KEYS)
+        // 1. Initialize Supabase (Ensure you replace these with your actual keys)
         const supabaseUrl = 'YOUR_SUPABASE_URL';
         const supabaseKey = 'YOUR_ANON_KEY';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -129,7 +135,6 @@
             const panels = ['tier1', 'tier2', 'tier3', 'prescriber'];
             panels.forEach(id => {
                 document.getElementById('panel-' + id).style.display = 'none';
-                
                 // Reset button styles to default state
                 document.getElementById('btn-' + id).className = "text-left px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors";
             });
@@ -171,6 +176,44 @@
                 statusDiv.textContent = "Prescription successfully saved for " + clientName + "!";
                 statusDiv.className = "mt-4 p-3 rounded-lg text-sm text-center font-medium bg-green-50 text-green-700 border border-green-200";
                 document.getElementById('prescriber-form').reset();
+            }
+        }
+
+        // 4. Save Session Notes Logic
+        async function saveSessionNote() {
+            const statusDiv = document.getElementById('notes-status');
+            statusDiv.style.display = 'block';
+            statusDiv.className = "mt-4 p-3 rounded-lg text-sm text-center font-medium bg-gray-100 text-gray-600 animate-pulse";
+            statusDiv.textContent = "Saving notes to database...";
+
+            const clientName = document.getElementById('note-client-name').value;
+            const notes = document.getElementById('session-notes-text').value;
+
+            if (!clientName) {
+                statusDiv.textContent = "Please select a client first.";
+                statusDiv.className = "mt-4 p-3 rounded-lg text-sm text-center font-medium bg-red-50 text-red-700 border border-red-200";
+                return;
+            }
+
+            // Insert data into Supabase
+            const { data, error } = await supabase
+                .from('session_notes')
+                .insert([
+                    { 
+                        client_name: clientName, 
+                        notes: notes 
+                    }
+                ]);
+
+            if (error) {
+                statusDiv.textContent = "Error: " + error.message;
+                statusDiv.className = "mt-4 p-3 rounded-lg text-sm text-center font-medium bg-red-50 text-red-700 border border-red-200";
+                console.error(error);
+            } else {
+                statusDiv.textContent = "Notes successfully saved for " + clientName + "!";
+                statusDiv.className = "mt-4 p-3 rounded-lg text-sm text-center font-medium bg-green-50 text-green-700 border border-green-200";
+                document.getElementById('session-notes-text').value = ''; // Clear the text area
+                document.getElementById('note-client-name').selectedIndex = 0; // Reset dropdown
             }
         }
     </script>
