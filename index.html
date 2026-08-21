@@ -128,6 +128,22 @@
         .form-container { max-width: 100%; margin: 3rem 5%; background: var(--card-bg); padding: 4rem 2rem; border-radius: 12px; box-shadow: 0 20px 50px rgba(9, 93, 40, 0.05); border: 1px solid var(--secondary-sand); }
         .form-container h2 { text-align: center; margin-bottom: 1rem; }
         
+        /* FIX FOR LOGO SIZE AND ALIGNMENT */
+        .portal-logo {
+            height: 70px;
+            max-width: 100%;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        /* FIX FOR INTAKE FORM ROWS ON MOBILE */
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        
         label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-main); margin-bottom: 0.8rem; font-weight: 700;}
         input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 2rem; border: 1px solid var(--secondary-sand); border-radius: 8px; background: var(--bg-color); font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
         input:focus, select:focus, textarea:focus { border-color: var(--primary-sage); outline: none; background: white; box-shadow: 0 0 0 2px rgba(13,155,70,0.1); }
@@ -194,6 +210,15 @@
             .macro-grid label, .micro-grid label { text-align: center; }
             .macro-grid input, .micro-grid input { text-align: center; }
             .daily-totals-macro, .daily-totals-micro { display: flex; justify-content: space-between; }
+            
+            /* FIX FOR INTAKE FORM ROWS ON DESKTOP */
+            .form-row {
+                flex-direction: row;
+                gap: 1.5rem;
+            }
+            .form-row > div {
+                flex: 1;
+            }
         }
 
         @media (min-width: 900px) {
@@ -384,7 +409,7 @@
 
     <!-- ================= SCREEN 4: LOGIN ================= -->
     <div id="screen-login" class="page-screen">
-        <div class="form-container" style="margin: 4rem auto;">
+        <div class="form-container">
             <img src="./logo.png" alt="Logo" class="portal-logo">
             <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; font-family: 'Montserrat'; font-weight: 600;">Patient Portal</h2>
             <p style="text-align: center; color: #666; margin-bottom: 2.5rem; font-size: 0.95rem;">Access your clinical files, health journals, and messages.</p>
@@ -400,7 +425,7 @@
 
     <!-- ================= SCREEN 5: REGISTRATION ================= -->
     <div id="screen-register" class="page-screen">
-        <div class="form-container" style="margin: 4rem auto;">
+        <div class="form-container">
             <img src="./logo.png" alt="Logo" class="portal-logo">
             <h2 style="font-size: 1.8rem; margin-bottom: 2.5rem; font-family: 'Montserrat'; font-weight: 600;">Patient Registration</h2>
             <form onsubmit="return processRegistration(event)">
