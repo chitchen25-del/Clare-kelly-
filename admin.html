@@ -295,7 +295,6 @@
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
-        const PRACTITIONER_EMAIL = "clare.claretownswnd82@gmail.com"; 
         
         let globalClients = [];
         let globalMsgs = [];
@@ -317,7 +316,7 @@
                 const db = getSupabase();
                 if(db) {
                     const { data: { session } } = await db.auth.getSession();
-                    if(session && session.user.email.toLowerCase() === PRACTITIONER_EMAIL.toLowerCase()) {
+                    if(session) {
                         initDashboard();
                     }
                 }
@@ -348,11 +347,6 @@
                 
                 const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
                 if (error) throw new Error(error.message);
-                
-                if (data.user.email.toLowerCase() !== PRACTITIONER_EMAIL.toLowerCase()) {
-                    await db.auth.signOut();
-                    throw new Error("UNAUTHORIZED: Client accounts cannot access the Practitioner EMR.");
-                }
 
                 initDashboard();
             } catch(err) {
@@ -1152,7 +1146,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>${serviceSelection}</td>
+                                യ<td>${serviceSelection}</td>
                                 <td class="amount">£${priceNum}.00</td>
                             </tr>
                         </tbody>
