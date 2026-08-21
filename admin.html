@@ -1068,13 +1068,119 @@
 
         window.generateInvoice = function(e) {
             e.preventDefault();
+            const clientName = document.getElementById('inv-client').value.trim();
+            const clientAddress = document.getElementById('inv-address').value.trim();
+            const serviceSelection = document.getElementById('inv-service-select').value;
+            
+            let priceNum = 75;
+            if (serviceSelection.includes('£85')) priceNum = 85;
+            else if (serviceSelection.includes('£175')) priceNum = 175;
+            else if (serviceSelection.includes('£297')) priceNum = 297;
+            else if (serviceSelection.includes('£1,450')) priceNum = 1450;
+            else if (serviceSelection.includes('£90')) priceNum = 90;
+            else if (serviceSelection.includes('£95')) priceNum = 95;
+
             const invNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000);
+            const todayStr = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
             const printWindow = window.open('', '_blank');
-            printWindow.document.write('<html><head><title>Invoice ' + invNumber + '</title></head><body style="font-family:sans-serif;padding:40px;">');
-            printWindow.document.write('<h2 style="color:#095d28;">THE NATURAL HEALING CLINIC</h2><hr><p>Invoice generated successfully.</p></body></html>');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>${invNumber} - Invoice</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+                    <style>
+                        body { font-family: 'Montserrat', sans-serif; color: #095d28; background: #ffffff; margin: 0; padding: 50px; line-height: 1.5; font-size: 0.95rem; }
+                        .invoice-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #d1dcd4; padding-bottom: 30px; margin-bottom: 40px; }
+                        .logo-area h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; margin: 0 0 5px 0; color: #095d28; font-weight: 600; letter-spacing: 1px; }
+                        .logo-area p { font-size: 0.8rem; color: #666; margin: 0; text-transform: uppercase; letter-spacing: 1.5px; }
+                        .invoice-meta { text-align: right; }
+                        .invoice-meta h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; margin: 0 0 10px 0; color: #0d9b46; }
+                        .invoice-meta p { margin: 2px 0; font-size: 0.85rem; color: #555; }
+                        
+                        .billing-section { display: flex; justify-content: space-between; margin-bottom: 40px; }
+                        .bill-box h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: #0d9b46; margin-bottom: 8px; }
+                        .bill-box p { margin: 2px 0; color: #333; font-size: 0.95rem; white-space: pre-line; }
+
+                        table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+                        th { background: #f3f1ef; color: #095d28; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1.5px; padding: 12px 16px; text-align: left; border-bottom: 1px solid #d1dcd4; }
+                        td { padding: 16px; border-bottom: 1px solid #eee; color: #333; font-size: 0.95rem; }
+                        td.amount { text-align: right; font-weight: 600; }
+                        th.amount { text-align: right; }
+
+                        .totals-area { display: flex; justify-content: flex-end; margin-bottom: 60px; }
+                        .totals-box { width: 300px; }
+                        .total-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.95rem; }
+                        .total-row.final { border-bottom: 2px solid #095d28; font-weight: 700; font-size: 1.2rem; color: #095d28; padding: 12px 0; }
+
+                        .footer { border-top: 1px solid #d1dcd4; padding-top: 25px; text-align: center; font-size: 0.75rem; color: #777; letter-spacing: 0.5px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="invoice-header">
+                        <div class="logo-area">
+                            <h1>THE NATURAL HEALING CLINIC</h1>
+                            <p>Isle of Man</p>
+                        </div>
+                        <div class="invoice-meta">
+                            <h2>INVOICE</h2>
+                            <p><strong>Invoice No:</strong> ${invNumber}</p>
+                            <p><strong>Date:</strong> ${todayStr}</p>
+                        </div>
+                    </div>
+
+                    <div class="billing-section">
+                        <div class="bill-box">
+                            <h4>Billed To:</h4>
+                            <p><strong>${clientName}</strong></p>
+                            <p>${clientAddress}</p>
+                        </div>
+                        <div class="bill-box" style="text-align: right;">
+                            <h4>Payment Terms:</h4>
+                            <p>Due Upon Receipt</p>
+                            <p>Bank Transfer / Cash</p>
+                        </div>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Description of Clinical Service</th>
+                                <th class="amount">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${serviceSelection}</td>
+                                <td class="amount">£${priceNum}.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="totals-area">
+                        <div class="totals-box">
+                            <div class="total-row">
+                                <span>Subtotal</span>
+                                <span>£${priceNum}.00</span>
+                            </div>
+                            <div class="total-row final">
+                                <span>Total Due</span>
+                                <span>£${priceNum}.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="footer">
+                        <p>&copy; 2026 Clare Townsend - Natural Healing Limited | All Rights Reserved</p>
+                        <p>Company Number: 121920C</p>
+                    </div>
+                </body>
+                </html>
+            `);
             printWindow.document.close();
-            setTimeout(() => { printWindow.print(); }, 500);
-        }
+            setTimeout(() => { printWindow.print(); }, 400);
+        };
     </script>
 </body>
 </html>
