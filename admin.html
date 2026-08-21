@@ -39,7 +39,6 @@
         .btn:active { transform: scale(0.98); }
         .btn-outline { background: transparent; border: 1px solid var(--secondary-sand); color: var(--text-main); box-shadow: none; }
         .btn-secondary { background: var(--text-main); border-color: var(--text-main); }
-        .btn-bypass { background: #12db14; color: #095d28; width: 100%; margin-top: 1.5rem; font-weight: 700; box-shadow: 0 10px 30px rgba(18, 219, 20, 0.3); }
 
         .fab-container { position: fixed; bottom: calc(80px + var(--safe-bottom)); right: 20px; z-index: 1100; }
         .fab-btn { width: 56px; height: 56px; background: var(--primary-sage); color: white; border-radius: 50%; border: none; font-size: 1.8rem; box-shadow: 0 10px 25px rgba(9, 93, 40, 0.3); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -164,8 +163,6 @@
                 <input type="password" id="admin-password" placeholder="Enter secure password" required>
                 <button type="submit" id="admin-login-btn" class="btn" style="width: 100%; margin-top: 1rem;">Authenticate</button>
             </form>
-            
-            <button type="button" class="btn btn-bypass" onclick="bypassLogin()">DEVELOPER BYPASS (SKIP LOGIN)</button>
         </div>
     </div>
 
@@ -175,7 +172,7 @@
         <!-- MORNING BRIEFING BANNER -->
         <div class="briefing-card">
             <h2>Good Morning, Clare.</h2>
-            <p>You have <strong id="briefing-count">3</strong> appointments scheduled for today. All client health journals are synced.</p>
+            <p>You have <strong id="briefing-count">0</strong> appointments scheduled for today. All client health journals are synced.</p>
         </div>
 
         <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
@@ -265,11 +262,10 @@
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
-        const PRACTITIONER_EMAIL = "clare@thenaturalhealingclinic.co.uk"; 
+        const PRACTITIONER_EMAIL = "clare.claretownswnd82@gmail.com"; 
         
         let globalClients = [];
         let globalMsgs = [];
-        let bypassMode = false;
         let activeChart = null; 
 
         function getSupabase() {
@@ -304,15 +300,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function bypassLogin() {
-            bypassMode = true;
-            document.getElementById('admin-login').style.display = 'none';
-            document.getElementById('admin-dashboard').style.display = 'block';
-            document.getElementById('fab-container').style.display = 'block';
-            document.getElementById('app-bottom-nav').style.display = window.innerWidth < 900 ? 'flex' : 'none';
-            injectDemoData();
-        }
-
         async function processAdminLogin(e) {
             e.preventDefault();
             const btn = document.getElementById('admin-login-btn');
@@ -343,10 +330,8 @@
 
         async function processLogout() {
             try {
-                if(!bypassMode) {
-                    const db = getSupabase();
-                    if(db) await db.auth.signOut();
-                }
+                const db = getSupabase();
+                if(db) await db.auth.signOut();
                 location.reload();
             } catch(err) { alert(err.message); }
         }
@@ -355,6 +340,7 @@
             document.getElementById('admin-login').style.display = 'none';
             document.getElementById('admin-dashboard').style.display = 'block';
             document.getElementById('fab-container').style.display = 'block';
+            document.getElementById('btn-logout').style.display = 'block';
             document.getElementById('app-bottom-nav').style.display = window.innerWidth < 900 ? 'flex' : 'none';
             
             const db = getSupabase();
@@ -398,8 +384,6 @@
                 const service = prompt("Treatment:", "Initial Consultation (£85)"); if(!service) return;
                 const dateInput = prompt("Date & Time (YYYY-MM-DD HH:MM):", new Date().toISOString().slice(0,16).replace('T', ' ')); if(!dateInput) return;
                 
-                if(bypassMode) { alert("Booked! (Bypass mode - not saved to DB)"); return; }
-
                 const db = getSupabase();
                 const { error } = await db.from('appointments').insert([{ client_id: 'manual_'+Date.now(), client_name: clientName, service_name: service, appointment_time: new Date(dateInput).toISOString(), status: 'confirmed' }]);
                 if(error) throw error;
@@ -410,7 +394,6 @@
         async function openClientModal() {
             try {
                 const name = prompt("Patient Full Name:"); if(!name) return;
-                if(bypassMode) { alert("Added! (Bypass mode - not saved to DB)"); return; }
 
                 const db = getSupabase();
                 const { error } = await db.from('appointments').insert([{ client_id: 'client_'+Date.now(), client_name: name, service_name: 'File Created', appointment_time: new Date().toISOString(), status: 'confirmed' }]);
@@ -908,12 +891,6 @@
                 const docData = JSON.stringify({ title: titleInput, filename: fileInput.files[0].name, date: new Date().toLocaleDateString('en-GB') });
                 const content = `[LAB DOCUMENT] ${docData}`;
 
-                if(bypassMode) {
-                    globalMsgs.unshift({ client_id: clientId, sender: 'admin', content: content, created_at: new Date().toISOString() });
-                    alert("Document securely uploaded to patient vault!");
-                    openClientProfile(clientId); switchTab('vault'); return false;
-                }
-
                 const db = getSupabase();
                 const { error } = await db.from('messages').insert([{ client_id: clientId, sender: 'admin', content: content }]);
                 if (error) throw error;
@@ -935,10 +912,7 @@
             try {
                 const pinData = JSON.stringify({ x: x.toFixed(2), y: y.toFixed(2), note: note });
                 const content = `[BODY MAP PIN] ${pinData}`;
-                if(bypassMode) {
-                    globalMsgs.unshift({ client_id: clientId, sender: 'admin', content: content, created_at: new Date().toISOString() });
-                    openClientProfile(clientId); switchTab('bodymap'); return;
-                }
+
                 const db = getSupabase();
                 const { error } = await db.from('messages').insert([{ client_id: clientId, sender: 'admin', content: content }]);
                 if (error) throw error;
@@ -958,10 +932,7 @@
             e.preventDefault();
             try {
                 const noteText = `[CLINICAL SOAP NOTE]\nDate: ${new Date().toLocaleDateString('en-GB')}\n- Subjective: ${document.getElementById('soap-s').value}\n- Objective: ${document.getElementById('soap-o').value}\n- Assessment: ${document.getElementById('soap-a').value}\n- Plan: ${document.getElementById('soap-p').value}`;
-                if(bypassMode) {
-                    globalMsgs.unshift({ client_id: clientId, sender: 'admin', content: noteText, created_at: new Date().toISOString() });
-                    openClientProfile(clientId); switchTab('charting'); return;
-                }
+                
                 const db = getSupabase();
                 const { error } = await db.from('messages').insert([{ client_id: clientId, sender: 'admin', content: noteText }]);
                 if (error) throw error;
@@ -974,79 +945,13 @@
             e.preventDefault();
             try {
                 const supText = `[SUPPLEMENT PROTOCOL]\nPrescribed: ${new Date().toLocaleDateString('en-GB')}\n• Item: ${document.getElementById('sup-name').value}\n• Dosage:\n${document.getElementById('sup-dose').value}\n• Instructions:\n${document.getElementById('sup-timing').value}`;
-                if(bypassMode) {
-                    globalMsgs.unshift({ client_id: clientId, sender: 'admin', content: supText, created_at: new Date().toISOString() });
-                    openClientProfile(clientId); switchTab('protocols'); return;
-                }
+                
                 const db = getSupabase();
                 const { error } = await db.from('messages').insert([{ client_id: clientId, sender: 'admin', content: supText }]);
                 if (error) throw error;
                 alert("Protocol prescribed!");
                 await loadClientDirectory(db); openClientProfile(clientId); switchTab('protocols');
             } catch (err) { alert("Error saving protocol: " + err.message); }
-        }
-
-        function injectDemoData() {
-            globalClients = [ { client_id: 'demo_1', client_name: 'Sarah Jenkins' }, { client_id: 'demo_2', client_name: 'Marcus Vance' } ];
-            
-            globalMsgs = [
-                { client_id: 'demo_1', sender: 'client', content: '[MEDICAL INTAKE SUBMISSION]\nAge: 42 | Sex: Female | Height: 165cm | Weight: 68kg\n\nAIMS: Regain consistent energy, reduce brain fog.\n\nFUNCTIONAL MARKERS:\nAutoimmune: Hashimoto\'s', created_at: '2026-07-25T10:00:00.000Z' },
-                { client_id: 'demo_1', sender: 'admin', content: '[BODY MAP PIN] {"x":"21.60","y":"16.50","note":"Severe TMJ tension & lymphatic stagnation"}', created_at: '2026-08-01T10:00:00.000Z' },
-                { client_id: 'demo_1', sender: 'admin', content: '[SUPPLEMENT PROTOCOL]\nPrescribed: 01/08/2026\n• Item: Magnesium Bisglycinate 400mg\n• Dosage:\n2 capsules daily\n• Instructions:\nTake with dinner', created_at: '2026-08-01T10:05:00.000Z' },
-                { client_id: 'demo_1', sender: 'admin', content: '[LAB DOCUMENT] {"title":"GI-MAP Comprehensive Stool Panel","filename":"gi-map-results.pdf","date":"12/08/2026"}', created_at: '2026-08-12T10:00:00.000Z' },
-                { client_id: 'demo_1', sender: 'client', content: `[DAILY HEALTH LOG]
-Date: 01/08/2026
-
-🥗 FOOD & NUTRITION:
-[Breakfast] Scrambled Eggs (2)
-> Macros: 140 kcal | 12g Pro | 2g Carb | 10g Fat
-> Micros: 0g Fiber | 140mg Sodium | 130mg Potassium | 50mg Calcium | 1mg Iron
-
->> DAILY MACRO TOTALS: 1,350 kcal | 95g Protein | 110g Carbs | 60g Fat 
->> DAILY MICRO TOTALS: 22g Fiber | 210mg Sodium | 1600mg Potassium | 400mg Calcium | 11mg Iron
-
-🏃‍♀️ ACTIVITY: None (0 mins)
-🧠 MOOD: Low | Energy: 3/10
-💤 SLEEP: 5 hours | Quality: 2/5`, created_at: '2026-08-01T20:00:00.000Z' },
-                { client_id: 'demo_1', sender: 'client', content: `[DAILY HEALTH LOG]\nDate: 08/08/2026\n\n🥗 FOOD & NUTRITION:\n>> DAILY MACRO TOTALS: 1,500 kcal | 100g Protein | 120g Carbs | 65g Fat\n\n🏃‍♀️ ACTIVITY: Walking (20 mins)\n🧠 MOOD: Okay | Energy: 5/10\n💤 SLEEP: 6.5 hours | Quality: 3/5`, created_at: '2026-08-08T20:00:00.000Z' },
-                { client_id: 'demo_1', sender: 'client', content: `[DAILY HEALTH LOG]\nDate: 15/08/2026\n\n🥗 FOOD & NUTRITION:\n>> DAILY MACRO TOTALS: 1,650 kcal | 110g Protein | 130g Carbs | 70g Fat\n\n🏃‍♀️ ACTIVITY: Yoga (45 mins)\n🧠 MOOD: Good | Energy: 7/10\n💤 SLEEP: 7 hours | Quality: 4/5`, created_at: '2026-08-15T20:00:00.000Z' },
-                { client_id: 'demo_1', sender: 'client', content: `[DAILY HEALTH LOG]
-Date: Today
-
-🥗 FOOD & NUTRITION:
-[Breakfast] Gluten Free Oats (50g), Blueberries (80g), Almond Milk (150ml).
-> Macros: 385 kcal | 12g Pro | 52g Carbs | 16g Fat
-> Micros: 11g Fiber | 45mg Sodium | 210mg Potassium | 300mg Calcium | 3mg Iron
-
-[Lunch] Wild Salmon (150g), Sweet Potato (100g), Spinach.
-> Macros: 510 kcal | 38g Pro | 24g Carbs | 28g Fat
-> Micros: 6g Fiber | 120mg Sodium | 950mg Potassium | 85mg Calcium | 4mg Iron
-
->> DAILY MACRO TOTALS: 1,531 kcal | 116g Protein | 110g Carbs | 71g Fat 
->> DAILY MICRO TOTALS: 27g Fiber | 255mg Sodium | 1910mg Potassium | 474mg Calcium | 13mg Iron
-
-🏃‍♀️ ACTIVITY: Pilates Flow (45 mins)
-🧠 MOOD: Great | Energy: 9/10
-💤 SLEEP: 8 hours | Quality: 5/5`, created_at: '2026-08-20T20:00:00.000Z' }
-            ];
-            
-            globalMsgs.reverse();
-
-            document.getElementById('admin-schedule-list').innerHTML = `
-                <div class="cal-card">
-                    <div style="display:flex; justify-content:space-between;">
-                        <div><strong style="color:var(--text-main); font-family:'Montserrat';">Sarah Jenkins</strong><br><span style="font-size:0.85rem;">360° Protocol</span></div>
-                        <div style="text-align:right;"><strong style="color:var(--primary-sage);">10:00 AM</strong></div>
-                    </div>
-                </div>`;
-            document.getElementById('admin-client-directory-list').innerHTML = `
-                <div class="client-list-item" onclick="openClientProfile('demo_1')">
-                    <div>
-                        <h4 style="margin:0 0 0.3rem 0;">Sarah Jenkins</h4>
-                        <span class="status-badge active">Active Protocol</span>
-                    </div>
-                    <span style="color:var(--primary-sage); font-size:1.5rem;">&rarr;</span>
-                </div>`;
         }
 
         window.generateInvoice = function(e) {
