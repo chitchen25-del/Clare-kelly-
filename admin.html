@@ -107,6 +107,18 @@
 
         .chart-container { position: relative; height: 280px; width: 100%; }
 
+        /* APPLE-STYLE MONTHLY CALENDAR GRID */
+        .cal-grid-month { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+        .cal-header-cell { text-align: center; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-main); padding: 0.5rem 0; }
+        .cal-day-cell { background: var(--bg-color); border: 1px solid var(--secondary-sand); min-height: 100px; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; gap: 4px; }
+        .cal-day-cell.other-month { opacity: 0.35; background: #faf9f8; }
+        .cal-day-cell.today { border-color: var(--primary-sage); background: white; box-shadow: 0 0 0 2px rgba(13, 155, 70, 0.15); }
+        .cal-day-num { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 600; color: #555; text-align: right; padding-right: 2px; }
+        .cal-event-card { background: #e2ede5; border-left: 3px solid var(--primary-sage); padding: 4px 6px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; transition: transform 0.15s; }
+        .cal-event-card:hover { transform: scale(1.02); background: #d0e4d5; }
+        .cal-event-time { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main); font-size: 0.65rem; display: block; }
+        .cal-event-name { font-weight: 600; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+
         .app-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--secondary-sand); display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -4px 20px rgba(9, 93, 40, 0.04); }
         .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: #888; cursor: pointer; width: 20%; height: 100%; font-weight: 600;}
         .app-nav-item.active { color: var(--primary-sage); }
@@ -178,11 +190,17 @@
             <span id="live-badge" style="font-size: 0.65rem; background: rgba(16, 211, 88, 0.1); color: var(--primary-sage); padding: 0.4rem 0.8rem; border-radius: 20px; font-family: 'Montserrat'; font-weight: 700; letter-spacing: 1px;">LIVE SYNC</span>
         </div>
 
-        <!-- CLINIC PLANNER (VISUAL CALENDAR GRID) -->
+        <!-- CLINIC PLANNER (MONTHLY CALENDAR GRID) -->
         <div id="view-schedule" class="app-view active-view">
             <div class="panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                    <h3 style="margin: 0; border: none;">Interactive Schedule Grid</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <h3 id="cal-month-title" style="margin: 0; border: none; font-size: 1.5rem;">August 2026</h3>
+                        <div style="display: flex; gap: 0.4rem;">
+                            <button class="btn btn-outline" style="padding: 0.3rem 0.6rem; min-height: auto; font-size: 0.7rem;" onclick="changeMonth(-1)">&larr;</button>
+                            <button class="btn btn-outline" style="padding: 0.3rem 0.6rem; min-height: auto; font-size: 0.7rem;" onclick="changeMonth(1)">&rarr;</button>
+                        </div>
+                    </div>
                     <button class="btn" style="padding: 0.5rem 1rem; min-height: 35px; font-size: 0.65rem;" onclick="openNewBookingModal()">+ Book Session</button>
                 </div>
                 <div id="admin-schedule-list"><p style="color: #888; font-size: 0.95rem;">Loading clinic planner...</p></div>
@@ -264,6 +282,8 @@
         
         let globalClients = [];
         let globalMsgs = [];
+        let globalAppointments = [];
+        let currentPlannerDate = new Date();
         let activeChart = null; 
 
         function getSupabase() {
@@ -356,43 +376,74 @@
             try {
                 const { data: appts, error } = await db.from('appointments').select('*').order('appointment_time', { ascending: true });
                 if(error) throw error;
-                if(!appts || appts.length === 0) { container.innerHTML = '<p style="color:#888;">No upcoming bookings on the planner.</p>'; return; }
+                globalAppointments = appts || [];
+                renderMonthlyCalendar();
+            } catch(err) { container.innerHTML = `<p style="color:#a94442;">Error: ${err.message}</p>`; }
+        }
 
-                document.getElementById('briefing-count').innerText = appts.length;
+        window.changeMonth = function(direction) {
+            currentPlannerDate.setMonth(currentPlannerDate.getMonth() + direction);
+            renderMonthlyCalendar();
+        }
 
-                let calendarHtml = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem;">';
-                
-                const days = {};
-                appts.forEach(a => {
-                    const dateKey = new Date(a.appointment_time).toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' });
-                    if (!days[dateKey]) days[dateKey] = [];
-                    days[dateKey].push(a);
+        function renderMonthlyCalendar() {
+            const container = document.getElementById('admin-schedule-list');
+            document.getElementById('briefing-count').innerText = globalAppointments.length;
+
+            const year = currentPlannerDate.getFullYear();
+            const month = currentPlannerDate.getMonth();
+            
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('cal-month-title').innerText = `${monthNames[month]} ${year}`;
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const prevTotalDays = new Date(year, month, 0).getDate();
+
+            let gridHtml = '<div class="cal-grid-month">';
+            const headers = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            headers.forEach(h => { gridHtml += `<div class="cal-header-cell">${h}</div>`; });
+
+            // Previous month buffer days
+            for (let i = firstDayIndex; i > 0; i--) {
+                const dayNum = prevTotalDays - i + 1;
+                gridHtml += `<div class="cal-day-cell other-month"><div class="cal-day-num">${dayNum}</div></div>`;
+            }
+
+            // Current month days
+            const todayStr = new Date().toISOString().slice(0, 10);
+            for (let day = 1; day <= totalDays; day++) {
+                const dateObj = new Date(year, month, day);
+                const dateString = dateObj.toISOString().slice(0, 10);
+                const isToday = dateString === todayStr;
+
+                const dayAppts = globalAppointments.filter(a => {
+                    const aDate = new Date(a.appointment_time).toISOString().slice(0, 10);
+                    return aDate === dateString;
                 });
 
-                for (const [dateStr, dayAppts] of Object.entries(days)) {
-                    calendarHtml += `
-                        <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.6rem; margin-bottom: 1rem;">
-                                <h4 style="color: var(--text-main); font-family: 'Montserrat'; font-size: 0.85rem; text-transform: uppercase; margin: 0;">${dateStr}</h4>
-                                <span class="status-badge active" style="font-size: 0.55rem; padding: 0.2rem 0.5rem;">${dayAppts.length} Booked</span>
+                gridHtml += `<div class="cal-day-cell ${isToday ? 'today' : ''}">
+                    <div class="cal-day-num">${day}</div>
+                    <div style="display:flex; flex-direction:column; gap:3px; overflow-y:auto; max-height:90px;">
+                        ${dayAppts.map(a => `
+                            <div class="cal-event-card" onclick="openClientProfile('${a.client_id}')" title="${a.client_name} - ${a.service_name}">
+                                <span class="cal-event-time">${new Date(a.appointment_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                <span class="cal-event-name">${a.client_name}</span>
                             </div>
-                            <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                                ${dayAppts.map(a => `
-                                    <div style="background: white; padding: 1rem; border-radius: 10px; border: 1px solid var(--secondary-sand); box-shadow: 0 2px 10px rgba(0,0,0,0.03); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'" onclick="openClientProfile('${a.client_id}')">
-                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
-                                            <strong style="color: var(--primary-sage); font-size: 0.8rem; font-family: 'Montserrat';">${new Date(a.appointment_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</strong>
-                                            <span style="font-size: 0.6rem; color: #888; font-family: 'Montserrat'; text-transform: uppercase;">Confirmed</span>
-                                        </div>
-                                        <h4 style="font-size: 1.05rem; color: var(--text-main); margin-bottom: 0.2rem; font-weight: 700;">${a.client_name}</h4>
-                                        <span style="font-size: 0.8rem; color: #555;">${a.service_name}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>`;
-                }
-                calendarHtml += '</div>';
-                container.innerHTML = calendarHtml;
-            } catch(err) { container.innerHTML = `<p style="color:#a94442;">Error: ${err.message}</p>`; }
+                        `).join('')}
+                    </div>
+                </div>`;
+            }
+
+            // Next month buffer days to complete grid rows
+            const totalCellsSoFar = firstDayIndex + totalDays;
+            const remainingCells = totalCellsSoFar % 7 === 0 ? 0 : 7 - (totalCellsSoFar % 7);
+            for (let nextDay = 1; nextDay <= remainingCells; nextDay++) {
+                gridHtml += `<div class="cal-day-cell other-month"><div class="cal-day-num">${nextDay}</div></div>`;
+            }
+
+            gridHtml += '</div>';
+            container.innerHTML = gridHtml;
         }
 
         async function openNewBookingModal() {
@@ -404,7 +455,11 @@
                 const db = getSupabase();
                 const { error } = await db.from('appointments').insert([{ client_id: gen_random_uuid_string(), client_name: clientName, service_name: service, appointment_time: new Date(dateInput).toISOString(), status: 'confirmed' }]);
                 if(error) throw error;
-                alert("Booked into Planner!"); loadSchedule(db); loadClientDirectory(db);
+                alert("Booked into Planner!"); 
+                const { data } = await db.from('appointments').select('*').order('appointment_time', { ascending: true });
+                globalAppointments = data || [];
+                renderMonthlyCalendar();
+                loadClientDirectory(db);
             } catch(err) { alert("Error: " + err.message); }
         }
 
