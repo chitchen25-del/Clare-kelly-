@@ -115,10 +115,10 @@
         .form-container h2 { text-align: center; margin-bottom: 1rem; }
         .form-row, .form-row.three { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
         
-        /* PREMIUM INPUT STYLING (Matches Admin exactly) */
+        /* PREMIUM INPUT STYLING */
         label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); margin-bottom: 0.8rem; font-weight: 600;}
-        input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 1.5rem; border: 1px solid var(--secondary-sand); border-radius: 2px; background: var(--bg-color); font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary-sage); outline: none; background: white; box-shadow: 0 0 0 1px var(--primary-sage); }
+        input, select, textarea { width: 100%; padding: 1.2rem; margin-bottom: 2rem; border: 1px solid var(--secondary-sand); border-radius: 2px; background: transparent; font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-sage); outline: none; box-shadow: 0 0 0 1px var(--primary-sage); background: white;}
         textarea { resize: vertical; height: 120px; }
 
         /* Client Dashboard */
@@ -169,6 +169,18 @@
 
         /* BARCODE SCANNER WINDOW */
         #reader { width: 100%; display: none; margin-bottom: 1.5rem; border-radius: 2px; overflow: hidden; border: 1px solid var(--primary-sage); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.1); }
+
+        /* ========================================================
+           PWA INSTALLATION OVERLAY (NEW FEATURE) 
+           ======================================================== */
+        .pwa-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(243, 241, 239, 0.95); backdrop-filter: blur(10px); z-index: 9999; display: none; justify-content: center; align-items: flex-end; padding-bottom: 2rem; animation: fadeIn 0.4s ease; }
+        .pwa-card { background: white; width: 90%; max-width: 400px; padding: 3rem 2rem; border-radius: 16px; border: 1px solid var(--primary-sage); box-shadow: 0 25px 60px rgba(9, 93, 40, 0.15); text-align: center; position: relative; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .pwa-icon { width: 80px; height: 80px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin: 0 auto 1.5rem auto; display: block; object-fit: cover; }
+        .pwa-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--text-main); margin-bottom: 0.5rem; line-height: 1.1; }
+        .pwa-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; color: #666; margin-bottom: 2rem; line-height: 1.5; }
+        .pwa-steps { background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 8px; text-align: left; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--text-main); line-height: 1.6; margin-bottom: 2rem; }
+        .pwa-close-btn { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #888; background: none; border: none; cursor: pointer; text-decoration: underline; margin-top: 1rem; }
 
         footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); color: #555; background: var(--card-bg); display: flex; flex-direction: column; text-align: center; gap: 2.5rem; max-width: 1300px; margin: 0 auto; }
         .footer-logo-wrapper { width: 100%; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 3rem; margin-bottom: 3rem; margin-top: 4rem; text-align: center; }
@@ -283,45 +295,19 @@
             </div>
         </section>
 
-        <!-- THE CLINICAL PATHWAY SECTION -->
         <section class="pathway-section">
             <div style="text-align: center; max-width: 800px; margin: 0 auto 4rem auto;">
                 <span class="section-subtitle">Our Clinical Pathway</span>
                 <h2>Comprehensive Functional Care</h2>
                 <p style="color: #555;">A meticulously structured approach designed to map your physiology and orchestrate profound, lasting healing.</p>
             </div>
-            
             <div class="pathway-grid">
-                <div class="pathway-card">
-                    <span class="pathway-number">01.</span>
-                    <h4>Full Symptom Assessment & Medical History Review</h4>
-                    <p>An exhaustive clinical deep-dive into your physiological timeline to map the origin and progression of your condition.</p>
-                </div>
-                <div class="pathway-card">
-                    <span class="pathway-number">02.</span>
-                    <h4>Lifestyle & Metabolic Assessment</h4>
-                    <p>Evaluating the critical pillars of your health, including nutrition, sleep architecture, stress load, and metabolic function.</p>
-                </div>
-                <div class="pathway-card">
-                    <span class="pathway-number">03.</span>
-                    <h4>Identifying the Root Cause of Your Symptoms</h4>
-                    <p>Moving beyond symptom management to isolate the underlying systemic dysfunctions driving your discomfort.</p>
-                </div>
-                <div class="pathway-card">
-                    <span class="pathway-number">04.</span>
-                    <h4>Personalised Treatment Plan</h4>
-                    <p>A bespoke, evidence-informed protocol tailored precisely to your unique biology and treatment goals.</p>
-                </div>
-                <div class="pathway-card">
-                    <span class="pathway-number">05.</span>
-                    <h4>Progress Tracking</h4>
-                    <p>Continuous monitoring via your secure Patient Portal to ensure your protocol adapts as your body heals.</p>
-                </div>
-                <div class="pathway-card">
-                    <span class="pathway-number">06.</span>
-                    <h4>Lymphatic Treatments</h4>
-                    <p>Advanced hands-on therapies to clear systemic inflammation, reduce edema, and accelerate tissue recovery.</p>
-                </div>
+                <div class="pathway-card"><span class="pathway-number">01.</span><h4>Full Symptom Assessment & Medical History Review</h4><p>An exhaustive clinical deep-dive into your physiological timeline to map the origin and progression of your condition.</p></div>
+                <div class="pathway-card"><span class="pathway-number">02.</span><h4>Lifestyle & Metabolic Assessment</h4><p>Evaluating the critical pillars of your health, including nutrition, sleep architecture, stress load, and metabolic function.</p></div>
+                <div class="pathway-card"><span class="pathway-number">03.</span><h4>Identifying the Root Cause of Your Symptoms</h4><p>Moving beyond symptom management to isolate the underlying systemic dysfunctions driving your discomfort.</p></div>
+                <div class="pathway-card"><span class="pathway-number">04.</span><h4>Personalised Treatment Plan</h4><p>A bespoke, evidence-informed protocol tailored precisely to your unique biology and treatment goals.</p></div>
+                <div class="pathway-card"><span class="pathway-number">05.</span><h4>Progress Tracking</h4><p>Continuous monitoring via your secure Patient Portal to ensure your protocol adapts as your body heals.</p></div>
+                <div class="pathway-card"><span class="pathway-number">06.</span><h4>Lymphatic Treatments</h4><p>Advanced hands-on therapies to clear systemic inflammation, reduce edema, and accelerate tissue recovery.</p></div>
             </div>
         </section>
 
@@ -578,24 +564,15 @@
                         </div>
 
                         <!-- 2. ACTIVITY -->
-                        <div class="journal-accordion" onclick="toggleAccordion('journal-activity')"><span>🏃‍♀️ Activity & Movement</span> <span class="icon">+</span></div>
+                        <div class="journal-accordion" onclick="toggleAccordion('journal-activity')"><span>🏃‍♀️ Activity & Mood</span> <span class="icon">+</span></div>
                         <div class="journal-panel" id="journal-activity">
-                            <label>Workout / Activity Type</label><input type="text" id="log-activity-type" placeholder="e.g. Walking, Yoga, Cycling">
-                            <label>Duration (Minutes)</label><input type="number" id="log-activity-dur" placeholder="e.g. 45">
-                            <label>Intensity</label>
-                            <select id="log-activity-int"><option value="">Select...</option><option value="Light">Light</option><option value="Moderate">Moderate</option><option value="Vigorous">Vigorous</option></select>
-                        </div>
-
-                        <!-- 3. MOOD -->
-                        <div class="journal-accordion" onclick="toggleAccordion('journal-mood')"><span>🧠 Mood & Stress</span> <span class="icon">+</span></div>
-                        <div class="journal-panel" id="journal-mood">
+                            <label>Activity Type</label><input type="text" id="log-activity-type">
+                            <label>Duration (Mins)</label><input type="number" id="log-activity-dur">
                             <label>Overall Mood</label>
                             <select id="log-mood-rating"><option value="">Select...</option><option value="Great">Great</option><option value="Good">Good</option><option value="Okay">Okay</option><option value="Low">Low</option><option value="Anxious/Stressed">Anxious/Stressed</option></select>
-                            <label>Energy Level (1-10)</label><input type="number" id="log-energy" placeholder="10 = High Energy" min="1" max="10">
-                            <label>Emotional Notes</label><input type="text" id="log-mood-notes" placeholder="Any specific triggers today?">
                         </div>
 
-                        <!-- 4. SLEEP -->
+                        <!-- 3. SLEEP -->
                         <div class="journal-accordion" onclick="toggleAccordion('journal-sleep')"><span>💤 Sleep</span> <span class="icon">+</span></div>
                         <div class="journal-panel" id="journal-sleep">
                             <label>Hours Slept</label><input type="number" step="0.5" id="log-sleep-hours" placeholder="e.g. 7.5">
@@ -603,7 +580,7 @@
                             <select id="log-sleep-quality"><option value="">Select...</option><option value="5">5 - Excellent</option><option value="4">4 - Good</option><option value="3">3 - Fair</option><option value="2">2 - Poor</option><option value="1">1 - Terrible</option></select>
                         </div>
 
-                        <!-- 5. BOWEL -->
+                        <!-- 4. BOWEL -->
                         <div class="journal-accordion" onclick="toggleAccordion('journal-bowel')"><span>🚽 Bowel Movements</span> <span class="icon">+</span></div>
                         <div class="journal-panel" id="journal-bowel">
                             <label>Type (Bristol Scale)</label>
@@ -620,13 +597,13 @@
                             <label>Frequency Today</label><input type="number" id="log-bowel-freq" placeholder="How many times today?">
                         </div>
 
-                        <!-- 6. HYDRATION -->
+                        <!-- 5. HYDRATION -->
                         <div class="journal-accordion" onclick="toggleAccordion('journal-water')"><span>💧 Hydration</span> <span class="icon">+</span></div>
                         <div class="journal-panel" id="journal-water">
                             <label>Water Intake</label><input type="text" id="log-water" placeholder="e.g. 2 Liters or 8 Glasses">
                         </div>
 
-                        <!-- 7. VITALS -->
+                        <!-- 6. VITALS -->
                         <div class="journal-accordion" onclick="toggleAccordion('journal-meas')"><span>📏 Measurements & Vitals</span> <span class="icon">+</span></div>
                         <div class="journal-panel" id="journal-meas">
                             <label>Weight</label><input type="text" id="log-meas-weight" placeholder="e.g. 72 kg or 11.3 st">
@@ -640,7 +617,7 @@
                 <!-- COMPREHENSIVE MEDICAL INTAKE -->
                 <div class="dash-card">
                     <h3>Comprehensive Medical Intake</h3>
-                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">Please complete this detailed functional health profile prior to your initial consultation.</p>
+                    <p style="font-size: 0.95rem; color: #555; margin-bottom: 2rem;">Please complete this detailed functional health profile prior to your initial consultation.</p>
                     
                     <form onsubmit="return submitMedicalIntake(event)">
                         <div class="form-row">
@@ -728,6 +705,23 @@
         </div>
     </div>
 
+    <!-- PWA APP INSTALL OVERLAY -->
+    <div class="pwa-overlay" id="pwa-install-overlay">
+        <div class="pwa-card">
+            <img src="./logo.png" alt="App Icon" class="pwa-icon">
+            <h2 class="pwa-title">Install The App</h2>
+            <p class="pwa-subtitle">For the best experience and to easily track your daily health journals, install our secure patient portal directly to your phone.</p>
+            
+            <div class="pwa-steps" id="pwa-instruction-text">
+                <strong>1.</strong> Tap the browser menu (usually three dots in the top right).<br><br>
+                <strong>2.</strong> Select <b>Add to Home Screen</b> or <b>Install App</b>.
+            </div>
+            
+            <button class="btn" style="width: 100%;" onclick="closePwaOverlay()">I've Installed It</button>
+            <button class="pwa-close-btn" onclick="closePwaOverlay()">Continue in browser</button>
+        </div>
+    </div>
+
     <footer>
         <div class="footer-logo-wrapper">
             <img src="./logo.png" alt="The Natural Healing Clinic" class="footer-brand-logo">
@@ -772,6 +766,27 @@
             }
         };
 
+        // --- NEW: PWA INSTALLATION DETECTOR ---
+        function checkPwaInstall() {
+            // Detect if running as standalone app
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+            
+            // Only show overlay if on a mobile device and NOT running as an app
+            if (!isStandalone && window.innerWidth <= 900) {
+                document.getElementById('pwa-install-overlay').style.display = 'flex';
+                
+                // Tailor instructions for iOS Safari users
+                if(isIos) {
+                    document.getElementById('pwa-instruction-text').innerHTML = `<strong>1.</strong> Tap the <b>Share</b> icon <svg width="14" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg> at the bottom of your screen.<br><br><strong>2.</strong> Scroll down and tap <b>Add to Home Screen</b>.`;
+                }
+            }
+        }
+
+        window.closePwaOverlay = function() {
+            document.getElementById('pwa-install-overlay').style.display = 'none';
+        }
+
         async function processClientLogin(e) {
             e.preventDefault();
             const btn = document.getElementById('client-login-btn');
@@ -792,6 +807,8 @@
                     updateNavState(true); 
                     openScreen('screen-dashboard'); 
                     loadClientDashboard(db, data.user);
+                    // Trigger the App Install Prompt after successful login!
+                    setTimeout(checkPwaInstall, 1000);
                 }
             } catch (err) {
                 alert("Login Failed: " + err.message);
@@ -825,6 +842,8 @@
                 updateNavState(true); 
                 openScreen('screen-dashboard'); 
                 loadClientDashboard(db, authData.user);
+                // Trigger the App Install Prompt after successful registration!
+                setTimeout(checkPwaInstall, 1000);
             } catch(err) {
                 alert("Registration Error: " + err.message);
             }
@@ -1095,17 +1114,9 @@ Date: ${new Date().toLocaleDateString('en-GB')}
                 if(error) throw error;
 
                 alert("Daily Health Log saved successfully to your practitioner file!");
-                
-                e.target.reset();
-                updateDailyTotals();
+                e.target.reset(); updateDailyTotals();
                 document.querySelectorAll('.journal-panel').forEach(p => p.classList.remove('show'));
-                document.querySelectorAll('.journal-accordion').forEach(a => {
-                    a.classList.remove('active');
-                    a.querySelector('.icon').innerText = '+';
-                });
-            } catch(err) {
-                alert("Error saving log: " + err.message);
-            }
+            } catch(err) { alert("Error saving log: " + err.message); }
             return false;
         };
 
@@ -1119,11 +1130,8 @@ Date: ${new Date().toLocaleDateString('en-GB')}
                 const { error } = await db.from('appointments').insert([{ client_id: user.id, client_name: user.user_metadata?.full_name || user.email, service_name: document.getElementById('portal-service').value, appointment_time: document.getElementById('portal-date').value, status: 'confirmed' }]);
                 if(error) throw error;
 
-                alert("Appointment booked!"); 
-                loadClientDashboard(db, user);
-            } catch(err) {
-                alert("Error booking session: " + err.message);
-            }
+                alert("Appointment booked!"); loadClientDashboard(db, user);
+            } catch(err) { alert("Error booking session: " + err.message); }
             return false;
         };
 
@@ -1133,12 +1141,9 @@ Date: ${new Date().toLocaleDateString('en-GB')}
                 const db = getSupabase();
                 const { error } = await db.from('appointments').delete().eq('id', id);
                 if(error) throw error;
-
                 const { data: { user } } = await db.auth.getUser();
                 loadClientDashboard(db, user);
-            } catch(err) {
-                alert("Error cancelling appointment: " + err.message);
-            }
+            } catch(err) { alert("Error cancelling appointment: " + err.message); }
         };
 
         async function loadClientDashboard(db, user) {
@@ -1195,9 +1200,7 @@ Date: ${new Date().toLocaleDateString('en-GB')}
                 updateNavState(false); 
                 openScreen('screen-home');
                 location.reload();
-            } catch(err) {
-                alert("Error signing out: " + err.message);
-            }
+            } catch(err) { alert("Error signing out: " + err.message); }
         }
 
         function updateNavState(isLoggedIn) {
