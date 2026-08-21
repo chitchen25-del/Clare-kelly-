@@ -107,11 +107,22 @@
 
         .chart-container { position: relative; height: 280px; width: 100%; }
 
-        /* CLINIC PLANNER AGENDA VIEW */
+        /* CLINIC PLANNER AGENDA VIEW & POPUP CALENDAR */
         .planner-date-group { margin-bottom: 1.5rem; }
         .planner-date-header { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); background: #e8ede9; padding: 0.6rem 1rem; border-radius: 8px; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center; }
         .planner-card { background: white; border: 1px solid var(--secondary-sand); padding: 1.2rem; border-radius: 12px; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.02); cursor: pointer; transition: transform 0.2s; }
         .planner-card:hover { transform: translateY(-2px); border-color: var(--primary-sage); box-shadow: 0 6px 20px rgba(9, 93, 40, 0.05); }
+
+        /* MODAL CALENDAR STYLING */
+        .cal-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 1rem; }
+        .cal-modal-content { background: white; width: 100%; max-width: 400px; border-radius: 16px; padding: 1.5rem; border: 1px solid var(--secondary-sand); box-shadow: 0 20px 50px rgba(0,0,0,0.2); animation: fadeIn 0.2s ease; }
+        .cal-grid-mini { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 1rem; }
+        .cal-mini-header { text-align: center; font-family: 'Montserrat', sans-serif; font-size: 0.65rem; font-weight: 700; color: var(--text-main); padding-bottom: 0.4rem; }
+        .cal-mini-day { background: var(--bg-color); border: 1px solid var(--secondary-sand); aspect-ratio: 1; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 600; cursor: pointer; position: relative; }
+        .cal-mini-day.other-month { opacity: 0.3; background: #faf9f8; }
+        .cal-mini-day.today { border-color: var(--primary-sage); color: var(--primary-sage); font-weight: 700; }
+        .cal-mini-day.has-event { background: rgba(13, 155, 70, 0.1); border-color: var(--primary-sage); color: var(--text-main); }
+        .cal-mini-dot { width: 5px; height: 5px; background: var(--primary-sage); border-radius: 50%; position: absolute; bottom: 4px; }
 
         .app-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--secondary-sand); display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -4px 20px rgba(9, 93, 40, 0.04); }
         .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: #888; cursor: pointer; width: 20%; height: 100%; font-weight: 600;}
@@ -155,6 +166,21 @@
         </div>
     </div>
 
+    <!-- MOBILE CALENDAR POPUP MODAL -->
+    <div class="cal-modal-overlay" id="cal-modal" onclick="if(event.target === this) toggleCalendarModal();">
+        <div class="cal-modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                <h3 id="mini-cal-title" style="margin:0; font-size:1.1rem; border:none; padding:0;">August 2026</h3>
+                <div style="display: flex; gap: 0.3rem;">
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; min-height: auto; font-size: 0.65rem;" onclick="changeMiniMonth(-1)">&larr;</button>
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; min-height: auto; font-size: 0.65rem;" onclick="changeMiniMonth(1)">&rarr;</button>
+                </div>
+            </div>
+            <div id="mini-cal-grid"></div>
+            <button class="btn btn-outline" style="width: 100%; margin-top: 1.2rem; font-size: 0.65rem; min-height: 35px;" onclick="toggleCalendarModal()">Close Calendar</button>
+        </div>
+    </div>
+
     <!-- LOGIN SCREEN -->
     <div id="admin-login" class="login-wrapper">
         <div class="form-container">
@@ -184,11 +210,14 @@
             <span id="live-badge" style="font-size: 0.65rem; background: rgba(16, 211, 88, 0.1); color: var(--primary-sage); padding: 0.4rem 0.8rem; border-radius: 20px; font-family: 'Montserrat'; font-weight: 700; letter-spacing: 1px;">LIVE SYNC</span>
         </div>
 
-        <!-- CLINIC PLANNER (AGENDA VIEW) -->
+        <!-- CLINIC PLANNER (AGENDA VIEW + CALENDAR ICON) -->
         <div id="view-schedule" class="app-view active-view">
             <div class="panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                    <h3 style="margin: 0; border: none;">Upcoming Sessions</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <h3 style="margin: 0; border: none;">Upcoming Sessions</h3>
+                        <button class="btn btn-outline" style="padding: 0.4rem 0.8rem; min-height: 35px; font-size: 0.7rem; border-color: var(--primary-sage); color: var(--primary-sage);" onclick="toggleCalendarModal()" title="Open Interactive Calendar">📅 Calendar</button>
+                    </div>
                     <button class="btn" style="padding: 0.5rem 1rem; min-height: 35px; font-size: 0.65rem;" onclick="openNewBookingModal()">+ Book Session</button>
                 </div>
                 <div id="admin-schedule-list"><p style="color: #888; font-size: 0.95rem;">Loading clinic planner...</p></div>
@@ -270,6 +299,8 @@
         
         let globalClients = [];
         let globalMsgs = [];
+        let globalAppointments = [];
+        let miniCalDate = new Date();
         let activeChart = null; 
 
         function getSupabase() {
@@ -362,13 +393,18 @@
             try {
                 const { data: appts, error } = await db.from('appointments').select('*').order('appointment_time', { ascending: true });
                 if(error) throw error;
-                if(!appts || appts.length === 0) { container.innerHTML = '<p style="color:#888;">No upcoming bookings on the planner.</p>'; return; }
+                globalAppointments = appts || [];
+                
+                if(!globalAppointments || globalAppointments.length === 0) { 
+                    container.innerHTML = '<p style="color:#888;">No upcoming bookings on the planner.</p>'; 
+                    return; 
+                }
 
-                document.getElementById('briefing-count').innerText = appts.length;
+                document.getElementById('briefing-count').innerText = globalAppointments.length;
 
                 let agendaHtml = '';
                 const days = {};
-                appts.forEach(a => {
+                globalAppointments.forEach(a => {
                     const dateKey = new Date(a.appointment_time).toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
                     if (!days[dateKey]) days[dateKey] = [];
                     days[dateKey].push(a);
@@ -376,7 +412,7 @@
 
                 for (const [dateStr, dayAppts] of Object.entries(days)) {
                     agendaHtml += `
-                        <div class="planner-date-group">
+                        <div class="planner-date-group" id="date-group-${dateStr.replace(/[^a-zA-Z0-9]/g, '_')}">
                             <div class="planner-date-header">
                                 <span>${dateStr}</span>
                                 <span style="font-size:0.7rem; background:white; padding:0.2rem 0.6rem; border-radius:10px; color:var(--text-main);">${dayAppts.length} session${dayAppts.length > 1 ? 's' : ''}</span>
@@ -397,6 +433,68 @@
                 }
                 container.innerHTML = agendaHtml;
             } catch(err) { container.innerHTML = `<p style="color:#a94442;">Error: ${err.message}</p>`; }
+        }
+
+        window.toggleCalendarModal = function() {
+            const modal = document.getElementById('cal-modal');
+            const isVisible = modal.style.display === 'flex';
+            modal.style.display = isVisible ? 'none' : 'flex';
+            if(!isVisible) renderMiniCalendar();
+        }
+
+        window.changeMiniMonth = function(direction) {
+            miniCalDate.setMonth(miniCalDate.getMonth() + direction);
+            renderMiniCalendar();
+        }
+
+        function renderMiniCalendar() {
+            const year = miniCalDate.getFullYear();
+            const month = miniCalDate.getMonth();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('mini-cal-title').innerText = `${monthNames[month]} ${year}`;
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const prevTotalDays = new Date(year, month, 0).getDate();
+
+            let gridHtml = '<div class="cal-grid-mini">';
+            ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].forEach(h => { gridHtml += `<div class="cal-mini-header">${h}</div>`; });
+
+            for (let i = firstDayIndex; i > 0; i--) {
+                gridHtml += `<div class="cal-mini-day other-month">${prevTotalDays - i + 1}</div>`;
+            }
+
+            const todayStr = new Date().toISOString().slice(0, 10);
+            for (let day = 1; day <= totalDays; day++) {
+                const dateObj = new Date(year, month, day);
+                const dateString = dateObj.toISOString().slice(0, 10);
+                const isToday = dateString === todayStr;
+
+                const dayAppts = globalAppointments.filter(a => new Date(a.appointment_time).toISOString().slice(0, 10) === dateString);
+                const hasEvent = dayAppts.length > 0;
+                const formattedKey = dateObj.toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }).replace(/[^a-zA-Z0-9]/g, '_');
+
+                gridHtml += `<div class="cal-mini-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}" onclick="jumpToDate('${formattedKey}')">
+                    ${day}
+                    ${hasEvent ? '<div class="cal-mini-dot"></div>' : ''}
+                </div>`;
+            }
+
+            gridHtml += '</div>';
+            document.getElementById('mini-cal-grid').innerHTML = gridHtml;
+        }
+
+        window.jumpToDate = function(dateElementId) {
+            toggleCalendarModal();
+            const target = document.getElementById(`date-group-${dateElementId}`);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                target.style.transition = 'background 0.5s';
+                target.style.background = '#e2ede5';
+                setTimeout(() => { target.style.background = 'transparent'; }, 1000);
+            } else {
+                alert("No appointments scheduled for this specific date.");
+            }
         }
 
         async function openNewBookingModal() {
