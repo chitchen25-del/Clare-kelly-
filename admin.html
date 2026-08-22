@@ -66,6 +66,18 @@
         .briefing-card h2 { color: white; font-size: 2rem; margin-bottom: 0.4rem; }
         .briefing-card p { opacity: 0.9; font-size: 1.05rem; margin: 0; }
 
+        /* =========================================================
+           BULLETPROOF CALENDAR GRID CSS (iOS SAFARI OVERRIDES)
+           ========================================================= */
+        .calendar-wrapper { border: 1px solid var(--secondary-sand); border-radius: 12px; overflow: hidden; margin-bottom: 2rem; background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: var(--bg-color); border-bottom: 1px solid var(--secondary-sand); font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main); font-size: 1.1rem; }
+        .calendar-days { display: grid !important; grid-template-columns: repeat(7, 1fr) !important; text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--primary-sage); padding: 0.8rem 0; border-bottom: 1px solid var(--secondary-sand); background: white; width: 100%; }
+        .calendar-grid { display: grid !important; grid-template-columns: repeat(7, 1fr) !important; text-align: center; width: 100%; background: white; }
+        .calendar-cell { padding: 1.2rem 0; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; border-right: 1px solid #f3f1ef; border-bottom: 1px solid #f3f1ef; cursor: pointer; color: #444; position: relative; display: flex; align-items: center; justify-content: center; }
+        .calendar-cell:nth-child(7n) { border-right: none; }
+        .calendar-cell.active { background: var(--primary-sage); color: white; font-weight: 700; border-radius: 8px; margin: 2px; }
+        .calendar-cell.has-appt::after { content: ''; position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: var(--gold-accent); border-radius: 50%; box-shadow: 0 0 4px rgba(16, 211, 88, 0.4); }
+
         .finance-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1.5rem; }
         .metric-card { background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 12px; text-align: center; }
         .metric-card span { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); display: block; margin-bottom: 0.5rem; font-weight: 700;}
@@ -122,7 +134,7 @@
     <nav>
         <img src="./logo.png" alt="Clinic Logo" class="nav-brand-logo" onclick="location.reload();">
         <div style="display: flex; gap: 1rem; align-items: center;">
-            <button id="btn-logout" class="btn btn-outline" style="display: none; padding: 0.5rem 1rem; font-size: 0.65rem; min-height: 35px;" onclick="processLogout()">Sign Out</button>
+            <button id="btn-logout" class="btn btn-outline" style="display: none; padding: 0.5rem 1rem; font-size: 0.6rem; min-height: 35px;" onclick="processLogout()">Sign Out</button>
         </div>
     </nav>
 
@@ -154,7 +166,6 @@
     <!-- MAIN DASHBOARD -->
     <div id="admin-dashboard" class="dashboard-wrapper">
         
-        <!-- MORNING BRIEFING BANNER -->
         <div class="briefing-card">
             <h2>Good Morning, Clare.</h2>
             <p>You have <strong id="briefing-count">0</strong> appointments scheduled. All client health journals are synced with Supabase.</p>
@@ -165,7 +176,7 @@
             <span id="live-badge" style="font-size: 0.65rem; background: rgba(16, 211, 88, 0.1); color: var(--primary-sage); padding: 0.4rem 0.8rem; border-radius: 20px; font-family: 'Montserrat'; font-weight: 700; letter-spacing: 1px;">LIVE SYNC</span>
         </div>
 
-        <!-- SCHEDULE (WITH CALENDAR) -->
+        <!-- SCHEDULE (WITH FIXED CALENDAR GRID) -->
         <div id="view-schedule" class="app-view active-view">
             <div class="panel">
                 <div class="calendar-wrapper">
@@ -271,9 +282,11 @@
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
+        const PRACTITIONER_EMAIL = "clare@thenaturalhealingclinic.co.uk"; 
         
         let globalClients = [];
         let globalMsgs = [];
+        let bypassMode = false;
         let activeChart = null; 
 
         function getSupabase() {
@@ -290,7 +303,7 @@
                 const db = getSupabase();
                 if(db) {
                     const { data: { session } } = await db.auth.getSession();
-                    if(session) {
+                    if(session && session.user.email.toLowerCase() === PRACTITIONER_EMAIL.toLowerCase()) {
                         initDashboard();
                     }
                 }
@@ -322,6 +335,11 @@
                 const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
                 if (error) throw new Error(error.message);
                 
+                if (data.user.email.toLowerCase() !== PRACTITIONER_EMAIL.toLowerCase()) {
+                    await db.auth.signOut();
+                    throw new Error("UNAUTHORIZED: Client accounts cannot access the Practitioner EMR.");
+                }
+
                 initDashboard();
             } catch(err) {
                 alert("Login Error: " + err.message);
@@ -748,9 +766,7 @@
                 if (error) throw error;
                 
                 alert("Document securely uploaded to patient vault!");
-                await loadClientDirectory(db); 
-                openClientProfile(clientId); 
-                switchTab('vault');
+                await loadClientDirectory(db); openClientProfile(clientId); switchTab('vault');
             } catch(err) { alert("Upload error: " + err.message); }
             return false;
         }
@@ -771,9 +787,7 @@
                 const { error } = await db.from('messages').insert([{ client_id: clientId, sender: 'admin', content: content }]);
                 if (error) throw error;
                 
-                await loadClientDirectory(db); 
-                openClientProfile(clientId); 
-                switchTab('bodymap');
+                await loadClientDirectory(db); openClientProfile(clientId); switchTab('bodymap');
             } catch (err) { alert("Error saving pin: " + err.message); }
         }
 
@@ -793,9 +807,7 @@
                 const { error } = await db.from('messages').insert([{ client_id: clientId, sender: 'admin', content: noteText }]);
                 if (error) throw error;
                 alert("SOAP Note saved!");
-                await loadClientDirectory(db); 
-                openClientProfile(clientId); 
-                switchTab('charting');
+                await loadClientDirectory(db); openClientProfile(clientId); switchTab('charting');
             } catch (err) { alert("Error saving note: " + err.message); }
         }
 
@@ -807,9 +819,7 @@
                 const { error } = await db.from('messages').insert([{ client_id: clientId, sender: 'admin', content: supText }]);
                 if (error) throw error;
                 alert("Protocol prescribed!");
-                await loadClientDirectory(db); 
-                openClientProfile(clientId); 
-                switchTab('protocols');
+                await loadClientDirectory(db); openClientProfile(clientId); switchTab('protocols');
             } catch (err) { alert("Error saving protocol: " + err.message); }
         }
 
