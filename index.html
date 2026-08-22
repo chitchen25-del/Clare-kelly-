@@ -34,7 +34,6 @@
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* App-like body behaviors */
         body { 
             font-family: 'Cormorant Garamond', serif; 
             background-color: var(--bg-color); 
@@ -42,17 +41,15 @@
             line-height: 1.8; 
             font-size: 1.15rem; 
             overflow-x: hidden; 
-            -webkit-user-select: none; /* Prevents text highlighting on scroll */
+            -webkit-user-select: none; 
             user-select: none;
         }
         
-        /* Re-enable text selection only for input fields */
         input, textarea, select { -webkit-user-select: auto; user-select: auto; }
 
         h1, h2 { font-family: 'Cormorant Garamond', serif; font-weight: 400; color: var(--text-main); line-height: 1.2; }
         h3, h4, h5, .btn, .price-amount, .section-subtitle, label { font-family: 'Montserrat', sans-serif; }
         
-        /* Native App Nav Bar (Accounts for iPhone Notch) */
         nav { 
             display: flex; 
             justify-content: space-between; 
@@ -128,7 +125,6 @@
         .form-container { max-width: 100%; margin: 3rem 5%; background: var(--card-bg); padding: 4rem 2rem; border-radius: 12px; box-shadow: 0 20px 50px rgba(9, 93, 40, 0.05); border: 1px solid var(--secondary-sand); }
         .form-container h2 { text-align: center; margin-bottom: 1rem; }
         
-        /* FIX FOR LOGO SIZE AND ALIGNMENT */
         .portal-logo {
             height: 70px;
             max-width: 100%;
@@ -137,7 +133,6 @@
             margin: 0 auto 1.5rem auto;
         }
 
-        /* FIX FOR INTAKE FORM ROWS ON MOBILE */
         .form-row {
             display: flex;
             flex-direction: column;
@@ -188,7 +183,6 @@
 
         #reader { width: 100%; display: none; margin-bottom: 1.5rem; border-radius: 8px; overflow: hidden; border: 1px solid var(--primary-sage); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.1); }
 
-        /* PWA INSTALLATION OVERLAY */
         .pwa-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(243, 241, 239, 0.95); backdrop-filter: blur(10px); z-index: 9999; display: none; justify-content: center; align-items: flex-end; padding-bottom: env(safe-area-inset-bottom); animation: fadeIn 0.4s ease; }
         .pwa-card { background: white; width: 100%; padding: 3rem 2rem 4rem 2rem; border-radius: 24px 24px 0 0; border-top: 1px solid var(--primary-sage); box-shadow: 0 -10px 40px rgba(9, 93, 40, 0.15); text-align: center; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -211,7 +205,6 @@
             .macro-grid input, .micro-grid input { text-align: center; }
             .daily-totals-macro, .daily-totals-micro { display: flex; justify-content: space-between; }
             
-            /* FIX FOR INTAKE FORM ROWS ON DESKTOP */
             .form-row {
                 flex-direction: row;
                 gap: 1.5rem;
@@ -334,51 +327,140 @@
         <section class="pricing-section">
             <div style="text-align: center; max-width: 700px; margin: 0 auto;">
                 <span class="section-subtitle">Pillar 1: Deep Transformation</span>
-                <h2>Functional Medicine</h2>
+                <h2>Functional Medicine & Treatments</h2>
             </div>
-            <div class="pricing-grid">
-                <div class="price-card">
-                    <div>
-                        <div class="price-title">Performance Health Audit</div>
-                        <div class="price-duration">Functional Kickstart</div>
-                        <div class="price-amount">£175</div>
-                        <ul class="price-features">
-                            <li>90-minute deep-dive functional consultation</li>
-                            <li>Full symptom timeline review</li>
-                            <li>Top 3 root-cause priorities identified</li>
-                        </ul>
+
+            <!-- COMPREHENSIVE TREATMENT & PRICING LIST -->
+            <div style="max-width: 1100px; margin: 3rem auto 0 auto; display: flex; flex-direction: column; gap: 3rem;">
+                
+                <!-- Core Hands-On Therapies -->
+                <div style="background: var(--card-bg); padding: 3rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.03);">
+                    <h3 style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem;">Core Hands-On Therapies</h3>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h4 style="color: var(--primary-sage); font-size: 1.1rem; margin-bottom: 0.4rem;">Myofascial Release Therapy[span_1](start_span)[span_1](end_span)</h4>
+                        <p style="font-size: 0.95rem; color: #555; margin-bottom: 0.8rem;">Supports postural alignment and correction, post-injury & surgical recovery, joint mobility, muscle tension relief, and improved circulation[span_2](start_span)[span_2](end_span).</p>
+                        <div style="font-family: 'Montserrat'; font-size: 0.85rem; color: var(--text-main);">
+                            <strong>Union Mills Clinic (Mon, Tue, Fri, Sat):</strong> £70[span_3](start_span)[span_3](end_span) &nbsp;|&nbsp; <strong>Castletown Clinic (Wed):</strong> £80[span_4](start_span)[span_4](end_span)
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Health Audit</button>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h4 style="color: var(--primary-sage); font-size: 1.1rem; margin-bottom: 0.4rem;">Lymphatic Treatment[span_5](start_span)[span_5](end_span)</h4>
+                        <p style="font-size: 0.95rem; color: #555; margin-bottom: 0.8rem;">Encourages the lymphatic system to clear excess fluid, metabolic waste, and inflammatory build-up. Particularly useful alongside chronic pain and autoimmune work, long-COVID, and gut health[span_6](start_span)[span_6](end_span).</p>
+                        <div style="font-family: 'Montserrat'; font-size: 0.85rem; color: var(--text-main);">
+                            <strong>Union Mills Clinic (Mon, Tue, Fri, Sat):</strong> £70[span_7](start_span)[span_7](end_span) &nbsp;|&nbsp; <strong>Castletown Clinic (Wed):</strong> £80[span_8](start_span)[span_8](end_span)
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 style="color: var(--primary-sage); font-size: 1.1rem; margin-bottom: 0.4rem;">Infrared Targeted Treatment[span_9](start_span)[span_9](end_span)</h4>
+                        <p style="font-size: 0.95rem; color: #555; margin-bottom: 0.8rem;">Deep-penetrating infrared wavelengths to reduce inflammation, support cellular repair, and ease localized injury, soft tissue issues, or arthritis[span_10](start_span)[span_10](end_span).</p>
+                        <div style="font-family: 'Montserrat'; font-size: 0.85rem; color: var(--text-main);">
+                            <strong>Union Mills:</strong> £50[span_11](start_span)[span_11](end_span) &nbsp;|&nbsp; <strong>Castletown:</strong> £60[span_12](start_span)[span_12](end_span) &nbsp;|&nbsp; <span style="color:var(--primary-sage);">Add-on to Lymphatic or Myofascial: £15</span>[span_13](start_span)[span_13](end_span)
+                        </div>
+                    </div>
                 </div>
 
-                <div class="price-card featured">
-                    <div class="featured-badge">Comprehensive Protocol</div>
-                    <div>
-                        <div class="price-title">360° Burnout & Adrenal Protocol</div>
-                        <div class="price-duration">12-Week Executive Program</div>
-                        <div class="price-amount">£1,450</div>
-                        <ul class="price-features">
-                            <li>Complete root-cause functional health investigation</li>
-                            <li>Bi-weekly hands-on Vagal/Bowen resets</li>
-                            <li>Curated functional supplementation blueprint</li>
-                        </ul>
+                <!-- Taster Gift Packages -->
+                <div style="background: linear-gradient(135deg, var(--text-main), var(--primary-sage)); color: white; padding: 3rem; border-radius: 12px; box-shadow: 0 15px 35px rgba(9, 93, 40, 0.15);">
+                    <h3 style="color: white; font-size: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 0.8rem; font-family: 'Cormorant Garamond', serif;">Taster Gift Packages & Bundles[span_14](start_span)[span_14](end_span)</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px;">
+                            <strong style="font-family: 'Montserrat'; font-size: 0.85rem;">1. Migraine & Neck Reset[span_15](start_span)[span_15](end_span)</strong>
+                            <p style="font-size: 0.8rem; opacity: 0.9; margin: 0.4rem 0;">2 x 30 min head & neck sessions[span_16](start_span)[span_16](end_span)</p>
+                            <span style="font-family: 'Montserrat'; font-weight: 700; color: var(--gold-accent);">£70[span_17](start_span)[span_17](end_span)</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px;">
+                            <strong style="font-family: 'Montserrat'; font-size: 0.85rem;">2. Clarity Drainage[span_18](start_span)[span_18](end_span)</strong>
+                            <p style="font-size: 0.8rem; opacity: 0.9; margin: 0.4rem 0;">2 x 30 min head & neck sessions[span_19](start_span)[span_19](end_span)</p>
+                            <span style="font-family: 'Montserrat'; font-weight: 700; color: var(--gold-accent);">£70[span_20](start_span)[span_20](end_span)</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px;">
+                            <strong style="font-family: 'Montserrat'; font-size: 0.85rem;">3. Gut Mini Reset[span_21](start_span)[span_21](end_span)</strong>
+                            <p style="font-size: 0.8rem; opacity: 0.9; margin: 0.4rem 0;">10-day personalised food plan[span_22](start_span)[span_22](end_span)</p>
+                            <span style="font-family: 'Montserrat'; font-weight: 700; color: var(--gold-accent);">£80[span_23](start_span)[span_23](end_span)</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.15); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--gold-accent);">
+                            <strong style="font-family: 'Montserrat'; font-size: 0.85rem; color: var(--gold-accent);">Taster Trio Bundle[span_24](start_span)[span_24](end_span)</strong>
+                            <p style="font-size: 0.8rem; opacity: 0.9; margin: 0.4rem 0;">All three above combined (Save £25)[span_25](start_span)[span_25](end_span)</p>
+                            <span style="font-family: 'Montserrat'; font-weight: 700; color: var(--gold-accent);">£195[span_26](start_span)[span_26](end_span)</span>
+                        </div>
                     </div>
-                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Apply For Protocol</button>
                 </div>
 
-                <div class="price-card">
-                    <div>
-                        <div class="price-title">The Gut Reset</div>
-                        <div class="price-duration">21-Day Programme</div>
-                        <div class="price-amount">£297 <span>£500</span></div>
-                        <ul class="price-features">
-                            <li>60-min functional gut assessment</li>
-                            <li>Personalised 21-day protocol</li>
-                            <li>Curated supplement guidance</li>
-                        </ul>
+                <!-- Functional Medicine Pathways -->
+                <div style="background: var(--card-bg); padding: 3rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.03);">
+                    <h3 style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem;">Functional Medicine Pathways & Cleanses</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
+                        <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
+                            <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 0.3rem;">Discovery Phone Call[span_27](start_span)[span_27](end_span)</h4>
+                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.8rem;">Complimentary 20-minute consultation[span_28](start_span)[span_28](end_span).</p>
+                            <strong style="color: var(--primary-sage); font-family: 'Montserrat';">Free[span_29](start_span)[span_29](end_span)</strong>
+                        </div>
+                        <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
+                            <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 0.3rem;">Functional Consultation[span_30](start_span)[span_30](end_span)</h4>
+                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.8rem;">90-minute deep-dive clinical assessment[span_31](start_span)[span_31](end_span).</p>
+                            <strong style="color: var(--primary-sage); font-family: 'Montserrat';">£350[span_32](start_span)[span_32](end_span)</strong>
+                        </div>
+                        <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
+                            <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 0.3rem;">90-Day Programme[span_33](start_span)[span_33](end_span)</h4>
+                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.8rem;">Comprehensive root-cause recovery pathway[span_34](start_span)[span_34](end_span).</p>
+                            <strong style="color: var(--primary-sage); font-family: 'Montserrat';">£950[span_35](start_span)[span_35](end_span)</strong>
+                        </div>
+                        <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
+                            <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 0.3rem;">30-Day Kickstart Cleanse[span_36](start_span)[span_36](end_span)</h4>
+                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.8rem;">6 treatments + 20% off (excl. supplements)[span_37](start_span)[span_37](end_span).</p>
+                            <strong style="color: var(--primary-sage); font-family: 'Montserrat';">£355[span_38](start_span)[span_38](end_span)</strong>
+                        </div>
+                        <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
+                            <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 0.3rem;">Parasite Cleanse[span_39](start_span)[span_39](end_span)</h4>
+                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.8rem;">3, 5, and 10 day protocols during full moon[span_40](start_span)[span_40](end_span).</p>
+                            <strong style="color: var(--primary-sage); font-family: 'Montserrat';">£150[span_41](start_span)[span_41](end_span)</strong>
+                        </div>
+                        <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
+                            <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 0.3rem;">Functional Testing Review[span_42](start_span)[span_42](end_span)</h4>
+                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.8rem;">90-minute test result analysis session[span_43](start_span)[span_43](end_span).</p>
+                            <strong style="color: var(--primary-sage); font-family: 'Montserrat';">£350[span_44](start_span)[span_44](end_span)</strong>
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Gut Reset</button>
                 </div>
+
+                <!-- Nordic Laboratories Functional Testing Menu -->
+                <div style="background: var(--card-bg); padding: 3rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.03);">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <span style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); font-weight: 700;">Nordic Laboratories</span>
+                        <h3 style="font-size: 1.8rem; color: var(--text-main); margin-top: 0.4rem;">Advanced Functional Lab Testing[span_45](start_span)[span_45](end_span)</h3>
+                        <p style="color: #666; font-size: 0.9rem; max-width: 650px; margin: 0.5rem auto 0 auto;">Specialist functional and genetic testing reviewed collaboratively at your follow-up consultation[span_46](start_span)[span_46](end_span).</p>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; font-family: 'Montserrat', sans-serif; font-size: 0.85rem;">
+                            <thead>
+                                <tr style="background: var(--text-main); color: white; text-align: left;">
+                                    <th style="padding: 0.9rem; border-top-left-radius: 6px;">Test Name[span_47](start_span)[span_47](end_span)</th>
+                                    <th style="padding: 0.9rem;">Sample Type[span_48](start_span)[span_48](end_span)</th>
+                                    <th style="padding: 0.9rem; text-align: right; border-top-right-radius: 6px;">Price[span_49](start_span)[span_49](end_span)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Comprehensive Gut Health Test</strong>[span_50](start_span)[span_50](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Stool[span_51](start_span)[span_51](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £325.00[span_52](start_span)[span_52](end_span)</td></tr>
+                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Gut Health + Barrier Function Test</strong>[span_53](start_span)[span_53](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Stool[span_54](start_span)[span_54](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £405.00[span_55](start_span)[span_55](end_span)</td></tr>
+                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>SIBO Breath Test</strong>[span_56](start_span)[span_56](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Breath[span_57](start_span)[span_57](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £181.00[span_58](start_span)[span_58](end_span)</td></tr>
+                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Extended Stool Analysis (2-day)</strong>[span_59](start_span)[span_59](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px실; color: #666;">Stool (2 days)[span_60](start_span)[span_60](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £489.00[span_61](start_span)[span_61](end_span)</td></tr>
+                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Organic Acids Test (OAT)</strong>[span_62](start_span)[span_62](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Urine[span_63](start_span)[span_63](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £328.00[span_64](start_span)[span_64](end_span)</td></tr>
+                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Omega-3 & Vitamin D Test</strong>[span_65](start_span)[span_65](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Blood spot[span_66](start_span)[span_66](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £150.00[span_67](start_span)[span_67](end_span)</td></tr>
+                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>DUTCH Complete Hormone Test</strong>[span_68](start_span)[span_68](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Dried urine[span_69](start_span)[span_69](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £269.00[span_70](start_span)[span_70](end_span)</td></tr>
+                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Mould & Environmental Toxin Screen</strong>[span_71](start_span)[span_71](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Urine[span_72](start_span)[span_72](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">£269.00[span_73](start_span)[span_73](end_span)</td></tr>
+                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>MycoTOX Profile</strong>[span_74](start_span)[span_74](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Urine[span_75](start_span)[span_75](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">£408.00[span_76](start_span)[span_76](end_span)</td></tr>
+                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Glyphosate Test</strong>[span_77](start_span)[span_77](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Urine[span_78](start_span)[span_78](end_span)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">£156.00[span_79](start_span)[span_79](end_span)</td></tr>
+                                <tr><td style="padding: 0.8rem;"><strong>Liver Detox Profile</strong>[span_80](start_span)[span_80](end_span)</td><td style="padding: 0.8rem; color: #666;">Urine[span_81](start_span)[span_81](end_span)</td><td style="padding: 0.8rem; text-align: right; color: var(--primary-sage); font-weight: 600;">£152.00[span_82](start_span)[span_82](end_span)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p style="text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: #666; font-family: 'Montserrat';">Not sure which test is right for you? We'll agree on the right starting point during your consultation[span_83](start_span)[span_83](end_span).</p>
+                </div>
+
             </div>
         </section>
     </div>
@@ -782,7 +864,6 @@
             }
         };
 
-        // --- PWA INSTALLATION DETECTOR ---
         function checkPwaInstall() {
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
             const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
