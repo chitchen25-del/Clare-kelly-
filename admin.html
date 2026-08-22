@@ -62,13 +62,7 @@
         .panel { background: var(--card-bg); padding: 2rem; border-radius: 16px; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem; box-shadow: 0 10px 30px rgba(9, 93, 40, 0.03); }
         .panel h3 { font-size: 1.25rem; color: var(--text-main); margin-bottom: 1.2rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; font-weight: 700; }
         
-        .briefing-card { background: linear-gradient(135deg, var(--text-main), var(--primary-sage)); color: white; padding: 2.5rem 2rem; border-radius: 16px; margin-bottom: 2rem; box-shadow: 0 15px 35px rgba(9, 93, 40, 0.15); }
-        .briefing-card h2 { color: white; font-size: 2rem; margin-bottom: 0.4rem; }
-        .briefing-card p { opacity: 0.9; font-size: 1.05rem; margin: 0; }
-
-        /* =========================================================
-           BULLETPROOF CALENDAR GRID CSS (iOS SAFARI OVERRIDES)
-           ========================================================= */
+        /* CALENDAR CSS WITH GRID OVERRIDES */
         .calendar-wrapper { border: 1px solid var(--secondary-sand); border-radius: 12px; overflow: hidden; margin-bottom: 2rem; background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .calendar-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: var(--bg-color); border-bottom: 1px solid var(--secondary-sand); font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main); font-size: 1.1rem; }
         .calendar-days { display: grid !important; grid-template-columns: repeat(7, 1fr) !important; text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--primary-sage); padding: 0.8rem 0; border-bottom: 1px solid var(--secondary-sand); background: white; width: 100%; }
@@ -77,6 +71,10 @@
         .calendar-cell:nth-child(7n) { border-right: none; }
         .calendar-cell.active { background: var(--primary-sage); color: white; font-weight: 700; border-radius: 8px; margin: 2px; }
         .calendar-cell.has-appt::after { content: ''; position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: var(--gold-accent); border-radius: 50%; box-shadow: 0 0 4px rgba(16, 211, 88, 0.4); }
+
+        .briefing-card { background: linear-gradient(135deg, var(--text-main), var(--primary-sage)); color: white; padding: 2.5rem 2rem; border-radius: 16px; margin-bottom: 2rem; box-shadow: 0 15px 35px rgba(9, 93, 40, 0.15); }
+        .briefing-card h2 { color: white; font-size: 2rem; margin-bottom: 0.4rem; }
+        .briefing-card p { opacity: 0.9; font-size: 1.05rem; margin: 0; }
 
         .finance-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1.5rem; }
         .metric-card { background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 12px; text-align: center; }
@@ -176,7 +174,7 @@
             <span id="live-badge" style="font-size: 0.65rem; background: rgba(16, 211, 88, 0.1); color: var(--primary-sage); padding: 0.4rem 0.8rem; border-radius: 20px; font-family: 'Montserrat'; font-weight: 700; letter-spacing: 1px;">LIVE SYNC</span>
         </div>
 
-        <!-- SCHEDULE (WITH FIXED CALENDAR GRID) -->
+        <!-- SCHEDULE (WITH CALENDAR) -->
         <div id="view-schedule" class="app-view active-view">
             <div class="panel">
                 <div class="calendar-wrapper">
@@ -282,11 +280,9 @@
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
-        const PRACTITIONER_EMAIL = "clare@thenaturalhealingclinic.co.uk"; 
         
         let globalClients = [];
         let globalMsgs = [];
-        let bypassMode = false;
         let activeChart = null; 
 
         function getSupabase() {
@@ -303,7 +299,8 @@
                 const db = getSupabase();
                 if(db) {
                     const { data: { session } } = await db.auth.getSession();
-                    if(session && session.user.email.toLowerCase() === PRACTITIONER_EMAIL.toLowerCase()) {
+                    // If any active session exists, initialize the dashboard
+                    if(session) {
                         initDashboard();
                     }
                 }
@@ -335,11 +332,6 @@
                 const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
                 if (error) throw new Error(error.message);
                 
-                if (data.user.email.toLowerCase() !== PRACTITIONER_EMAIL.toLowerCase()) {
-                    await db.auth.signOut();
-                    throw new Error("UNAUTHORIZED: Client accounts cannot access the Practitioner EMR.");
-                }
-
                 initDashboard();
             } catch(err) {
                 alert("Login Error: " + err.message);
@@ -602,13 +594,13 @@
 
                     <!-- THE 7 WORKSTATION TABS -->
                     <div class="tab-container">
-                        <button class="tab-btn active" id="btn-timeline" onclick="switchTab('timeline')">⚡ Timeline</button>
-                        <button class="tab-btn" id="btn-overview" onclick="switchTab('overview')">Charts</button>
-                        <button class="tab-btn" id="btn-vault" onclick="switchTab('vault')">Vault</button>
+                        <button class="tab-btn active" id="btn-timeline" onclick="switchTab('timeline')">⚡ Timeline Feed</button>
+                        <button class="tab-btn" id="btn-overview" onclick="switchTab('overview')">Overview & Charts</button>
+                        <button class="tab-btn" id="btn-vault" onclick="switchTab('vault')">Labs & Docs</button>
                         <button class="tab-btn" id="btn-bodymap" onclick="switchTab('bodymap')">Body Map</button>
-                        <button class="tab-btn" id="btn-charting" onclick="switchTab('charting')">SOAP</button>
-                        <button class="tab-btn" id="btn-protocols" onclick="switchTab('protocols')">Prescribe</button>
-                        <button class="tab-btn" id="btn-logs" onclick="switchTab('logs')">Journals</button>
+                        <button class="tab-btn" id="btn-charting" onclick="switchTab('charting')">SOAP Notes</button>
+                        <button class="tab-btn" id="btn-protocols" onclick="switchTab('protocols')">Prescriber</button>
+                        <button class="tab-btn" id="btn-logs" onclick="switchTab('logs')">Daily Logs</button>
                     </div>
 
                     <!-- UNIFIED TIMELINE TAB -->
