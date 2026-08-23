@@ -151,7 +151,7 @@
             border: 1px solid var(--secondary-sand);
             margin-bottom: 0.8rem;
             display: flex;
-            gap: 1rem;
+            gap: 1.0rem;
             align-items: flex-start;
         }
 
@@ -171,17 +171,18 @@
             display: block;
         }
 
+        /* 3-LINE CENTRALIZED FOOTER */
         .flyer-footer {
             background: var(--text-main);
             color: white;
             padding: 1rem 1.5rem;
             border-radius: 8px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            gap: 0.3rem;
             font-family: 'Montserrat', sans-serif;
             margin-top: 0.8rem;
-            white-space: nowrap;
         }
         
         .flyer-footer a {
@@ -223,13 +224,9 @@
         </p>
 
         <div class="flyer-footer">
-            <div>
-                <strong style="font-size: 0.85rem; display: block; margin-bottom: 0.1rem;">The Natural Healing Clinic</strong>
-                <span style="font-size: 0.7rem; opacity: 0.85;">Union Mills & Castletown</span>
-            </div>
-            <div style="text-align: right; font-size: 0.75rem;">
-                <span>Limited Availability</span>
-            </div>
+            <strong style="font-size: 0.85rem; font-weight: 600;">The Natural Healing Clinic</strong>
+            <span style="font-size: 0.75rem; opacity: 0.9;">Limited Availability</span>
+            <span style="font-size: 0.75rem; opacity: 0.9;">Union Mills & Castletown</span>
         </div>
     </div>
 
@@ -271,13 +268,9 @@
         </div>
 
         <div class="flyer-footer">
-            <div>
-                <strong style="font-size: 0.85rem; display: block; margin-bottom: 0.1rem;">The Natural Healing Clinic</strong>
-                <span style="font-size: 0.7rem; opacity: 0.85;">Led by Clare Kelly | Isle of Man</span>
-            </div>
-            <div style="text-align: right; font-size: 0.75rem;">
-                <a href="https://nhc.co.im">nhc.co.im</a> &bull; <a href="tel:07624202121">07624 202 121</a>
-            </div>
+            <strong style="font-size: 0.85rem; font-weight: 600;">The Natural Healing Clinic</strong>
+            <span style="font-size: 0.75rem; opacity: 0.9;">Led by Clare Kelly | Isle of Man</span>
+            <span style="font-size: 0.75rem;"><a href="https://nhc.co.im">nhc.co.im</a> &bull; <a href="tel:07624202121">07624 202 121</a></span>
         </div>
     </div>
 
