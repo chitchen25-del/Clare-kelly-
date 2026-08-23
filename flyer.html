@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Migraine Awareness Month Promotion | The Natural Healing Clinic</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
     <style>
         :root {
@@ -29,6 +30,24 @@
             gap: 40px;
         }
 
+        /* FACEBOOK DOWNLOAD TOOLBAR */
+        .fb-toolbar {
+            background: white;
+            padding: 1.2rem 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--secondary-sand);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 10px 30px rgba(9, 93, 40, 0.05);
+            max-width: 750px;
+            width: 100%;
+            justify-content: space-between;
+        }
+        .fb-toolbar p { font-family: 'Montserrat'; font-size: 0.85rem; color: #555; }
+        .btn-download { background: var(--primary-sage); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 6px; font-family: 'Montserrat'; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
+        .btn-download:hover { background: var(--text-main); }
+
         .flyer-page {
             width: 100%;
             max-width: 750px;
@@ -41,8 +60,6 @@
             box-shadow: 0 20px 50px rgba(9, 93, 40, 0.08);
             border: 1px solid var(--secondary-sand);
             position: relative;
-            page-break-after: always;
-            break-after: page;
         }
 
         .flyer-header {
@@ -131,13 +148,6 @@
             padding: 1rem 0;
         }
 
-        .flyer-body h3 {
-            font-size: 1.8rem;
-            color: var(--text-main);
-            margin-bottom: 1rem;
-            font-weight: 500;
-        }
-
         .flyer-body p {
             font-family: 'Montserrat', sans-serif;
             font-size: 0.95rem;
@@ -173,6 +183,7 @@
             display: block;
         }
 
+        /* FIXED FOOTER ALIGNMENT */
         .flyer-footer {
             background: var(--text-main);
             color: white;
@@ -183,35 +194,46 @@
             align-items: center;
             font-family: 'Montserrat', sans-serif;
             margin-top: 2rem;
+            gap: 1rem;
         }
 
-        .footer-left strong {
-            font-size: 1.05rem;
-            display: block;
-            margin-bottom: 0.2rem;
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
         }
-
-        .footer-left span {
-            font-size: 0.8rem;
-            opacity: 0.85;
-        }
+        .footer-left strong { font-size: 1.05rem; margin-bottom: 0.2rem; }
+        .footer-left span { font-size: 0.8rem; opacity: 0.85; }
 
         .footer-right {
+            display: flex;
+            flex-direction: column;
             text-align: right;
             font-size: 0.85rem;
             line-height: 1.5;
+            white-space: nowrap;
         }
 
         @media print {
+            .fb-toolbar { display: none; }
             body { background: white; padding: 0; }
-            .flyer-page { box-shadow: none; border: none; width: 100%; max-width: none; min-height: 100vh; margin: 0; padding: 25mm 20mm; }
+            .flyer-page { box-shadow: none; border: none; width: 100%; max-width: none; min-height: 100vh; margin: 0; padding: 25mm 20mm; page-break-after: always; }
         }
     </style>
 </head>
 <body>
 
+    <!-- FACEBOOK IMAGE DOWNLOAD TOOLBAR -->
+    <div class="fb-toolbar">
+        <div>
+            <strong>Facebook Business Post Ready</strong>
+            <p>Click to download Page 1 as an image for Facebook.</p>
+        </div>
+        <button class="btn-download" onclick="downloadFacebookImage()">Download FB Image</button>
+    </div>
+
     <!-- ================= PAGE 1 ================= -->
-    <div class="flyer-page">
+    <div class="flyer-page" id="flyer-page-1">
         <div class="flyer-header">
             <img src="./logo.png" alt="The Natural Healing Clinic" class="flyer-logo" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'50\'><text x=\'0\' y=\'30\' font-family=\'serif\' font-size=\'20\' fill=\'%23095d28\'>The NHC</text></svg>';">
             <span class="flyer-eyebrow">UK Migraine Awareness Week Promotion (21–27 September)</span>
@@ -233,14 +255,14 @@
                 <span>Led by Clare Kelly | Isle of Man</span>
             </div>
             <div class="footer-right">
-                <span>Book online: nhc.co.im</span><br>
+                <span>nhc.co.im</span>
                 <span>Tel: 07624 202 121</span>
             </div>
         </div>
     </div>
 
     <!-- ================= PAGE 2 ================= -->
-    <div class="flyer-page">
+    <div class="flyer-page" id="flyer-page-2">
         <div class="flyer-header" style="text-align: left; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
             <span class="flyer-eyebrow" style="margin-bottom: 0.3rem;">Clinical Approach</span>
             <h1 style="font-size: 2.2rem; margin-bottom: 0;">Root-Cause Relief Tailored For You</h1>
@@ -282,11 +304,23 @@
                 <span>Union Mills & Castletown | Isle of Man</span>
             </div>
             <div class="footer-right">
-                <span>Secure your September booking today</span><br>
+                <span>Secure your booking</span>
                 <span>nhc.co.im</span>
             </div>
         </div>
     </div>
+
+    <script>
+        function downloadFacebookImage() {
+            const page1 = document.getElementById('flyer-page-1');
+            html2canvas(page1, { scale: 2, useCORS: true }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'migraine-promo-facebook.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
 
 </body>
 </html>
