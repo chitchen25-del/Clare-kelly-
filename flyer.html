@@ -48,67 +48,68 @@
 
         .flyer-header {
             text-align: center;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
         }
 
         .flyer-logo {
-            height: 55px;
+            height: 50px;
             object-fit: contain;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.6rem;
             display: inline-block;
         }
 
         .flyer-eyebrow {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: var(--primary-sage);
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             display: block;
         }
 
         .flyer-header h1 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             color: var(--text-main);
             font-weight: 400;
-            line-height: 1.2;
-            margin-bottom: 0.8rem;
+            line-height: 1.15;
+            margin-bottom: 0.6rem;
         }
 
         .top-contact-banner {
             background: var(--text-main);
             color: white;
-            padding: 0.9rem 1.2rem;
+            padding: 0.8rem 1.2rem;
             border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-family: 'Montserrat', sans-serif;
-            margin-bottom: 1.2rem;
-            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
             white-space: nowrap;
         }
+        .top-contact-banner a { color: white !important; text-decoration: none; }
         .top-contact-banner strong { color: var(--gold-accent); letter-spacing: 0.5px; }
 
         .flyer-hero-image {
             position: relative;
-            height: 250px;
+            height: 240px;
             background: linear-gradient(rgba(9, 93, 40, 0.4), rgba(9, 93, 40, 0.6)), url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
         }
 
         .discount-badge {
             background: rgba(255, 255, 255, 0.96);
             backdrop-filter: blur(10px);
-            padding: 1.2rem 2rem;
+            padding: 1rem 1.8rem;
             border-radius: 10px;
             border: 1px solid var(--gold-accent);
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
@@ -116,7 +117,7 @@
 
         .discount-badge span {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             color: var(--text-main);
@@ -126,7 +127,7 @@
         }
 
         .discount-badge h2 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             color: var(--primary-sage);
             font-weight: 600;
             line-height: 1;
@@ -135,28 +136,28 @@
 
         .flyer-body-intro {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #555;
             text-align: center;
             line-height: 1.5;
-            max-width: 520px;
+            max-width: 500px;
             margin: 0 auto;
         }
 
         .highlight-box {
             background: var(--bg-color);
-            padding: 1.2rem 1.5rem;
+            padding: 1rem 1.2rem;
             border-radius: 8px;
             border: 1px solid var(--secondary-sand);
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             display: flex;
-            gap: 1.2rem;
+            gap: 1rem;
             align-items: flex-start;
         }
 
         .highlight-box strong {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-main);
             display: block;
             margin-bottom: 0.2rem;
@@ -164,7 +165,7 @@
 
         .highlight-box span {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #666;
             line-height: 1.4;
             display: block;
@@ -173,18 +174,18 @@
         .flyer-footer {
             background: var(--text-main);
             color: white;
-            padding: 1.2rem 1.8rem;
+            padding: 1rem 1.5rem;
             border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-family: 'Montserrat', sans-serif;
-            margin-top: 1rem;
+            margin-top: 0.8rem;
             white-space: nowrap;
         }
         
         .flyer-footer a {
-            color: white;
+            color: white !important;
             text-decoration: none;
         }
 
@@ -204,8 +205,8 @@
             <h1>Find Relief From Chronic Headaches & Migraines</h1>
             
             <div class="top-contact-banner">
-                <div><strong>Book Online:</strong> nhc.co.im</div>
-                <div><strong>Tel:</strong> 07624 202 121</div>
+                <div><strong>Book Online:</strong> <a href="https://nhc.co.im">nhc.co.im</a></div>
+                <div><strong>Tel:</strong> <a href="tel:07624202121">07624 202 121</a></div>
             </div>
         </div>
 
@@ -213,7 +214,7 @@
             <div class="discount-badge">
                 <span>Special September Offer</span>
                 <h2>15% OFF</h2>
-                <span style="font-size: 0.7rem; margin-top: 0.3rem; color: #444; font-weight: 600;">All Migraine-Associated Bookings Throughout September</span>
+                <span style="font-size: 0.65rem; margin-top: 0.2rem; color: #444; font-weight: 600;">All Migraine-Associated Bookings Throughout September</span>
             </div>
         </div>
 
@@ -223,7 +224,7 @@
 
         <div class="flyer-footer">
             <div>
-                <strong style="font-size: 0.9rem; display: block; margin-bottom: 0.1rem;">The Natural Healing Clinic</strong>
+                <strong style="font-size: 0.85rem; display: block; margin-bottom: 0.1rem;">The Natural Healing Clinic</strong>
                 <span style="font-size: 0.7rem; opacity: 0.85;">Union Mills & Castletown</span>
             </div>
             <div style="text-align: right; font-size: 0.75rem;">
@@ -234,18 +235,18 @@
 
     <!-- ================= PAGE 2 ================= -->
     <div class="flyer-page">
-        <div class="flyer-header" style="text-align: left; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem; margin-bottom: 1rem;">
+        <div class="flyer-header" style="text-align: left; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem; margin-bottom: 0.8rem;">
             <span class="flyer-eyebrow" style="margin-bottom: 0.2rem;">Clinical Approach</span>
-            <h1 style="font-size: 2rem; margin-bottom: 0;">Root-Cause Relief Tailored For You</h1>
+            <h1 style="font-size: 1.8rem; margin-bottom: 0;">Root-Cause Relief Tailored For You</h1>
         </div>
 
         <div style="text-align: left;">
-            <p style="font-family: 'Montserrat', sans-serif; font-size: 0.9rem; color: #555; line-height: 1.6; margin-bottom: 1.2rem;">
+            <p style="font-family: 'Montserrat', sans-serif; font-size: 0.85rem; color: #555; line-height: 1.5; margin-bottom: 1rem;">
                 Migraines are frequently driven by deep-seated muscular tension, cranial restriction, and nervous system overload. Our specialized clinical sessions focus on releasing tight fascial patterns in the neck, shoulders, and jaw to restore vital balance.
             </p>
 
             <div class="highlight-box">
-                <div style="font-family: 'Cormorant Garamond'; font-size: 1.8rem; color: var(--primary-sage); line-height: 1; min-width: 25px;">01</div>
+                <div style="font-family: 'Cormorant Garamond'; font-size: 1.6rem; color: var(--primary-sage); line-height: 1; min-width: 25px;">01</div>
                 <div>
                     <strong>Neck & Jaw Release</strong>
                     <span>Eases restrictions at the base of the skull and TMJ where many debilitating headaches and migraines originate.</span>
@@ -253,7 +254,7 @@
             </div>
 
             <div class="highlight-box">
-                <div style="font-family: 'Cormorant Garamond'; font-size: 1.8rem; color: var(--primary-sage); line-height: 1; min-width: 25px;">02</div>
+                <div style="font-family: 'Cormorant Garamond'; font-size: 1.6rem; color: var(--primary-sage); line-height: 1; min-width: 25px;">02</div>
                 <div>
                     <strong>Nervous System Reset</strong>
                     <span>Calms the sympathetic nervous system, shifting your body out of chronic fight-or-flight and reducing stress triggers.</span>
@@ -261,7 +262,7 @@
             </div>
 
             <div class="highlight-box">
-                <div style="font-family: 'Cormorant Garamond'; font-size: 1.8rem; color: var(--primary-sage); line-height: 1; min-width: 25px;">03</div>
+                <div style="font-family: 'Cormorant Garamond'; font-size: 1.6rem; color: var(--primary-sage); line-height: 1; min-width: 25px;">03</div>
                 <div>
                     <strong>Evidence-Informed Recovery</strong>
                     <span>Designed to deliver quick, realistic, and lasting results so you can get back to living without pain.</span>
@@ -271,7 +272,7 @@
 
         <div class="flyer-footer">
             <div>
-                <strong style="font-size: 0.9rem; display: block; margin-bottom: 0.1rem;">The Natural Healing Clinic</strong>
+                <strong style="font-size: 0.85rem; display: block; margin-bottom: 0.1rem;">The Natural Healing Clinic</strong>
                 <span style="font-size: 0.7rem; opacity: 0.85;">Led by Clare Kelly | Isle of Man</span>
             </div>
             <div style="text-align: right; font-size: 0.75rem;">
