@@ -21,29 +21,6 @@ window.toggleAccordion = function(id) {
     btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
 }
 
-// Clean 12-hour time formatter (e.g. 14:00 -> 2:00 pm)
-window.formatCleanTime = function(timeString) {
-    if (!timeString) return '';
-    let timePart = timeString;
-    if (timeString.includes('T')) {
-        timePart = timeString.split('T')[1].substring(0, 5);
-    }
-    const [hourStr, minuteStr] = timePart.split(':');
-    let hour = parseInt(hourStr, 10);
-    const ampm = hour >= 12 ? 'pm' : 'am';
-    hour = hour % 12;
-    hour = hour ? hour; 
-    return `${hour}:${minuteStr} ${ampm}`;
-};
-
-window.formatCleanDateTime = function(isoString) {
-    if (!isoString) return '';
-    const dateObj = new Date(isoString);
-    const datePart = dateObj.toLocaleDateString('en-GB', { dateStyle: 'full' });
-    const timePart = window.formatCleanTime(isoString);
-    return `${datePart} at ${timePart}`;
-};
-
 const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
 
@@ -115,7 +92,7 @@ window.processRegistration = async function(e) {
                 await db.from('client_tiers').insert([{ client_id: authData.user.id, is_premium: false }]);
             }
 
-            const formattedDate = window.formatCleanDateTime(date);
+            const formattedDate = new Date(date).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' });
             await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
 
             await db.rpc('send_booking_email', {
@@ -144,7 +121,7 @@ window.bookNewSession = async function(e) {
         const serviceName = document.getElementById('portal-service').value;
         const appointmentTime = document.getElementById('portal-date').value;
         const clientName = user.user_metadata?.full_name || user.email;
-        const formattedDate = window.formatCleanDateTime(appointmentTime);
+        const formattedDate = new Date(appointmentTime).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' });
 
         const isFunctional = serviceName.includes('Functional') || serviceName.includes('Gut Reset') || serviceName.includes('Health Audit');
         let vipCode = null;
@@ -199,13 +176,9 @@ window.unlockVipApp = async function(e) {
     try {
         const db = getSupabase();
         const { data: { user } } = await db.auth.getUser();
-        if(!user) throw new Error("You must be logged in to unlock the app.");
-
         const enteredCode = document.getElementById('vip-code-input').value.trim().toUpperCase();
 
-        const { data: tier, error } = await db.from('client_tiers').select('*').eq('client_id', user.id).single();
-        if(error) throw new Error("Could not verify client tier.");
-
+        const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).single();
         if(tier && tier.unlock_code === enteredCode) {
             await db.from('client_tiers').update({ is_premium: true }).eq('client_id', user.id);
             alert("VIP App Unlocked Successfully!");
@@ -213,9 +186,7 @@ window.unlockVipApp = async function(e) {
         } else {
             alert("Invalid unlock code. Please check your confirmation email.");
         }
-    } catch(err) { 
-        alert("Error unlocking: " + err.message); 
-    }
+    } catch(err) { alert("Error unlocking: " + err.message); }
     return false;
 };
 
@@ -241,7 +212,7 @@ async function loadClientDashboard(db, user) {
 
         list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => `
             <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); background: white;">
-                <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${window.formatCleanDateTime(a.appointment_time)}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
+                <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${new Date(a.appointment_time).toLocaleString('en-GB')}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
                 <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
                     <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; flex: 1;" onclick="rescheduleAppointment('${a.id}')">Reschedule</button>
                     <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; color: #a94442; border-color: #a94442; flex: 1;" onclick="cancelAppointment('${a.id}')">Cancel</button>
@@ -273,15 +244,6 @@ window.startBarcodeScanner = function() {
 
 window.updateDailyTotals = function() {};
 
-window.triggerPwaInstall = function() {
-    const overlay = document.getElementById('pwa-install-overlay');
-    if(overlay) {
-        overlay.style.display = 'flex';
-    } else {
-        alert("To install, tap your browser menu (three dots or share icon) and select 'Add to Home Screen'.");
-    }
-}
-
 window.closePwaOverlay = function() {
     const overlay = document.getElementById('pwa-install-overlay');
     if(overlay) overlay.style.display = 'none';
@@ -302,4 +264,44 @@ function updateNavState(isLoggedIn) {
     document.getElementById('mobile-portal-link').style.display = isLoggedIn ? 'none' : 'block';
     document.getElementById('mobile-book-link').style.display = isLoggedIn ? 'none' : 'block';
     document.getElementById('mobile-logout-link').style.display = isLoggedIn ? 'block' : 'none';
+}
+// 1. Handle VIP Code Verification & App Unlock
+window.unlockVipApp = async function(e) {
+    e.preventDefault();
+    try {
+        const db = getSupabase();
+        const { data: { user } } = await db.auth.getUser();
+        if(!user) throw new Error("You must be logged in to unlock the app.");
+
+        const enteredCode = document.getElementById('vip-code-input').value.trim().toUpperCase();
+
+        const { data: tier, error } = await db.from('client_tiers').select('*').eq('client_id', user.id).single();
+        if(error) throw new Error("Could not verify client tier.");
+
+        if(tier && tier.unlock_code === enteredCode) {
+            await db.from('client_tiers').update({ is_premium: true }).eq('client_id', user.id);
+            alert("VIP App Unlocked Successfully!");
+            loadClientDashboard(db, user);
+        } else {
+            alert("Invalid unlock code. Please check your confirmation email.");
+        }
+    } catch(err) { 
+        alert("Error unlocking: " + err.message); 
+    }
+    return false;
+};
+
+// 2. Trigger PWA Native App Install Prompt / Overlay
+window.triggerPwaInstall = function() {
+    const overlay = document.getElementById('pwa-install-overlay');
+    if(overlay) {
+        overlay.style.display = 'flex';
+    } else {
+        alert("To install, tap your browser menu (three dots or share icon) and select 'Add to Home Screen'.");
+    }
+}
+
+window.closePwaOverlay = function() {
+    const overlay = document.getElementById('pwa-install-overlay');
+    if(overlay) overlay.style.display = 'none';
 }
