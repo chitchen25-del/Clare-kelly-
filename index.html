@@ -504,7 +504,7 @@
         <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Food Diary</h3>
         
         <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-            <input type="text" id="food-search-input" placeholder="Search food (e.g., chicken, oats, eggs)..." style="flex: 1; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #fafafa;">
+            <input type="text" id="food-search-input" placeholder="Search food (e.g., chicken, oats, eggs)..." style="flex: 1; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #fafafa;" onkeydown="if(event.key === 'Enter') searchCleanFood()">
             <button class="btn" style="background: #333; color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="searchCleanFood()">🔍</button>
             <button class="btn" style="background: var(--primary-green, #1B4332); color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="forceBarcodeScanner()">📷</button>
         </div>
@@ -619,7 +619,7 @@
         <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 1.2rem; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);" onclick="submitDailyLog(event)">SAVE DAILY METRICS</button>
     </div>
 
-    <!-- EMBEDDED JAVASCRIPT: Clean, Error-Free Food Engine -->
+    <!-- EMBEDDED JAVASCRIPT: Infinite Reset Engine -->
     <script>
         if (typeof dailyTotals === 'undefined') {
             var dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
@@ -693,10 +693,9 @@
             updateDashboardTotals();
             renderMealUI(meal);
             
-            const resultsDiv = document.getElementById('food-results');
-            if(resultsDiv) {
-                resultsDiv.innerHTML = `<p style="color: green; text-align: center; font-weight: bold;">Successfully added ${name} to ${meal}!</p>`;
-            }
+            // Reset search input and results so user can search again immediately
+            document.getElementById('food-search-input').value = '';
+            document.getElementById('food-results').innerHTML = `<p style="color: green; text-align: center; font-weight: bold;">Successfully added ${name} to ${meal}!</p>`;
         };
 
         window.removeFoodItem = function(meal, index) {
@@ -743,10 +742,11 @@
                 return;
             }
 
+            // If container is open, cleanly stop and close it
             if (container.style.display === 'block') {
                 if (activeHtml5QrCode) {
-                    await activeHtml5QrCode.stop().catch(() => {});
-                    activeHtml5QrCode.clear();
+                    try { await activeHtml5QrCode.stop(); } catch(e) {}
+                    try { activeHtml5QrCode.clear(); } catch(e) {}
                 }
                 container.style.display = 'none';
                 return;
@@ -762,8 +762,11 @@
                     { facingMode: "environment" },
                     { fps: 15, qrbox: { width: 250, height: 150 } },
                     async (decodedText) => {
-                        await activeHtml5QrCode.stop().catch(() => {});
-                        activeHtml5QrCode.clear();
+                        // Fully stop scanner instance on successful read
+                        if (activeHtml5QrCode) {
+                            try { await activeHtml5QrCode.stop(); } catch(e) {}
+                            try { activeHtml5QrCode.clear(); } catch(e) {}
+                        }
                         container.style.display = 'none';
                         
                         let item = { name: "Cherry Bakewell Tart (1 tart)", cals: 190, pro: 2, fat: 8, carb: 27, fib: 1 };
@@ -788,6 +791,7 @@
         };
     </script>
 </div>
+
 
 
 
