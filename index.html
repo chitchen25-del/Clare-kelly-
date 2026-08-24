@@ -453,7 +453,7 @@
                 </div>
 
                 <!-- DEDICATED VIP APP LAUNCHPAD (Shown when Unlocked) -->
-               <div id="premium-app-container" style="display: none; margin-top: 1.5rem;">
+              <div id="premium-app-container" style="display: none; margin-top: 1.5rem; padding-bottom: 2rem;">
     
     <!-- CARD 1: THE LOBBY BOUNCER (Only shows in Safari) -->
     <div class="dash-card pwa-install-card" style="background: var(--primary-green, #1B4332); color: white; padding: 2rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
@@ -462,60 +462,174 @@
         <button class="btn" style="background: white; color: var(--primary-green, #1B4332); width: 100%; font-weight: bold; border: none; padding: 1rem; border-radius: 8px; font-size: 0.95rem;" onclick="triggerPwaInstall()">INSTALL APP TO UNLOCK</button>
     </div>
 
-    <!-- CARD 2: DAILY HABIT DASHBOARD (App Mode Only) -->
+    <!-- CARD 2: MACRO & HYDRATION DASHBOARD -->
     <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1rem;">
-        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Daily Targets</h3>
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Daily Nutrition</h3>
+        
+        <!-- Running Macro Totals -->
+        <div style="display: flex; justify-content: space-between; text-align: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
+                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Cals</span>
+                <strong style="display: block; font-size: 1.1rem; color: #333;">0</strong>
+            </div>
+            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
+                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Pro</span>
+                <strong style="display: block; font-size: 1.1rem; color: #d9534f;">0g</strong>
+            </div>
+            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
+                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Fat</span>
+                <strong style="display: block; font-size: 1.1rem; color: #f0ad4e;">0g</strong>
+            </div>
+            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
+                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Carb</span>
+                <strong style="display: block; font-size: 1.1rem; color: #5bc0de;">0g</strong>
+            </div>
+            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
+                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Fib</span>
+                <strong style="display: block; font-size: 1.1rem; color: #5cb85c;">0g</strong>
+            </div>
+        </div>
+
+        <!-- Water Tracker -->
+        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Water Intake (Liters)</label>
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <button style="flex: 1; padding: 0.8rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px; color: #0056b3; font-weight: bold;">+ 250ml</button>
+            <button style="flex: 1; padding: 0.8rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px; color: #0056b3; font-weight: bold;">+ 500ml</button>
+        </div>
+        <div style="background: #eee; height: 10px; border-radius: 5px; overflow: hidden; margin-bottom: 1rem;">
+            <div style="background: #5bc0de; width: 0%; height: 100%;"></div>
+        </div>
+    </div>
+
+    <!-- CARD 3: FOOD LOGGING & SCANNER -->
+    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Food Diary</h3>
+        
+        <!-- Search & Scanner UI -->
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+            <input type="text" id="food-search-input" placeholder="Search database..." style="flex: 1; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #fafafa;">
+            <button class="btn" style="background: #333; color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="searchFood()">🔍</button>
+            <button class="btn" style="background: var(--primary-green, #1B4332); color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="startBarcodeScanner()">📷</button>
+        </div>
+        
+        <div id="barcode-reader" style="width: 100%; display: none; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; border: 1px solid #ddd;"></div>
+        <div id="food-results" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: #555;"></div>
+
+        <!-- Meal Categories -->
+        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: #444;">Breakfast</strong>
+                <span style="font-size: 0.85rem; color: #888;">0 kcal</span>
+            </div>
+            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: #444;">Lunch</strong>
+                <span style="font-size: 0.85rem; color: #888;">0 kcal</span>
+            </div>
+            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: #444;">Dinner</strong>
+                <span style="font-size: 0.85rem; color: #888;">0 kcal</span>
+            </div>
+            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: #444;">Snacks</strong>
+                <span style="font-size: 0.85rem; color: #888;">0 kcal</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARD 4: LIFESTYLE & BODY METRICS -->
+    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Lifestyle Metrics</h3>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-            <!-- Water Tracker -->
-            <div style="background: #eef7ff; padding: 1.2rem 1rem; border-radius: 10px; text-align: center; border: 1px solid #cce5ff;">
-                <span style="font-size: 1.8rem; display: block; margin-bottom: 0.3rem;">💧</span>
-                <strong style="font-size: 1.3rem; color: #0056b3; font-family: 'Montserrat', sans-serif;">0 / 3L</strong>
-                <p style="font-size: 0.75rem; color: #555; margin: 0; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Water</p>
+            <!-- Steps -->
+            <div>
+                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Steps</label>
+                <input type="number" placeholder="e.g. 8500" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
             </div>
-            <!-- Steps/Movement Tracker -->
-            <div style="background: #f0f9f0; padding: 1.2rem 1rem; border-radius: 10px; text-align: center; border: 1px solid #c3e6c3;">
-                <span style="font-size: 1.8rem; display: block; margin-bottom: 0.3rem;">👟</span>
-                <strong style="font-size: 1.3rem; color: #2d5a2d; font-family: 'Montserrat', sans-serif;">0 / 10k</strong>
-                <p style="font-size: 0.75rem; color: #555; margin: 0; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Steps</p>
+            <!-- Weight -->
+            <div>
+                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Weight (kg/lbs)</label>
+                <input type="number" placeholder="e.g. 70.5" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
+            </div>
+            <!-- Sleep -->
+            <div>
+                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Sleep (Hours)</label>
+                <input type="number" step="0.5" placeholder="e.g. 7.5" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
+            </div>
+            <!-- Mood -->
+            <div>
+                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Mood</label>
+                <select style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; background: white;">
+                    <option value="">Select...</option>
+                    <option value="great">😁 Great</option>
+                    <option value="good">🙂 Good</option>
+                    <option value="okay">😐 Okay</option>
+                    <option value="low">😔 Low</option>
+                    <option value="stressed">😫 Stressed</option>
+                </select>
             </div>
         </div>
-        
-        <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 0.9rem; border-radius: 8px; border: none; font-weight: bold; letter-spacing: 0.5px;" onclick="updateDailyTotals()">LOG HABITS</button>
+
+        <!-- Medication Tracker -->
+        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Daily Protocol / Supplements</label>
+        <div style="background: #fafafa; padding: 1rem; border: 1px solid #eee; border-radius: 8px; display: flex; flex-direction: column; gap: 0.8rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; color: #333;">
+                <input type="checkbox" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-green, #1B4332);"> AM Protocol Complete
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; color: #333;">
+                <input type="checkbox" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-green, #1B4332);"> PM Protocol Complete
+            </label>
+        </div>
     </div>
 
-    <!-- CARD 3: CLINICAL HEALTH JOURNAL (App Mode Only) -->
+    <!-- CARD 5: GUT HEALTH & BRISTOL STOOL CHART -->
     <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
-        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Health Journal</h3>
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Gut Health</h3>
         
-        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Gut Comfort (1-10)</label>
-        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
-            <span style="font-size: 0.8rem; color: #888;">Poor</span>
-            <input type="range" min="1" max="10" value="5" style="flex: 1; accent-color: var(--primary-green, #1B4332);">
-            <span style="font-size: 0.8rem; color: #888;">Great</span>
+        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Bristol Stool Scale</label>
+        <select style="width: 100%; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; font-size: 0.95rem; background: white;">
+            <option value="">Select B.M. Type...</option>
+            <option value="1">Type 1 - Separate hard lumps</option>
+            <option value="2">Type 2 - Sausage-shaped, lumpy</option>
+            <option value="3">Type 3 - Sausage with cracks</option>
+            <option value="4">Type 4 - Smooth, soft sausage (Ideal)</option>
+            <option value="5">Type 5 - Soft blobs, clear edges</option>
+            <option value="6">Type 6 - Fluffy pieces, mushy</option>
+            <option value="7">Type 7 - Watery, no solid pieces</option>
+        </select>
+
+        <!-- Built-in Visual Reference Guide -->
+        <div style="background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 1rem;">
+            <p style="font-size: 0.75rem; text-align: center; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 0; margin-bottom: 0.8rem; font-weight: bold;">Visual Reference Guide</p>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 0.6rem; font-size: 0.85rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #8b5a2b; width: 12px; height: 12px; border-radius: 50%;"></span> <strong>Type 1-2:</strong> Constipation (Hard/Lumpy)</div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #a0522d; width: 12px; height: 12px; border-radius: 4px;"></span> <strong>Type 3-4:</strong> Ideal/Normal (Smooth sausage)</div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #cd853f; width: 12px; height: 4px; border-radius: 2px;"></span> <strong>Type 5-7:</strong> Diarrhea (Mushy/Liquid)</div>
+            </div>
         </div>
-        
-        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Symptoms & Notes</label>
-        <textarea placeholder="Log any bloating, fatigue, or flare-ups..." style="width: 100%; padding: 1rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; min-height: 100px; font-family: inherit; font-size: 0.95rem; box-sizing: border-box; background: #fafafa;"></textarea>
-        
-        <button class="btn" style="width: 100%; border: 2px solid var(--primary-green, #1B4332); background: transparent; color: var(--primary-green, #1B4332); padding: 0.9rem; border-radius: 8px; font-weight: bold; letter-spacing: 0.5px;" onclick="submitDailyLog(event)">SAVE ENTRY</button>
     </div>
 
-    <!-- CARD 4: SECURE CLINICAL CHAT (App Mode Only) -->
-    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem; margin-bottom: 2rem;">
+    <!-- SAVE BUTTON FOR ALL METRICS -->
+    <div style="margin-top: 1.5rem;">
+        <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 1.2rem; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);" onclick="submitDailyLog(event)">SAVE DAILY METRICS</button>
+    </div>
+
+    <!-- CARD 6: SECURE CLINICAL CHAT -->
+    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 2rem;">
         <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Message Clare</h3>
         
-        <div style="background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 1rem; height: 200px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; overflow-y: auto;">
+        <div style="background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 1rem; height: 180px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; overflow-y: auto;">
             <p style="color: #aaa; font-style: italic; font-size: 0.9rem; text-align: center;">End-to-end encrypted.<br>No messages yet.</p>
         </div>
         
         <div style="display: flex; gap: 0.5rem;">
             <input id="client-msg-input" type="text" placeholder="Type a message..." style="flex: 1; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #fafafa;">
-            <button class="btn" style="background: var(--primary-green, #1B4332); color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="handleClientMessage(event)">SEND</button>
+            <button class="btn" style="background: #333; color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="handleClientMessage(event)">SEND</button>
         </div>
     </div>
 
 </div>
+
 
 
                     <!-- SECURE CLINICAL CHAT (Stacked Directly Underneath) -->
