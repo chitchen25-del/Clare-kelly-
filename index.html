@@ -619,44 +619,80 @@
         <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 1.2rem; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);" onclick="submitDailyLog(event)">SAVE DAILY METRICS</button>
     </div>
 
-    <!-- EMBEDDED JAVASCRIPT: Fully Functional Food Logging & Calculations -->
+    <!-- EMBEDDED JAVASCRIPT: Portion Scaling & Smart Logging Engine -->
     <script>
         let dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
         let mealData = { breakfast: [], lunch: [], dinner: [], snacks: [] };
 
-        window.logFoodItem = function(name, cals, pro, fat, carb, fib) {
-            const meal = prompt("Log to which meal?\nType: breakfast, lunch, dinner, or snacks").toLowerCase().trim();
-            if(!mealData[meal]) {
-                alert("Invalid meal category. Please type: breakfast, lunch, dinner, or snacks");
-                return;
-            }
-
-            mealData[meal].push({ name, cals, pro, fat, carb, fib });
-            
-            // Update Totals
-            dailyTotals.cals += cals;
-            dailyTotals.pro += pro;
-            dailyTotals.fat += fat;
-            dailyTotals.carb += carb;
-            dailyTotals.fib += fib;
-
-            // Render UI updates
-            document.getElementById('total-cals').innerText = Math.round(dailyTotals.cals);
-            document.getElementById('total-pro').innerText = Math.round(dailyTotals.pro) + 'g';
-            document.getElementById('total-fat').innerText = Math.round(dailyTotals.fat) + 'g';
-            document.getElementById('total-carb').innerText = Math.round(dailyTotals.carb) + 'g';
-            document.getElementById('total-fib').innerText = Math.round(dailyTotals.fib) + 'g';
-
-            // Render Meal list
+        window.renderMealUI = function(meal) {
             const container = document.getElementById(`${meal}-items`);
             const kcalSpan = document.getElementById(`${meal}-kcal`);
             
             const totalMealCals = mealData[meal].reduce((sum, item) => sum + item.cals, 0);
             kcalSpan.innerText = Math.round(totalMealCals) + ' kcal';
             
-            container.innerHTML = mealData[meal].map(i => `<div>• ${i.name} (${Math.round(i.cals)} kcal)</div>`).join('');
+            if (mealData[meal].length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = mealData[meal].map((i, index) => `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px dashed #eee;">
+                    <span>• ${i.name} (${Math.round(i.cals)} kcal)</span>
+                    <button style="background: #a94442; color: white; border: none; border-radius: 4px; padding: 0.2rem 0.5rem; font-size: 0.75rem; font-weight: bold; cursor: pointer;" onclick="removeFoodItem('${meal}', ${index})">×</button>
+                </div>
+            `).join('');
+        };
+
+        window.updateDashboardTotals = function() {
+            dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
+            ['breakfast', 'lunch', 'dinner', 'snacks'].forEach(meal => {
+                mealData[meal].forEach(i => {
+                    dailyTotals.cals += i.cals;
+                    dailyTotals.pro += i.pro;
+                    dailyTotals.fat += i.fat;
+                    dailyTotals.carb += i.carb;
+                    dailyTotals.fib += i.fib;
+                });
+            });
+
+            document.getElementById('total-cals').innerText = Math.round(dailyTotals.cals);
+            document.getElementById('total-pro').innerText = Math.round(dailyTotals.pro) + 'g';
+            document.getElementById('total-fat').innerText = Math.round(dailyTotals.fat) + 'g';
+            document.getElementById('total-carb').innerText = Math.round(dailyTotals.carb) + 'g';
+            document.getElementById('total-fib').innerText = Math.round(dailyTotals.fib) + 'g';
+        };
+
+        window.logFoodItem = function(name, baseCals, basePro, baseFat, baseCarb, baseFib) {
+            const multiplierInput = prompt(`Enter portion multiplier (e.g. 0.16 for 1 out of 6 tarts, or grams):\nDefault is 1 (entire package/base amount)`, "1");
+            if(multiplierInput === null) return;
+            
+            const multiplier = parseFloat(multiplierInput) || 1;
+
+            const meal = prompt("Log to which meal?\nType: breakfast, lunch, dinner, or snacks").toLowerCase().trim();
+            if(!mealData[meal]) {
+                alert("Invalid meal category. Please type: breakfast, lunch, dinner, or snacks");
+                return;
+            }
+
+            const cals = baseCals * multiplier;
+            const pro = basePro * multiplier;
+            const fat = baseFat * multiplier;
+            const carb = baseCarb * multiplier;
+            const fib = baseFib * multiplier;
+
+            mealData[meal].push({ name: `${name} (x${multiplier})`, cals, pro, fat, carb, fib });
+            
+            updateDashboardTotals();
+            renderMealUI(meal);
             
             document.getElementById('food-results').innerHTML = `<p style="color: green; text-align: center; font-weight: bold;">Successfully added ${name} to ${meal}!</p>`;
+        };
+
+        window.removeFoodItem = function(meal, index) {
+            mealData[meal].splice(index, 1);
+            updateDashboardTotals();
+            renderMealUI(meal);
         };
 
         window.forceSearchFood = async function() {
@@ -767,6 +803,7 @@
         };
     </script>
 </div>
+
 
 
 
