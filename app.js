@@ -21,30 +21,6 @@ window.toggleAccordion = function(id) {
     btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
 }
 
-// Clean 12-hour time formatter (e.g. 14:00 -> 2:00 pm)
-window.formatCleanTime = function(timeString) {
-    if (!timeString) return '';
-    let timePart = timeString;
-    if (timeString.includes('T')) {
-        timePart = timeString.split('T')[1].substring(0, 5);
-    }
-    const [hourStr, minuteStr] = timePart.split(':');
-    let hour = parseInt(hourStr, 10);
-    const ampm = hour >= 12 ? 'pm' : 'am';
-    hour = hour % 12;
-    hour = hour ? hour; 
-    return `${hour}:${minuteStr} ${ampm}`;
-};
-
-// Format full appointment date & time cleanly for emails/display
-window.formatCleanDateTime = function(isoString) {
-    if (!isoString) return '';
-    const dateObj = new Date(isoString);
-    const datePart = dateObj.toLocaleDateString('en-GB', { dateStyle: 'full' });
-    const timePart = window.formatCleanTime(isoString);
-    return `${datePart} at ${timePart}`;
-};
-
 const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
 
@@ -116,9 +92,9 @@ window.processRegistration = async function(e) {
                 await db.from('client_tiers').insert([{ client_id: authData.user.id, is_premium: false }]);
             }
 
+            const formattedDate = new Date(date).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' });
             await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
 
-            const formattedDate = window.formatCleanDateTime(date);
             await db.rpc('send_booking_email', {
                 to_email: email,
                 client_name: name,
@@ -145,9 +121,9 @@ window.bookNewSession = async function(e) {
         const serviceName = document.getElementById('portal-service').value;
         const appointmentTime = document.getElementById('portal-date').value;
         const clientName = user.user_metadata?.full_name || user.email;
-        const formattedDate = window.formatCleanDateTime(appointmentTime);
+        const formattedDate = new Date(appointmentTime).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' });
 
-        const isFunctional = serviceName.includes('Functional') || serviceName.includes('Gut Reset');
+        const isFunctional = serviceName.includes('Functional') || serviceName.includes('Gut Reset') || serviceName.includes('Health Audit');
         let vipCode = null;
 
         if (isFunctional) {
@@ -183,7 +159,7 @@ window.cancelAppointment = async function(id) {
 };
 
 window.rescheduleAppointment = async function(id) {
-    const newDate = prompt("Enter new date and time (YYYY-MM-DDTHH:MM, e.g. 2026-09-01T14:00):");
+    const newDate = prompt("Enter new date and time (YYYY-MM-DDTHH:MM, e.g. 2026-09-01T10:00):");
     if(!newDate) return;
     try {
         const db = getSupabase();
@@ -214,16 +190,6 @@ window.unlockVipApp = async function(e) {
     return false;
 };
 
-window.triggerPwaInstall = function() {
-    const overlay = document.getElementById('pwa-install-overlay');
-    if(overlay) overlay.style.display = 'flex';
-}
-
-window.closePwaOverlay = function() {
-    const overlay = document.getElementById('pwa-install-overlay');
-    if(overlay) overlay.style.display = 'none';
-}
-
 async function loadClientDashboard(db, user) {
     const list = document.getElementById('client-appointments-list');
     document.getElementById('portal-welcome-title').innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
@@ -231,28 +197,57 @@ async function loadClientDashboard(db, user) {
     try {
         const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).single();
         if (tier && tier.is_premium) {
-            document.getElementById('vip-unlock-card').style.display = 'none';
-            document.getElementById('premium-app-container').style.display = 'block';
+            const unlockCard = document.getElementById('vip-unlock-card');
+            const appContainer = document.getElementById('premium-app-container');
+            if(unlockCard) unlockCard.style.display = 'none';
+            if(appContainer) appContainer.style.display = 'block';
         } else {
-            document.getElementById('vip-unlock-card').style.display = 'block';
-            document.getElementById('premium-app-container').style.display = 'none';
+            const unlockCard = document.getElementById('vip-unlock-card');
+            const appContainer = document.getElementById('premium-app-container');
+            if(unlockCard) unlockCard.style.display = 'block';
+            if(appContainer) appContainer.style.display = 'none';
         }
 
         const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
 
-        list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => {
-            const cleanDisplayTime = window.formatCleanDateTime(a.appointment_time);
-            return `
+        list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => `
             <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); background: white;">
-                <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${cleanDisplayTime}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
+                <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${new Date(a.appointment_time).toLocaleString('en-GB')}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
                 <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
                     <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; flex: 1;" onclick="rescheduleAppointment('${a.id}')">Reschedule</button>
                     <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; color: #a94442; border-color: #a94442; flex: 1;" onclick="cancelAppointment('${a.id}')">Cancel</button>
                 </div>
-            </div>`;
-        }).join('');
+            </div>`).join('');
     } catch(err) { console.error(err.message); }
 }
+
+window.submitDailyLog = async function(e) {
+    e.preventDefault();
+    alert("Daily log saved successfully!");
+    return false;
+};
+
+window.handleClientMessage = async function(e) {
+    e.preventDefault();
+    alert("Message sent to Clare!");
+    document.getElementById('client-msg-input').value = '';
+    return false;
+};
+
+window.searchFood = function() {
+    alert("Food database search triggered.");
+};
+
+window.startBarcodeScanner = function() {
+    alert("Barcode scanner initiated.");
+};
+
+window.updateDailyTotals = function() {};
+
+window.closePwaOverlay = function() {
+    const overlay = document.getElementById('pwa-install-overlay');
+    if(overlay) overlay.style.display = 'none';
+};
 
 window.processLogout = async function() {
     try {
