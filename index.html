@@ -315,9 +315,28 @@
                         <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
                     </optgroup>
                 </select>
-                <label>First Session Date & Time (Mon-Sat, 9AM - 5PM)</label>
-                <input type="datetime-local" id="reg-date" min="2026-01-01T09:00" max="2030-12-31T17:00" required onchange="validateBusinessHours(this)">
-                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Complete Booking</button>
+                                      <!-- SERVICE DATE & TIME SELECTION -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div>
+                                <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Appointment Date</label>
+                                <input type="date" id="portal-date" min="2026-01-01" required style="margin-bottom: 0;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Preferred Time</label>
+                                <select id="portal-time" required style="margin-bottom: 0;">
+                                    <option value="">-- Select Time --</option>
+                                    <option value="09:00">09:00 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="11:00">11:00 AM</option>
+                                    <option value="12:00">12:00 PM</option>
+                                    <option value="13:00">01:00 PM</option>
+                                    <option value="14:00">02:00 PM</option>
+                                    <option value="15:00">03:00 PM</option>
+                                    <option value="16:00">04:00 PM</option>
+                                </select>
+                            </div>
+                        </div>
+
             </form>
         </div>
     </div>
@@ -393,8 +412,27 @@
                                 <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
                             </optgroup>
                         </select>
-                        <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Date & Time (Mon-Sat, 9AM - 5PM)</label>
-                        <input type="datetime-local" id="portal-date" min="2026-01-01T09:00" max="2030-12-31T17:00" required onchange="validateBusinessHours(this)" style="margin-bottom: 1.5rem;">
+                                              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div>
+                                <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Appointment Date</label>
+                                <input type="date" id="portal-date" min="2026-01-01" required style="margin-bottom: 0;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Preferred Time</label>
+                                <select id="portal-time" required style="margin-bottom: 0;">
+                                    <option value="">-- Select Time --</option>
+                                    <option value="09:00">09:00 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="11:00">11:00 AM</option>
+                                    <option value="12:00">12:00 PM</option>
+                                    <option value="13:00">01:00 PM</option>
+                                    <option value="14:00">02:00 PM</option>
+                                    <option value="15:00">03:00 PM</option>
+                                    <option value="16:00">04:00 PM</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <button type="submit" class="btn" style="width: 100%; padding: 0.9rem;">Confirm Booking</button>
                     </form>
                 </div>
