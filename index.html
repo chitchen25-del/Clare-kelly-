@@ -336,18 +336,21 @@
 
              <div class="dashboard-container" style="max-width: 1200px; margin: 3rem auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;">
             
-            <!-- LEFT COLUMN: Appointments & Booking -->
+                     <!-- LEFT COLUMN: Appointments & Booking (Upgraded Aesthetic) -->
             <div>
-                <div class="dash-card">
-                    <h3>Your Appointments</h3>
+                <div class="dash-card" style="border-top: 4px solid var(--primary-sage);">
+                    <h3 style="margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                        <span>Your Appointments</span>
+                        <span style="font-size: 0.75rem; color: var(--primary-sage); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Live Schedule</span>
+                    </h3>
                     <div id="client-appointments-list"><p style="color: #888; font-size: 0.95rem;">Loading schedule...</p></div>
                 </div>
 
-                <div class="dash-card" id="new-booking-card">
-                    <h3>Book Another Session</h3>
+                <div class="dash-card" id="new-booking-card" style="border-top: 4px solid var(--text-main);">
+                    <h3 style="margin-bottom: 1.5rem;">Book Another Session</h3>
                     <form onsubmit="return bookNewSession(event)">
-                        <label>Treatment Pathway</label>
-                        <select id="portal-service" required>
+                        <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Treatment Pathway</label>
+                        <select id="portal-service" required style="margin-bottom: 1.2rem;">
                             <option value="">-- Choose a Service or Test --</option>
                             <optgroup label="Myofascial Release Therapy">
                                 <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
@@ -390,12 +393,13 @@
                                 <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
                             </optgroup>
                         </select>
-                        <label>Date & Time (Mon-Sat, 9AM - 5PM)</label>
-                        <input type="datetime-local" id="portal-date" min="2026-01-01T09:00" max="2030-12-31T17:00" required onchange="validateBusinessHours(this)">
-                        <button type="submit" class="btn" style="width: 100%;">Confirm Booking</button>
+                        <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Date & Time (Mon-Sat, 9AM - 5PM)</label>
+                        <input type="datetime-local" id="portal-date" min="2026-01-01T09:00" max="2030-12-31T17:00" required onchange="validateBusinessHours(this)" style="margin-bottom: 1.5rem;">
+                        <button type="submit" class="btn" style="width: 100%; padding: 0.9rem;">Confirm Booking</button>
                     </form>
                 </div>
             </div>
+
 
                       <!-- RIGHT COLUMN: VIP Gateway & App Launchpad -->
             <div>
