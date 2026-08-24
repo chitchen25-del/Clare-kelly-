@@ -112,22 +112,26 @@
         .pricing-section { padding: 8rem 6%; border-top: 1px solid var(--secondary-sand); background-color: var(--bg-color); }
         .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 4rem auto 0 auto; }
         
+        /* RESTORED PRICING CARD CSS */
+        .price-card { background: var(--card-bg); padding: 3rem 2rem; border-radius: 12px; border: 1px solid var(--secondary-sand); text-align: center; position: relative; transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
+        .price-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(9, 93, 40, 0.08); border-color: var(--primary-sage); }
+        .price-card.featured { border: 2px solid var(--primary-sage); transform: scale(1.05); box-shadow: 0 20px 50px rgba(13, 155, 70, 0.12); z-index: 2; }
+        .price-card.featured:hover { transform: scale(1.05) translateY(-5px); }
+        .featured-badge { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--primary-sage); color: white; padding: 0.4rem 1.5rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-radius: 20px; white-space: nowrap; }
+        .price-title { font-family: 'Cormorant Garamond'; font-size: 1.8rem; color: var(--text-main); margin-bottom: 0.5rem; line-height: 1.2; }
+        .price-duration { font-size: 0.8rem; color: var(--primary-sage); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 1.5rem; }
+        .price-amount { font-size: 3rem; color: var(--text-main); margin-bottom: 2rem; font-weight: 300; line-height: 1; }
+        .price-amount span { font-size: 1.2rem; color: #888; text-decoration: line-through; margin-left: 0.5rem; font-weight: 400; }
+        .price-features { list-style: none; margin-bottom: 2.5rem; text-align: left; }
+        .price-features li { margin-bottom: 1rem; font-size: 0.95rem; color: #555; padding-left: 1.5rem; position: relative; }
+        .price-features li::before { content: "✓"; position: absolute; left: 0; color: var(--gold-accent); font-weight: bold; }
+
         .form-container { max-width: 100%; margin: 3rem 5%; background: var(--card-bg); padding: 4rem 2rem; border-radius: 12px; box-shadow: 0 20px 50px rgba(9, 93, 40, 0.05); border: 1px solid var(--secondary-sand); }
         .form-container h2 { text-align: center; margin-bottom: 1rem; }
         
-        .portal-logo {
-            height: 70px;
-            max-width: 100%;
-            object-fit: contain;
-            display: block;
-            margin: 0 auto 1.5rem auto;
-        }
+        .portal-logo { height: 70px; max-width: 100%; object-fit: contain; display: block; margin: 0 auto 1.5rem auto; }
 
-        .form-row {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
+        .form-row { display: flex; flex-direction: column; gap: 0; }
         
         label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-main); margin-bottom: 0.8rem; font-weight: 700;}
         input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 2rem; border: 1px solid var(--secondary-sand); border-radius: 8px; background: var(--bg-color); font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
@@ -840,10 +844,77 @@
     <script>
         const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
+        const BREVO_API_KEY = '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'; 
 
         function getSupabase() {
             if(!window.supabase) return null;
             return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
+
+        // Bypasses browser security to send email instantly
+        async function sendBookingConfirmationEmail(clientEmail, clientName, serviceName, appointmentTime) {
+            try {
+                const formattedDate = new Date(appointmentTime).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' });
+                await fetch('https://corsproxy.io/?https://api.brevo.com/v3/smtp/email', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'api-key': BREVO_API_KEY
+                    },
+                    body: JSON.stringify({
+                        sender: { name: "The Natural Healing Clinic", email: "claretownsend82@gmail.com" },
+                        to: [{ email: clientEmail, name: clientName }],
+                        subject: "Your Appointment Confirmation - The Natural Healing Clinic",
+                        htmlContent: `
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f3f1ef; padding: 40px 20px;">
+                                <tr>
+                                    <td align="center">
+                                        <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(9, 93, 40, 0.05); border: 1px solid #d1dcd4;">
+                                            <tr>
+                                                <td align="center" style="padding: 40px 40px 20px 40px; border-bottom: 1px solid #d1dcd4;">
+                                                    <img src="https://nhc.co.im/logo.png" alt="The Natural Healing Clinic" width="150" height="50" style="display: block; border: 0; object-fit: contain;">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 40px; color: #555555; font-family: 'Montserrat', Arial, sans-serif; font-size: 15px; line-height: 1.6;">
+                                                    <h2 style="color: #095d28; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; font-weight: normal; margin-top: 0; margin-bottom: 20px;">You're Booked In!</h2>
+                                                    <p style="margin-bottom: 20px;">Hello <strong>${clientName}</strong>,</p>
+                                                    <p style="margin-bottom: 20px;">Thank you for booking with The Natural Healing Clinic. We are looking forward to welcoming you to the clinic in Union Mills.</p>
+                                                    
+                                                    <div style="background-color: #f9f8f6; border-left: 4px solid #095d28; padding: 20px; margin: 25px 0; border-radius: 0 8px 8px 0;">
+                                                        <p style="margin: 0 0 10px 0; font-weight: bold; color: #095d28;">Appointment Details:</p>
+                                                        <p style="margin: 0 0 5px 0;"><strong>Service:</strong> ${serviceName}</p>
+                                                        <p style="margin: 0;"><strong>Date & Time:</strong> ${formattedDate}</p>
+                                                    </div>
+                                                    
+                                                    <p style="margin-bottom: 20px;">If you need to reschedule or have any questions prior to your visit, please feel free to reach out via your Patient Portal.</p>
+                                                    
+                                                    <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #eae6e1; text-align: center;">
+                                                        <h3 style="color: #095d28; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; margin-bottom: 15px;">Explore More Ways to Support Your Well-being</h3>
+                                                        <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Complement your treatment with our specialized holistic therapies designed to restore balance.</p>
+                                                        <a href="https://nhc.co.im/#services" target="_blank" style="background-color: #0d9b46; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; display: inline-block;">View Our Services</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center" style="padding: 30px 40px; background-color: #f9f8f6; color: #888888; font-family: 'Montserrat', Arial, sans-serif; font-size: 12px; line-height: 1.5; border-top: 1px solid #d1dcd4;">
+                                                    <strong style="color: #095d28;">The Natural Healing Clinic</strong><br>
+                                                    Led by Clare Kelly | Isle of Man<br>
+                                                    13 Cronk Drine, Union Mills, IM4 4NG<br>
+                                                    <a href="https://nhc.co.im" style="color: #0d9b46; text-decoration: none;">nhc.co.im</a> | 07624 202 121
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        `
+                    })
+                });
+            } catch (err) {
+                console.error("Email dispatch failed:", err);
+            }
         }
 
         window.onload = async function() {
@@ -970,17 +1041,11 @@
                 if (error) throw new Error(error.message);
                 
                 if (authData.user) {
-                    const formattedDate = new Date(date).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' });
                     const { error: apptError } = await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
                     if(apptError) throw new Error(apptError.message);
 
-                    // Fire confirmation email via secure database HTTP bypass
-                    await db.rpc('send_booking_email', {
-                        to_email: email,
-                        client_name: name,
-                        service_name: service,
-                        appointment_time: formattedDate
-                    });
+                    // Fire confirmation email directly via proxy bypass
+                    await sendBookingConfirmationEmail(email, name, service, date);
                 }
                 
                 alert('Registered and booked successfully!'); 
@@ -1201,14 +1266,8 @@
                 const { error } = await db.from('appointments').insert([{ client_id: user.id, client_name: clientName, service_name: serviceName, appointment_time: appointmentTime, status: 'confirmed' }]);
                 if(error) throw error;
 
-                // Fire confirmation email via secure database bypass
-                const formattedDate = new Date(appointmentTime).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' });
-                await db.rpc('send_booking_email', {
-                    to_email: user.email,
-                    client_name: clientName,
-                    service_name: serviceName,
-                    appointment_time: formattedDate
-                });
+                // Fire confirmation email directly via proxy bypass
+                await sendBookingConfirmationEmail(user.email, clientName, serviceName, appointmentTime);
 
                 alert("Appointment booked successfully and confirmation email sent!"); 
                 loadClientDashboard(db, user);
