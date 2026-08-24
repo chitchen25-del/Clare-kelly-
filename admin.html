@@ -139,6 +139,7 @@
             <button class="fab-item" onclick="openNewBookingModal(); toggleFabMenu();">+ Manual Booking</button>
             <button class="fab-item" onclick="openClientModal(); toggleFabMenu();">+ Onboard Patient</button>
             <button class="fab-item" onclick="switchAppView('finance'); toggleFabMenu();">Create Invoice</button>
+            <button class="fab-item" onclick="switchAppView('news'); toggleFabMenu();">Publish News / PDF</button>
         </div>
     </div>
 
@@ -210,6 +211,36 @@
             <div id="client-detail-content"></div>
         </div>
 
+        <!-- NEW NEWS & PDF PUBLISHER TAB -->
+        <div id="view-news" class="app-view">
+            <div class="panel">
+                <h3>Publish Latest News & PDF Article</h3>
+                <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">Upload documents directly to your public <strong>latest-news</strong> Supabase storage bucket. The system will automatically scrub dashes and unwanted symbols from your title to create a clean, professional heading for your patients.</p>
+                
+                <form onsubmit="return publishNewsArticle(event)">
+                    <label>Article / Document Title</label>
+                    <input type="text" id="news-title-input" placeholder="e.g. autumn-wellness-guide-v2--final" style="background: white;" required>
+                    <small style="color: #666; font-size: 0.8rem; display: block; margin-top: -1rem; margin-bottom: 1.5rem;">Type anything—our system will automatically format it into a clean title.</small>
+
+                    <label>Short Summary / Description</label>
+                    <textarea id="news-desc-input" placeholder="Write a short summary or preview of the article or PDF..." style="height: 100px; background: white;" required></textarea>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <label>Upload PDF File</label>
+                            <input type="file" id="news-pdf-file" accept=".pdf" style="background: white;" required>
+                        </div>
+                        <div>
+                            <label>Upload Image (Optional)</label>
+                            <input type="file" id="news-img-file" accept="image/*" style="background: white;">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="publish-news-btn" class="btn" style="width: 100%;">Publish Article to Feed</button>
+                </form>
+            </div>
+        </div>
+
         <!-- FULL UPDATED INVOICE DROP-DOWN -->
         <div id="view-finance" class="app-view">
             <div class="panel">
@@ -227,44 +258,44 @@
                         <select id="inv-service-select" style="background: white;" required>
                             <option value="">-- Choose a Service or Test --</option>
                             <optgroup label="Myofascial Release Therapy">
-                                <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70[span_1](start_span)[span_1](end_span)</option>
-                                <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release (Castletown) — £80[span_2](start_span)[span_2](end_span)</option>
+                                <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
+                                <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release (Castletown) — £80</option>
                             </optgroup>
                             <optgroup label="Lymphatic Treatment">
-                                <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70[span_3](start_span)[span_3](end_span)</option>
-                                <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment (Castletown) — £80[span_4](start_span)[span_4](end_span)</option>
+                                <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70</option>
+                                <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment (Castletown) — £80</option>
                             </optgroup>
                             <optgroup label="Infrared Targeted Treatment">
-                                <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment (Union Mills) — £50[span_5](start_span)[span_5](end_span)</option>
-                                <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment (Castletown) — £60[span_6](start_span)[span_6](end_span)</option>
-                                <option value="Infrared Add-on (£15)">Infrared Add-on to Lymphatic/Myofascial — £15[span_7](start_span)[span_7](end_span)</option>
+                                <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment (Union Mills) — £50</option>
+                                <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment (Castletown) — £60</option>
+                                <option value="Infrared Add-on (£15)">Infrared Add-on to Lymphatic/Myofascial — £15</option>
                             </optgroup>
                             <optgroup label="Taster Gift Packages & Bundles">
-                                <option value="Migraine & Neck Reset (£70)">Migraine & Neck Reset Package — £70[span_8](start_span)[span_8](end_span)</option>
-                                <option value="Clarity Drainage (£70)">Clarity Drainage Package — £70[span_9](start_span)[span_9](end_span)</option>
-                                <option value="Gut Mini Reset 10 Days (£80)">Gut Mini Reset (10 Days) — £80[span_10](start_span)[span_10](end_span)</option>
-                                <option value="Taster Trio Bundle (£195)">Taster Trio Bundle — £195[span_11](start_span)[span_11](end_span)</option>
+                                <option value="Migraine & Neck Reset (£70)">Migraine & Neck Reset Package — £70</option>
+                                <option value="Clarity Drainage (£70)">Clarity Drainage Package — £70</option>
+                                <option value="Gut Mini Reset 10 Days (£80)">Gut Mini Reset (10 Days) — £80</option>
+                                <option value="Taster Trio Bundle (£195)">Taster Trio Bundle — £195</option>
                             </optgroup>
                             <optgroup label="Functional Medicine Pathways">
-                                <option value="Discovery Call (£0)">Discovery Phone Call (20m) — Free[span_12](start_span)[span_12](end_span)</option>
-                                <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90m) — £350[span_13](start_span)[span_13](end_span)</option>
-                                <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950[span_14](start_span)[span_14](end_span)</option>
-                                <option value="Parasite Cleanse (£150)">Parasite Cleanse (3, 5, or 10 day) — £150[span_15](start_span)[span_15](end_span)</option>
-                                <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse (excl. supplements) — £355[span_16](start_span)[span_16](end_span)</option>
-                                <option value="Functional Testing Review (£350)">Functional Testing Review (90m) — £350[span_17](start_span)[span_17](end_span)</option>
+                                <option value="Discovery Call (£0)">Discovery Phone Call (20m) — Free</option>
+                                <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90m) — £350</option>
+                                <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950</option>
+                                <option value="Parasite Cleanse (£150)">Parasite Cleanse (3, 5, or 10 day) — £150</option>
+                                <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse (excl. supplements) — £355</option>
+                                <option value="Functional Testing Review (£350)">Functional Testing Review (90m) — £350</option>
                             </optgroup>
                             <optgroup label="Nordic Laboratories Functional Testing">
-                                <option value="Comprehensive Gut Health Test (£325)">Comprehensive Gut Health Test (Stool) — From £325[span_18](start_span)[span_18](end_span)</option>
-                                <option value="Gut Health + Barrier Function Test (£405)">Gut Health + Barrier Function Test (Stool) — From £405[span_19](start_span)[span_19](end_span)</option>
-                                <option value="SIBO Breath Test (£181)">SIBO Breath Test (Breath) — From £181[span_20](start_span)[span_20](end_span)</option>
-                                <option value="Extended Stool Analysis (£489)">Extended Stool Analysis (2-day Stool) — From £489[span_21](start_span)[span_21](end_span)</option>
-                                <option value="Organic Acids Test OAT (£328)">Organic Acids Test (OAT - Urine) — From £328[span_22](start_span)[span_22](end_span)</option>
-                                <option value="Omega-3 & Vitamin D Test (£150)">Omega-3 & Vitamin D Test (Blood spot) — From £150[span_23](start_span)[span_23](end_span)</option>
-                                <option value="DUTCH Complete Hormone Test (£269)">DUTCH Complete Hormone Test (Dried urine) — From £269[span_24](start_span)[span_24](end_span)</option>
-                                <option value="Mould & Environmental Toxin Screen (£269)">Mould & Environmental Toxin Screen (Urine) — £269[span_25](start_span)[span_25](end_span)</option>
-                                <option value="MycoTOX Profile (£408)">MycoTOX Profile (Urine) — £408[span_26](start_span)[span_26](end_span)</option>
-                                <option value="Glyphosate Test (£156)">Glyphosate Test (Urine) — £156[span_27](start_span)[span_27](end_span)</option>
-                                <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152[span_28](start_span)[span_28](end_span)</option>
+                                <option value="Comprehensive Gut Health Test (£325)">Comprehensive Gut Health Test (Stool) — From £325</option>
+                                <option value="Gut Health + Barrier Function Test (£405)">Gut Health + Barrier Function Test (Stool) — From £405</option>
+                                <option value="SIBO Breath Test (£181)">SIBO Breath Test (Breath) — From £181</option>
+                                <option value="Extended Stool Analysis (£489)">Extended Stool Analysis (2-day Stool) — From £489</option>
+                                <option value="Organic Acids Test OAT (£328)">Organic Acids Test (OAT - Urine) — From £328</option>
+                                <option value="Omega-3 & Vitamin D Test (£150)">Omega-3 & Vitamin D Test (Blood spot) — From £150</option>
+                                <option value="DUTCH Complete Hormone Test (£269)">DUTCH Complete Hormone Test (Dried urine) — From £269</option>
+                                <option value="Mould & Environmental Toxin Screen (£269)">Mould & Environmental Toxin Screen (Urine) — £269</option>
+                                <option value="MycoTOX Profile (£408)">MycoTOX Profile (Urine) — £408</option>
+                                <option value="Glyphosate Test (£156)">Glyphosate Test (Urine) — £156</option>
+                                <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
                             </optgroup>
                         </select>
                         
@@ -288,6 +319,9 @@
         </div>
         <div class="app-nav-item" onclick="switchAppView('clients', this)">
             <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>Clients
+        </div>
+        <div class="app-nav-item" onclick="switchAppView('news', this)">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>News
         </div>
         <div class="app-nav-item" onclick="switchAppView('finance', this)">
             <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>Finance
@@ -328,7 +362,7 @@
             document.querySelectorAll('.app-nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`view-${viewName}`).classList.add('active-view');
             if(element) element.classList.add('active');
-            const titles = { schedule: 'Master Schedule', clients: 'Patient Directory', 'client-detail': 'Patient Workspace', finance: 'Income & Invoicing', inbox: 'Live Patient Inbox' };
+            const titles = { schedule: 'Master Schedule', clients: 'Patient Directory', 'client-detail': 'Patient Workspace', news: 'Publish News & PDFs', finance: 'Income & Invoicing', inbox: 'Live Patient Inbox' };
             document.getElementById('app-header-title').innerText = titles[viewName] || 'EMR';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -454,6 +488,89 @@
                 const chatMsgs = data.filter(m => !m.content.includes('[DAILY HEALTH LOG]') && !m.content.includes('[MEDICAL INTAKE SUBMISSION]') && !m.content.includes('[BODY MAP PIN]') && !m.content.includes('[LAB DOCUMENT]'));
                 chatBox.innerHTML = chatMsgs.map(m => `<div class="msg ${m.sender}"><strong>${m.sender === 'client' ? 'Patient' : 'Clare'}:</strong> ${m.content}</div>`).join('');
             } catch(err) {}
+        }
+
+        // PUBLISH NEWS & PDF ARTICLE SCRIPT
+        async function publishNewsArticle(e) {
+            e.preventDefault();
+            const btn = document.getElementById('publish-news-btn');
+            const ogText = btn.innerText;
+            btn.innerText = "Uploading & Publishing...";
+            
+            const rawTitle = document.getElementById('news-title-input').value;
+            const description = document.getElementById('news-desc-input').value;
+            const pdfFile = document.getElementById('news-pdf-file').files[0];
+            const imgFile = document.getElementById('news-img-file').files[0];
+            
+            if (!pdfFile) {
+                alert('Please select a PDF file to upload.');
+                btn.innerText = ogText;
+                return false;
+            }
+
+            // Scrub the dashes, underscores, and extra shite away from the title
+            let cleanTitle = rawTitle
+                .replace(/[-_]+/g, ' ')              
+                .replace(/[^\w\s]/gi, '')            
+                .replace(/\s+/g, ' ')                
+                .trim();
+            
+            cleanTitle = cleanTitle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+
+            try {
+                const db = getSupabase();
+                
+                // 1. Upload PDF to 'latest-news' bucket
+                const pdfFileName = Date.now() + '-' + pdfFile.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+                const { data: pdfData, error: pdfError } = await db.storage
+                    .from('latest-news')
+                    .upload(pdfFileName, pdfFile);
+
+                if (pdfError) throw pdfError;
+
+                const { data: pdfPublicUrlData } = db.storage
+                    .from('latest-news')
+                    .getPublicUrl(pdfFileName);
+                
+                const pdfUrl = pdfPublicUrlData.publicUrl;
+
+                // 2. Optional Image Upload if provided
+                let imageUrl = '';
+                if (imgFile) {
+                    const imgFileName = Date.now() + '-' + imgFile.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+                    const { data: imgData, error: imgError } = await db.storage
+                        .from('latest-news')
+                        .upload(imgFileName, imgFile);
+                    if (!imgError) {
+                        const { data: imgPublicUrlData } = db.storage.from('latest-news').getPublicUrl(imgFileName);
+                        imageUrl = imgPublicUrlData.publicUrl;
+                    }
+                }
+
+                // 3. Save to 'clinic_news' table
+                const { error: dbError } = await db
+                    .from('clinic_news')
+                    .insert([{ 
+                        title: cleanTitle, 
+                        description: description, 
+                        pdf_url: pdfUrl, 
+                        image_url: imageUrl,
+                        created_at: new Date() 
+                    }]);
+
+                if (dbError) throw dbError;
+
+                alert(`Success! "${cleanTitle}" has been formatted and published to your Latest News feed.`);
+                document.querySelector('form').reset();
+                switchAppView('schedule');
+
+            } catch (err) {
+                console.error(err);
+                alert('Error publishing article: ' + err.message);
+            } finally {
+                btn.innerText = ogText;
+            }
+            return false;
         }
 
         window.generateInvoice = function(e) {
