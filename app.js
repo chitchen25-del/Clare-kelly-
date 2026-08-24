@@ -265,3 +265,43 @@ function updateNavState(isLoggedIn) {
     document.getElementById('mobile-book-link').style.display = isLoggedIn ? 'none' : 'block';
     document.getElementById('mobile-logout-link').style.display = isLoggedIn ? 'block' : 'none';
 }
+// 1. Handle VIP Code Verification & App Unlock
+window.unlockVipApp = async function(e) {
+    e.preventDefault();
+    try {
+        const db = getSupabase();
+        const { data: { user } } = await db.auth.getUser();
+        if(!user) throw new Error("You must be logged in to unlock the app.");
+
+        const enteredCode = document.getElementById('vip-code-input').value.trim().toUpperCase();
+
+        const { data: tier, error } = await db.from('client_tiers').select('*').eq('client_id', user.id).single();
+        if(error) throw new Error("Could not verify client tier.");
+
+        if(tier && tier.unlock_code === enteredCode) {
+            await db.from('client_tiers').update({ is_premium: true }).eq('client_id', user.id);
+            alert("VIP App Unlocked Successfully!");
+            loadClientDashboard(db, user);
+        } else {
+            alert("Invalid unlock code. Please check your confirmation email.");
+        }
+    } catch(err) { 
+        alert("Error unlocking: " + err.message); 
+    }
+    return false;
+};
+
+// 2. Trigger PWA Native App Install Prompt / Overlay
+window.triggerPwaInstall = function() {
+    const overlay = document.getElementById('pwa-install-overlay');
+    if(overlay) {
+        overlay.style.display = 'flex';
+    } else {
+        alert("To install, tap your browser menu (three dots or share icon) and select 'Add to Home Screen'.");
+    }
+}
+
+window.closePwaOverlay = function() {
+    const overlay = document.getElementById('pwa-install-overlay');
+    if(overlay) overlay.style.display = 'none';
+}
