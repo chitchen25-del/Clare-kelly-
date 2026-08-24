@@ -57,16 +57,17 @@
         </button>
     </nav>
 
- <div class="mobile-drawer" id="mobile-drawer">
-    <span style="position: absolute; top: calc(1.5rem + env(safe-area-inset-top)); right: 1.5rem; font-size: 1.5rem; color: #333; cursor: pointer;" onclick="toggleMobileMenu()">×</span>
-    <span class="mobile-drawer-link" onclick="openScreen('home'); toggleMobileMenu();">Home</span>
-    <span class="mobile-drawer-link" onclick="openScreen('about'); toggleMobileMenu();">About Clare</span>
-    <span class="mobile-drawer-link" onclick="openScreen('portal'); toggleMobileMenu();">Patient Portal</span>
-    <a href="#testimonials" class="mobile-drawer-link" onclick="toggleMobileMenu()">Testimonials</a>
-    <a href="#news" class="mobile-drawer-link" onclick="toggleMobileMenu()">Latest News</a>
-    <span class="mobile-drawer-link" onclick="openScreen('contact'); toggleMobileMenu();">Contact</span>
-    <span class="mobile-drawer-link" onclick="proceedToProtocol(); toggleMobileMenu();">VIP Protocol</span>
+<div class="mobile-drawer" id="mobile-drawer">
+    <span style="position: absolute; top: calc(1.5rem + env(safe-area-inset-top)); right: 2rem; font-size: 2rem; cursor: pointer; color: var(--text-main);" onclick="toggleMobileMenu()">✕</span>
+    <span class="mobile-drawer-link" onclick="openScreen('screen-home')">Home</span>
+    <span class="mobile-drawer-link" onclick="openScreen('screen-about')">About Clare</span>
+    <span class="mobile-drawer-link" onclick="openScreen('screen-testimonials')">Testimonials</span>
+    <span class="mobile-drawer-link" onclick="openScreen('screen-news')">Latest News</span>
+    <span class="mobile-drawer-link" onclick="openScreen('screen-login')" id="mobile-portal-link">Patient Portal</span>
+    <span class="mobile-drawer-link" onclick="openScreen('screen-register')" id="mobile-book-link">Register & Book</span>
+    <span class="mobile-drawer-link" onclick="processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
 </div>
+
 
 
 
@@ -876,26 +877,13 @@
                 <p>Mon & Fri: 10:00 - 15:00</p>
             </div>
         </div>
-        <!-- LATEST NEWS SECTION -->
-<section id="news" class="page-section" style="padding: 5rem 2rem; background: white; border-top: 1px solid #eee;">
-    <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-        <h2 style="font-family: 'Playfair Display', serif; color: var(--primary-green, #1B4332); font-size: 2.2rem; margin-bottom: 1rem;">Latest News</h2>
-        <p style="color: #666; font-size: 1.05rem; line-height: 1.6; margin-bottom: 2rem;">Stay up to date with clinic announcements, health insights, and community updates from our team.</p>
-        <div style="background: #fafafa; padding: 2rem; border-radius: 12px; border: 1px solid #eee; text-align: left;">
-            <span style="font-size: 0.8rem; color: #888; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Clinic Update • August 2026</span>
-            <h3 style="font-family: 'Playfair Display', serif; color: #333; margin: 0.5rem 0 1rem 0; font-size: 1.4rem;">Expanding Our Patient Wellness Portal</h3>
-            <p style="color: #555; font-size: 0.95rem; line-height: 1.6; margin: 0;">We are thrilled to roll out our brand new mobile-friendly web app features, allowing active patients to securely track daily habits, macros, gut health protocols, and direct messages with the clinic seamlessly from their home screens.</p>
+           <!-- ================= SCREEN: TESTIMONIALS ================= -->
+    <div id="screen-testimonials" class="page-screen">
+        <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
+            <span class="section-subtitle">Client Experiences</span>
+            <h1 style="margin-top: 0.5rem; font-family: 'Playfair Display', serif;">Testimonials</h1>
         </div>
-    </div>
-</section>
-
-<!-- TESTIMONIALS SECTION (Featuring Johnny's Review) -->
-<section id="testimonials" class="page-section" style="padding: 5rem 2rem; background: #f9f9f9; border-top: 1px solid #eee;">
-    <div style="max-width: 800px; margin: 0 auto;">
-        <h2 style="font-family: 'Playfair Display', serif; color: var(--primary-green, #1B4332); text-align: center; font-size: 2.2rem; margin-bottom: 2.5rem;">Client Testimonials</h2>
-        
-        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-            <!-- Johnny's Review -->
+        <section class="section" style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
             <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-left: 4px solid var(--primary-green, #1B4332);">
                 <div style="color: #f0ad4e; font-size: 1.2rem; margin-bottom: 1rem;">★★★★★</div>
                 <p style="font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #333; line-height: 1.7; margin-bottom: 1.5rem; font-style: italic;">
@@ -907,9 +895,29 @@
                     <span style="font-size: 0.75rem; color: #888; font-style: italic;">Verified Patient Review</span>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
-</section>
+
+    <!-- ================= SCREEN: LATEST NEWS ================= -->
+    <div id="screen-news" class="page-screen">
+        <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
+            <span class="section-subtitle">Clinic Updates</span>
+            <h1 style="margin-top: 0.5rem; font-family: 'Playfair Display', serif;">Latest News & PDFs</h1>
+        </div>
+        <section class="section" style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
+            <div style="background: #fafafa; padding: 2rem; border-radius: 12px; border: 1px solid #eee; display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <span style="font-size: 0.8rem; color: #888; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Clinic Update • August 2026</span>
+                    <h3 style="font-family: 'Playfair Display', serif; color: #333; margin: 0.4rem 0 0.8rem 0; font-size: 1.4rem;">Expanding Our Patient Wellness Portal</h3>
+                    <p style="color: #555; font-size: 0.95rem; line-height: 1.6; margin: 0;">We are thrilled to roll out our brand new mobile-friendly web app features, allowing active patients to securely track daily habits, macros, gut health protocols, and direct messages with the clinic seamlessly from their home screens.</p>
+                </div>
+                <div>
+                    <a href="./patient-portal-guide.pdf" target="_blank" style="display: inline-block; background: var(--primary-green, #1B4332); color: white; padding: 0.7rem 1.2rem; border-radius: 6px; text-decoration: none; font-size: 0.9rem; font-weight: bold;">📄 Download User Guide (PDF)</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
 
     </footer>
 
