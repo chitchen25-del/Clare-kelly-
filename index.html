@@ -453,18 +453,70 @@
                 </div>
 
                 <!-- DEDICATED VIP APP LAUNCHPAD (Shown when Unlocked) -->
-                <div id="premium-app-container" style="display: none;">
-                    <div class="dash-card" style="background: linear-gradient(135deg, var(--text-main), #1a3a24); color: white; padding: 2.5rem; text-align: center; margin-bottom: 2rem;">
-                        <img src="./logo.png" alt="App Logo" style="height: 60px; margin-bottom: 1.5rem;">
-                        <span style="background: var(--primary-sage); color: white; padding: 0.3rem 0.8rem; font-size: 0.7rem; font-family: 'Montserrat'; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; border-radius: 4px; display: inline-block; margin-bottom: 1rem;">VIP Access Verified</span>
-                        <h3 style="color: white; font-size: 2rem; margin-bottom: 0.5rem; border: none; padding: 0;">The Natural Healing App</h3>
-                        <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 2rem;">Your protocol is active. Launch your secure client portal app or add it directly to your home screen for instant daily tracking.</p>
-                        
-                        <div style="display: flex; flex-direction: column; gap: 1rem;">
-                            <button type="button" class="btn" style="background: white; color: var(--text-main); width: 100%; padding: 1rem; font-size: 1rem;" onclick="alert('To install on iPhone: Tap the Share button in Safari and select Add to Home Screen.')">📲 Install App to Home Screen</button>
-                            <button type="button" class="btn btn-outline" style="border-color: rgba(255,255,255,0.4); color: white; width: 100%; padding: 1rem;" onclick="openScreen('screen-home')">Return to Clinic Home</button>
-                        </div>
-                    </div>
+               <div id="premium-app-container" style="display: none; margin-top: 1.5rem;">
+    
+    <!-- CARD 1: THE LOBBY BOUNCER (Only shows in Safari) -->
+    <div class="dash-card pwa-install-card" style="background: var(--primary-green, #1B4332); color: white; padding: 2rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: white;">The Natural Healing App</h3>
+        <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 1.5rem;">Your VIP protocol is active. Add to your home screen to unlock your daily trackers and secure chat.</p>
+        <button class="btn" style="background: white; color: var(--primary-green, #1B4332); width: 100%; font-weight: bold; border: none; padding: 1rem; border-radius: 8px; font-size: 0.95rem;" onclick="triggerPwaInstall()">INSTALL APP TO UNLOCK</button>
+    </div>
+
+    <!-- CARD 2: DAILY HABIT DASHBOARD (App Mode Only) -->
+    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1rem;">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Daily Targets</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+            <!-- Water Tracker -->
+            <div style="background: #eef7ff; padding: 1.2rem 1rem; border-radius: 10px; text-align: center; border: 1px solid #cce5ff;">
+                <span style="font-size: 1.8rem; display: block; margin-bottom: 0.3rem;">💧</span>
+                <strong style="font-size: 1.3rem; color: #0056b3; font-family: 'Montserrat', sans-serif;">0 / 3L</strong>
+                <p style="font-size: 0.75rem; color: #555; margin: 0; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Water</p>
+            </div>
+            <!-- Steps/Movement Tracker -->
+            <div style="background: #f0f9f0; padding: 1.2rem 1rem; border-radius: 10px; text-align: center; border: 1px solid #c3e6c3;">
+                <span style="font-size: 1.8rem; display: block; margin-bottom: 0.3rem;">👟</span>
+                <strong style="font-size: 1.3rem; color: #2d5a2d; font-family: 'Montserrat', sans-serif;">0 / 10k</strong>
+                <p style="font-size: 0.75rem; color: #555; margin: 0; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Steps</p>
+            </div>
+        </div>
+        
+        <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 0.9rem; border-radius: 8px; border: none; font-weight: bold; letter-spacing: 0.5px;" onclick="updateDailyTotals()">LOG HABITS</button>
+    </div>
+
+    <!-- CARD 3: CLINICAL HEALTH JOURNAL (App Mode Only) -->
+    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Health Journal</h3>
+        
+        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Gut Comfort (1-10)</label>
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+            <span style="font-size: 0.8rem; color: #888;">Poor</span>
+            <input type="range" min="1" max="10" value="5" style="flex: 1; accent-color: var(--primary-green, #1B4332);">
+            <span style="font-size: 0.8rem; color: #888;">Great</span>
+        </div>
+        
+        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Symptoms & Notes</label>
+        <textarea placeholder="Log any bloating, fatigue, or flare-ups..." style="width: 100%; padding: 1rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; min-height: 100px; font-family: inherit; font-size: 0.95rem; box-sizing: border-box; background: #fafafa;"></textarea>
+        
+        <button class="btn" style="width: 100%; border: 2px solid var(--primary-green, #1B4332); background: transparent; color: var(--primary-green, #1B4332); padding: 0.9rem; border-radius: 8px; font-weight: bold; letter-spacing: 0.5px;" onclick="submitDailyLog(event)">SAVE ENTRY</button>
+    </div>
+
+    <!-- CARD 4: SECURE CLINICAL CHAT (App Mode Only) -->
+    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem; margin-bottom: 2rem;">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Message Clare</h3>
+        
+        <div style="background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 1rem; height: 200px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; overflow-y: auto;">
+            <p style="color: #aaa; font-style: italic; font-size: 0.9rem; text-align: center;">End-to-end encrypted.<br>No messages yet.</p>
+        </div>
+        
+        <div style="display: flex; gap: 0.5rem;">
+            <input id="client-msg-input" type="text" placeholder="Type a message..." style="flex: 1; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #fafafa;">
+            <button class="btn" style="background: var(--primary-green, #1B4332); color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="handleClientMessage(event)">SEND</button>
+        </div>
+    </div>
+
+</div>
+
 
                     <!-- SECURE CLINICAL CHAT (Stacked Directly Underneath) -->
                     <div class="dash-card" id="chat-section-card" style="border-top: 4px solid var(--primary-sage);">
