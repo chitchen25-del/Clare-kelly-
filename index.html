@@ -600,7 +600,7 @@
         <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 1.2rem; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);" onclick="submitDailyLog(event)">SAVE DAILY METRICS</button>
     </div>
 
-    <!-- EMBEDDED JAVASCRIPT: Bypasses iPhone Cache to guarantee Search and Scanner work immediately -->
+    <!-- EMBEDDED JAVASCRIPT: Forced Rear Camera Scanner & Database -->
     <script>
         window.forceSearchFood = async function() {
             const query = document.getElementById('food-search-input').value.trim();
@@ -650,7 +650,19 @@
             readerDiv.style.display = 'block';
             resultsDiv.innerHTML = "";
             
-            embeddedQrcodeScanner = new Html5QrcodeScanner("barcode-reader", { fps: 10, qrbox: {width: 250, height: 250} }, false);
+            // Initializing with facingMode: { exact: "environment" } forces the rear-facing camera
+            embeddedQrcodeScanner = new Html5QrcodeScanner(
+                "barcode-reader", 
+                { 
+                    fps: 10, 
+                    qrbox: {width: 250, height: 250},
+                    aspectRatio: 1.0,
+                    videoConstraints: {
+                        facingMode: "environment"
+                    }
+                }, 
+                false
+            );
             
             embeddedQrcodeScanner.render(async (decodedText) => {
                 embeddedQrcodeScanner.clear();
@@ -679,6 +691,7 @@
         };
     </script>
 </div>
+
 
 
 
