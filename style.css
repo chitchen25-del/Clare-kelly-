@@ -1,5 +1,4 @@
 :root {
-    /* VIBRANT GREEN LUXURY PALETTE */
     --bg-color: #f3f1ef;         
     --card-bg: #ffffff;          
     --text-main: #095d28;        
@@ -94,22 +93,26 @@ h2 { font-size: 2.8rem; margin-bottom: 1.5rem; }
 .pricing-section { padding: 8rem 6%; border-top: 1px solid var(--secondary-sand); background-color: var(--bg-color); }
 .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 4rem auto 0 auto; }
 
+/* RESTORED PRICING CARD CSS */
+.price-card { background: var(--card-bg); padding: 3rem 2rem; border-radius: 12px; border: 1px solid var(--secondary-sand); text-align: center; position: relative; transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
+.price-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(9, 93, 40, 0.08); border-color: var(--primary-sage); }
+.price-card.featured { border: 2px solid var(--primary-sage); transform: scale(1.05); box-shadow: 0 20px 50px rgba(13, 155, 70, 0.12); z-index: 2; }
+.price-card.featured:hover { transform: scale(1.05) translateY(-5px); }
+.featured-badge { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--primary-sage); color: white; padding: 0.4rem 1.5rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-radius: 20px; white-space: nowrap; }
+.price-title { font-family: 'Cormorant Garamond'; font-size: 1.8rem; color: var(--text-main); margin-bottom: 0.5rem; line-height: 1.2; }
+.price-duration { font-size: 0.8rem; color: var(--primary-sage); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 1.5rem; }
+.price-amount { font-size: 3rem; color: var(--text-main); margin-bottom: 2rem; font-weight: 300; line-height: 1; }
+.price-amount span { font-size: 1.2rem; color: #888; text-decoration: line-through; margin-left: 0.5rem; font-weight: 400; }
+.price-features { list-style: none; margin-bottom: 2.5rem; text-align: left; }
+.price-features li { margin-bottom: 1rem; font-size: 0.95rem; color: #555; padding-left: 1.5rem; position: relative; }
+.price-features li::before { content: "✓"; position: absolute; left: 0; color: var(--gold-accent); font-weight: bold; }
+
 .form-container { max-width: 100%; margin: 3rem 5%; background: var(--card-bg); padding: 4rem 2rem; border-radius: 12px; box-shadow: 0 20px 50px rgba(9, 93, 40, 0.05); border: 1px solid var(--secondary-sand); }
 .form-container h2 { text-align: center; margin-bottom: 1rem; }
 
-.portal-logo {
-    height: 70px;
-    max-width: 100%;
-    object-fit: contain;
-    display: block;
-    margin: 0 auto 1.5rem auto;
-}
+.portal-logo { height: 70px; max-width: 100%; object-fit: contain; display: block; margin: 0 auto 1.5rem auto; }
 
-.form-row {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
+.form-row { display: flex; flex-direction: column; gap: 0; }
 
 label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-main); margin-bottom: 0.8rem; font-weight: 700;}
 input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 2rem; border: 1px solid var(--secondary-sand); border-radius: 8px; background: var(--bg-color); font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
