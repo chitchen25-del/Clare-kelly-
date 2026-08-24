@@ -107,6 +107,9 @@
         
         .timeline-feed-item { background: white; border-left: 4px solid var(--primary-sage); border: 1px solid var(--secondary-sand); border-left-width: 4px; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
 
+        .body-map-container { position: relative; width: 100%; max-width: 280px; margin: 0 auto 1.5rem auto; background: white; border: 1px solid var(--secondary-sand); border-radius: 12px; padding: 1.5rem 1rem; text-align: center; }
+        .map-pin-badge { display: inline-block; background: rgba(16, 211, 88, 0.15); color: var(--text-main); padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-bottom: 0.5rem; }
+
         .app-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(65px + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--secondary-sand); display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -4px 20px rgba(9, 93, 40, 0.04); }
         .app-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: #888; cursor: pointer; width: 20%; height: 100%; font-weight: 600;}
         .app-nav-item.active { color: var(--primary-sage); }
@@ -192,7 +195,7 @@
                     <h3 style="margin: 0; border: none;">Patient Directory</h3>
                     <button class="btn" style="padding: 0.5rem 1rem; min-height: 35px; font-size: 0.65rem;" onclick="openClientModal()">+ Add</button>
                 </div>
-                <p style="font-size: 1rem; color: #666; margin-bottom: 2.5rem;">Select a patient to access their unified clinical timeline, lab vault, and charting.</p>
+                <p style="font-size: 1rem; color: #666; margin-bottom: 2.5rem;">Select a patient to access their unified clinical timeline, SOAP chart, posture media vault, and body map pins.</p>
                 <div id="admin-client-directory-list"><p style="color: #888; font-size: 0.95rem;">Loading client records...</p></div>
             </div>
         </div>
@@ -206,12 +209,12 @@
         <div id="view-news" class="app-view">
             <div class="panel">
                 <h3>Publish Latest News & PDF Article</h3>
-                <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">Upload documents directly to your public <strong>latest-news</strong> Supabase storage bucket. The system will automatically scrub dashes and unwanted symbols from your title to create a clean, professional heading for your patients.</p>
+                <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">Upload documents directly to your public <strong>latest-news</strong> Supabase storage bucket. The system automatically scrubs dashes and unwanted symbols from your title to create a clean heading for your patients.</p>
                 
                 <form onsubmit="return publishNewsArticle(event)">
                     <label>Article / Document Title</label>
                     <input type="text" id="news-title-input" placeholder="e.g. autumn-wellness-guide-v2--final" style="background: white;" required>
-                    <small style="color: #666; font-size: 0.8rem; display: block; margin-top: -1rem; margin-bottom: 1.5rem;">Type anything—our system will automatically format it into a clean title.</small>
+                    <small style="color: #666; font-size: 0.8rem; display: block; margin-top: -1rem; margin-bottom: 1.5rem;">Type anything—our system will format it automatically.</small>
 
                     <label>Short Summary / Description</label>
                     <textarea id="news-desc-input" placeholder="Write a short summary or preview of the article or PDF..." style="height: 100px; background: white;" required></textarea>
@@ -479,6 +482,7 @@
                         <div class="tab-container">
                             <button class="tab-btn active" onclick="switchClientTab('timeline', this)">Clinical Timeline</button>
                             <button class="tab-btn" onclick="switchClientTab('soap', this)">SOAP Charting</button>
+                            <button class="tab-btn" onclick="switchClientTab('body', this)">Body Map & Posture</button>
                             <button class="tab-btn" onclick="switchClientTab('chat', this)">Secure Chat</button>
                         </div>
 
@@ -495,18 +499,37 @@
                         </div>
 
                         <div id="ctab-soap" class="tab-content">
-                            <h3 style="margin-bottom: 1rem;">Clinical SOAP Notes</h3>
+                            <h3 style="margin-bottom: 1rem;">Clinical SOAP Notes & Protocol</h3>
                             <div class="soap-grid">
                                 <div class="data-block">
                                     <label>Subjective & Objective Findings</label>
                                     <textarea id="soap-so" placeholder="Enter patient feedback and physical findings..." style="background: white; height: 120px;"></textarea>
                                 </div>
                                 <div class="data-block">
-                                    <label>Assessment & Plan</label>
-                                    <textarea id="soap-ap" placeholder="Enter clinical assessment and protocol plan..." style="background: white; height: 120px;"></textarea>
+                                    <label>Assessment & Natural Healing Protocol</label>
+                                    <textarea id="soap-ap" placeholder="Enter clinical assessment, supplements, and protocol plan..." style="background: white; height: 120px;"></textarea>
                                 </div>
                             </div>
                             <button class="btn" onclick="alert('SOAP notes saved securely!')">Save Clinical Notes</button>
+                        </div>
+
+                        <div id="ctab-body" class="tab-content">
+                            <h3 style="margin-bottom: 1rem;">Body Map & Posture Assessment Vault</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                                <div class="body-map-container">
+                                    <span class="map-pin-badge">Pain / Tension Map</span>
+                                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">Patient reported target areas logged from mobile app.</p>
+                                    <div style="background: var(--bg-color); padding: 2rem; border-radius: 8px; border: 1px dashed var(--secondary-sand);">
+                                        <span style="font-size: 2rem;">👤</span>
+                                        <p style="font-size: 0.8rem; color: var(--text-main); margin-top: 0.5rem; font-weight: bold;">Active Pains Mapped</p>
+                                    </div>
+                                </div>
+                                <div class="data-block" style="margin-bottom: 0;">
+                                    <label>Upload Posture / Lab Photo</label>
+                                    <input type="file" accept="image/*" style="background: white; margin-bottom: 1rem;">
+                                    <button class="btn" style="width: 100%;" onclick="alert('Posture photo uploaded to vault!')">Upload to Client Vault</button>
+                                </div>
+                            </div>
                         </div>
 
                         <div id="ctab-chat" class="tab-content">
