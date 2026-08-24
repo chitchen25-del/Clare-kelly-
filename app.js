@@ -1,3 +1,4 @@
+// --- UI TOGGLES ---
 window.openScreen = function(screenId) {
     try {
         document.querySelectorAll('.page-screen').forEach(el => el.classList.remove('visible'));
@@ -10,8 +11,10 @@ window.openScreen = function(screenId) {
         if(drawer) drawer.classList.remove('open');
     } catch (err) { console.error(err.message); }
 }
-function toggleMobileMenu() { document.getElementById('mobile-drawer').classList.toggle('open'); }
-function toggleAccordion(id) {
+
+window.toggleMobileMenu = function() { document.getElementById('mobile-drawer').classList.toggle('open'); }
+
+window.toggleAccordion = function(id) {
     const panel = document.getElementById(id);
     const btn = panel.previousElementSibling;
     panel.classList.toggle('show');
@@ -19,29 +22,9 @@ function toggleAccordion(id) {
     btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
 }
 
-const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
-
-function getSupabase() {
-    if(!window.supabase) return null;
-    return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.closePwaOverlay = function() {
+    document.getElementById('pwa-install-overlay').style.display = 'none';
 }
-
-window.onload = async function() {
-    try {
-        const db = getSupabase();
-        if(db) {
-            const { data: { session } } = await db.auth.getSession();
-            if(session) {
-                updateNavState(true); 
-                openScreen('screen-dashboard'); 
-                loadClientDashboard(db, session.user);
-            }
-        }
-    } catch(err) {
-        console.log("No active session found.");
-    }
-};
 
 function checkPwaInstall() {
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
@@ -55,11 +38,130 @@ function checkPwaInstall() {
     }
 }
 
-window.closePwaOverlay = function() {
-    document.getElementById('pwa-install-overlay').style.display = 'none';
+// --- SUPABASE & EMAIL SETUP ---
+const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
+const BREVO_API_KEY = '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';
+
+function getSupabase() {
+    if(!window.supabase) return null;
+    return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 }
 
-async function processClientLogin(e) {
+// BYPASSES BROWSER CORS SECURITY VIA PROXY
+async function sendBookingConfirmationEmail(clientEmail, clientName, serviceName, appointmentTime) {
+    try {
+        const formattedDate = new Date(appointmentTime).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' });
+        await fetch('https://corsproxy.io/?https://api.brevo.com/v3/smtp/email', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'api-key': BREVO_API_KEY
+            },
+            body: JSON.stringify({
+                sender: { name: "The Natural Healing Clinic", email: "claretownsend82@gmail.com" },
+                to: [{ email: clientEmail, name: clientName }],
+                subject: "Your Appointment Confirmation - The Natural Healing Clinic",
+                htmlContent: `
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f3f1ef; padding: 40px 20px;">
+                        <tr>
+                            <td align="center">
+                                <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(9, 93, 40, 0.05); border: 1px solid #d1dcd4;">
+                                    <tr>
+                                        <td align="center" style="padding: 40px 40px 20px 40px; border-bottom: 1px solid #d1dcd4;">
+                                            <img src="https://nhc.co.im/logo.png" alt="The Natural Healing Clinic" width="150" height="50" style="display: block; border: 0; object-fit: contain;">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 40px; color: #555555; font-family: 'Montserrat', Arial, sans-serif; font-size: 15px; line-height: 1.6;">
+                                            <h2 style="color: #095d28; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; font-weight: normal; margin-top: 0; margin-bottom: 20px;">You're Booked In!</h2>
+                                            <p style="margin-bottom: 20px;">Hello <strong>${clientName}</strong>,</p>
+                                            <p style="margin-bottom: 20px;">Thank you for booking with The Natural Healing Clinic. We are looking forward to welcoming you to the clinic in Union Mills.</p>
+                                            
+                                            <div style="background-color: #f9f8f6; border-left: 4px solid #095d28; padding: 20px; margin: 25px 0; border-radius: 0 8px 8px 0;">
+                                                <p style="margin: 0 0 10px 0; font-weight: bold; color: #095d28;">Appointment Details:</p>
+                                                <p style="margin: 0 0 5px 0;"><strong>Service:</strong> ${serviceName}</p>
+                                                <p style="margin: 0;"><strong>Date & Time:</strong> ${formattedDate}</p>
+                                            </div>
+                                            
+                                            <p style="margin-bottom: 20px;">If you need to reschedule or have any questions prior to your visit, please feel free to reach out via your Patient Portal.</p>
+                                            
+                                            <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #eae6e1; text-align: center;">
+                                                <h3 style="color: #095d28; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; margin-bottom: 15px;">Explore More Ways to Support Your Well-being</h3>
+                                                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Complement your treatment with our specialized holistic therapies designed to restore balance.</p>
+                                                <a href="https://nhc.co.im/#services" target="_blank" style="background-color: #0d9b46; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; display: inline-block;">View Our Services</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="padding: 30px 40px; background-color: #f9f8f6; color: #888888; font-family: 'Montserrat', Arial, sans-serif; font-size: 12px; line-height: 1.5; border-top: 1px solid #d1dcd4;">
+                                            <strong style="color: #095d28;">The Natural Healing Clinic</strong><br>
+                                            Led by Clare Kelly | Isle of Man<br>
+                                            13 Cronk Drine, Union Mills, IM4 4NG<br>
+                                            <a href="https://nhc.co.im" style="color: #0d9b46; text-decoration: none;">nhc.co.im</a> | 07624 202 121
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                `
+            })
+        });
+    } catch (err) {
+        console.error("Email dispatch failed:", err);
+    }
+}
+
+window.onload = async function() {
+    try {
+        const db = getSupabase();
+        if(db) {
+            db.auth.onAuthStateChange(async (event, session) => {
+                if (event === 'PASSWORD_RECOVERY') {
+                    const newPassword = prompt("Please enter your new password:");
+                    if (newPassword) {
+                        const { error } = await db.auth.updateUser({ password: newPassword });
+                        if (error) alert("Error updating password: " + error.message);
+                        else alert("Password updated successfully! You are now logged in.");
+                    }
+                }
+            });
+
+            const { data: { session } } = await db.auth.getSession();
+            if(session) {
+                updateNavState(true); 
+                openScreen('screen-dashboard'); 
+                loadClientDashboard(db, session.user);
+            }
+        }
+    } catch(err) {
+        console.log("No active session found.");
+    }
+};
+
+window.validateBusinessHours = function(input) {
+    const val = input.value;
+    if(!val) return;
+    const date = new Date(val);
+    const day = date.getDay();
+    const hour = date.getHours();
+
+    if (day === 0) {
+        alert("The clinic is closed on Sundays. Please select Monday through Saturday.");
+        input.value = "";
+        return;
+    }
+    if (hour < 9 || hour >= 17) {
+        alert("Please select a time between 9:00 AM and 5:00 PM.");
+        input.value = "";
+        return;
+    }
+}
+
+// --- AUTH & BOOKING LOGIC ---
+window.processClientLogin = async function(e) {
     e.preventDefault();
     const btn = document.getElementById('client-login-btn');
     const originalText = btn.innerText;
@@ -84,7 +186,30 @@ async function processClientLogin(e) {
     return false;
 }
 
-async function processRegistration(e) {
+window.processPasswordReset = async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('reset-btn');
+    const ogText = btn.innerText;
+    btn.innerText = "Sending Link...";
+    try {
+        const email = document.getElementById('forgot-email').value.trim();
+        const db = getSupabase();
+        const { error } = await db.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + window.location.pathname
+        });
+        if (error) throw error;
+        alert("If an account exists for that email, a password reset link has been sent.");
+        openScreen('screen-login');
+        document.getElementById('forgot-email').value = '';
+    } catch(err) { 
+        alert("Reset Error: " + err.message); 
+    } finally { 
+        btn.innerText = ogText; 
+    }
+    return false;
+}
+
+window.processRegistration = async function(e) {
     e.preventDefault();
     try {
         const db = getSupabase();
@@ -100,9 +225,12 @@ async function processRegistration(e) {
         if (authData.user) {
             const { error: apptError } = await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
             if(apptError) throw new Error(apptError.message);
+
+            // Fire confirmation email directly via proxy bypass
+            await sendBookingConfirmationEmail(email, name, service, date);
         }
         
-        alert('Registered successfully!'); 
+        alert('Registered and booked successfully!'); 
         updateNavState(true); 
         openScreen('screen-dashboard'); 
         loadClientDashboard(db, authData.user);
@@ -111,7 +239,105 @@ async function processRegistration(e) {
     return false;
 }
 
-async function submitMedicalIntake(e) {
+window.bookNewSession = async function(e) {
+    e.preventDefault();
+    try {
+        const db = getSupabase();
+        const { data: { user } } = await db.auth.getUser();
+
+        const serviceName = document.getElementById('portal-service').value;
+        const appointmentTime = document.getElementById('portal-date').value;
+        const clientName = user.user_metadata?.full_name || user.email;
+
+        const { error } = await db.from('appointments').insert([{ client_id: user.id, client_name: clientName, service_name: serviceName, appointment_time: appointmentTime, status: 'confirmed' }]);
+        if(error) throw error;
+
+        // Fire confirmation email directly via proxy bypass
+        await sendBookingConfirmationEmail(user.email, clientName, serviceName, appointmentTime);
+
+        alert("Appointment booked successfully and confirmation email sent!"); 
+        loadClientDashboard(db, user);
+    } catch(err) { alert("Error booking session: " + err.message); }
+    return false;
+};
+
+// Cancel functionality relies on the Supabase RLS SQL policy we ran
+window.cancelAppointment = async function(id) {
+    if(!confirm("Are you sure you want to cancel this appointment?")) return;
+    try {
+        const db = getSupabase();
+        const { error } = await db.from('appointments').delete().eq('id', id);
+        if(error) throw error;
+        
+        const { data: { user } } = await db.auth.getUser();
+        loadClientDashboard(db, user);
+    } catch(err) { alert("Error cancelling appointment: " + err.message); }
+};
+
+window.processLogout = async function() {
+    try {
+        const db = getSupabase();
+        if(db) await db.auth.signOut();
+        updateNavState(false); 
+        openScreen('screen-home');
+        location.reload();
+    } catch(err) { alert("Error signing out: " + err.message); }
+}
+
+function updateNavState(isLoggedIn) {
+    document.getElementById('nav-portal-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+    document.getElementById('nav-book-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+    document.getElementById('nav-logout-btn').style.display = isLoggedIn ? 'inline-block' : 'none';
+    document.getElementById('mobile-portal-link').style.display = isLoggedIn ? 'none' : 'block';
+    document.getElementById('mobile-book-link').style.display = isLoggedIn ? 'none' : 'block';
+    document.getElementById('mobile-logout-link').style.display = isLoggedIn ? 'block' : 'none';
+}
+
+// --- PORTAL DATA LOADING ---
+async function loadClientDashboard(db, user) {
+    const list = document.getElementById('client-appointments-list');
+    const chatBox = document.getElementById('client-chat-box');
+    document.getElementById('portal-welcome-title').innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
+
+    try {
+        const { data: appts, error: apptError } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
+        if(apptError) throw apptError;
+
+        list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => `
+            <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); display: flex; justify-content: space-between; align-items: center; background: white;">
+                <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${new Date(a.appointment_time).toLocaleString('en-GB')}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
+                <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1.5rem; color: #a94442; border-color: #a94442;" onclick="cancelAppointment('${a.id}')">Cancel</button>
+            </div>`).join('');
+
+        const { data: msgs, error: msgError } = await db.from('messages').select('*').eq('client_id', user.id).order('created_at', { ascending: true });
+        if(msgError) throw msgError;
+
+        if(msgs) {
+            const chatMsgs = msgs.filter(m => !m.content.includes('[DAILY HEALTH LOG]') && !m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
+            chatBox.innerHTML = chatMsgs.map(m => `<div class="msg ${m.sender}"><strong>${m.sender === 'client' ? 'You' : 'Clare'}:</strong> ${m.content}</div>`).join('');
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    } catch(err) { list.innerHTML = `<p style="color: #a94442; font-size: 0.9rem;">Database Error: ${err.message}</p>`; }
+}
+
+window.handleClientMessage = async function(e) {
+    e.preventDefault();
+    try {
+        const db = getSupabase();
+        const input = document.getElementById('client-msg-input');
+        const { data: { user } } = await db.auth.getUser();
+        
+        const { error } = await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: input.value.trim() }]);
+        if(error) throw error;
+
+        document.getElementById('client-chat-box').innerHTML += `<div class="msg client"><strong>You:</strong> ${input.value}</div>`;
+        input.value = '';
+        document.getElementById('client-chat-box').scrollTop = document.getElementById('client-chat-box').scrollHeight;
+    } catch(err) { alert("Error sending message: " + err.message); }
+    return false;
+}
+
+window.submitMedicalIntake = async function(e) {
     e.preventDefault();
     try {
         const db = getSupabase();
@@ -127,6 +353,7 @@ async function submitMedicalIntake(e) {
     return false;
 }
 
+// --- NUTRITION & BARCODE LOGIC ---
 window.startBarcodeScanner = function() {
     try {
         const readerDiv = document.getElementById('reader');
@@ -295,7 +522,7 @@ window.submitDailyLog = async function(e) {
         const db = getSupabase();
         const { data: { user } } = await db.auth.getUser();
 
-        const logData = `[DAILY HEALTH LOG]\nDate: ${new Date().toLocaleDateString('en-GB')}\n\n🥗 FOOD & NUTRITION:\n[Breakfast] ${document.getElementById('log-brk-desc').value || '-'}\n> Macros: ${document.getElementById('log-brk-cal').value||0}kcal | ${document.getElementById('log-brk-pro').value||0}g Pro | ${document.getElementById('log-brk-car').value||0}g Carb | ${document.getElementById('log-brk-fat').value||0}g Fat\n> Micros: ${document.getElementById('log-brk-fib').value||0}g Fiber | ${document.getElementById('log-brk-sod').value||0}mg Sodium | ${document.getElementById('log-brk-pot').value||0}mg Potassium | ${document.getElementById('log-brk-calc').value||0}mg Calcium | ${document.getElementById('log-brk-iron').value||0}mg Iron\n\n[Lunch] ${document.getElementById('log-lun-desc').value || '-'}\n> Macros: ${document.getElementById('log-lun-cal').value||0}kcal | ${document.getElementById('log-lun-pro').value||0}g Pro | ${document.getElementById('log-lun-car').value||0}g Carb | ${document.getElementById('log-lun-fat').value||0}g Fat\n> Micros: ${document.getElementById('log-lun-fib').value||0}g Fiber | ${document.getElementById('log-lun-sod').value||0}mg Sodium | ${document.getElementById('log-lun-pot').value||0}mg Potassium | ${document.getElementById('log-lun-calc').value||0}mg Calcium | ${document.getElementById('log-lun-iron').value||0}mg Iron\n\n[Dinner] ${document.getElementById('log-din-desc').value || '-'}\n> Macros: ${document.getElementById('log-din-cal').value||0}kcal | ${document.getElementById('log-din-pro').value||0}g Pro | ${document.getElementById('log-din-car').value||0}g Carb | ${document.getElementById('log-din-fat').value||0}g Fat\n> Micros: ${document.getElementById('log-din-fib').value||0}g Fiber | ${document.getElementById('log-din-sod').value||0}mg Sodium | ${document.getElementById('log-din-pot').value||0}mg Potassium | ${document.getElementById('log-din-calc').value||0}mg Calcium | ${document.getElementById('log-din-iron').value||0}mg Iron\n\n[Snacks] ${document.getElementById('log-snk-desc').value || '-'}\n> Macros: ${document.getElementById('log-snk-cal').value||0}kcal | ${document.getElementById('log-snk-pro').value||0}g Pro | ${document.getElementById('log-snk-car').value||0}g Carb | ${document.getElementById('log-snk-fat').value||0}g Fat\n> Micros: ${document.getElementById('log-snk-fib').value||0}g Fiber | ${document.getElementById('log-snk-sod').value||0}mg Sodium | ${document.getElementById('log-snk-pot').value||0}mg Potassium | ${document.getElementById('log-snk-calc').value||0}mg Calcium | ${document.getElementById('log-snk-iron').value||0}mg Iron\n\n>> DAILY MACRO TOTALS: ${document.getElementById('tot-cal').innerText} kcal | ${document.getElementById('tot-pro').innerText} Protein | ${document.getElementById('tot-car').innerText} Carbs | ${document.getElementById('tot-fat').innerText} Fat \n>> DAILY MICRO TOTALS: ${document.getElementById('tot-fib').innerText} Fiber | ${document.getElementById('tot-sod').innerText} Sodium | ${document.getElementById('tot-pot').innerText} Potassium | ${document.getElementById('tot-calc').innerText} Calcium | ${document.getElementById('tot-iron').innerText} Iron\n\n🏃‍♀️ ACTIVITY: ${document.getElementById('log-activity-type').value || '-'} (${document.getElementById('log-activity-dur').value || '0'} mins) | Intensity: ${document.getElementById('log-activity-int').value || '-'}\n🧠 MOOD: ${document.getElementById('log-mood-rating').value || '-'} | Energy: ${document.getElementById('log-energy').value || '-'}/10 | Notes: ${document.getElementById('log-mood-notes').value || '-'}\n💤 SLEEP: ${document.getElementById('log-sleep-hours').value || '-'} hours | Quality: ${document.getElementById('log-sleep-quality').value || '-'}/5\n🚽 BOWEL: ${document.getElementById('log-bowel-type').value || '-'} | Freq: ${document.getElementById('log-bowel-freq').value || '-'}\n💧 WATER: ${document.getElementById('log-water').value || '-'}\n📏 VITALS: Weight: ${document.getElementById('log-meas-weight').value || '-'} | BP: ${document.getElementById('log-meas-bp').value || '-'}`;
+        const logData = `[DAILY HEALTH LOG]\nDate: ${new Date().toLocaleDateString('en-GB')}\n\n🥗 FOOD & NUTRITION:\n[Breakfast] ${document.getElementById('log-brk-desc').value || '-'}\n> Macros: ${document.getElementById('log-brk-cal').value||0}kcal | ${document.getElementById('log-brk-pro').value||0}g Pro | ${document.getElementById('log-brk-car').value||0}g Carb | ${document.getElementById('log-brk-fat').value||0}g Fat\n> Micros: ${document.getElementById('log-brk-fib').value||0}g Fiber | ${document.getElementById('log-brk-sod').value||0}mg Sodium | ${document.getElementById('log-brk-pot').value||0}mg Potassium | ${document.getElementById('log-brk-calc').value||0}mg Calcium | ${document.getElementById('log-brk-iron').value||0}mg Iron\n\n[Lunch] ${document.getElementById('log-lun-desc').value || '-'}\n> Macros: ${document.getElementById('log-lun-cal').value||0}kcal | ${document.getElementById('log-lun-pro').value||0}g Pro | ${document.getElementById('log-lun-car').value||0}g Carb | ${document.getElementById('log-lun-fat').value||0}g Fat\n> Micros: ${document.getElementById('log-lun-fib').value||0}g Fiber | ${document.getElementById('log-lun-sod').value||0}mg Sodium | ${document.getElementById('log-lun-pot').value||0}mg Potassium | ${document.getElementById('log-lun-calc').value||0}mg Calcium | ${document.getElementById('log-lun-iron').value||0}mg Iron\n\n[Dinner] ${document.getElementById('log-din-desc').value || '-'}\n> Macros: ${document.getElementById('log-din-cal').value||0}kcal | ${document.getElementById('log-din-pro').value||0}g Pro | ${document.getElementById('log-din-car').value||0}g Carb | ${document.getElementById('log-din-fat').value||0}g Fat\n> Micros: ${document.getElementById('log-din-fib').value||0}g Fiber | ${document.getElementById('log-din-sod').value||0}mg Sodium | ${document.getElementById('log-din-pot').value||0}mg Potassium | ${document.getElementById('log-din-calc').value||0}mg Calcium | ${document.getElementById('log-din-iron').value||0}mg Iron\n\n[Snacks] ${document.getElementById('log-snk-desc').value || '-'}\n> Macros: ${document.getElementById('log-snk-cal').value||0}kcal | ${document.getElementById('log-snk-pro').value||0}g Pro | ${document.getElementById('log-snk-car').value||0}g Carb | ${document.getElementById('log-snk-fat').value||0}g Fat\n> Micros: ${document.getElementById('log-snk-fib').value||0}g Fiber | ${document.getElementById('log-snk-sod').value||0}mg Sodium | ${document.getElementById('log-snk-pot').value||0}mg Potassium | ${document.getElementById('log-snk-calc').value||0}mg Calcium | ${document.getElementById('log-snk-iron').value||0}mg Iron\n\n>> DAILY MACRO TOTALS: ${document.getElementById('tot-cal').innerText} kcal | ${document.getElementById('tot-pro').innerText} Protein | ${document.getElementById('tot-car').innerText} Carbs | ${document.getElementById('tot-fat').innerText} Fat \n>> DAILY MICRO TOTALS: ${document.getElementById('tot-fib').innerText} Fiber | ${document.getElementById('tot-sod').innerText} Sodium | ${document.getElementById('tot-pot').innerText} Potassium | ${document.getElementById('tot-calc').innerText} Calcium | ${document.getElementById('tot-iron').innerText} Iron\n\n🏃‍♀️ ACTIVITY: ${document.getElementById('log-activity-type').value || '-'} (${document.getElementById('log-activity-dur').value || '0'} mins) | Intensity: ${document.getElementById('log-activity-int')?.value || '-'}\n🧠 MOOD: ${document.getElementById('log-mood-rating').value || '-'} | Energy: ${document.getElementById('log-energy')?.value || '-'}/10 | Notes: ${document.getElementById('log-mood-notes')?.value || '-'}\n💤 SLEEP: ${document.getElementById('log-sleep-hours').value || '-'} hours | Quality: ${document.getElementById('log-sleep-quality').value || '-'}/5\n🚽 BOWEL: ${document.getElementById('log-bowel-type').value || '-'} | Freq: ${document.getElementById('log-bowel-freq').value || '-'}\n💧 WATER: ${document.getElementById('log-water').value || '-'}\n📏 VITALS: Weight: ${document.getElementById('log-meas-weight').value || '-'} | BP: ${document.getElementById('log-meas-bp').value || '-'}`;
 
         const { error } = await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: logData }]);
         if(error) throw error;
@@ -306,90 +533,3 @@ window.submitDailyLog = async function(e) {
     } catch(err) { alert("Error saving log: " + err.message); }
     return false;
 };
-
-window.bookNewSession = async function(e) {
-    e.preventDefault();
-    try {
-        const db = getSupabase();
-        const { data: { user } } = await db.auth.getUser();
-
-        const { error } = await db.from('appointments').insert([{ client_id: user.id, client_name: user.user_metadata?.full_name || user.email, service_name: document.getElementById('portal-service').value, appointment_time: document.getElementById('portal-date').value, status: 'confirmed' }]);
-        if(error) throw error;
-
-        alert("Appointment booked!"); loadClientDashboard(db, user);
-    } catch(err) { alert("Error booking session: " + err.message); }
-    return false;
-};
-
-window.cancelAppointment = async function(id) {
-    if(!confirm("Cancel appointment?")) return;
-    try {
-        const db = getSupabase();
-        const { error } = await db.from('appointments').delete().eq('id', id);
-        if(error) throw error;
-        const { data: { user } } = await db.auth.getUser();
-        loadClientDashboard(db, user);
-    } catch(err) { alert("Error cancelling appointment: " + err.message); }
-};
-
-async function loadClientDashboard(db, user) {
-    const list = document.getElementById('client-appointments-list');
-    const chatBox = document.getElementById('client-chat-box');
-    document.getElementById('portal-welcome-title').innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
-
-    try {
-        const { data: appts, error: apptError } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
-        if(apptError) throw apptError;
-
-        list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => `
-            <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); display: flex; justify-content: space-between; align-items: center; background: white;">
-                <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${new Date(a.appointment_time).toLocaleString('en-GB')}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
-                <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1.5rem; color: #a94442; border-color: #a94442;" onclick="cancelAppointment('${a.id}')">Cancel</button>
-            </div>`).join('');
-
-        const { data: msgs, error: msgError } = await db.from('messages').select('*').eq('client_id', user.id).order('created_at', { ascending: true });
-        if(msgError) throw msgError;
-
-        if(msgs) {
-            const chatMsgs = msgs.filter(m => !m.content.includes('[DAILY HEALTH LOG]') && !m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
-            chatBox.innerHTML = chatMsgs.map(m => `<div class="msg ${m.sender}"><strong>${m.sender === 'client' ? 'You' : 'Clare'}:</strong> ${m.content}</div>`).join('');
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-    } catch(err) { list.innerHTML = `<p style="color: #a94442; font-size: 0.9rem;">Database Error: ${err.message}</p>`; }
-}
-
-async function handleClientMessage(e) {
-    e.preventDefault();
-    try {
-        const db = getSupabase();
-        const input = document.getElementById('client-msg-input');
-        const { data: { user } } = await db.auth.getUser();
-        
-        const { error } = await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: input.value.trim() }]);
-        if(error) throw error;
-
-        document.getElementById('client-chat-box').innerHTML += `<div class="msg client"><strong>You:</strong> ${input.value}</div>`;
-        input.value = '';
-        document.getElementById('client-chat-box').scrollTop = document.getElementById('client-chat-box').scrollHeight;
-    } catch(err) { alert("Error sending message: " + err.message); }
-    return false;
-}
-
-async function processLogout() {
-    try {
-        const db = getSupabase();
-        if(db) await db.auth.signOut();
-        updateNavState(false); 
-        openScreen('screen-home');
-        location.reload();
-    } catch(err) { alert("Error signing out: " + err.message); }
-}
-
-function updateNavState(isLoggedIn) {
-    document.getElementById('nav-portal-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
-    document.getElementById('nav-book-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
-    document.getElementById('nav-logout-btn').style.display = isLoggedIn ? 'inline-block' : 'none';
-    document.getElementById('mobile-portal-link').style.display = isLoggedIn ? 'none' : 'block';
-    document.getElementById('mobile-book-link').style.display = isLoggedIn ? 'none' : 'block';
-    document.getElementById('mobile-logout-link').style.display = isLoggedIn ? 'block' : 'none';
-}
