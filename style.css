@@ -193,3 +193,71 @@ footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); col
     .dashboard-container { grid-template-columns: 2fr 1fr; padding: 0 6%; margin: 4rem auto; gap: 3rem; }
     footer { flex-direction: row; text-align: left; justify-content: space-between; padding: 0 6% 6rem 6%; }
 }
+/* ================= PREMIUM PORTAL & DASHBOARD UPGRADES ================= */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+}
+@media(min-width: 900px) {
+    .dashboard-container {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+}
+.portal-welcome-banner {
+    background: linear-gradient(135deg, var(--card-bg), #eae6e1);
+    padding: 3rem 4%;
+    border-bottom: 1px solid var(--secondary-sand);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+.dash-card {
+    background: white;
+    border: 1px solid var(--secondary-sand);
+    border-radius: 12px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(9, 93, 40, 0.03);
+    margin-bottom: 2rem;
+}
+.dash-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--text-main);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--secondary-sand);
+    padding-bottom: 0.8rem;
+}
+.dash-card label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #666;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-weight: 600;
+}
+.dash-card input, .dash-card select, .dash-card textarea {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--secondary-sand);
+    border-radius: 8px;
+    background: var(--bg-color);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+    color: var(--text-main);
+}
+.dash-card input:focus, .dash-card select:focus {
+    outline: none;
+    border-color: var(--primary-sage);
+    background: white;
+}
