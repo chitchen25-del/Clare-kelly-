@@ -509,7 +509,11 @@
             <button class="btn" style="background: var(--primary-green, #1B4332); color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="forceBarcodeScanner()">📷</button>
         </div>
         
-        <div id="barcode-reader" style="width: 100%; display: none; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; border: 1px solid #ddd;"></div>
+        <!-- Camera Viewport Box -->
+        <div id="interactive-barcode-container" style="width: 100%; display: none; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; background: #000;">
+            <div id="reader-view" style="width: 100%;"></div>
+        </div>
+        
         <div id="food-results" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: #555;"></div>
 
         <div style="display: flex; flex-direction: column; gap: 0.8rem;">
@@ -600,7 +604,7 @@
         <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 1.2rem; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);" onclick="submitDailyLog(event)">SAVE DAILY METRICS</button>
     </div>
 
-    <!-- EMBEDDED JAVASCRIPT: Forced Rear Camera Scanner & Database -->
+    <!-- EMBEDDED JAVASCRIPT: High-Speed Instant Scanner Logic -->
     <script>
         window.forceSearchFood = async function() {
             const query = document.getElementById('food-search-input').value.trim();
@@ -631,66 +635,74 @@
             }
         };
 
-        let embeddedQrcodeScanner = null;
-        window.forceBarcodeScanner = function() {
-            const readerDiv = document.getElementById('barcode-reader');
+        let activeHtml5QrCode = null;
+        window.forceBarcodeScanner = async function() {
+            const container = document.getElementById('interactive-barcode-container');
             const resultsDiv = document.getElementById('food-results');
             
-            if (!window.Html5QrcodeScanner) {
-                resultsDiv.innerHTML = "<p style='color:#a94442; text-align:center;'>Camera library still loading. Refresh page and try again.</p>";
+            if (!window.Html5Qrcode) {
+                resultsDiv.innerHTML = "<p style='color:#a94442; text-align:center;'>Scanner engine loading. Please wait a second and retry.</p>";
                 return;
             }
 
-            if(readerDiv.style.display === 'block') {
-                if(embeddedQrcodeScanner) embeddedQrcodeScanner.clear();
-                readerDiv.style.display = 'none';
+            if (container.style.display === 'block') {
+                if (activeHtml5QrCode) {
+                    await activeHtml5QrCode.stop().catch(() => {});
+                    activeHtml5QrCode.clear();
+                }
+                container.style.display = 'none';
                 return;
             }
             
-            readerDiv.style.display = 'block';
-            resultsDiv.innerHTML = "";
+            container.style.display = 'block';
+            resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Initializing rear camera...</p>`;
             
-            // Initializing with facingMode: { exact: "environment" } forces the rear-facing camera
-            embeddedQrcodeScanner = new Html5QrcodeScanner(
-                "barcode-reader", 
-                { 
-                    fps: 10, 
-                    qrbox: {width: 250, height: 250},
-                    aspectRatio: 1.0,
-                    videoConstraints: {
-                        facingMode: "environment"
-                    }
-                }, 
-                false
-            );
+            activeHtml5QrCode = new Html5Qrcode("reader-view");
             
-            embeddedQrcodeScanner.render(async (decodedText) => {
-                embeddedQrcodeScanner.clear();
-                readerDiv.style.display = 'none';
-                resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Looking up scanned item...</p>`;
-                
-                try {
-                    const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${decodedText}.json`);
-                    const data = await res.json();
-                    
-                    if(data.status === 1 && data.product) {
-                        const p = data.product;
-                        resultsDiv.innerHTML = `
-                            <div style="padding: 1rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px;">
-                                <strong style="color: #0056b3;">${p.product_name || 'Item Found'}</strong><br>
-                                <span style="font-size: 0.85rem; color: #555;">${p.nutriments?.['energy-kcal_100g'] ? Math.round(p.nutriments['energy-kcal_100g']) + ' kcal' : 'Calories unknown'}</span><br>
-                                <button class="btn" style="width: 100%; margin-top: 0.8rem; background: #0056b3; color: white; padding: 0.6rem; border-radius: 4px;" onclick="alert('Food logged!')">LOG THIS ITEM</button>
-                            </div>`;
-                    } else {
-                        resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Barcode not in database.</p>`;
+            try {
+                await activeHtml5QrCode.start(
+                    { facingMode: "environment" },
+                    { fps: 15, qrbox: { width: 250, height: 150 } },
+                    async (decodedText) => {
+                        // SUCCESS: Barcode detected!
+                        await activeHtml5QrCode.stop().catch(() => {});
+                        activeHtml5QrCode.clear();
+                        container.style.display = 'none';
+                        
+                        resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Found Barcode (${decodedText}). Fetching product...</p>`;
+                        
+                        try {
+                            const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${decodedText}.json`);
+                            const data = await res.json();
+                            
+                            if(data.status === 1 && data.product) {
+                                const p = data.product;
+                                resultsDiv.innerHTML = `
+                                    <div style="padding: 1rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px;">
+                                        <strong style="color: #0056b3;">${p.product_name || 'Item Found'}</strong><br>
+                                        <span style="font-size: 0.85rem; color: #555;">${p.nutriments?.['energy-kcal_100g'] ? Math.round(p.nutriments['energy-kcal_100g']) + ' kcal per 100g' : 'Calories unknown'}</span><br>
+                                        <button class="btn" style="width: 100%; margin-top: 0.8rem; background: #0056b3; color: white; padding: 0.6rem; border-radius: 4px;" onclick="alert('Food logged successfully!')">LOG THIS ITEM</button>
+                                    </div>`;
+                            } else {
+                                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Barcode (${decodedText}) not found in database.</p>`;
+                            }
+                        } catch(err) {
+                            resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Error looking up barcode.</p>`;
+                        }
+                    },
+                    (errorMessage) => {
+                        // Scanning frame loop (actively hunting for a barcode)
                     }
-                } catch(err) {
-                    resultsDiv.innerHTML = `<p style="color: #a94442;">Error fetching barcode data.</p>`;
-                }
-            }, (errorMessage) => {});
+                );
+                resultsDiv.innerHTML = `<p style="font-size: 0.85rem; color: #666; text-align: center;">Point camera at product barcode...</p>`;
+            } catch(err) {
+                container.style.display = 'none';
+                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Camera permission denied or unavailable.</p>`;
+            }
         };
     </script>
 </div>
+
 
 
 
