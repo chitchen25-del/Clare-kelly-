@@ -315,18 +315,6 @@
                         <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
                     </optgroup>
                 </select>
-
-                <!-- Split Date & Time Inputs for Registration -->
-                <label>Session Date (Mon-Sat)</label>
-                <input type="date" id="reg-date" min="2026-01-01" required onchange="validateBusinessDays(this)">
-
-                <label>Session Time (9:00 AM - 5:00 PM)</label>
-                <input type="time" id="reg-time" min="09:00" max="17:00" required onchange="validateBusinessHours(this)">
-
-                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Complete Booking</button>
-            </form>
-        </div>
-    </div>
                                       <!-- SERVICE DATE & TIME SELECTION -->
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                             <div>
@@ -377,11 +365,11 @@
                     <div id="client-appointments-list"><p style="color: #888; font-size: 0.95rem;">Loading schedule...</p></div>
                 </div>
 
-                <div class="dash-card" id="new-booking-card">
-                    <h3>Book Another Session</h3>
+                <div class="dash-card" id="new-booking-card" style="border-top: 4px solid var(--text-main);">
+                    <h3 style="margin-bottom: 1.5rem;">Book Another Session</h3>
                     <form onsubmit="return bookNewSession(event)">
-                        <label>Treatment Pathway</label>
-                        <select id="portal-service" required>
+                        <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Treatment Pathway</label>
+                        <select id="portal-service" required style="margin-bottom: 1.2rem;">
                             <option value="">-- Choose a Service or Test --</option>
                             <optgroup label="Myofascial Release Therapy">
                                 <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
@@ -424,17 +412,26 @@
                                 <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
                             </optgroup>
                         </select>
-
-                        <!-- Split Date & Time Inputs for Portal Booking -->
-                        <label>Session Date (Mon-Sat)</label>
-                        <input type="date" id="portal-date" min="2026-01-01" required onchange="validateBusinessDays(this)">
-
-                        <label>Session Time (9:00 AM - 5:00 PM)</label>
-                        <input type="time" id="portal-time" min="09:00" max="17:00" required onchange="validateBusinessHours(this)">
-
-                        <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Confirm Booking</button>
-                    </form>
-                </div>
+                                              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div>
+                                <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Appointment Date</label>
+                                <input type="date" id="portal-date" min="2026-01-01" required style="margin-bottom: 0;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Preferred Time</label>
+                                <select id="portal-time" required style="margin-bottom: 0;">
+                                    <option value="">-- Select Time --</option>
+                                    <option value="09:00">09:00 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="11:00">11:00 AM</option>
+                                    <option value="12:00">12:00 PM</option>
+                                    <option value="13:00">01:00 PM</option>
+                                    <option value="14:00">02:00 PM</option>
+                                    <option value="15:00">03:00 PM</option>
+                                    <option value="16:00">04:00 PM</option>
+                                </select>
+                            </div>
+                        </div>
 
                         <button type="submit" class="btn" style="width: 100%; padding: 0.9rem;">Confirm Booking</button>
                     </form>
