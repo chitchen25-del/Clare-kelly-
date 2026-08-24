@@ -21,6 +21,29 @@ window.toggleAccordion = function(id) {
     btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
 }
 
+// Clean 12-hour time formatter (e.g. 14:00 -> 2:00 pm)
+window.formatCleanTime = function(timeString) {
+    if (!timeString) return '';
+    let timePart = timeString;
+    if (timeString.includes('T')) {
+        timePart = timeString.split('T')[1].substring(0, 5);
+    }
+    const [hourStr, minuteStr] = timePart.split(':');
+    let hour = parseInt(hourStr, 10);
+    const ampm = hour >= 12 ? 'pm' : 'am';
+    hour = hour % 12;
+    hour = hour ? hour; 
+    return `${hour}:${minuteStr} ${ampm}`;
+};
+
+window.formatCleanDateTime = function(isoString) {
+    if (!isoString) return '';
+    const dateObj = new Date(isoString);
+    const datePart = dateObj.toLocaleDateString('en-GB', { dateStyle: 'full' });
+    const timePart = window.formatCleanTime(isoString);
+    return `${datePart} at ${timePart}`;
+};
+
 const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
 
@@ -57,14 +80,20 @@ window.processClientLogin = async function(e) {
         const email = document.getElementById('login-email').value.trim();
         const pass = document.getElementById('login-password').value.trim();
         const db = getSupabase();
+        
+        if (!db) throw new Error("Supabase client failed to initialize.");
+
         const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
         if (error) throw new Error(error.message);
+        
         if (data.user) {
             updateNavState(true); 
             openScreen('screen-dashboard'); 
             loadClientDashboard(db, data.user);
         }
-    } catch (err) { alert("Login Failed: " + err.message); }
+    } catch (err) { 
+        alert("Login Failed: " + err.message); 
+    }
     return false;
 }
 
@@ -92,9 +121,9 @@ window.processRegistration = async function(e) {
                 await db.from('client_tiers').insert([{ client_id: authData.user.id, is_premium: false }]);
             }
 
-            const formattedDate = new Date(date).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' });
             await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
 
+            const formattedDate = window.formatCleanDateTime(date);
             await db.rpc('send_booking_email', {
                 to_email: email,
                 client_name: name,
@@ -121,9 +150,9 @@ window.bookNewSession = async function(e) {
         const serviceName = document.getElementById('portal-service').value;
         const appointmentTime = document.getElementById('portal-date').value;
         const clientName = user.user_metadata?.full_name || user.email;
-        const formattedDate = new Date(appointmentTime).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' });
+        const formattedDate = window.formatCleanDateTime(appointmentTime);
 
-        const isFunctional = serviceName.includes('Functional') || serviceName.includes('Gut Reset') || serviceName.includes('Health Audit');
+        const isFunctional = serviceName.includes('Functional') || serviceName.includes('Gut Reset');
         let vipCode = null;
 
         if (isFunctional) {
@@ -159,7 +188,7 @@ window.cancelAppointment = async function(id) {
 };
 
 window.rescheduleAppointment = async function(id) {
-    const newDate = prompt("Enter new date and time (YYYY-MM-DDTHH:MM, e.g. 2026-09-01T10:00):");
+    const newDate = prompt("Enter new date and time (YYYY-MM-DDTHH:MM, e.g. 2026-09-01T14:00):");
     if(!newDate) return;
     try {
         const db = getSupabase();
@@ -171,121 +200,6 @@ window.rescheduleAppointment = async function(id) {
     } catch(err) { alert("Reschedule Error: " + err.message); }
 };
 
-window.unlockVipApp = async function(e) {
-    e.preventDefault();
-    try {
-        const db = getSupabase();
-        const { data: { user } } = await db.auth.getUser();
-        const enteredCode = document.getElementById('vip-code-input').value.trim().toUpperCase();
-
-        const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).single();
-        if(tier && tier.unlock_code === enteredCode) {
-            await db.from('client_tiers').update({ is_premium: true }).eq('client_id', user.id);
-            alert("VIP App Unlocked Successfully!");
-            loadClientDashboard(db, user);
-        } else {
-            alert("Invalid unlock code. Please check your confirmation email.");
-        }
-    } catch(err) { alert("Error unlocking: " + err.message); }
-    return false;
-};
-
-async function loadClientDashboard(db, user) {
-    const list = document.getElementById('client-appointments-list');
-    document.getElementById('portal-welcome-title').innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
-
-    try {
-        // Use .maybeSingle() instead of .single() so it never crashes if multiple rows exist
-        const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).maybeSingle();
-        
-        const isVip = tier && (tier.is_premium === true || tier.is_premium === 'true');
-
-        if (isVip) {
-            const unlockCard = document.getElementById('vip-unlock-card');
-            const premiumApp = document.getElementById('premium-app-container');
-            if(unlockCard) unlockCard.style.display = 'none';
-            if(premiumApp) premiumApp.style.display = 'block';
-        } else {
-            const unlockCard = document.getElementById('vip-unlock-card');
-            const premiumApp = document.getElementById('premium-app-container');
-            if(unlockCard) unlockCard.style.display = 'block';
-            if(premiumApp) premiumApp.style.display = 'none';
-        }
-
-        const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
-
-        list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => {
-            const cleanDisplayTime = window.formatCleanDateTime(a.appointment_time);
-            return `
-            <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); background: white;">
-                <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${cleanDisplayTime}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
-                <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
-                    <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; flex: 1;" onclick="rescheduleAppointment('${a.id}')">Reschedule</button>
-                    <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; color: #a94442; border-color: #a94442; flex: 1;" onclick="cancelAppointment('${a.id}')">Cancel</button>
-                </div>
-            </div>`;
-        }).join('');
-    } catch(err) { console.error("Dashboard Load Error:", err.message); }
-}
-
-        const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
-
-        list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => `
-            <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); background: white;">
-                <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${new Date(a.appointment_time).toLocaleString('en-GB')}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
-                <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
-                    <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; flex: 1;" onclick="rescheduleAppointment('${a.id}')">Reschedule</button>
-                    <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; color: #a94442; border-color: #a94442; flex: 1;" onclick="cancelAppointment('${a.id}')">Cancel</button>
-                </div>
-            </div>`).join('');
-    } catch(err) { console.error(err.message); }
-}
-
-window.submitDailyLog = async function(e) {
-    e.preventDefault();
-    alert("Daily log saved successfully!");
-    return false;
-};
-
-window.handleClientMessage = async function(e) {
-    e.preventDefault();
-    alert("Message sent to Clare!");
-    document.getElementById('client-msg-input').value = '';
-    return false;
-};
-
-window.searchFood = function() {
-    alert("Food database search triggered.");
-};
-
-window.startBarcodeScanner = function() {
-    alert("Barcode scanner initiated.");
-};
-
-window.updateDailyTotals = function() {};
-
-window.closePwaOverlay = function() {
-    const overlay = document.getElementById('pwa-install-overlay');
-    if(overlay) overlay.style.display = 'none';
-};
-
-window.processLogout = async function() {
-    try {
-        const db = getSupabase();
-        if(db) await db.auth.signOut();
-        location.reload();
-    } catch(err) { alert("Error signing out: " + err.message); }
-}
-
-function updateNavState(isLoggedIn) {
-    document.getElementById('nav-portal-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
-    document.getElementById('nav-book-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
-    document.getElementById('nav-logout-btn').style.display = isLoggedIn ? 'inline-block' : 'none';
-    document.getElementById('mobile-portal-link').style.display = isLoggedIn ? 'none' : 'block';
-    document.getElementById('mobile-book-link').style.display = isLoggedIn ? 'none' : 'block';
-    document.getElementById('mobile-logout-link').style.display = isLoggedIn ? 'block' : 'none';
-}
-// 1. Handle VIP Code Verification & App Unlock
 window.unlockVipApp = async function(e) {
     e.preventDefault();
     try {
@@ -311,7 +225,6 @@ window.unlockVipApp = async function(e) {
     return false;
 };
 
-// 2. Trigger PWA Native App Install Prompt / Overlay
 window.triggerPwaInstall = function() {
     const overlay = document.getElementById('pwa-install-overlay');
     if(overlay) {
@@ -324,4 +237,59 @@ window.triggerPwaInstall = function() {
 window.closePwaOverlay = function() {
     const overlay = document.getElementById('pwa-install-overlay');
     if(overlay) overlay.style.display = 'none';
+}
+
+async function loadClientDashboard(db, user) {
+    const list = document.getElementById('client-appointments-list');
+    const welcomeTitle = document.getElementById('portal-welcome-title');
+    if(welcomeTitle) welcomeTitle.innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
+
+    try {
+        const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).maybeSingle();
+        
+        const isVip = tier && (tier.is_premium === true || tier.is_premium === 'true');
+        const unlockCard = document.getElementById('vip-unlock-card');
+        const premiumApp = document.getElementById('premium-app-container');
+
+        if (isVip) {
+            if(unlockCard) unlockCard.style.display = 'none';
+            if(premiumApp) premiumApp.style.display = 'block';
+        } else {
+            if(unlockCard) unlockCard.style.display = 'block';
+            if(premiumApp) premiumApp.style.display = 'none';
+        }
+
+        const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
+
+        if(list) {
+            list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => {
+                const cleanDisplayTime = window.formatCleanDateTime(a.appointment_time);
+                return `
+                <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); background: white;">
+                    <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${cleanDisplayTime}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
+                    <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
+                        <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; flex: 1;" onclick="rescheduleAppointment('${a.id}')">Reschedule</button>
+                        <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; color: #a94442; border-color: #a94442; flex: 1;" onclick="cancelAppointment('${a.id}')">Cancel</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+    } catch(err) { console.error("Dashboard Load Error:", err.message); }
+}
+
+window.processLogout = async function() {
+    try {
+        const db = getSupabase();
+        if(db) await db.auth.signOut();
+        location.reload();
+    } catch(err) { alert("Error signing out: " + err.message); }
+}
+
+function updateNavState(isLoggedIn) {
+    document.getElementById('nav-portal-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+    document.getElementById('nav-book-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+    document.getElementById('nav-logout-btn').style.display = isLoggedIn ? 'inline-block' : 'none';
+    document.getElementById('mobile-portal-link').style.display = isLoggedIn ? 'none' : 'block';
+    document.getElementById('mobile-book-link').style.display = isLoggedIn ? 'none' : 'block';
+    document.getElementById('mobile-logout-link').style.display = isLoggedIn ? 'block' : 'none';
 }
