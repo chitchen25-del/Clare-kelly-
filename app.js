@@ -195,18 +195,38 @@ async function loadClientDashboard(db, user) {
     document.getElementById('portal-welcome-title').innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
 
     try {
-        const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).single();
-        if (tier && tier.is_premium) {
+        // Use .maybeSingle() instead of .single() so it never crashes if multiple rows exist
+        const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).maybeSingle();
+        
+        const isVip = tier && (tier.is_premium === true || tier.is_premium === 'true');
+
+        if (isVip) {
             const unlockCard = document.getElementById('vip-unlock-card');
-            const appContainer = document.getElementById('premium-app-container');
+            const premiumApp = document.getElementById('premium-app-container');
             if(unlockCard) unlockCard.style.display = 'none';
-            if(appContainer) appContainer.style.display = 'block';
+            if(premiumApp) premiumApp.style.display = 'block';
         } else {
             const unlockCard = document.getElementById('vip-unlock-card');
-            const appContainer = document.getElementById('premium-app-container');
+            const premiumApp = document.getElementById('premium-app-container');
             if(unlockCard) unlockCard.style.display = 'block';
-            if(appContainer) appContainer.style.display = 'none';
+            if(premiumApp) premiumApp.style.display = 'none';
         }
+
+        const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
+
+        list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => {
+            const cleanDisplayTime = window.formatCleanDateTime(a.appointment_time);
+            return `
+            <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); background: white;">
+                <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${cleanDisplayTime}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
+                <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
+                    <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; flex: 1;" onclick="rescheduleAppointment('${a.id}')">Reschedule</button>
+                    <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; color: #a94442; border-color: #a94442; flex: 1;" onclick="cancelAppointment('${a.id}')">Cancel</button>
+                </div>
+            </div>`;
+        }).join('');
+    } catch(err) { console.error("Dashboard Load Error:", err.message); }
+}
 
         const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
 
