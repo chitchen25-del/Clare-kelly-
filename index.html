@@ -19,10 +19,230 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Link to your new external CSS file -->
-    <link rel="stylesheet" href="./style.css">
+    <style>
+        :root {
+            --bg-color: #f3f1ef;         
+            --card-bg: #ffffff;          
+            --text-main: #095d28;        
+            --primary-sage: #0d9b46;     
+            --sage-hover: #095d28;       
+            --gold-accent: #10d358;      
+            --bright-accent: #12db14;    
+            --secondary-sand: #d1dcd4;   
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Cormorant Garamond', serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            line-height: 1.8; 
+            font-size: 1.15rem; 
+            overflow-x: hidden; 
+            -webkit-user-select: none; 
+            user-select: none;
+        }
+        
+        input, textarea, select { -webkit-user-select: auto; user-select: auto; }
+
+        h1, h2 { font-family: 'Cormorant Garamond', serif; font-weight: 400; color: var(--text-main); line-height: 1.2; }
+        h3, h4, h5, .btn, .price-amount, .section-subtitle, label { font-family: 'Montserrat', sans-serif; }
+        
+        nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: calc(1rem + env(safe-area-inset-top)) 5% 1rem 5%; 
+            background-color: rgba(255, 255, 255, 0.98); 
+            backdrop-filter: blur(15px); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            border-bottom: 1px solid var(--secondary-sand); 
+            box-shadow: 0 4px 30px rgba(9, 93, 40, 0.03); 
+        }
+        .nav-brand-logo { height: 45px; width: auto; cursor: pointer; transition: opacity 0.3s ease; object-fit: contain; }
+        .nav-brand-logo:hover { opacity: 0.8; }
+        
+        .desktop-nav-links { display: none; align-items: center; gap: 2rem; }
+        .nav-link-text { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); cursor: pointer; transition: color 0.3s; }
+        .nav-link-text:hover { color: var(--primary-sage); }
+        .mobile-menu-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 6px; padding: 0.5rem; z-index: 102; }
+        .mobile-menu-btn span { display: block; width: 30px; height: 1px; background-color: var(--text-main); transition: transform 0.3s ease; }
+
+        .mobile-drawer { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background-color: var(--card-bg); z-index: 101; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2.5rem; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding: 2rem; border-left: 1px solid var(--secondary-sand); }
+        .mobile-drawer.open { right: 0; }
+        .mobile-drawer-link { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 500; text-transform: uppercase; letter-spacing: 3px; color: var(--text-main); text-decoration: none; cursor: pointer; transition: color 0.3s; }
+
+        .btn { display: inline-block; padding: 1.1rem 2.5rem; text-decoration: none; font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border-radius: 6px; cursor: pointer; border: 1px solid var(--primary-sage); background-color: var(--primary-sage); color: white; transition: all 0.3s ease; text-align: center; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(13, 155, 70, 0.15); }
+        .btn:active { transform: scale(0.98); }
+        .btn-outline { background-color: transparent; color: var(--text-main); border-color: var(--secondary-sand); box-shadow: none; }
+
+        .page-screen { display: none; animation: fadeIn 0.4s ease; }
+        .page-screen.visible { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .hero { text-align: center; padding: 10rem 6%; background: linear-gradient(rgba(243, 241, 239, 0.93), rgba(243, 241, 239, 0.98)), url('./clinical-herb.jpeg') center/cover; border-bottom: 1px solid var(--secondary-sand); }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1.2rem; letter-spacing: -0.5px; }
+        .hero p { font-size: 1.3rem; margin-bottom: 3rem; color: var(--primary-sage); max-width: 650px; margin-left: auto; margin-right: auto; font-style: italic; }
+
+        .section { padding: 8rem 6%; display: flex; flex-wrap: wrap; align-items: center; gap: 5rem; max-width: 1250px; margin: 0 auto; }
+        .section-text { flex: 1.2; min-width: 280px; }
+        .section-image-wrapper { flex: 1; min-width: 280px; position: relative; }
+        
+        .image-arch-container { position: relative; border-radius: 200px 200px 8px 8px; overflow: hidden; box-shadow: 0 40px 80px rgba(9, 93, 40, 0.1); border: 1px solid var(--secondary-sand); background-color: var(--secondary-sand); }
+        .image-arch { width: 100%; height: 550px; object-fit: cover; display: block; }
+        
+        .image-floating-badge { position: absolute; bottom: -20px; left: 25px; right: 25px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px); padding: 1.8rem; border-radius: 8px; border: 1px solid var(--secondary-sand); box-shadow: 0 15px 40px rgba(9, 93, 40, 0.05); }
+        .image-floating-badge span { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); display: block; margin-bottom: 0.5rem; font-weight: 700; }
+        .image-floating-badge p { font-size: 1.1rem; color: var(--text-main); font-style: italic; margin: 0; }
+        
+        .section-subtitle { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--primary-sage); margin-bottom: 1.2rem; display: block; font-weight: 600; border-bottom: 1px solid var(--gold-accent); display: inline-block; padding-bottom: 0.3rem;}
+        h2 { font-size: 2.8rem; margin-bottom: 1.5rem; }
+        
+        .help-list { column-count: 1; list-style: none; color: var(--text-main); font-size: 1.1rem; margin-top: 2rem; }
+        .help-list li { margin-bottom: 1rem; position: relative; padding-left: 2rem; }
+        .help-list li::before { content: "—"; position: absolute; left: 0; color: var(--gold-accent); font-weight: bold; }
+
+        .pathway-section { padding: 8rem 6%; background-color: var(--card-bg); border-top: 1px solid var(--secondary-sand); }
+        .pathway-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 0 auto; }
+        .pathway-card { padding: 3rem 2.5rem; border: 1px solid var(--secondary-sand); border-radius: 8px; background: var(--card-bg); position: relative; }
+        .pathway-card h4 { color: var(--text-main); font-size: 1.2rem; margin-bottom: 1rem; line-height: 1.4; font-weight: 600; }
+        .pathway-card p { color: #555; font-size: 1rem; line-height: 1.7; margin: 0;}
+        .pathway-number { font-family: 'Cormorant Garamond'; font-size: 2.5rem; color: var(--secondary-sand); margin-bottom: 1rem; display: block; line-height: 1; font-style: italic; }
+
+        .pricing-section { padding: 8rem 6%; border-top: 1px solid var(--secondary-sand); background-color: var(--bg-color); }
+        .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 4rem auto 0 auto; }
+        
+        .form-container { max-width: 100%; margin: 3rem 5%; background: var(--card-bg); padding: 4rem 2rem; border-radius: 12px; box-shadow: 0 20px 50px rgba(9, 93, 40, 0.05); border: 1px solid var(--secondary-sand); }
+        .form-container h2 { text-align: center; margin-bottom: 1rem; }
+        
+        .portal-logo {
+            height: 70px;
+            max-width: 100%;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-main); margin-bottom: 0.8rem; font-weight: 700;}
+        input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 2rem; border: 1px solid var(--secondary-sand); border-radius: 8px; background: var(--bg-color); font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--text-main); transition: all 0.3s; appearance: none; -webkit-appearance: none; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-sage); outline: none; background: white; box-shadow: 0 0 0 2px rgba(13,155,70,0.1); }
+        textarea { resize: vertical; height: 120px; }
+
+        .dashboard-container { max-width: 1300px; margin: 2rem auto 4rem auto; padding: 0 5%; display: grid; grid-template-columns: 1fr; gap: 2rem; }
+        .dash-card { background: var(--card-bg); padding: 2.5rem 1.5rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 40px rgba(9, 93, 40, 0.03); margin-bottom: 2rem; }
+        .dash-card h3 { color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem; font-size: 1.3rem; font-weight: 700; }
+        
+        .chat-box { height: 300px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg-color); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 1rem; border: 1px solid var(--secondary-sand); }
+        .msg { padding: 1rem; border-radius: 8px; max-width: 85%; font-size: 0.95rem; line-height: 1.5; }
+        .msg.client { background: var(--primary-sage); color: white; align-self: flex-end; }
+        .msg.admin { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; box-shadow: 0 4px 15px rgba(9, 93, 40, 0.03); color: var(--text-main); }
+
+        .journal-accordion { background-color: var(--bg-color); color: var(--text-main); cursor: pointer; padding: 1.2rem; width: 100%; border: 1px solid var(--secondary-sand); border-radius: 8px; text-align: left; font-size: 0.8rem; font-family: 'Montserrat', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; transition: all 0.3s; }
+        .journal-accordion.active { background-color: var(--primary-sage); color: white; border-color: var(--primary-sage); }
+        .journal-panel { padding: 0 1.2rem; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; border-left: 1px solid var(--secondary-sand); border-right: 1px solid var(--secondary-sand); margin-top: -1rem; margin-bottom: 2rem; border-bottom: 1px solid transparent; border-radius: 0 0 8px 8px; }
+        .journal-panel.show { padding: 2rem 1.2rem; max-height: 4000px; border-bottom: 1px solid var(--secondary-sand); overflow: visible; }
+        
+        .macro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .macro-grid div { display: flex; flex-direction: column; }
+        .macro-grid label { font-size: 0.65rem; text-align: left; letter-spacing: 1px; color: var(--primary-sage); margin-bottom: 0.5rem; font-weight: 700; border: none; padding: 0;}
+        .macro-grid input { padding: 0.9rem 0.8rem; font-size: 1rem; text-align: left; margin-bottom: 0; font-weight: 500; }
+        
+        .micro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.2rem; margin-bottom: 1.5rem; }
+        .micro-grid div { display: flex; flex-direction: column; }
+        .micro-grid label { font-size: 0.6rem; text-align: left; letter-spacing: 1px; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 600; border: none; padding: 0;}
+        .micro-grid input { padding: 0.8rem; font-size: 0.95rem; text-align: left; margin-bottom: 0; background-color: var(--bg-color); }
+
+        .meal-section { border-bottom: 1px solid var(--secondary-sand); padding-bottom: 2rem; margin-bottom: 2rem; }
+        .meal-section h5 { font-family: 'Montserrat'; font-size: 0.9rem; color: var(--text-main); margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+
+        .daily-totals-macro { background: var(--text-main); color: white; padding: 1.5rem; border-radius: 8px; margin-top: 1rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; font-family: 'Montserrat'; }
+        .daily-totals-macro span { font-size: 0.6rem; color: var(--secondary-sand); letter-spacing: 2px; display: block; margin-bottom: 0.4rem; font-weight: 700; }
+        
+        .daily-totals-micro { background: var(--bg-color); color: var(--text-main); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; font-family: 'Montserrat'; border: 1px solid var(--secondary-sand); border-top: none; }
+        .daily-totals-micro span { font-size: 0.6rem; color: var(--text-main); letter-spacing: 1.5px; display: block; margin-bottom: 0.4rem; font-weight: 700; }
+
+        .premium-list-item { padding: 1.2rem; border-bottom: 1px solid var(--secondary-sand); cursor: pointer; transition: background 0.2s; border-radius: 8px; margin-bottom: 0.4rem; background: white; }
+        .premium-list-item strong { color: var(--primary-sage); font-family: 'Montserrat'; font-size: 0.95rem; font-weight: 700;}
+        .premium-list-item span { font-size: 0.8rem; color: #666; font-family: 'Montserrat'; display: block; margin-top: 0.4rem; line-height: 1.5; }
+
+        #reader { width: 100%; display: none; margin-bottom: 1.5rem; border-radius: 8px; overflow: hidden; border: 1px solid var(--primary-sage); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.1); }
+
+        .pwa-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(243, 241, 239, 0.95); backdrop-filter: blur(10px); z-index: 9999; display: none; justify-content: center; align-items: flex-end; padding-bottom: env(safe-area-inset-bottom); animation: fadeIn 0.4s ease; }
+        .pwa-card { background: white; width: 100%; padding: 3rem 2rem 4rem 2rem; border-radius: 24px 24px 0 0; border-top: 1px solid var(--primary-sage); box-shadow: 0 -10px 40px rgba(9, 93, 40, 0.15); text-align: center; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .pwa-icon { width: 70px; height: 70px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin: 0 auto 1.5rem auto; display: block; object-fit: cover; }
+        .pwa-title { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--text-main); margin-bottom: 0.5rem; line-height: 1.1; }
+        .pwa-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; color: #666; margin-bottom: 2rem; line-height: 1.5; }
+        .pwa-steps { background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 1.5rem; border-radius: 12px; text-align: left; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--text-main); line-height: 1.6; margin-bottom: 2rem; }
+        .pwa-close-btn { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #888; background: none; border: none; cursor: pointer; text-decoration: underline; margin-top: 1.5rem; padding: 1rem;}
+
+        footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); color: #555; background: var(--card-bg); display: flex; flex-direction: column; text-align: center; gap: 2.5rem; max-width: 1300px; margin: 0 auto; padding-bottom: calc(4rem + env(safe-area-inset-bottom));}
+        .footer-logo-wrapper { width: 100%; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 3rem; margin-bottom: 3rem; margin-top: 4rem; text-align: center; }
+        .footer-brand-logo { height: 70px; object-fit: contain; }
+        .footer-col h4 { color: var(--text-main); margin-bottom: 1rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
+
+        @media (min-width: 768px) {
+            .pathway-grid { grid-template-columns: repeat(2, 1fr); }
+            .macro-grid { grid-template-columns: repeat(4, 1fr); }
+            .micro-grid { grid-template-columns: repeat(5, 1fr); }
+            .macro-grid label, .micro-grid label { text-align: center; }
+            .macro-grid input, .micro-grid input { text-align: center; }
+            .daily-totals-macro, .daily-totals-micro { display: flex; justify-content: space-between; }
+            
+            .form-row {
+                flex-direction: row;
+                gap: 1.5rem;
+            }
+            .form-row > div {
+                flex: 1;
+            }
+        }
+
+        @media (min-width: 900px) {
+            .nav-brand-logo { height: 60px; } 
+            .mobile-menu-btn { display: none; }
+            .desktop-nav-links { display: flex; }
+            .pathway-grid { grid-template-columns: repeat(3, 1fr); }
+            .pricing-grid { grid-template-columns: repeat(3, 1fr); }
+            .form-container { max-width: 500px; padding: 4rem; }
+            .dashboard-container { grid-template-columns: 2fr 1fr; padding: 0 6%; margin: 4rem auto; gap: 3rem; }
+            footer { flex-direction: row; text-align: left; justify-content: space-between; padding: 0 6% 6rem 6%; }
+        }
+    </style>
 </head>
 <body>
+
+    <script>
+        window.openScreen = function(screenId) {
+            try {
+                document.querySelectorAll('.page-screen').forEach(el => el.classList.remove('visible'));
+                const target = document.getElementById(screenId);
+                if(target) {
+                    target.classList.add('visible');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                const drawer = document.getElementById('mobile-drawer');
+                if(drawer) drawer.classList.remove('open');
+            } catch (err) { console.error(err.message); }
+        }
+        function toggleMobileMenu() { document.getElementById('mobile-drawer').classList.toggle('open'); }
+        function toggleAccordion(id) {
+            const panel = document.getElementById(id);
+            const btn = panel.previousElementSibling;
+            panel.classList.toggle('show');
+            btn.classList.toggle('active');
+            btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
+        }
+    </script>
 
     <nav>
         <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="openScreen('screen-home')">
@@ -100,140 +320,51 @@
         <section class="pricing-section">
             <div style="text-align: center; max-width: 700px; margin: 0 auto;">
                 <span class="section-subtitle">Pillar 1: Deep Transformation</span>
-                <h2>Functional Medicine & Treatments</h2>
+                <h2>Functional Medicine</h2>
             </div>
-
-            <!-- COMPREHENSIVE TREATMENT & PRICING LIST -->
-            <div style="max-width: 1100px; margin: 3rem auto 0 auto; display: flex; flex-direction: column; gap: 3rem;">
-                
-                <!-- Core Hands-On Therapies -->
-                <div style="background: var(--card-bg); padding: 3rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.03);">
-                    <h3 style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem;">Core Hands-On Therapies</h3>
-                    
-                    <div style="margin-bottom: 2rem;">
-                        <h4 style="color: var(--primary-sage); font-size: 1.1rem; margin-bottom: 0.4rem;">Myofascial Release Therapy</h4>
-                        <p style="font-size: 0.95rem; color: #555; margin-bottom: 0.8rem;">Supports postural alignment and correction, post-injury & surgical recovery, joint mobility, muscle tension relief, and improved circulation.</p>
-                        <div style="font-family: 'Montserrat'; font-size: 0.85rem; color: var(--text-main);">
-                            <strong>Union Mills Clinic (Mon, Tue, Fri, Sat):</strong> £70 &nbsp;|&nbsp; <strong>Castletown Clinic (Wed):</strong> £80
-                        </div>
-                    </div>
-
-                    <div style="margin-bottom: 2rem;">
-                        <h4 style="color: var(--primary-sage); font-size: 1.1rem; margin-bottom: 0.4rem;">Lymphatic Treatment</h4>
-                        <p style="font-size: 0.95rem; color: #555; margin-bottom: 0.8rem;">Encourages the lymphatic system to clear excess fluid, metabolic waste, and inflammatory build-up. Particularly useful alongside chronic pain and autoimmune work, long-COVID, and gut health.</p>
-                        <div style="font-family: 'Montserrat'; font-size: 0.85rem; color: var(--text-main);">
-                            <strong>Union Mills Clinic (Mon, Tue, Fri, Sat):</strong> £70 &nbsp;|&nbsp; <strong>Castletown Clinic (Wed):</strong> £80
-                        </div>
-                    </div>
-
+            <div class="pricing-grid">
+                <div class="price-card">
                     <div>
-                        <h4 style="color: var(--primary-sage); font-size: 1.1rem; margin-bottom: 0.4rem;">Infrared Targeted Treatment</h4>
-                        <p style="font-size: 0.95rem; color: #555; margin-bottom: 0.8rem;">Deep-penetrating infrared wavelengths to reduce inflammation, support cellular repair, and ease localized injury, soft tissue issues, or arthritis.</p>
-                        <div style="font-family: 'Montserrat'; font-size: 0.85rem; color: var(--text-main);">
-                            <strong>Union Mills:</strong> £50 &nbsp;|&nbsp; <strong>Castletown:</strong> £60 &nbsp;|&nbsp; <span style="color:var(--primary-sage);">Add-on to Lymphatic or Myofascial: £15</span>
-                        </div>
+                        <div class="price-title">Performance Health Audit</div>
+                        <div class="price-duration">Functional Kickstart</div>
+                        <div class="price-amount">£175</div>
+                        <ul class="price-features">
+                            <li>90-minute deep-dive functional consultation</li>
+                            <li>Full symptom timeline review</li>
+                            <li>Top 3 root-cause priorities identified</li>
+                        </ul>
                     </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Health Audit</button>
                 </div>
 
-                <!-- Taster Gift Packages -->
-                <div style="background: linear-gradient(135deg, var(--text-main), var(--primary-sage)); color: white; padding: 3rem; border-radius: 12px; box-shadow: 0 15px 35px rgba(9, 93, 40, 0.15);">
-                    <h3 style="color: white; font-size: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 0.8rem; font-family: 'Cormorant Garamond', serif;">Taster Gift Packages & Bundles</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;">
-                        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px;">
-                            <strong style="font-family: 'Montserrat'; font-size: 0.85rem;">1. Migraine & Neck Reset</strong>
-                            <p style="font-size: 0.8rem; opacity: 0.9; margin: 0.4rem 0;">2 x 30 min head & neck sessions</p>
-                            <span style="font-family: 'Montserrat'; font-weight: 700; color: var(--gold-accent);">£70</span>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px;">
-                            <strong style="font-family: 'Montserrat'; font-size: 0.85rem;">2. Clarity Drainage</strong>
-                            <p style="font-size: 0.8rem; opacity: 0.9; margin: 0.4rem 0;">2 x 30 min head & neck sessions</p>
-                            <span style="font-family: 'Montserrat'; font-weight: 700; color: var(--gold-accent);">£70</span>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px;">
-                            <strong style="font-family: 'Montserrat'; font-size: 0.85rem;">3. Gut Mini Reset</strong>
-                            <p style="font-size: 0.8rem; opacity: 0.9; margin: 0.4rem 0;">10-day personalised food plan</p>
-                            <span style="font-family: 'Montserrat'; font-weight: 700; color: var(--gold-accent);">£80</span>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.15); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--gold-accent);">
-                            <strong style="font-family: 'Montserrat'; font-size: 0.85rem; color: var(--gold-accent);">Taster Trio Bundle</strong>
-                            <p style="font-size: 0.8rem; opacity: 0.9; margin: 0.4rem 0;">All three above combined (Save £25)</p>
-                            <span style="font-family: 'Montserrat'; font-weight: 700; color: var(--gold-accent);">£195</span>
-                        </div>
+                <div class="price-card featured">
+                    <div class="featured-badge">Comprehensive Protocol</div>
+                    <div>
+                        <div class="price-title">360° Burnout & Adrenal Protocol</div>
+                        <div class="price-duration">12-Week Executive Program</div>
+                        <div class="price-amount">£1,450</div>
+                        <ul class="price-features">
+                            <li>Complete root-cause functional health investigation</li>
+                            <li>Bi-weekly hands-on Vagal/Bowen resets</li>
+                            <li>Curated functional supplementation blueprint</li>
+                        </ul>
                     </div>
+                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Apply For Protocol</button>
                 </div>
 
-                <!-- Functional Medicine Pathways -->
-                <div style="background: var(--card-bg); padding: 3rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.03);">
-                    <h3 style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem;">Functional Medicine Pathways & Cleanses</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
-                        <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
-                            <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 0.3rem;">Discovery Phone Call</h4>
-                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.8rem;">Complimentary 20-minute consultation.</p>
-                            <strong style="color: var(--primary-sage); font-family: 'Montserrat';">Free</strong>
-                        </div>
-                        <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
-                            <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 0.3rem;">Functional Consultation</h4>
-                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.8rem;">90-minute deep-dive clinical assessment.</p>
-                            <strong style="color: var(--primary-sage); font-family: 'Montserrat';">£350</strong>
-                        </div>
-                        <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
-                            <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 0.3rem;">90-Day Programme</h4>
-                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.8rem;">Comprehensive root-cause recovery pathway.</p>
-                            <strong style="color: var(--primary-sage); font-family: 'Montserrat';">£950</strong>
-                        </div>
-                        <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
-                            <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 0.3rem;">30-Day Kickstart Cleanse</h4>
-                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.8rem;">6 treatments + 20% off (excl. supplements).</p>
-                            <strong style="color: var(--primary-sage); font-family: 'Montserrat';">£355</strong>
-                        </div>
-                        <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
-                            <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 0.3rem;">Parasite Cleanse</h4>
-                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.8rem;">3, 5, and 10 day protocols during full moon.</p>
-                            <strong style="color: var(--primary-sage); font-family: 'Montserrat';">£150</strong>
-                        </div>
-                        <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
-                            <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 0.3rem;">Functional Testing Review</h4>
-                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.8rem;">90-minute test result analysis session.</p>
-                            <strong style="color: var(--primary-sage); font-family: 'Montserrat';">£350</strong>
-                        </div>
+                <div class="price-card">
+                    <div>
+                        <div class="price-title">The Gut Reset</div>
+                        <div class="price-duration">21-Day Programme</div>
+                        <div class="price-amount">£297 <span>£500</span></div>
+                        <ul class="price-features">
+                            <li>60-min functional gut assessment</li>
+                            <li>Personalised 21-day protocol</li>
+                            <li>Curated supplement guidance</li>
+                        </ul>
                     </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Gut Reset</button>
                 </div>
-
-                <!-- Nordic Laboratories Functional Testing Menu -->
-                <div style="background: var(--card-bg); padding: 3rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.03);">
-                    <div style="text-align: center; margin-bottom: 2rem;">
-                        <span style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-sage); font-weight: 700;">Nordic Laboratories</span>
-                        <h3 style="font-size: 1.8rem; color: var(--text-main); margin-top: 0.4rem;">Advanced Functional Lab Testing</h3>
-                        <p style="color: #666; font-size: 0.9rem; max-width: 650px; margin: 0.5rem auto 0 auto;">Specialist functional and genetic testing reviewed collaboratively at your follow-up consultation.</p>
-                    </div>
-
-                    <div style="overflow-x: auto;">
-                        <table style="width: 100%; border-collapse: collapse; font-family: 'Montserrat', sans-serif; font-size: 0.85rem;">
-                            <thead>
-                                <tr style="background: var(--text-main); color: white; text-align: left;">
-                                    <th style="padding: 0.9rem; border-top-left-radius: 6px;">Test Name</th>
-                                    <th style="padding: 0.9rem;">Sample Type</th>
-                                    <th style="padding: 0.9rem; text-align: right; border-top-right-radius: 6px;">Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Comprehensive Gut Health Test</strong></td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Stool</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £325.00</td></tr>
-                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Gut Health + Barrier Function Test</strong></td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Stool</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £405.00</td></tr>
-                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>SIBO Breath Test</strong></td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Breath</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £181.00</td></tr>
-                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Extended Stool Analysis (2-day)</strong></td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Stool (2 days)</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £489.00</td></tr>
-                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Organic Acids Test (OAT)</strong></td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Urine</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £328.00</td></tr>
-                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Omega-3 & Vitamin D Test</strong></td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Blood spot</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £150.00</td></tr>
-                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>DUTCH Complete Hormone Test</strong></td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Dried urine</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">From £269.00</td></tr>
-                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Mould & Environmental Toxin Screen</strong></td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Urine</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">£269.00</td></tr>
-                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>MycoTOX Profile</strong></td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Urine</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">£408.00</td></tr>
-                                <tr><td style="padding: 0.8rem; border-bottom: 1px solid #eee;"><strong>Glyphosate Test</strong></td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; color: #666;">Urine</td><td style="padding: 0.8rem; border-bottom: 1px solid #eee; text-align: right; color: var(--primary-sage); font-weight: 600;">£156.00</td></tr>
-                                <tr><td style="padding: 0.8rem;"><strong>Liver Detox Profile</strong></td><td style="padding: 0.8rem; color: #666;">Urine</td><td style="padding: 0.8rem; text-align: right; color: var(--primary-sage); font-weight: 600;">£152.00</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <p style="text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: #666; font-family: 'Montserrat';">Not sure which test is right for you? We'll agree on the right starting point during your consultation.</p>
-                </div>
-
             </div>
         </section>
     </div>
@@ -273,7 +404,27 @@
                 <input type="email" id="login-email" placeholder="Enter your email" required>
                 <label>Password</label>
                 <input type="password" id="login-password" placeholder="Enter your password" required>
-                <button type="submit" id="client-login-btn" class="btn" style="width: 100%; margin-top: 1rem;">Secure Login</button>
+                
+                <div style="text-align: right; margin-top: -1rem; margin-bottom: 1.5rem;">
+                    <span style="font-size: 0.75rem; color: var(--primary-sage); cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 600;" onclick="openScreen('screen-forgot')">Forgot Password?</span>
+                </div>
+
+                <button type="submit" id="client-login-btn" class="btn" style="width: 100%;">Secure Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= SCREEN 4B: FORGOT PASSWORD ================= -->
+    <div id="screen-forgot" class="page-screen">
+        <div class="form-container">
+            <img src="./logo.png" alt="Logo" class="portal-logo" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'50\'><text x=\'0\' y=\'30\' font-family=\'serif\' font-size=\'20\' fill=\'%23095d28\'>The NHC</text></svg>';">
+            <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; font-family: 'Montserrat'; font-weight: 600;">Reset Password</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2.5rem; font-size: 0.95rem;">Enter your email address to receive a secure password reset link.</p>
+            <form onsubmit="return processPasswordReset(event)">
+                <label>Email Address</label>
+                <input type="email" id="forgot-email" placeholder="Enter your email" required>
+                <button type="submit" id="reset-btn" class="btn" style="width: 100%; margin-top: 1rem;">Send Reset Link</button>
+                <button type="button" class="btn btn-outline" style="width: 100%; margin-top: 1rem;" onclick="openScreen('screen-login')">Back to Login</button>
             </form>
         </div>
     </div>
@@ -288,25 +439,51 @@
                 <label>Email Address</label><input type="email" id="reg-email" required>
                 <label>Create Password</label><input type="password" id="reg-password" required>
                 <label>Treatment Pathway</label>
-                
-                <!-- UPDATED DROPDOWN FOR REGISTRATION -->
-                <select id="reg-service">
-                    <option value="Discovery Phone Call (Free)">Discovery Phone Call (Free)</option>
-                    <option value="Functional Consultation (£350)">Functional Consultation (£350)</option>
-                    <option value="90-Day Programme (£950)">90-Day Programme (£950)</option>
-                    <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse (£355)</option>
-                    <option value="Parasite Cleanse (£150)">Parasite Cleanse (£150)</option>
-                    <option value="Functional Testing Review (£350)">Functional Testing Review (£350)</option>
-                    <option value="Myofascial Release Therapy (From £70)">Myofascial Release Therapy (From £70)</option>
-                    <option value="Lymphatic Treatment (From £70)">Lymphatic Treatment (From £70)</option>
-                    <option value="Infrared Targeted Treatment (From £50)">Infrared Targeted Treatment (From £50)</option>
-                    <option value="Migraine & Neck Reset (£70)">Migraine & Neck Reset (£70)</option>
-                    <option value="Clarity Drainage (£70)">Clarity Drainage (£70)</option>
-                    <option value="Gut Mini Reset (£80)">Gut Mini Reset (£80)</option>
-                    <option value="Taster Trio Bundle (£195)">Taster Trio Bundle (£195)</option>
+                <select id="reg-service" required>
+                    <option value="">-- Choose a Service or Test --</option>
+                    <optgroup label="Myofascial Release Therapy">
+                        <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
+                        <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release (Castletown) — £80</option>
+                    </optgroup>
+                    <optgroup label="Lymphatic Treatment">
+                        <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70</option>
+                        <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment (Castletown) — £80</option>
+                    </optgroup>
+                    <optgroup label="Infrared Targeted Treatment">
+                        <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment (Union Mills) — £50</option>
+                        <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment (Castletown) — £60</option>
+                        <option value="Infrared Add-on (£15)">Infrared Add-on to Lymphatic/Myofascial — £15</option>
+                    </optgroup>
+                    <optgroup label="Taster Gift Packages & Bundles">
+                        <option value="Migraine & Neck Reset (£70)">Migraine & Neck Reset Package — £70</option>
+                        <option value="Clarity Drainage (£70)">Clarity Drainage Package — £70</option>
+                        <option value="Gut Mini Reset 10 Days (£80)">Gut Mini Reset (10 Days) — £80</option>
+                        <option value="Taster Trio Bundle (£195)">Taster Trio Bundle — £195</option>
+                    </optgroup>
+                    <optgroup label="Functional Medicine Pathways">
+                        <option value="Discovery Call (£0)">Discovery Phone Call (20m) — Free</option>
+                        <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90m) — £350</option>
+                        <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950</option>
+                        <option value="Parasite Cleanse (£150)">Parasite Cleanse (3, 5, or 10 day) — £150</option>
+                        <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse (excl. supplements) — £355</option>
+                        <option value="Functional Testing Review (£350)">Functional Testing Review (90m) — £350</option>
+                    </optgroup>
+                    <optgroup label="Nordic Laboratories Functional Testing">
+                        <option value="Comprehensive Gut Health Test (£325)">Comprehensive Gut Health Test (Stool) — From £325</option>
+                        <option value="Gut Health + Barrier Function Test (£405)">Gut Health + Barrier Function Test (Stool) — From £405</option>
+                        <option value="SIBO Breath Test (£181)">SIBO Breath Test (Breath) — From £181</option>
+                        <option value="Extended Stool Analysis (£489)">Extended Stool Analysis (2-day Stool) — From £489</option>
+                        <option value="Organic Acids Test OAT (£328)">Organic Acids Test (OAT - Urine) — From £328</option>
+                        <option value="Omega-3 & Vitamin D Test (£150)">Omega-3 & Vitamin D Test (Blood spot) — From £150</option>
+                        <option value="DUTCH Complete Hormone Test (£269)">DUTCH Complete Hormone Test (Dried urine) — From £269</option>
+                        <option value="Mould & Environmental Toxin Screen (£269)">Mould & Environmental Toxin Screen (Urine) — £269</option>
+                        <option value="MycoTOX Profile (£408)">MycoTOX Profile (Urine) — £408</option>
+                        <option value="Glyphosate Test (£156)">Glyphosate Test (Urine) — £156</option>
+                        <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
+                    </optgroup>
                 </select>
-
-                <label>First Session Date & Time</label><input type="datetime-local" id="reg-date" required>
+                <label>First Session Date & Time (Mon-Sat, 9AM - 5PM)</label>
+                <input type="datetime-local" id="reg-date" min="2026-01-01T09:00" max="2030-12-31T17:00" required onchange="validateBusinessHours(this)">
                 <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Complete Booking</button>
             </form>
         </div>
@@ -560,26 +737,51 @@
                     <h3>Book Another Session</h3>
                     <form onsubmit="return bookNewSession(event)">
                         <label>Treatment Pathway</label>
-
-                        <!-- UPDATED DROPDOWN FOR PORTAL DASHBOARD -->
-                        <select id="portal-service">
-                            <option value="Discovery Phone Call (Free)">Discovery Phone Call (Free)</option>
-                            <option value="Functional Consultation (£350)">Functional Consultation (£350)</option>
-                            <option value="90-Day Programme (£950)">90-Day Programme (£950)</option>
-                            <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse (£355)</option>
-                            <option value="Parasite Cleanse (£150)">Parasite Cleanse (£150)</option>
-                            <option value="Functional Testing Review (£350)">Functional Testing Review (£350)</option>
-                            <option value="Myofascial Release Therapy (From £70)">Myofascial Release Therapy (From £70)</option>
-                            <option value="Lymphatic Treatment (From £70)">Lymphatic Treatment (From £70)</option>
-                            <option value="Infrared Targeted Treatment (From £50)">Infrared Targeted Treatment (From £50)</option>
-                            <option value="Migraine & Neck Reset (£70)">Migraine & Neck Reset (£70)</option>
-                            <option value="Clarity Drainage (£70)">Clarity Drainage (£70)</option>
-                            <option value="Gut Mini Reset (£80)">Gut Mini Reset (£80)</option>
-                            <option value="Taster Trio Bundle (£195)">Taster Trio Bundle (£195)</option>
+                        <select id="portal-service" required>
+                            <option value="">-- Choose a Service or Test --</option>
+                            <optgroup label="Myofascial Release Therapy">
+                                <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
+                                <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release (Castletown) — £80</option>
+                            </optgroup>
+                            <optgroup label="Lymphatic Treatment">
+                                <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70</option>
+                                <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment (Castletown) — £80</option>
+                            </optgroup>
+                            <optgroup label="Infrared Targeted Treatment">
+                                <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment (Union Mills) — £50</option>
+                                <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment (Castletown) — £60</option>
+                                <option value="Infrared Add-on (£15)">Infrared Add-on to Lymphatic/Myofascial — £15</option>
+                            </optgroup>
+                            <optgroup label="Taster Gift Packages & Bundles">
+                                <option value="Migraine & Neck Reset (£70)">Migraine & Neck Reset Package — £70</option>
+                                <option value="Clarity Drainage (£70)">Clarity Drainage Package — £70</option>
+                                <option value="Gut Mini Reset 10 Days (£80)">Gut Mini Reset (10 Days) — £80</option>
+                                <option value="Taster Trio Bundle (£195)">Taster Trio Bundle — £195</option>
+                            </optgroup>
+                            <optgroup label="Functional Medicine Pathways">
+                                <option value="Discovery Call (£0)">Discovery Phone Call (20m) — Free</option>
+                                <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90m) — £350</option>
+                                <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950</option>
+                                <option value="Parasite Cleanse (£150)">Parasite Cleanse (3, 5, or 10 day) — £150</option>
+                                <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse (excl. supplements) — £355</option>
+                                <option value="Functional Testing Review (£350)">Functional Testing Review (90m) — £350</option>
+                            </optgroup>
+                            <optgroup label="Nordic Laboratories Functional Testing">
+                                <option value="Comprehensive Gut Health Test (£325)">Comprehensive Gut Health Test (Stool) — From £325</option>
+                                <option value="Gut Health + Barrier Function Test (£405)">Gut Health + Barrier Function Test (Stool) — From £405</option>
+                                <option value="SIBO Breath Test (£181)">SIBO Breath Test (Breath) — From £181</option>
+                                <option value="Extended Stool Analysis (£489)">Extended Stool Analysis (2-day Stool) — From £489</option>
+                                <option value="Organic Acids Test OAT (£328)">Organic Acids Test (OAT - Urine) — From £328</option>
+                                <option value="Omega-3 & Vitamin D Test (£150)">Omega-3 & Vitamin D Test (Blood spot) — From £150</option>
+                                <option value="DUTCH Complete Hormone Test (£269)">DUTCH Complete Hormone Test (Dried urine) — From £269</option>
+                                <option value="Mould & Environmental Toxin Screen (£269)">Mould & Environmental Toxin Screen (Urine) — £269</option>
+                                <option value="MycoTOX Profile (£408)">MycoTOX Profile (Urine) — £408</option>
+                                <option value="Glyphosate Test (£156)">Glyphosate Test (Urine) — £156</option>
+                                <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
+                            </optgroup>
                         </select>
-                        
-                        <label>Date & Time</label>
-                        <input type="datetime-local" id="portal-date" required>
+                        <label>Date & Time (Mon-Sat, 9AM - 5PM)</label>
+                        <input type="datetime-local" id="portal-date" min="2026-01-01T09:00" max="2030-12-31T17:00" required onchange="validateBusinessHours(this)">
                         <button type="submit" class="btn" style="width: 100%;">Confirm Booking</button>
                     </form>
                 </div>
@@ -638,7 +840,436 @@
         </div>
     </footer>
 
-    <!-- Link to your new external JavaScript file -->
-    <script src="./app.js"></script>
+    <script>
+        const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
+
+        function getSupabase() {
+            if(!window.supabase) return null;
+            return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
+
+        window.onload = async function() {
+            try {
+                const db = getSupabase();
+                if(db) {
+                    
+                    // Listen for password recovery requests
+                    db.auth.onAuthStateChange(async (event, session) => {
+                        if (event === 'PASSWORD_RECOVERY') {
+                            const newPassword = prompt("Please enter your new password:");
+                            if (newPassword) {
+                                const { error } = await db.auth.updateUser({ password: newPassword });
+                                if (error) alert("Error updating password: " + error.message);
+                                else alert("Password updated successfully! You are now logged in.");
+                            }
+                        }
+                    });
+
+                    const { data: { session } } = await db.auth.getSession();
+                    if(session) {
+                        updateNavState(true); 
+                        openScreen('screen-dashboard'); 
+                        loadClientDashboard(db, session.user);
+                    }
+                }
+            } catch(err) {
+                console.log("No active session found.");
+            }
+        };
+
+        function validateBusinessHours(input) {
+            const val = input.value;
+            if(!val) return;
+            const date = new Date(val);
+            const day = date.getDay(); // 0 is Sunday, 6 is Saturday
+            const hour = date.getHours();
+
+            if (day === 0) {
+                alert("The clinic is closed on Sundays. Please select Monday through Saturday.");
+                input.value = "";
+                return;
+            }
+            if (hour < 9 || hour >= 17) {
+                alert("Please select a time between 9:00 AM and 5:00 PM.");
+                input.value = "";
+                return;
+            }
+        }
+
+        function checkPwaInstall() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+            
+            if (!isStandalone && window.innerWidth <= 900) {
+                document.getElementById('pwa-install-overlay').style.display = 'flex';
+                if(isIos) {
+                    document.getElementById('pwa-instruction-text').innerHTML = `<strong>1.</strong> Tap the <b>Share</b> icon <svg width="14" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg> at the bottom of your Safari screen.<br><br><strong>2.</strong> Scroll down and tap <b>Add to Home Screen</b>.`;
+                }
+            }
+        }
+
+        window.closePwaOverlay = function() {
+            document.getElementById('pwa-install-overlay').style.display = 'none';
+        }
+
+        async function processClientLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('client-login-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Authenticating...";
+
+            try {
+                const email = document.getElementById('login-email').value.trim();
+                const pass = document.getElementById('login-password').value.trim();
+                const db = getSupabase();
+                
+                const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+                if (error) throw new Error(error.message);
+                
+                if (data.user) {
+                    updateNavState(true); 
+                    openScreen('screen-dashboard'); 
+                    loadClientDashboard(db, data.user);
+                    setTimeout(checkPwaInstall, 1000);
+                }
+            } catch (err) { alert("Login Failed: " + err.message); } 
+            finally { btn.innerText = originalText; }
+            return false;
+        }
+
+        async function processPasswordReset(e) {
+            e.preventDefault();
+            const btn = document.getElementById('reset-btn');
+            const ogText = btn.innerText;
+            btn.innerText = "Sending Link...";
+            try {
+                const email = document.getElementById('forgot-email').value.trim();
+                const db = getSupabase();
+                const { error } = await db.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin + window.location.pathname
+                });
+                if (error) throw error;
+                alert("If an account exists for that email, a password reset link has been sent.");
+                openScreen('screen-login');
+                document.getElementById('forgot-email').value = '';
+            } catch(err) { 
+                alert("Reset Error: " + err.message); 
+            } finally { 
+                btn.innerText = ogText; 
+            }
+            return false;
+        }
+
+        async function processRegistration(e) {
+            e.preventDefault();
+            try {
+                const db = getSupabase();
+                const name = document.getElementById('reg-name').value.trim();
+                const email = document.getElementById('reg-email').value.trim();
+                const pass = document.getElementById('reg-password').value.trim();
+                const service = document.getElementById('reg-service').value;
+                const date = document.getElementById('reg-date').value;
+
+                const { data: authData, error } = await db.auth.signUp({ email, password: pass, options: { data: { full_name: name } } });
+                if (error) throw new Error(error.message);
+                
+                if (authData.user) {
+                    const { error: apptError } = await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
+                    if(apptError) throw new Error(apptError.message);
+                }
+                
+                alert('Registered successfully!'); 
+                updateNavState(true); 
+                openScreen('screen-dashboard'); 
+                loadClientDashboard(db, authData.user);
+                setTimeout(checkPwaInstall, 1000);
+            } catch(err) { alert("Registration Error: " + err.message); }
+            return false;
+        }
+
+        async function submitMedicalIntake(e) {
+            e.preventDefault();
+            try {
+                const db = getSupabase();
+                const { data: { user } } = await db.auth.getUser();
+                
+                const summary = `[MEDICAL INTAKE SUBMISSION]\nAge: ${document.getElementById('intake-age').value} | Sex: ${document.getElementById('intake-sex').value}\nHeight: ${document.getElementById('intake-height').value} | Weight: ${document.getElementById('intake-weight').value}\n\nAIMS: ${document.getElementById('intake-aims').value}\n\nFUNCTIONAL MARKERS:\nAutoimmune: ${document.getElementById('fm-immune-1').value || 'N/A'}\nDigestion/Gas: ${document.getElementById('fm-digest-1').value || 'N/A'}\nSkin Issues: ${document.getElementById('fm-digest-2').value || 'N/A'}\nCravings: ${document.getElementById('fm-hormone-1').value || 'N/A'}\nMorning Energy: ${document.getElementById('fm-hormone-2').value || 'N/A'}\nThyroid Markers: ${document.getElementById('fm-thyroid-1').value || 'N/A'}\nBlood Sugar: ${document.getElementById('fm-blood-1').value || 'N/A'}\n\nCONSENT: Patient has digitally signed the Functional Medicine Informed Consent waiver.`;
+
+                const { error } = await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: summary }]);
+                if(error) throw new Error(error.message);
+
+                alert("Comprehensive Medical Intake successfully submitted!");
+            } catch (err) { alert("Error submitting intake: " + err.message); }
+            return false;
+        }
+
+        window.startBarcodeScanner = function() {
+            try {
+                const readerDiv = document.getElementById('reader');
+                if(readerDiv.style.display === 'block') {
+                    if(window.html5QrCode) window.html5QrCode.stop().then(() => { readerDiv.style.display = 'none'; });
+                    return;
+                }
+                readerDiv.style.display = 'block';
+                window.html5QrCode = new Html5Qrcode("reader");
+                window.html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: {width: 250, height: 150} },
+                    (decodedText) => { window.html5QrCode.stop().then(() => { readerDiv.style.display = 'none'; lookupBarcode(decodedText); }); },
+                    (errorMessage) => { }
+                ).catch(err => { alert("Camera access error. Ensure you have granted permissions."); readerDiv.style.display = 'none'; });
+            } catch (err) { alert("Scanner error: " + err.message); }
+        };
+
+        window.lookupBarcode = async function(barcode) {
+            const resBox = document.getElementById('food-search-results');
+            resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Looking up barcode...</p>';
+            try {
+                const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`);
+                const data = await res.json();
+                if(data.status === 1 && data.product) {
+                    const p = data.product;
+                    const name = p.product_name || 'Unknown Food';
+                    const kcal = p.nutriments ? (p.nutriments['energy-kcal_100g'] || 0) : 0;
+                    const pro = p.nutriments ? (p.nutriments.proteins_100g || 0) : 0;
+                    const car = p.nutriments ? (p.nutriments.carbohydrates_100g || 0) : 0;
+                    const fat = p.nutriments ? (p.nutriments.fat_100g || 0) : 0;
+                    const fib = p.nutriments ? (p.nutriments.fiber_100g || 0) : 0;
+                    const sod = p.nutriments ? ((p.nutriments.sodium_100g || 0) * 1000) : 0;
+                    const pot = p.nutriments ? ((p.nutriments.potassium_100g || 0) * 1000) : 0;
+                    const calc = p.nutriments ? ((p.nutriments.calcium_100g || 0) * 1000) : 0;
+                    const iron = p.nutriments ? ((p.nutriments.iron_100g || 0) * 1000) : 0;
+                    const safeName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                    selectFood(safeName, kcal, pro, car, fat, fib, sod, pot, calc, iron);
+                } else { resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Product not found in database.</p>'; }
+            } catch(err) { resBox.innerHTML = '<p style="color:#a94442; font-size:0.9rem;">Error connecting to food database.</p>'; }
+        };
+
+        window.searchFood = async function() {
+            const query = document.getElementById('food-search-query').value.trim();
+            if(!query) return;
+            const resBox = document.getElementById('food-search-results');
+            resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">Searching database...</p>';
+            try {
+                const res = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10`);
+                const data = await res.json();
+                if(data.products && data.products.length > 0) {
+                    let html = '<div style="margin-top: 1rem;">';
+                    data.products.forEach((p) => {
+                        const name = p.product_name || 'Unknown Food';
+                        const brand = p.brands ? `(${p.brands})` : '';
+                        const kcal = p.nutriments ? (p.nutriments['energy-kcal_100g'] || 0) : 0;
+                        const pro = p.nutriments ? (p.nutriments.proteins_100g || 0) : 0;
+                        const car = p.nutriments ? (p.nutriments.carbohydrates_100g || 0) : 0;
+                        const fat = p.nutriments ? (p.nutriments.fat_100g || 0) : 0;
+                        const fib = p.nutriments ? (p.nutriments.fiber_100g || 0) : 0;
+                        const sod = p.nutriments ? ((p.nutriments.sodium_100g || 0) * 1000) : 0;
+                        const pot = p.nutriments ? ((p.nutriments.potassium_100g || 0) * 1000) : 0;
+                        const calc = p.nutriments ? ((p.nutriments.calcium_100g || 0) * 1000) : 0;
+                        const iron = p.nutriments ? ((p.nutriments.iron_100g || 0) * 1000) : 0;
+                        const safeName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        
+                        html += `<div class="premium-list-item" onclick="selectFood('${safeName}', ${kcal}, ${pro}, ${car}, ${fat}, ${fib}, ${sod}, ${pot}, ${calc}, ${iron})">
+                            <strong>${name} ${brand}</strong>
+                            <span>Per 100g: ${kcal} kcal | ${pro}g Pro | ${car}g Carb | ${fat}g Fat | ${fib}g Fiber</span>
+                        </div>`;
+                    });
+                    html += '</div>';
+                    resBox.innerHTML = html;
+                } else { resBox.innerHTML = '<p style="color:#666; font-size:0.9rem; margin-top:0.5rem;">No results found.</p>'; }
+            } catch(err) { resBox.innerHTML = `<p style="color:#a94442; font-size:0.9rem;">Error connecting to database. ${err.message}</p>`; }
+        };
+
+        window.selectFood = function(name, k, p, c, f, fib, sod, pot, calc, iron) {
+            const panel = document.getElementById('food-selection-panel');
+            panel.style.display = 'block';
+            panel.innerHTML = `
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--primary-sage); box-shadow: 0 10px 30px rgba(13,155,70,0.08);">
+                    <h5 style="margin-bottom:0.8rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; text-transform: none;">${name}</h5>
+                    <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1.5rem;">
+                        <label style="margin:0; font-size: 0.85rem;">Portion (grams):</label>
+                        <input type="number" id="food-grams" value="100" style="width: 120px; padding:0.8rem; margin:0; background: var(--bg-color);" oninput="updatePreviewMacros(${k}, ${p}, ${c}, ${f}, ${fib}, ${sod}, ${pot}, ${calc}, ${iron})">
+                    </div>
+                    <div id="food-macro-preview" style="font-size:0.95rem; color:#555; margin-bottom:1.5rem; font-family: 'Montserrat'; line-height: 1.6; padding-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand);">
+                        <strong style="color:var(--text-main); font-size: 1.1rem;">${k} kcal</strong> | ${p}g Pro | ${c}g Carbs | ${f}g Fat <br>
+                        <span style="font-size:0.8rem; color:#888;">${fib}g Fiber | ${sod}mg Sodium | ${pot}mg Potassium | ${calc}mg Calcium | ${iron}mg Iron</span>
+                    </div>
+                    <div style="display:flex; gap:0.8rem; flex-wrap: wrap;">
+                        <select id="food-meal-target" style="padding:0.8rem; margin:0; flex:1; background: var(--bg-color);">
+                            <option value="brk">Breakfast</option>
+                            <option value="lun">Lunch</option>
+                            <option value="din">Dinner</option>
+                            <option value="snk">Snacks & Supplements</option>
+                        </select>
+                        <button type="button" class="btn" style="padding:0 1.5rem; min-height:45px;" onclick="addFoodToLog('${name.replace(/'/g, "\\'")}', ${k}, ${p}, ${c}, ${f}, ${fib}, ${sod}, ${pot}, ${calc}, ${iron})">Add to Meal</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('food-search-results').innerHTML = '';
+        };
+
+        window.updatePreviewMacros = function(k, p, c, f, fib, sod, pot, calc, iron) {
+            const g = document.getElementById('food-grams').value || 0;
+            const r = g / 100;
+            document.getElementById('food-macro-preview').innerHTML = `<strong style="color:var(--text-main); font-size: 1.1rem;">${Math.round(k*r)} kcal</strong> | ${Math.round(p*r)}g Pro | ${Math.round(c*r)}g Carbs | ${Math.round(f*r)}g Fat <br>
+            <span style="font-size:0.8rem; color:#888;">${Math.round(fib*r)}g Fiber | ${Math.round(sod*r)}mg Sodium | ${Math.round(pot*r)}mg Potassium | ${Math.round(calc*r)}mg Calcium | ${Math.round(iron*r)}mg Iron</span>`;
+        };
+
+        window.addFoodToLog = function(name, k, p, c, f, fib, sod, pot, calc, iron) {
+            const g = document.getElementById('food-grams').value || 0;
+            const r = g / 100;
+            const meal = document.getElementById('food-meal-target').value;
+            
+            const descInput = document.getElementById(`log-${meal}-desc`);
+            const entryText = `${name} (${g}g)\n`;
+            descInput.value = descInput.value ? descInput.value + entryText : entryText;
+
+            document.getElementById(`log-${meal}-cal`).value = Math.round((Number(document.getElementById(`log-${meal}-cal`).value) || 0) + (k * r));
+            document.getElementById(`log-${meal}-pro`).value = Math.round((Number(document.getElementById(`log-${meal}-pro`).value) || 0) + (p * r));
+            document.getElementById(`log-${meal}-car`).value = Math.round((Number(document.getElementById(`log-${meal}-car`).value) || 0) + (c * r));
+            document.getElementById(`log-${meal}-fat`).value = Math.round((Number(document.getElementById(`log-${meal}-fat`).value) || 0) + (f * r));
+            document.getElementById(`log-${meal}-fib`).value = Math.round((Number(document.getElementById(`log-${meal}-fib`).value) || 0) + (fib * r));
+
+            document.getElementById(`log-${meal}-sod`).value = Math.round((Number(document.getElementById(`log-${meal}-sod`).value) || 0) + (sod * r));
+            document.getElementById(`log-${meal}-pot`).value = Math.round((Number(document.getElementById(`log-${meal}-pot`).value) || 0) + (pot * r));
+            document.getElementById(`log-${meal}-calc`).value = Math.round((Number(document.getElementById(`log-${meal}-calc`).value) || 0) + (calc * r));
+            document.getElementById(`log-${meal}-iron`).value = Math.round((Number(document.getElementById(`log-${meal}-iron`).value) || 0) + (iron * r));
+
+            document.getElementById('food-selection-panel').style.display = 'none';
+            document.getElementById('food-search-query').value = '';
+            
+            updateDailyTotals();
+            alert(`${name} (${g}g) added to your log!`);
+        };
+
+        window.updateDailyTotals = function() {
+            const meals = ['brk', 'lun', 'din', 'snk'];
+            let tCal=0, tPro=0, tCar=0, tFat=0, tFib=0, tSod=0, tPot=0, tCalc=0, tIron=0;
+            meals.forEach(m => {
+                tCal += Number(document.getElementById(`log-${m}-cal`).value) || 0;
+                tPro += Number(document.getElementById(`log-${m}-pro`).value) || 0;
+                tCar += Number(document.getElementById(`log-${m}-car`).value) || 0;
+                tFat += Number(document.getElementById(`log-${m}-fat`).value) || 0;
+                tFib += Number(document.getElementById(`log-${m}-fib`).value) || 0;
+                tSod += Number(document.getElementById(`log-${m}-sod`).value) || 0;
+                tPot += Number(document.getElementById(`log-${m}-pot`).value) || 0;
+                tCalc += Number(document.getElementById(`log-${m}-calc`).value) || 0;
+                tIron += Number(document.getElementById(`log-${m}-iron`).value) || 0;
+            });
+            document.getElementById('tot-cal').innerText = tCal;
+            document.getElementById('tot-pro').innerText = tPro + 'g';
+            document.getElementById('tot-car').innerText = tCar + 'g';
+            document.getElementById('tot-fat').innerText = tFat + 'g';
+            document.getElementById('tot-fib').innerText = tFib + 'g';
+            document.getElementById('tot-sod').innerText = tSod + 'mg';
+            document.getElementById('tot-pot').innerText = tPot + 'mg';
+            document.getElementById('tot-calc').innerText = tCalc + 'mg';
+            document.getElementById('tot-iron').innerText = tIron + 'mg';
+        };
+
+        window.submitDailyLog = async function(e) {
+            e.preventDefault();
+            try {
+                const db = getSupabase();
+                const { data: { user } } = await db.auth.getUser();
+
+                const logData = `[DAILY HEALTH LOG]\nDate: ${new Date().toLocaleDateString('en-GB')}\n\n🥗 FOOD & NUTRITION:\n[Breakfast] ${document.getElementById('log-brk-desc').value || '-'}\n> Macros: ${document.getElementById('log-brk-cal').value||0}kcal | ${document.getElementById('log-brk-pro').value||0}g Pro | ${document.getElementById('log-brk-car').value||0}g Carb | ${document.getElementById('log-brk-fat').value||0}g Fat\n> Micros: ${document.getElementById('log-brk-fib').value||0}g Fiber | ${document.getElementById('log-brk-sod').value||0}mg Sodium | ${document.getElementById('log-brk-pot').value||0}mg Potassium | ${document.getElementById('log-brk-calc').value||0}mg Calcium | ${document.getElementById('log-brk-iron').value||0}mg Iron\n\n[Lunch] ${document.getElementById('log-lun-desc').value || '-'}\n> Macros: ${document.getElementById('log-lun-cal').value||0}kcal | ${document.getElementById('log-lun-pro').value||0}g Pro | ${document.getElementById('log-lun-car').value||0}g Carb | ${document.getElementById('log-lun-fat').value||0}g Fat\n> Micros: ${document.getElementById('log-lun-fib').value||0}g Fiber | ${document.getElementById('log-lun-sod').value||0}mg Sodium | ${document.getElementById('log-lun-pot').value||0}mg Potassium | ${document.getElementById('log-lun-calc').value||0}mg Calcium | ${document.getElementById('log-lun-iron').value||0}mg Iron\n\n[Dinner] ${document.getElementById('log-din-desc').value || '-'}\n> Macros: ${document.getElementById('log-din-cal').value||0}kcal | ${document.getElementById('log-din-pro').value||0}g Pro | ${document.getElementById('log-din-car').value||0}g Carb | ${document.getElementById('log-din-fat').value||0}g Fat\n> Micros: ${document.getElementById('log-din-fib').value||0}g Fiber | ${document.getElementById('log-din-sod').value||0}mg Sodium | ${document.getElementById('log-din-pot').value||0}mg Potassium | ${document.getElementById('log-din-calc').value||0}mg Calcium | ${document.getElementById('log-din-iron').value||0}mg Iron\n\n[Snacks] ${document.getElementById('log-snk-desc').value || '-'}\n> Macros: ${document.getElementById('log-snk-cal').value||0}kcal | ${document.getElementById('log-snk-pro').value||0}g Pro | ${document.getElementById('log-snk-car').value||0}g Carb | ${document.getElementById('log-snk-fat').value||0}g Fat\n> Micros: ${document.getElementById('log-snk-fib').value||0}g Fiber | ${document.getElementById('log-snk-sod').value||0}mg Sodium | ${document.getElementById('log-snk-pot').value||0}mg Potassium | ${document.getElementById('log-snk-calc').value||0}mg Calcium | ${document.getElementById('log-snk-iron').value||0}mg Iron\n\n>> DAILY MACRO TOTALS: ${document.getElementById('tot-cal').innerText} kcal | ${document.getElementById('tot-pro').innerText} Protein | ${document.getElementById('tot-car').innerText} Carbs | ${document.getElementById('tot-fat').innerText} Fat \n>> DAILY MICRO TOTALS: ${document.getElementById('tot-fib').innerText} Fiber | ${document.getElementById('tot-sod').innerText} Sodium | ${document.getElementById('tot-pot').innerText} Potassium | ${document.getElementById('tot-calc').innerText} Calcium | ${document.getElementById('tot-iron').innerText} Iron\n\n🏃‍♀️ ACTIVITY: ${document.getElementById('log-activity-type').value || '-'} (${document.getElementById('log-activity-dur').value || '0'} mins) | Intensity: ${document.getElementById('log-activity-int').value || '-'}\n🧠 MOOD: ${document.getElementById('log-mood-rating').value || '-'} | Energy: ${document.getElementById('log-energy').value || '-'}/10 | Notes: ${document.getElementById('log-mood-notes').value || '-'}\n💤 SLEEP: ${document.getElementById('log-sleep-hours').value || '-'} hours | Quality: ${document.getElementById('log-sleep-quality').value || '-'}/5\n🚽 BOWEL: ${document.getElementById('log-bowel-type').value || '-'} | Freq: ${document.getElementById('log-bowel-freq').value || '-'}\n💧 WATER: ${document.getElementById('log-water').value || '-'}\n📏 VITALS: Weight: ${document.getElementById('log-meas-weight').value || '-'} | BP: ${document.getElementById('log-meas-bp').value || '-'}`;
+
+                const { error } = await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: logData }]);
+                if(error) throw error;
+
+                alert("Daily Health Log saved successfully to your practitioner file!");
+                e.target.reset(); updateDailyTotals();
+                document.querySelectorAll('.journal-panel').forEach(p => p.classList.remove('show'));
+            } catch(err) { alert("Error saving log: " + err.message); }
+            return false;
+        };
+
+        window.bookNewSession = async function(e) {
+            e.preventDefault();
+            try {
+                const db = getSupabase();
+                const { data: { user } } = await db.auth.getUser();
+
+                const { error } = await db.from('appointments').insert([{ client_id: user.id, client_name: user.user_metadata?.full_name || user.email, service_name: document.getElementById('portal-service').value, appointment_time: document.getElementById('portal-date').value, status: 'confirmed' }]);
+                if(error) throw error;
+
+                alert("Appointment booked!"); loadClientDashboard(db, user);
+            } catch(err) { alert("Error booking session: " + err.message); }
+            return false;
+        };
+
+        window.cancelAppointment = async function(id) {
+            if(!confirm("Cancel appointment?")) return;
+            try {
+                const db = getSupabase();
+                const { error } = await db.from('appointments').delete().eq('id', id);
+                if(error) throw error;
+                const { data: { user } } = await db.auth.getUser();
+                loadClientDashboard(db, user);
+            } catch(err) { alert("Error cancelling appointment: " + err.message); }
+        };
+
+        async function loadClientDashboard(db, user) {
+            const list = document.getElementById('client-appointments-list');
+            const chatBox = document.getElementById('client-chat-box');
+            document.getElementById('portal-welcome-title').innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
+
+            try {
+                const { data: appts, error: apptError } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
+                if(apptError) throw apptError;
+
+                list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => `
+                    <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); display: flex; justify-content: space-between; align-items: center; background: white;">
+                        <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${new Date(a.appointment_time).toLocaleString('en-GB')}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
+                        <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1.5rem; color: #a94442; border-color: #a94442;" onclick="cancelAppointment('${a.id}')">Cancel</button>
+                    </div>`).join('');
+
+                const { data: msgs, error: msgError } = await db.from('messages').select('*').eq('client_id', user.id).order('created_at', { ascending: true });
+                if(msgError) throw msgError;
+
+                if(msgs) {
+                    const chatMsgs = msgs.filter(m => !m.content.includes('[DAILY HEALTH LOG]') && !m.content.includes('[MEDICAL INTAKE SUBMISSION]'));
+                    chatBox.innerHTML = chatMsgs.map(m => `<div class="msg ${m.sender}"><strong>${m.sender === 'client' ? 'You' : 'Clare'}:</strong> ${m.content}</div>`).join('');
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }
+            } catch(err) { list.innerHTML = `<p style="color: #a94442; font-size: 0.9rem;">Database Error: ${err.message}</p>`; }
+        }
+
+        async function handleClientMessage(e) {
+            e.preventDefault();
+            try {
+                const db = getSupabase();
+                const input = document.getElementById('client-msg-input');
+                const { data: { user } } = await db.auth.getUser();
+                
+                const { error } = await db.from('messages').insert([{ client_id: user.id, sender: 'client', content: input.value.trim() }]);
+                if(error) throw error;
+
+                document.getElementById('client-chat-box').innerHTML += `<div class="msg client"><strong>You:</strong> ${input.value}</div>`;
+                input.value = '';
+                document.getElementById('client-chat-box').scrollTop = document.getElementById('client-chat-box').scrollHeight;
+            } catch(err) { alert("Error sending message: " + err.message); }
+            return false;
+        }
+
+        async function processLogout() {
+            try {
+                const db = getSupabase();
+                if(db) await db.auth.signOut();
+                updateNavState(false); 
+                openScreen('screen-home');
+                location.reload();
+            } catch(err) { alert("Error signing out: " + err.message); }
+        }
+
+        function updateNavState(isLoggedIn) {
+            document.getElementById('nav-portal-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+            document.getElementById('nav-book-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
+            document.getElementById('nav-logout-btn').style.display = isLoggedIn ? 'inline-block' : 'none';
+            document.getElementById('mobile-portal-link').style.display = isLoggedIn ? 'none' : 'block';
+            document.getElementById('mobile-book-link').style.display = isLoggedIn ? 'none' : 'block';
+            document.getElementById('mobile-logout-link').style.display = isLoggedIn ? 'block' : 'none';
+        }
+    </script>
 </body>
 </html>
