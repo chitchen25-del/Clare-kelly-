@@ -38,80 +38,13 @@ function checkPwaInstall() {
     }
 }
 
-// --- SUPABASE & EMAIL SETUP ---
+// --- SUPABASE SETUP ---
 const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
-const BREVO_API_KEY = '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';
 
 function getSupabase() {
     if(!window.supabase) return null;
     return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-}
-
-// BYPASSES BROWSER CORS SECURITY VIA PROXY
-async function sendBookingConfirmationEmail(clientEmail, clientName, serviceName, appointmentTime) {
-    try {
-        const formattedDate = new Date(appointmentTime).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' });
-        await fetch('https://corsproxy.io/?https://api.brevo.com/v3/smtp/email', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'api-key': BREVO_API_KEY
-            },
-            body: JSON.stringify({
-                sender: { name: "The Natural Healing Clinic", email: "claretownsend82@gmail.com" },
-                to: [{ email: clientEmail, name: clientName }],
-                subject: "Your Appointment Confirmation - The Natural Healing Clinic",
-                htmlContent: `
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f3f1ef; padding: 40px 20px;">
-                        <tr>
-                            <td align="center">
-                                <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(9, 93, 40, 0.05); border: 1px solid #d1dcd4;">
-                                    <tr>
-                                        <td align="center" style="padding: 40px 40px 20px 40px; border-bottom: 1px solid #d1dcd4;">
-                                            <img src="https://nhc.co.im/logo.png" alt="The Natural Healing Clinic" width="150" height="50" style="display: block; border: 0; object-fit: contain;">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 40px; color: #555555; font-family: 'Montserrat', Arial, sans-serif; font-size: 15px; line-height: 1.6;">
-                                            <h2 style="color: #095d28; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; font-weight: normal; margin-top: 0; margin-bottom: 20px;">You're Booked In!</h2>
-                                            <p style="margin-bottom: 20px;">Hello <strong>${clientName}</strong>,</p>
-                                            <p style="margin-bottom: 20px;">Thank you for booking with The Natural Healing Clinic. We are looking forward to welcoming you to the clinic in Union Mills.</p>
-                                            
-                                            <div style="background-color: #f9f8f6; border-left: 4px solid #095d28; padding: 20px; margin: 25px 0; border-radius: 0 8px 8px 0;">
-                                                <p style="margin: 0 0 10px 0; font-weight: bold; color: #095d28;">Appointment Details:</p>
-                                                <p style="margin: 0 0 5px 0;"><strong>Service:</strong> ${serviceName}</p>
-                                                <p style="margin: 0;"><strong>Date & Time:</strong> ${formattedDate}</p>
-                                            </div>
-                                            
-                                            <p style="margin-bottom: 20px;">If you need to reschedule or have any questions prior to your visit, please feel free to reach out via your Patient Portal.</p>
-                                            
-                                            <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #eae6e1; text-align: center;">
-                                                <h3 style="color: #095d28; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; margin-bottom: 15px;">Explore More Ways to Support Your Well-being</h3>
-                                                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Complement your treatment with our specialized holistic therapies designed to restore balance.</p>
-                                                <a href="https://nhc.co.im/#services" target="_blank" style="background-color: #0d9b46; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; display: inline-block;">View Our Services</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center" style="padding: 30px 40px; background-color: #f9f8f6; color: #888888; font-family: 'Montserrat', Arial, sans-serif; font-size: 12px; line-height: 1.5; border-top: 1px solid #d1dcd4;">
-                                            <strong style="color: #095d28;">The Natural Healing Clinic</strong><br>
-                                            Led by Clare Kelly | Isle of Man<br>
-                                            13 Cronk Drine, Union Mills, IM4 4NG<br>
-                                            <a href="https://nhc.co.im" style="color: #0d9b46; text-decoration: none;">nhc.co.im</a> | 07624 202 121
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                `
-            })
-        });
-    } catch (err) {
-        console.error("Email dispatch failed:", err);
-    }
 }
 
 window.onload = async function() {
@@ -223,11 +156,17 @@ window.processRegistration = async function(e) {
         if (error) throw new Error(error.message);
         
         if (authData.user) {
+            const formattedDate = new Date(date).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' });
             const { error: apptError } = await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
             if(apptError) throw new Error(apptError.message);
 
-            // Fire confirmation email directly via proxy bypass
-            await sendBookingConfirmationEmail(email, name, service, date);
+            // Trigger secure database email
+            await db.rpc('send_booking_email', {
+                to_email: email,
+                client_name: name,
+                service_name: service,
+                appointment_time: formattedDate
+            });
         }
         
         alert('Registered and booked successfully!'); 
@@ -248,12 +187,18 @@ window.bookNewSession = async function(e) {
         const serviceName = document.getElementById('portal-service').value;
         const appointmentTime = document.getElementById('portal-date').value;
         const clientName = user.user_metadata?.full_name || user.email;
+        const formattedDate = new Date(appointmentTime).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' });
 
         const { error } = await db.from('appointments').insert([{ client_id: user.id, client_name: clientName, service_name: serviceName, appointment_time: appointmentTime, status: 'confirmed' }]);
         if(error) throw error;
 
-        // Fire confirmation email directly via proxy bypass
-        await sendBookingConfirmationEmail(user.email, clientName, serviceName, appointmentTime);
+        // Trigger secure database email
+        await db.rpc('send_booking_email', {
+            to_email: user.email,
+            client_name: clientName,
+            service_name: serviceName,
+            appointment_time: formattedDate
+        });
 
         alert("Appointment booked successfully and confirmation email sent!"); 
         loadClientDashboard(db, user);
@@ -261,7 +206,6 @@ window.bookNewSession = async function(e) {
     return false;
 };
 
-// Cancel functionality relies on the Supabase RLS SQL policy we ran
 window.cancelAppointment = async function(id) {
     if(!confirm("Are you sure you want to cancel this appointment?")) return;
     try {
