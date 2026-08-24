@@ -334,10 +334,9 @@
             </div>
         </div>
 
-        <div class="dashboard-container" style="max-width: 1200px; margin: 3rem auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;">
-    
-<>
-            <!-- LEFT COLUMN: Standard Appointments & VIP Unlock -->
+             <div class="dashboard-container" style="max-width: 1200px; margin: 3rem auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;">
+            
+            <!-- LEFT COLUMN: Appointments & Booking -->
             <div>
                 <div class="dash-card">
                     <h3>Your Appointments</h3>
@@ -396,6 +395,34 @@
                         <button type="submit" class="btn" style="width: 100%;">Confirm Booking</button>
                     </form>
                 </div>
+            </div>
+
+            <!-- RIGHT COLUMN: VIP Unlock & Premium App Container -->
+            <div>
+                <!-- VIP APP UNLOCK CARD (Shown if Basic User) -->
+                <div class="dash-card" id="vip-unlock-card" style="background: linear-gradient(135deg, #095d28, #0d9b46); color: white;">
+                    <h3 style="color: white; border-color: rgba(255,255,255,0.2);">Unlock Premium Patient App</h3>
+                    <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 1.5rem;">If you booked a functional medicine pathway, enter your unique VIP unlock code from your confirmation email below.</p>
+                    <form onsubmit="return unlockVipApp(event)" style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                        <input type="text" id="vip-code-input" placeholder="Enter Code (e.g. VIP-8291)" style="margin-bottom: 0; flex: 1; background: white; text-transform: uppercase; color: var(--text-main);" required>
+                        <button type="submit" class="btn" style="background: white; color: var(--text-main); border: none;">Unlock App</button>
+                    </form>
+                </div>
+
+                <!-- PREMIUM CLINICAL APP (Hidden unless unlocked) -->
+                <div id="premium-app-container" style="display: none;">
+                    <div class="dash-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem;">
+                            <h3 style="margin: 0; border: none; padding: 0;">Daily Health Journal</h3>
+                            <span style="background: var(--primary-sage); color: white; padding: 0.3rem 0.8rem; font-size: 0.7rem; font-family: 'Montserrat'; font-weight: bold; text-transform: uppercase; border-radius: 4px;">VIP Unlocked</span>
+                        </div>
+                        <p style="font-size: 0.95rem; color: #555;">Your advanced clinical tracking tools are active.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
 
                 <!-- VIP APP UNLOCK CARD (Shown if Basic User) -->
                 <div class="dash-card" id="vip-unlock-card" style="background: linear-gradient(135deg, #095d28, #0d9b46); color: white;">
