@@ -16,10 +16,32 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Link to your external CSS file with a cache-buster -->
-    <link rel="stylesheet" href="./style.css?version=3">
+    <link rel="stylesheet" href="./style.css?version=6">
 </head>
 <body>
+
+    <script>
+        window.openScreen = function(screenId) {
+            try {
+                document.querySelectorAll('.page-screen').forEach(el => el.classList.remove('visible'));
+                const target = document.getElementById(screenId);
+                if(target) {
+                    target.classList.add('visible');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                const drawer = document.getElementById('mobile-drawer');
+                if(drawer) drawer.classList.remove('open');
+            } catch (err) { console.error(err.message); }
+        }
+        function toggleMobileMenu() { document.getElementById('mobile-drawer').classList.toggle('open'); }
+        function toggleAccordion(id) {
+            const panel = document.getElementById(id);
+            const btn = panel.previousElementSibling;
+            panel.classList.toggle('show');
+            btn.classList.toggle('active');
+            btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
+        }
+    </script>
 
     <nav>
         <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="openScreen('screen-home')">
@@ -43,7 +65,7 @@
         <span class="mobile-drawer-link" onclick="processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
     </div>
 
-    <!-- ================= SCREEN 1: THE HOME PAGE ================= -->
+    <!-- ================= SCREEN 1: HOME ================= -->
     <div id="screen-home" class="page-screen visible">
         <section class="hero">
             <h1>Healing From The Inside Out</h1>
@@ -145,7 +167,6 @@
             </div>
         </section>
 
-        <!-- NEW TREATMENTS SECTION -->
         <section class="section" style="background-color: var(--card-bg); border-top: 1px solid var(--secondary-sand); width: 100%; max-width: 100%;">
             <div style="width: 100%; max-width: 1200px; margin: 0 auto;">
                 <div style="text-align: center; margin-bottom: 4rem;">
@@ -183,7 +204,7 @@
         </section>
     </div>
 
-    <!-- ================= SCREEN 2: ABOUT CLARE ================= -->
+    <!-- ================= SCREEN 2: ABOUT ================= -->
     <div id="screen-about" class="page-screen">
         <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
             <span class="section-subtitle">Clinical Leadership</span>
@@ -201,18 +222,17 @@
                 <span class="section-subtitle">Practitioner Profile</span>
                 <h2 style="font-size: 2.2rem;">Bridging Functional Medicine & Soft-Tissue Therapy</h2>
                 <p style="margin-bottom: 1.5rem; color: #555;">Clare Kelly is a leading functional health and soft-tissue practitioner based in Castletown, Isle of Man. With decades of clinical experience, Clare established <strong>The Natural Healing Clinic</strong> with a singular mission: to provide patients suffering from chronic pain, systemic inflammation, and deep-seated physical trauma with clear, sustainable results in a realistic timeframe.</p>
-                <p style="margin-bottom: 2.5rem; color: #555;">Her clinical methodology is strictly evidence-informed, drawing from advanced training in Bowen Therapy, Manual Lymphatic Drainage (MLD), and Functional Medicine frameworks. Clare works closely alongside mainstream medical protocols.</p>
                 <button type="button" class="btn" onclick="openScreen('screen-register')">Book Consultation</button>
             </div>
         </section>
     </div>
 
-    <!-- ================= SCREEN 4: LOGIN ================= -->
+    <!-- ================= SCREEN 3: LOGIN ================= -->
     <div id="screen-login" class="page-screen">
         <div class="form-container">
             <img src="./logo.png" alt="Logo" class="portal-logo">
             <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; font-family: 'Montserrat'; font-weight: 600;">Patient Portal</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 2.5rem; font-size: 0.95rem;">Access your clinical files, health journals, and messages.</p>
+            <p style="text-align: center; color: #666; margin-bottom: 2.5rem; font-size: 0.95rem;">Access your appointments and manage your care.</p>
             <form onsubmit="return processClientLogin(event)">
                 <label>Email Address</label>
                 <input type="email" id="login-email" placeholder="Enter your email" required>
@@ -228,12 +248,11 @@
         </div>
     </div>
 
-    <!-- ================= SCREEN 4B: FORGOT PASSWORD ================= -->
+    <!-- ================= SCREEN 3B: FORGOT PASSWORD ================= -->
     <div id="screen-forgot" class="page-screen">
         <div class="form-container">
-            <img src="./logo.png" alt="Logo" class="portal-logo" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'50\'><text x=\'0\' y=\'30\' font-family=\'serif\' font-size=\'20\' fill=\'%23095d28\'>The NHC</text></svg>';">
+            <img src="./logo.png" alt="Logo" class="portal-logo">
             <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; font-family: 'Montserrat'; font-weight: 600;">Reset Password</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 2.5rem; font-size: 0.95rem;">Enter your email address to receive a secure password reset link.</p>
             <form onsubmit="return processPasswordReset(event)">
                 <label>Email Address</label>
                 <input type="email" id="forgot-email" placeholder="Enter your email" required>
@@ -243,7 +262,7 @@
         </div>
     </div>
 
-    <!-- ================= SCREEN 5: REGISTRATION ================= -->
+    <!-- ================= SCREEN 4: REGISTER ================= -->
     <div id="screen-register" class="page-screen">
         <div class="form-container">
             <img src="./logo.png" alt="Logo" class="portal-logo">
@@ -276,8 +295,8 @@
                     </optgroup>
                     <optgroup label="Functional Medicine Pathways">
                         <option value="Discovery Call (£0)">Discovery Phone Call (20m) — Free</option>
-                        <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90m) — £350</option>
-                        <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950</option>
+                        <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90m) — £350 (VIP App Access)</option>
+                        <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950 (VIP App Access)</option>
                         <option value="Parasite Cleanse (£150)">Parasite Cleanse (3, 5, or 10 day) — £150</option>
                         <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse (excl. supplements) — £355</option>
                         <option value="Functional Testing Review (£350)">Functional Testing Review (90m) — £350</option>
@@ -303,23 +322,98 @@
         </div>
     </div>
 
-    <!-- ================= SCREEN 6: CLIENT DASHBOARD ================= -->
+    <!-- ================= SCREEN 5: CLIENT DASHBOARD (TWO-TIER) ================= -->
     <div id="screen-dashboard" class="page-screen">
         <div style="background-color: var(--card-bg); padding: 3rem 6%; border-bottom: 1px solid var(--secondary-sand);">
             <div style="max-width: 1300px; margin: 0 auto; display: flex; align-items: center; gap: 1.5rem;">
                 <img src="./logo.png" alt="Logo" style="height: 50px;">
                 <div>
                     <h1 id="portal-welcome-title" style="font-size: 1.8rem; margin-bottom: 0;">Patient Portal</h1>
-                    <p style="color: #666; font-style: italic; font-size: 0.9rem; margin: 0;">Manage your clinical health journey.</p>
+                    <p style="color: #666; font-style: italic; font-size: 0.9rem; margin: 0;">Manage your appointments.</p>
                 </div>
             </div>
         </div>
 
         <div class="dashboard-container">
+            <!-- LEFT COLUMN: Standard Appointments & VIP Unlock -->
             <div>
+                <div class="dash-card">
+                    <h3>Your Appointments</h3>
+                    <div id="client-appointments-list"><p style="color: #888; font-size: 0.95rem;">Loading schedule...</p></div>
+                </div>
+
+                <div class="dash-card" id="new-booking-card">
+                    <h3>Book Another Session</h3>
+                    <form onsubmit="return bookNewSession(event)">
+                        <label>Treatment Pathway</label>
+                        <select id="portal-service" required>
+                            <option value="">-- Choose a Service or Test --</option>
+                            <optgroup label="Myofascial Release Therapy">
+                                <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
+                                <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release (Castletown) — £80</option>
+                            </optgroup>
+                            <optgroup label="Lymphatic Treatment">
+                                <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70</option>
+                                <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment (Castletown) — £80</option>
+                            </optgroup>
+                            <optgroup label="Infrared Targeted Treatment">
+                                <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment (Union Mills) — £50</option>
+                                <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment (Castletown) — £60</option>
+                                <option value="Infrared Add-on (£15)">Infrared Add-on to Lymphatic/Myofascial — £15</option>
+                            </optgroup>
+                            <optgroup label="Taster Gift Packages & Bundles">
+                                <option value="Migraine & Neck Reset (£70)">Migraine & Neck Reset Package — £70</option>
+                                <option value="Clarity Drainage (£70)">Clarity Drainage Package — £70</option>
+                                <option value="Gut Mini Reset 10 Days (£80)">Gut Mini Reset (10 Days) — £80</option>
+                                <option value="Taster Trio Bundle (£195)">Taster Trio Bundle — £195</option>
+                            </optgroup>
+                            <optgroup label="Functional Medicine Pathways">
+                                <option value="Discovery Call (£0)">Discovery Phone Call (20m) — Free</option>
+                                <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90m) — £350 (VIP App Access)</option>
+                                <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950 (VIP App Access)</option>
+                                <option value="Parasite Cleanse (£150)">Parasite Cleanse (3, 5, or 10 day) — £150</option>
+                                <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse (excl. supplements) — £355</option>
+                                <option value="Functional Testing Review (£350)">Functional Testing Review (90m) — £350</option>
+                            </optgroup>
+                            <optgroup label="Nordic Laboratories Functional Testing">
+                                <option value="Comprehensive Gut Health Test (£325)">Comprehensive Gut Health Test (Stool) — From £325</option>
+                                <option value="Gut Health + Barrier Function Test (£405)">Gut Health + Barrier Function Test (Stool) — From £405</option>
+                                <option value="SIBO Breath Test (£181)">SIBO Breath Test (Breath) — From £181</option>
+                                <option value="Extended Stool Analysis (£489)">Extended Stool Analysis (2-day Stool) — From £489</option>
+                                <option value="Organic Acids Test OAT (£328)">Organic Acids Test (OAT - Urine) — From £328</option>
+                                <option value="Omega-3 & Vitamin D Test (£150)">Omega-3 & Vitamin D Test (Blood spot) — From £150</option>
+                                <option value="DUTCH Complete Hormone Test (£269)">DUTCH Complete Hormone Test (Dried urine) — From £269</option>
+                                <option value="Mould & Environmental Toxin Screen (£269)">Mould & Environmental Toxin Screen (Urine) — £269</option>
+                                <option value="MycoTOX Profile (£408)">MycoTOX Profile (Urine) — £408</option>
+                                <option value="Glyphosate Test (£156)">Glyphosate Test (Urine) — £156</option>
+                                <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
+                            </optgroup>
+                        </select>
+                        <label>Date & Time (Mon-Sat, 9AM - 5PM)</label>
+                        <input type="datetime-local" id="portal-date" min="2026-01-01T09:00" max="2030-12-31T17:00" required onchange="validateBusinessHours(this)">
+                        <button type="submit" class="btn" style="width: 100%;">Confirm Booking</button>
+                    </form>
+                </div>
+
+                <!-- VIP APP UNLOCK CARD (Shown if Basic User) -->
+                <div class="dash-card" id="vip-unlock-card" style="background: linear-gradient(135deg, #095d28, #0d9b46); color: white;">
+                    <h3 style="color: white; border-color: rgba(255,255,255,0.2);">Unlock Premium Patient App</h3>
+                    <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 1.5rem;">If you booked a functional medicine pathway, enter your unique VIP unlock code from your confirmation email below.</p>
+                    <form onsubmit="return unlockVipApp(event)" style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                        <input type="text" id="vip-code-input" placeholder="Enter Code (e.g. VIP-8291)" style="margin-bottom: 0; flex: 1; background: white; text-transform: uppercase;" required>
+                        <button type="submit" class="btn" style="background: white; color: var(--text-main); border: none;">Unlock App</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: PREMIUM CLINICAL APP (Hidden unless unlocked) -->
+            <div id="premium-app-container" style="display: none;">
                 <!-- DAILY HEALTH JOURNAL -->
                 <div class="dash-card">
-                    <h3>Daily Health Journal</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem;">
+                        <h3 style="margin: 0; border: none; padding: 0;">Daily Health Journal</h3>
+                        <span style="background: var(--primary-sage); color: white; padding: 0.3rem 0.8rem; font-size: 0.7rem; font-family: 'Montserrat'; font-weight: bold; text-transform: uppercase; border-radius: 4px;">VIP Unlocked</span>
+                    </div>
                     <p style="font-size: 0.95rem; color: #555; margin-bottom: 2rem;">Log your daily metrics. Search the database or scan a barcode to automatically track exact macros and key micronutrients.</p>
                     
                     <form onsubmit="return submitDailyLog(event)">
@@ -547,72 +641,13 @@
                     </form>
                 </div>
 
-                <div class="dash-card" id="new-booking-card">
-                    <h3>Book Another Session</h3>
-                    <form onsubmit="return bookNewSession(event)">
-                        <label>Treatment Pathway</label>
-                        <select id="portal-service" required>
-                            <option value="">-- Choose a Service or Test --</option>
-                            <optgroup label="Myofascial Release Therapy">
-                                <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
-                                <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release (Castletown) — £80</option>
-                            </optgroup>
-                            <optgroup label="Lymphatic Treatment">
-                                <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70</option>
-                                <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment (Castletown) — £80</option>
-                            </optgroup>
-                            <optgroup label="Infrared Targeted Treatment">
-                                <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment (Union Mills) — £50</option>
-                                <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment (Castletown) — £60</option>
-                                <option value="Infrared Add-on (£15)">Infrared Add-on to Lymphatic/Myofascial — £15</option>
-                            </optgroup>
-                            <optgroup label="Taster Gift Packages & Bundles">
-                                <option value="Migraine & Neck Reset (£70)">Migraine & Neck Reset Package — £70</option>
-                                <option value="Clarity Drainage (£70)">Clarity Drainage Package — £70</option>
-                                <option value="Gut Mini Reset 10 Days (£80)">Gut Mini Reset (10 Days) — £80</option>
-                                <option value="Taster Trio Bundle (£195)">Taster Trio Bundle — £195</option>
-                            </optgroup>
-                            <optgroup label="Functional Medicine Pathways">
-                                <option value="Discovery Call (£0)">Discovery Phone Call (20m) — Free</option>
-                                <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90m) — £350</option>
-                                <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950</option>
-                                <option value="Parasite Cleanse (£150)">Parasite Cleanse (3, 5, or 10 day) — £150</option>
-                                <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse (excl. supplements) — £355</option>
-                                <option value="Functional Testing Review (£350)">Functional Testing Review (90m) — £350</option>
-                            </optgroup>
-                            <optgroup label="Nordic Laboratories Functional Testing">
-                                <option value="Comprehensive Gut Health Test (£325)">Comprehensive Gut Health Test (Stool) — From £325</option>
-                                <option value="Gut Health + Barrier Function Test (£405)">Gut Health + Barrier Function Test (Stool) — From £405</option>
-                                <option value="SIBO Breath Test (£181)">SIBO Breath Test (Breath) — From £181</option>
-                                <option value="Extended Stool Analysis (£489)">Extended Stool Analysis (2-day Stool) — From £489</option>
-                                <option value="Organic Acids Test OAT (£328)">Organic Acids Test (OAT - Urine) — From £328</option>
-                                <option value="Omega-3 & Vitamin D Test (£150)">Omega-3 & Vitamin D Test (Blood spot) — From £150</option>
-                                <option value="DUTCH Complete Hormone Test (£269)">DUTCH Complete Hormone Test (Dried urine) — From £269</option>
-                                <option value="Mould & Environmental Toxin Screen (£269)">Mould & Environmental Toxin Screen (Urine) — £269</option>
-                                <option value="MycoTOX Profile (£408)">MycoTOX Profile (Urine) — £408</option>
-                                <option value="Glyphosate Test (£156)">Glyphosate Test (Urine) — £156</option>
-                                <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
-                            </optgroup>
-                        </select>
-                        <label>Date & Time (Mon-Sat, 9AM - 5PM)</label>
-                        <input type="datetime-local" id="portal-date" min="2026-01-01T09:00" max="2030-12-31T17:00" required onchange="validateBusinessHours(this)">
-                        <button type="submit" class="btn" style="width: 100%;">Confirm Booking</button>
-                    </form>
-                </div>
-            </div>
-
-            <div>
+                <!-- SECURE MESSAGING -->
                 <div class="dash-card">
-                    <h3>Your Appointments</h3>
-                    <div id="client-appointments-list"><p style="color: #888; font-size: 0.95rem;">Loading schedule...</p></div>
-                </div>
-
-                <div class="dash-card">
-                    <h3>Secure Messaging</h3>
+                    <h3>Secure Clinical Chat</h3>
                     <div class="chat-box" id="client-chat-box"></div>
                     <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 1rem;">
-                        <input type="text" id="client-msg-input" placeholder="Type message..." style="margin-bottom: 0; flex: 1;" required>
-                        <button type="submit" class="btn" style="padding: 0 1.5rem; border-radius: 8px;">Send</button>
+                        <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1;" required>
+                        <button type="submit" class="btn" style="padding: 0 1.5rem;">Send</button>
                     </form>
                 </div>
             </div>
@@ -625,12 +660,10 @@
             <img src="./logo.png" alt="App Icon" class="pwa-icon">
             <h2 class="pwa-title">Install The App</h2>
             <p class="pwa-subtitle">For the best experience and to easily track your daily health journals, install our secure patient portal directly to your phone.</p>
-            
             <div class="pwa-steps" id="pwa-instruction-text">
                 <strong>1.</strong> Tap the browser menu (usually three dots in the top right).<br><br>
                 <strong>2.</strong> Select <b>Add to Home Screen</b> or <b>Install App</b>.
             </div>
-            
             <button class="btn" style="width: 100%;" onclick="closePwaOverlay()">I've Installed It</button>
             <button class="pwa-close-btn" onclick="closePwaOverlay()">Continue in browser</button>
         </div>
