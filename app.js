@@ -160,7 +160,7 @@ window.processRegistration = async function(e) {
             const { error: apptError } = await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
             if(apptError) throw new Error(apptError.message);
 
-            // Trigger secure database email
+            // Calls the secure Supabase email function
             await db.rpc('send_booking_email', {
                 to_email: email,
                 client_name: name,
@@ -192,7 +192,7 @@ window.bookNewSession = async function(e) {
         const { error } = await db.from('appointments').insert([{ client_id: user.id, client_name: clientName, service_name: serviceName, appointment_time: appointmentTime, status: 'confirmed' }]);
         if(error) throw error;
 
-        // Trigger secure database email
+        // Calls the secure Supabase email function
         await db.rpc('send_booking_email', {
             to_email: user.email,
             client_name: clientName,
