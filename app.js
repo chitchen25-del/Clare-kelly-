@@ -92,9 +92,7 @@ window.processRegistration = async function(e) {
                 await db.from('client_tiers').insert([{ client_id: authData.user.id, is_premium: false }]);
             }
 
-            // Fixed time formatting natively
-            const formattedDate = new Date(date).toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', hour: 'numeric', minute: '2-digit', hour12: true });
-            
+            const formattedDate = new Date(date).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short', hour12: true });
             await db.from('appointments').insert([{ client_id: authData.user.id, client_name: name, service_name: service, appointment_time: date, status: 'confirmed' }]);
 
             await db.rpc('send_booking_email', {
@@ -123,9 +121,7 @@ window.bookNewSession = async function(e) {
         const serviceName = document.getElementById('portal-service').value;
         const appointmentTime = document.getElementById('portal-date').value;
         const clientName = user.user_metadata?.full_name || user.email;
-        
-        // Fixed time formatting natively
-        const formattedDate = new Date(appointmentTime).toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', hour: 'numeric', minute: '2-digit', hour12: true });
+        const formattedDate = new Date(appointmentTime).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short', hour12: true });
 
         const isFunctional = serviceName.includes('Functional') || serviceName.includes('Gut Reset') || serviceName.includes('Health Audit');
         let vipCode = null;
@@ -175,57 +171,57 @@ window.rescheduleAppointment = async function(id) {
     } catch(err) { alert("Reschedule Error: " + err.message); }
 };
 
-window.unlockVipApp = async function(e) {
-    e.preventDefault();
-    try {
-        const db = getSupabase();
-        const { data: { user } } = await db.auth.getUser();
-        if(!user) throw new Error("You must be logged in to unlock the app.");
-
-        const enteredCode = document.getElementById('vip-code-input').value.trim().toUpperCase();
-
-        // Fixed .single() crash for duplicate test data
-        const { data: tier, error } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
-        if(error) throw new Error("Could not verify client tier.");
-
-        if(tier && tier.unlock_code === enteredCode) {
-            await db.from('client_tiers').update({ is_premium: true }).eq('client_id', user.id);
-            alert("VIP App Unlocked Successfully!");
-            loadClientDashboard(db, user);
-        } else {
-            alert("Invalid unlock code. Please check your confirmation email.");
-        }
-    } catch(err) { 
-        alert("Error unlocking: " + err.message); 
-    }
-    return false;
-};
-
 async function loadClientDashboard(db, user) {
     const list = document.getElementById('client-appointments-list');
     document.getElementById('portal-welcome-title').innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
 
     try {
-        // Fixed .single() crash for duplicate test data
+        // limit(1).maybeSingle() protects you from duplicate database rows crashing the load
         const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
         
-        if (tier && tier.is_premium) {
-            const unlockCard = document.getElementById('vip-unlock-card');
-            const appContainer = document.getElementById('premium-app-container');
+        const isVip = tier && (tier.is_premium === true || tier.is_premium === 'true');
+        const unlockCard = document.getElementById('vip-unlock-card');
+        const appContainer = document.getElementById('premium-app-container');
+
+        if (isVip) {
             if(unlockCard) unlockCard.style.display = 'none';
-            if(appContainer) appContainer.style.display = 'block';
+            if(appContainer) {
+                appContainer.style.display = 'block';
+                
+                // --- THE MAGIC DOOR LOGIC (Works on Android & iOS) ---
+                const isAppMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+                
+                const premiumCards = appContainer.querySelectorAll('.dash-card');
+                
+                if(premiumCards.length > 0) {
+                    const installCard = premiumCards[0]; // First card is the green "Install App" banner
+                    
+                    if (isAppMode) {
+                        // THEY ARE IN THE APP: Hide the install prompt, reveal all VIP features
+                        installCard.style.display = 'none';
+                        for(let i = 1; i < premiumCards.length; i++) {
+                            premiumCards[i].style.display = 'block';
+                        }
+                    } else {
+                        // THEY ARE IN SAFARI/CHROME: Show ONLY install prompt, lock everything else behind the door
+                        installCard.style.display = 'block';
+                        for(let i = 1; i < premiumCards.length; i++) {
+                            premiumCards[i].style.display = 'none';
+                        }
+                    }
+                }
+            }
         } else {
-            const unlockCard = document.getElementById('vip-unlock-card');
-            const appContainer = document.getElementById('premium-app-container');
             if(unlockCard) unlockCard.style.display = 'block';
             if(appContainer) appContainer.style.display = 'none';
         }
 
         const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
 
+        // Natively formats time to 12-hour clean display without external functions
         list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => `
             <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); background: white;">
-                <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${new Date(a.appointment_time).toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', hour: 'numeric', minute: '2-digit', hour12: true })}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
+                <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${new Date(a.appointment_time).toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
                 <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
                     <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; flex: 1;" onclick="rescheduleAppointment('${a.id}')">Reschedule</button>
                     <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; color: #a94442; border-color: #a94442; flex: 1;" onclick="cancelAppointment('${a.id}')">Cancel</button>
@@ -278,6 +274,31 @@ function updateNavState(isLoggedIn) {
     document.getElementById('mobile-book-link').style.display = isLoggedIn ? 'none' : 'block';
     document.getElementById('mobile-logout-link').style.display = isLoggedIn ? 'block' : 'none';
 }
+
+window.unlockVipApp = async function(e) {
+    e.preventDefault();
+    try {
+        const db = getSupabase();
+        const { data: { user } } = await db.auth.getUser();
+        if(!user) throw new Error("You must be logged in to unlock the app.");
+
+        const enteredCode = document.getElementById('vip-code-input').value.trim().toUpperCase();
+
+        const { data: tier, error } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
+        if(error) throw new Error("Could not verify client tier.");
+
+        if(tier && tier.unlock_code === enteredCode) {
+            await db.from('client_tiers').update({ is_premium: true }).eq('client_id', user.id);
+            alert("VIP App Unlocked Successfully!");
+            loadClientDashboard(db, user);
+        } else {
+            alert("Invalid unlock code. Please check your confirmation email.");
+        }
+    } catch(err) { 
+        alert("Error unlocking: " + err.message); 
+    }
+    return false;
+};
 
 window.triggerPwaInstall = function() {
     const overlay = document.getElementById('pwa-install-overlay');
