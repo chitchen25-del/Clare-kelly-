@@ -509,6 +509,7 @@
             <button class="btn" style="background: var(--primary-green, #1B4332); color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="forceBarcodeScanner()">📷</button>
         </div>
         
+        <!-- Re-creatable viewport wrapper -->
         <div id="interactive-barcode-container" style="width: 100%; display: none; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; background: #000;">
             <div id="reader-view" style="width: 100%;"></div>
         </div>
@@ -619,7 +620,7 @@
         <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 1.2rem; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);" onclick="submitDailyLog(event)">SAVE DAILY METRICS</button>
     </div>
 
-    <!-- EMBEDDED JAVASCRIPT: Infinite Reset Engine -->
+    <!-- EMBEDDED JAVASCRIPT: Hard-Reset Camera Engine -->
     <script>
         if (typeof dailyTotals === 'undefined') {
             var dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
@@ -637,7 +638,8 @@
             { name: "Salmon Fillet (100g)", cals: 206, pro: 22, fat: 12, carb: 0, fib: 0 },
             { name: "Sweet Potato (150g)", cals: 130, pro: 2.5, fat: 0.2, carb: 30, fib: 4 },
             { name: "Almonds (30g)", cals: 164, pro: 6, fat: 14, carb: 6, fib: 3.5 },
-            { name: "Cherry Bakewell Tart (1 tart)", cals: 190, pro: 2, fat: 8, carb: 27, fib: 1 }
+            { name: "Cherry Bakewell Tart (1 tart)", cals: 190, pro: 2, fat: 8, carb: 27, fib: 1 },
+            { name: "Protein Bar (1 bar)", cals: 210, pro: 20, fat: 7, carb: 22, fib: 8 }
         ];
 
         window.renderMealUI = function(meal) {
@@ -693,7 +695,6 @@
             updateDashboardTotals();
             renderMealUI(meal);
             
-            // Reset search input and results so user can search again immediately
             document.getElementById('food-search-input').value = '';
             document.getElementById('food-results').innerHTML = `<p style="color: green; text-align: center; font-weight: bold;">Successfully added ${name} to ${meal}!</p>`;
         };
@@ -742,11 +743,12 @@
                 return;
             }
 
-            // If container is open, cleanly stop and close it
+            // Toggle / Wipe active scanner instance
             if (container.style.display === 'block') {
                 if (activeHtml5QrCode) {
                     try { await activeHtml5QrCode.stop(); } catch(e) {}
                     try { activeHtml5QrCode.clear(); } catch(e) {}
+                    activeHtml5QrCode = null;
                 }
                 container.style.display = 'none';
                 return;
@@ -755,6 +757,7 @@
             container.style.display = 'block';
             resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Initializing rear camera...</p>`;
             
+            // Re-create a fresh instance every single time
             activeHtml5QrCode = new Html5Qrcode("reader-view");
             
             try {
@@ -762,17 +765,21 @@
                     { facingMode: "environment" },
                     { fps: 15, qrbox: { width: 250, height: 150 } },
                     async (decodedText) => {
-                        // Fully stop scanner instance on successful read
+                        // Immediately hard-stop and clear the engine to drop the cached string buffer
                         if (activeHtml5QrCode) {
                             try { await activeHtml5QrCode.stop(); } catch(e) {}
                             try { activeHtml5QrCode.clear(); } catch(e) {}
+                            activeHtml5QrCode = null;
                         }
                         container.style.display = 'none';
                         
-                        let item = { name: "Cherry Bakewell Tart (1 tart)", cals: 190, pro: 2, fat: 8, carb: 27, fib: 1 };
-                        if(decodedText.length % 2 === 0) {
-                            item = { name: "Organic Oats (50g portion)", cals: 190, pro: 6.5, fat: 3.5, carb: 34, fib: 5 };
-                        }
+                        // Dynamic rotation items for testing multi-scans
+                        let itemsList = [
+                            { name: "Cherry Bakewell Tart (1 tart)", cals: 190, pro: 2, fat: 8, carb: 27, fib: 1 },
+                            { name: "Organic Oats (50g portion)", cals: 190, pro: 6.5, fat: 3.5, carb: 34, fib: 5 },
+                            { name: "Protein Bar (1 bar)", cals: 210, pro: 20, fat: 7, carb: 22, fib: 8 }
+                        ];
+                        let item = itemsList[decodedText.length % itemsList.length];
 
                         resultsDiv.innerHTML = `
                             <div style="padding: 1rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px;">
@@ -791,6 +798,7 @@
         };
     </script>
 </div>
+
 
 
 
