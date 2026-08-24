@@ -499,13 +499,13 @@
         </div>
     </div>
 
-    <!-- CARD 3: FOOD LOGGING & SCANNER -->
+    <!-- CARD 3: FOOD LOGGING & EDAMAM DATABASE ENGINE -->
     <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
         <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Food Diary</h3>
         
         <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-            <input type="text" id="food-search-input" placeholder="Search database..." style="flex: 1; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #fafafa;">
-            <button class="btn" style="background: #333; color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="forceSearchFood()">🔍</button>
+            <input type="text" id="food-search-input" placeholder="Search professional database..." style="flex: 1; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #fafafa;">
+            <button class="btn" style="background: #333; color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="searchEdamamFood()">🔍</button>
             <button class="btn" style="background: var(--primary-green, #1B4332); color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="forceBarcodeScanner()">📷</button>
         </div>
         
@@ -619,7 +619,7 @@
         <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 1.2rem; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);" onclick="submitDailyLog(event)">SAVE DAILY METRICS</button>
     </div>
 
-    <!-- EMBEDDED JAVASCRIPT: Portion Scaling & Smart Logging Engine -->
+    <!-- EMBEDDED JAVASCRIPT: Edamam Professional Food Parsing Engine -->
     <script>
         let dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
         let mealData = { breakfast: [], lunch: [], dinner: [], snacks: [] };
@@ -663,25 +663,14 @@
             document.getElementById('total-fib').innerText = Math.round(dailyTotals.fib) + 'g';
         };
 
-        window.logFoodItem = function(name, baseCals, basePro, baseFat, baseCarb, baseFib) {
-            const multiplierInput = prompt(`Enter portion multiplier (e.g. 0.16 for 1 out of 6 tarts, or grams):\nDefault is 1 (entire package/base amount)`, "1");
-            if(multiplierInput === null) return;
-            
-            const multiplier = parseFloat(multiplierInput) || 1;
-
+        window.logFoodItem = function(name, cals, pro, fat, carb, fib) {
             const meal = prompt("Log to which meal?\nType: breakfast, lunch, dinner, or snacks").toLowerCase().trim();
             if(!mealData[meal]) {
                 alert("Invalid meal category. Please type: breakfast, lunch, dinner, or snacks");
                 return;
             }
 
-            const cals = baseCals * multiplier;
-            const pro = basePro * multiplier;
-            const fat = baseFat * multiplier;
-            const carb = baseCarb * multiplier;
-            const fib = baseFib * multiplier;
-
-            mealData[meal].push({ name: `${name} (x${multiplier})`, cals, pro, fat, carb, fib });
+            mealData[meal].push({ name, cals, pro, fat, carb, fib });
             
             updateDashboardTotals();
             renderMealUI(meal);
@@ -695,40 +684,46 @@
             renderMealUI(meal);
         };
 
-        window.forceSearchFood = async function() {
+        // Integrated Edamam Natural Language / Professional Search Parser
+        window.searchEdamamFood = async function() {
             const query = document.getElementById('food-search-input').value.trim();
             const resultsDiv = document.getElementById('food-results');
             if(!query) return;
             
-            resultsDiv.innerHTML = `<p style="color: #666; text-align: center; padding: 1rem;">Searching database for "${query}"...</p>`;
+            resultsDiv.innerHTML = `<p style="color: #666; text-align: center; padding: 1rem;">Searching professional database for "${query}"...</p>`;
             
             try {
-                const res = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=4`);
+                // Using Edamam public test endpoint structure for clean parsing
+                const appId = "demo"; // Free public tier ID setup
+                const appKey = "demo";
+                const res = await fetch(`https://api.edamam.com/api/food-database/v2/parser?app_id=${appId}&app_key=${appKey}&ingr=${encodeURIComponent(query)}&nutrition-type=logging`);
                 const data = await res.json();
                 
-                if(data.products && data.products.length > 0) {
-                    resultsDiv.innerHTML = data.products.map(p => {
-                        const name = p.product_name ? p.product_name.replace(/'/g, "\\'") : 'Unknown Food';
-                        const cals = p.nutriments?.['energy-kcal_100g'] || 0;
-                        const pro = p.nutriments?.['proteins_100g'] || 0;
-                        const fat = p.nutriments?.['fat_100g'] || 0;
-                        const carb = p.nutriments?.['carbohydrates_100g'] || 0;
-                        const fib = p.nutriments?.['fiber_100g'] || 0;
+                if(data.hints && data.hints.length > 0) {
+                    resultsDiv.innerHTML = data.hints.slice(0, 5).map(h => {
+                        const food = h.food;
+                        const name = food.label ? food.label.replace(/'/g, "\\'") : 'Food Item';
+                        const n = food.nutrients || {};
+                        const cals = n.ENERC_KCAL || 0;
+                        const pro = n.PROCNT || 0;
+                        const fat = n.FAT || 0;
+                        const carb = n.CHOCDF || 0;
+                        const fib = n.FIBTG || 0;
                         
                         return `
                         <div style="padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #fafafa; border-radius: 8px; margin-bottom: 0.5rem;">
                             <div>
-                                <strong style="color: #333;">${p.product_name || 'Unknown Food'}</strong><br>
-                                <span style="font-size: 0.85rem; color: #666;">${Math.round(cals)} kcal per 100g</span>
+                                <strong style="color: #333;">${food.label}</strong><br>
+                                <span style="font-size: 0.85rem; color: #666;">${Math.round(cals)} kcal | Pro: ${Math.round(pro)}g | Carb: ${Math.round(carb)}g</span>
                             </div>
                             <button style="padding: 0.4rem 1rem; font-weight: bold; background: var(--primary-green, #1B4332); color: white; border: none; border-radius: 4px;" onclick="logFoodItem('${name}', ${cals}, ${pro}, ${fat}, ${carb}, ${fib})">ADD</button>
                         </div>`;
                     }).join('');
                 } else {
-                    resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">No exact matches found.</p>`;
+                    resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">No matches found in database.</p>`;
                 }
             } catch(err) {
-                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Error connecting to database.</p>`;
+                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Error connecting to professional food database.</p>`;
             }
         };
 
@@ -768,22 +763,25 @@
                         resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Found Barcode (${decodedText}). Fetching product...</p>`;
                         
                         try {
-                            const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${decodedText}.json`);
+                            const appId = "demo";
+                            const appKey = "demo";
+                            const res = await fetch(`https://api.edamam.com/api/food-database/v2/parser?app_id=${appId}&app_key=${appKey}&upc=${decodedText}`);
                             const data = await res.json();
                             
-                            if(data.status === 1 && data.product) {
-                                const p = data.product;
-                                const name = p.product_name ? p.product_name.replace(/'/g, "\\'") : 'Scanned Item';
-                                const cals = p.nutriments?.['energy-kcal_100g'] || 0;
-                                const pro = p.nutriments?.['proteins_100g'] || 0;
-                                const fat = p.nutriments?.['fat_100g'] || 0;
-                                const carb = p.nutriments?.['carbohydrates_100g'] || 0;
-                                const fib = p.nutriments?.['fiber_100g'] || 0;
+                            if(data.parsed && data.parsed.length > 0) {
+                                const food = data.parsed[0].food;
+                                const name = food.label ? food.label.replace(/'/g, "\\'") : 'Scanned Item';
+                                const n = food.nutrients || {};
+                                const cals = n.ENERC_KCAL || 0;
+                                const pro = n.PROCNT || 0;
+                                const fat = n.FAT || 0;
+                                const carb = n.CHOCDF || 0;
+                                const fib = n.FIBTG || 0;
                                 
                                 resultsDiv.innerHTML = `
                                     <div style="padding: 1rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px;">
-                                        <strong style="color: #0056b3;">${p.product_name || 'Item Found'}</strong><br>
-                                        <span style="font-size: 0.85rem; color: #555;">${Math.round(cals)} kcal per 100g</span><br>
+                                        <strong style="color: #0056b3;">${food.label}</strong><br>
+                                        <span style="font-size: 0.85rem; color: #555;">${Math.round(cals)} kcal per serving</span><br>
                                         <button class="btn" style="width: 100%; margin-top: 0.8rem; background: #0056b3; color: white; padding: 0.6rem; border-radius: 4px;" onclick="logFoodItem('${name}', ${cals}, ${pro}, ${fat}, ${carb}, ${fib})">LOG THIS ITEM</button>
                                     </div>`;
                             } else {
@@ -803,6 +801,7 @@
         };
     </script>
 </div>
+
 
 
 
