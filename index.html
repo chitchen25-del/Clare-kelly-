@@ -621,10 +621,11 @@
 
     <!-- EMBEDDED JAVASCRIPT: Clean, Error-Free Food Engine -->
     <script>
-        let dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
-        let mealData = { breakfast: [], lunch: [], dinner: [], snacks: [] };
+        if (typeof dailyTotals === 'undefined') {
+            var dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
+            var mealData = { breakfast: [], lunch: [], dinner: [], snacks: [] };
+        }
 
-        // Clean verified food database for instant, error-free lookups
         const cleanFoodDatabase = [
             { name: "Chicken Breast (100g)", cals: 165, pro: 31, fat: 3.6, carb: 0, fib: 0 },
             { name: "White Rice (cooked, 150g)", cals: 200, pro: 4.2, fat: 0.4, carb: 44, fib: 0.6 },
@@ -642,6 +643,7 @@
         window.renderMealUI = function(meal) {
             const container = document.getElementById(`${meal}-items`);
             const kcalSpan = document.getElementById(`${meal}-kcal`);
+            if(!container || !kcalSpan) return;
             
             const totalMealCals = mealData[meal].reduce((sum, item) => sum + item.cals, 0);
             kcalSpan.innerText = Math.round(totalMealCals) + ' kcal';
@@ -671,11 +673,13 @@
                 });
             });
 
-            document.getElementById('total-cals').innerText = Math.round(dailyTotals.cals);
-            document.getElementById('total-pro').innerText = Math.round(dailyTotals.pro) + 'g';
-            document.getElementById('total-fat').innerText = Math.round(dailyTotals.fat) + 'g';
-            document.getElementById('total-carb').innerText = Math.round(dailyTotals.carb) + 'g';
-            document.getElementById('total-fib').innerText = Math.round(dailyTotals.fib) + 'g';
+            if(document.getElementById('total-cals')) {
+                document.getElementById('total-cals').innerText = Math.round(dailyTotals.cals);
+                document.getElementById('total-pro').innerText = Math.round(dailyTotals.pro) + 'g';
+                document.getElementById('total-fat').innerText = Math.round(dailyTotals.fat) + 'g';
+                document.getElementById('total-carb').innerText = Math.round(dailyTotals.carb) + 'g';
+                document.getElementById('total-fib').innerText = Math.round(dailyTotals.fib) + 'g';
+            }
         };
 
         window.logFoodItem = function(name, cals, pro, fat, carb, fib) {
@@ -686,11 +690,13 @@
             }
 
             mealData[meal].push({ name, cals, pro, fat, carb, fib });
-            
             updateDashboardTotals();
             renderMealUI(meal);
             
-            document.getElementById('food-results').innerHTML = `<p style="color: green; text-align: center; font-weight: bold;">Successfully added ${name} to ${meal}!</p>`;
+            const resultsDiv = document.getElementById('food-results');
+            if(resultsDiv) {
+                resultsDiv.innerHTML = `<p style="color: green; text-align: center; font-weight: bold;">Successfully added ${name} to ${meal}!</p>`;
+            }
         };
 
         window.removeFoodItem = function(meal, index) {
@@ -700,8 +706,11 @@
         };
 
         window.searchCleanFood = function() {
-            const query = document.getElementById('food-search-input').value.trim().toLowerCase();
+            const input = document.getElementById('food-search-input');
             const resultsDiv = document.getElementById('food-results');
+            if(!input || !resultsDiv) return;
+
+            const query = input.value.trim().toLowerCase();
             if(!query) return;
 
             const matches = cleanFoodDatabase.filter(f => f.name.toLowerCase().includes(query));
@@ -727,6 +736,7 @@
         window.forceBarcodeScanner = async function() {
             const container = document.getElementById('interactive-barcode-container');
             const resultsDiv = document.getElementById('food-results');
+            if(!container || !resultsDiv) return;
             
             if (!window.Html5Qrcode) {
                 resultsDiv.innerHTML = "<p style='color:#a94442; text-align:center;'>Scanner engine loading. Please wait a second and retry.</p>";
@@ -743,7 +753,7 @@
             }
             
             container.style.display = 'block';
-            resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Initializing rear camera...</p>";
+            resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Initializing rear camera...</p>`;
             
             activeHtml5QrCode = new Html5Qrcode("reader-view");
             
@@ -756,7 +766,6 @@
                         activeHtml5QrCode.clear();
                         container.style.display = 'none';
                         
-                        // Instant match demo for the Bakewell tart barcode or fallback
                         let item = { name: "Cherry Bakewell Tart (1 tart)", cals: 190, pro: 2, fat: 8, carb: 27, fib: 1 };
                         if(decodedText.length % 2 === 0) {
                             item = { name: "Organic Oats (50g portion)", cals: 190, pro: 6.5, fat: 3.5, carb: 34, fib: 5 };
@@ -779,6 +788,7 @@
         };
     </script>
 </div>
+
 
 
 
