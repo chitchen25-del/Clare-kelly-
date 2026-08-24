@@ -261,3 +261,19 @@ footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); col
     border-color: var(--primary-sage);
     background: white;
 }
+/* ================= DASHBOARD GRID FIX ================= */
+.dashboard-container {
+    max-width: 1200px !important;
+    margin: 3rem auto !important;
+    padding: 0 2rem !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+}
+
+@media(min-width: 900px) {
+    .dashboard-container {
+        grid-template-columns: 1fr 1fr !important;
+        align-items: start !important;
+    }
+}
