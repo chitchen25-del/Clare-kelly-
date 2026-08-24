@@ -469,23 +469,23 @@
         <div style="display: flex; justify-content: space-between; text-align: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem;">
             <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
                 <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Cals</span>
-                <strong style="display: block; font-size: 1.1rem; color: #333;">0</strong>
+                <strong id="total-cals" style="display: block; font-size: 1.1rem; color: #333;">0</strong>
             </div>
             <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
                 <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Pro</span>
-                <strong style="display: block; font-size: 1.1rem; color: #d9534f;">0g</strong>
+                <strong id="total-pro" style="display: block; font-size: 1.1rem; color: #d9534f;">0g</strong>
             </div>
             <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
                 <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Fat</span>
-                <strong style="display: block; font-size: 1.1rem; color: #f0ad4e;">0g</strong>
+                <strong id="total-fat" style="display: block; font-size: 1.1rem; color: #f0ad4e;">0g</strong>
             </div>
             <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
                 <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Carb</span>
-                <strong style="display: block; font-size: 1.1rem; color: #5bc0de;">0g</strong>
+                <strong id="total-carb" style="display: block; font-size: 1.1rem; color: #5bc0de;">0g</strong>
             </div>
             <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
                 <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Fib</span>
-                <strong style="display: block; font-size: 1.1rem; color: #5cb85c;">0g</strong>
+                <strong id="total-fib" style="display: block; font-size: 1.1rem; color: #5cb85c;">0g</strong>
             </div>
         </div>
 
@@ -509,7 +509,6 @@
             <button class="btn" style="background: var(--primary-green, #1B4332); color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="forceBarcodeScanner()">📷</button>
         </div>
         
-        <!-- Camera Viewport Box -->
         <div id="interactive-barcode-container" style="width: 100%; display: none; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; background: #000;">
             <div id="reader-view" style="width: 100%;"></div>
         </div>
@@ -517,17 +516,33 @@
         <div id="food-results" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: #555;"></div>
 
         <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                <strong style="color: #444;">Breakfast</strong><span style="font-size: 0.85rem; color: #888;">0 kcal</span>
+            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                    <strong style="color: #444;">Breakfast</strong>
+                    <span id="breakfast-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
+                </div>
+                <div id="breakfast-items" style="font-size: 0.85rem; color: #666;"></div>
             </div>
-            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                <strong style="color: #444;">Lunch</strong><span style="font-size: 0.85rem; color: #888;">0 kcal</span>
+            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                    <strong style="color: #444;">Lunch</strong>
+                    <span id="lunch-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
+                </div>
+                <div id="lunch-items" style="font-size: 0.85rem; color: #666;"></div>
             </div>
-            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                <strong style="color: #444;">Dinner</strong><span style="font-size: 0.85rem; color: #888;">0 kcal</span>
+            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                    <strong style="color: #444;">Dinner</strong>
+                    <span id="dinner-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
+                </div>
+                <div id="dinner-items" style="font-size: 0.85rem; color: #666;"></div>
             </div>
-            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                <strong style="color: #444;">Snacks</strong><span style="font-size: 0.85rem; color: #888;">0 kcal</span>
+            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                    <strong style="color: #444;">Snacks</strong>
+                    <span id="snacks-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
+                </div>
+                <div id="snacks-items" style="font-size: 0.85rem; color: #666;"></div>
             </div>
         </div>
     </div>
@@ -604,8 +619,46 @@
         <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 1.2rem; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);" onclick="submitDailyLog(event)">SAVE DAILY METRICS</button>
     </div>
 
-    <!-- EMBEDDED JAVASCRIPT: High-Speed Instant Scanner Logic -->
+    <!-- EMBEDDED JAVASCRIPT: Fully Functional Food Logging & Calculations -->
     <script>
+        let dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
+        let mealData = { breakfast: [], lunch: [], dinner: [], snacks: [] };
+
+        window.logFoodItem = function(name, cals, pro, fat, carb, fib) {
+            const meal = prompt("Log to which meal?\nType: breakfast, lunch, dinner, or snacks").toLowerCase().trim();
+            if(!mealData[meal]) {
+                alert("Invalid meal category. Please type: breakfast, lunch, dinner, or snacks");
+                return;
+            }
+
+            mealData[meal].push({ name, cals, pro, fat, carb, fib });
+            
+            // Update Totals
+            dailyTotals.cals += cals;
+            dailyTotals.pro += pro;
+            dailyTotals.fat += fat;
+            dailyTotals.carb += carb;
+            dailyTotals.fib += fib;
+
+            // Render UI updates
+            document.getElementById('total-cals').innerText = Math.round(dailyTotals.cals);
+            document.getElementById('total-pro').innerText = Math.round(dailyTotals.pro) + 'g';
+            document.getElementById('total-fat').innerText = Math.round(dailyTotals.fat) + 'g';
+            document.getElementById('total-carb').innerText = Math.round(dailyTotals.carb) + 'g';
+            document.getElementById('total-fib').innerText = Math.round(dailyTotals.fib) + 'g';
+
+            // Render Meal list
+            const container = document.getElementById(`${meal}-items`);
+            const kcalSpan = document.getElementById(`${meal}-kcal`);
+            
+            const totalMealCals = mealData[meal].reduce((sum, item) => sum + item.cals, 0);
+            kcalSpan.innerText = Math.round(totalMealCals) + ' kcal';
+            
+            container.innerHTML = mealData[meal].map(i => `<div>• ${i.name} (${Math.round(i.cals)} kcal)</div>`).join('');
+            
+            document.getElementById('food-results').innerHTML = `<p style="color: green; text-align: center; font-weight: bold;">Successfully added ${name} to ${meal}!</p>`;
+        };
+
         window.forceSearchFood = async function() {
             const query = document.getElementById('food-search-input').value.trim();
             const resultsDiv = document.getElementById('food-results');
@@ -618,15 +671,23 @@
                 const data = await res.json();
                 
                 if(data.products && data.products.length > 0) {
-                    resultsDiv.innerHTML = data.products.map(p => `
+                    resultsDiv.innerHTML = data.products.map(p => {
+                        const name = p.product_name ? p.product_name.replace(/'/g, "\\'") : 'Unknown Food';
+                        const cals = p.nutriments?.['energy-kcal_100g'] || 0;
+                        const pro = p.nutriments?.['proteins_100g'] || 0;
+                        const fat = p.nutriments?.['fat_100g'] || 0;
+                        const carb = p.nutriments?.['carbohydrates_100g'] || 0;
+                        const fib = p.nutriments?.['fiber_100g'] || 0;
+                        
+                        return `
                         <div style="padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #fafafa; border-radius: 8px; margin-bottom: 0.5rem;">
                             <div>
                                 <strong style="color: #333;">${p.product_name || 'Unknown Food'}</strong><br>
-                                <span style="font-size: 0.85rem; color: #666;">${p.nutriments?.['energy-kcal_100g'] ? Math.round(p.nutriments['energy-kcal_100g']) + ' kcal per 100g' : 'Calories unknown'}</span>
+                                <span style="font-size: 0.85rem; color: #666;">${Math.round(cals)} kcal per 100g</span>
                             </div>
-                            <button style="padding: 0.4rem 1rem; font-weight: bold; background: var(--primary-green, #1B4332); color: white; border: none; border-radius: 4px;" onclick="alert('Food logged!')">ADD</button>
-                        </div>
-                    `).join('');
+                            <button style="padding: 0.4rem 1rem; font-weight: bold; background: var(--primary-green, #1B4332); color: white; border: none; border-radius: 4px;" onclick="logFoodItem('${name}', ${cals}, ${pro}, ${fat}, ${carb}, ${fib})">ADD</button>
+                        </div>`;
+                    }).join('');
                 } else {
                     resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">No exact matches found.</p>`;
                 }
@@ -664,7 +725,6 @@
                     { facingMode: "environment" },
                     { fps: 15, qrbox: { width: 250, height: 150 } },
                     async (decodedText) => {
-                        // SUCCESS: Barcode detected!
                         await activeHtml5QrCode.stop().catch(() => {});
                         activeHtml5QrCode.clear();
                         container.style.display = 'none';
@@ -677,11 +737,18 @@
                             
                             if(data.status === 1 && data.product) {
                                 const p = data.product;
+                                const name = p.product_name ? p.product_name.replace(/'/g, "\\'") : 'Scanned Item';
+                                const cals = p.nutriments?.['energy-kcal_100g'] || 0;
+                                const pro = p.nutriments?.['proteins_100g'] || 0;
+                                const fat = p.nutriments?.['fat_100g'] || 0;
+                                const carb = p.nutriments?.['carbohydrates_100g'] || 0;
+                                const fib = p.nutriments?.['fiber_100g'] || 0;
+                                
                                 resultsDiv.innerHTML = `
                                     <div style="padding: 1rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px;">
                                         <strong style="color: #0056b3;">${p.product_name || 'Item Found'}</strong><br>
-                                        <span style="font-size: 0.85rem; color: #555;">${p.nutriments?.['energy-kcal_100g'] ? Math.round(p.nutriments['energy-kcal_100g']) + ' kcal per 100g' : 'Calories unknown'}</span><br>
-                                        <button class="btn" style="width: 100%; margin-top: 0.8rem; background: #0056b3; color: white; padding: 0.6rem; border-radius: 4px;" onclick="alert('Food logged successfully!')">LOG THIS ITEM</button>
+                                        <span style="font-size: 0.85rem; color: #555;">${Math.round(cals)} kcal per 100g</span><br>
+                                        <button class="btn" style="width: 100%; margin-top: 0.8rem; background: #0056b3; color: white; padding: 0.6rem; border-radius: 4px;" onclick="logFoodItem('${name}', ${cals}, ${pro}, ${fat}, ${carb}, ${fib})">LOG THIS ITEM</button>
                                     </div>`;
                             } else {
                                 resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Barcode (${decodedText}) not found in database.</p>`;
@@ -690,9 +757,7 @@
                             resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Error looking up barcode.</p>`;
                         }
                     },
-                    (errorMessage) => {
-                        // Scanning frame loop (actively hunting for a barcode)
-                    }
+                    (errorMessage) => {}
                 );
                 resultsDiv.innerHTML = `<p style="font-size: 0.85rem; color: #666; text-align: center;">Point camera at product barcode...</p>`;
             } catch(err) {
@@ -702,6 +767,7 @@
         };
     </script>
 </div>
+
 
 
 
