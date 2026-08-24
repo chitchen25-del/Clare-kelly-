@@ -499,17 +499,16 @@
         </div>
     </div>
 
-    <!-- CARD 3: FOOD LOGGING & SECURE DATABASE ENGINE -->
+    <!-- CARD 3: LIVE GLOBAL FOOD DATABASE -->
     <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
         <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Food Diary</h3>
         
         <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-            <input type="text" id="food-search-input" placeholder="Search food (e.g., chicken, oats, eggs)..." style="flex: 1; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #fafafa;" onkeydown="if(event.key === 'Enter') searchCleanFood()">
-            <button class="btn" style="background: #333; color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="searchCleanFood()">🔍</button>
+            <input type="text" id="food-search-input" placeholder="Search any food (e.g., lazy garlic, chicken)..." style="flex: 1; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #fafafa;" onkeydown="if(event.key === 'Enter') searchLiveGlobalFood()">
+            <button class="btn" style="background: #333; color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="searchLiveGlobalFood()">🔍</button>
             <button class="btn" style="background: var(--primary-green, #1B4332); color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="forceBarcodeScanner()">📷</button>
         </div>
         
-        <!-- Re-creatable viewport wrapper -->
         <div id="interactive-barcode-container" style="width: 100%; display: none; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; background: #000;">
             <div id="reader-view" style="width: 100%;"></div>
         </div>
@@ -606,7 +605,7 @@
         </select>
 
         <div style="background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 1rem;">
-            <p style="font-size: 0.75rem; text-align: center; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 0; margin-bottom: 0.8rem; font-weight: bold;">Visual Reference Guide</p>
+            <p style="font-size: 0.75rem; text-align: center; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 0; margin-bottom: 0.8rem; font-weight: bold;">Reference Guide</p>
             <div style="display: grid; grid-template-columns: 1fr; gap: 0.6rem; font-size: 0.85rem;">
                 <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #8b5a2b; width: 12px; height: 12px; border-radius: 50%;"></span> <strong>Type 1-2:</strong> Constipation (Hard/Lumpy)</div>
                 <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #a0522d; width: 12px; height: 12px; border-radius: 4px;"></span> <strong>Type 3-4:</strong> Ideal/Normal (Smooth sausage)</div>
@@ -620,27 +619,12 @@
         <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 1.2rem; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);" onclick="submitDailyLog(event)">SAVE DAILY METRICS</button>
     </div>
 
-    <!-- EMBEDDED JAVASCRIPT: Hard-Reset Camera Engine -->
+    <!-- EMBEDDED JAVASCRIPT: Real OpenFoodFacts API Engine -->
     <script>
         if (typeof dailyTotals === 'undefined') {
             var dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
             var mealData = { breakfast: [], lunch: [], dinner: [], snacks: [] };
         }
-
-        const cleanFoodDatabase = [
-            { name: "Chicken Breast (100g)", cals: 165, pro: 31, fat: 3.6, carb: 0, fib: 0 },
-            { name: "White Rice (cooked, 150g)", cals: 200, pro: 4.2, fat: 0.4, carb: 44, fib: 0.6 },
-            { name: "Oats (dry, 50g)", cals: 190, pro: 6.5, fat: 3.5, carb: 34, fib: 5 },
-            { name: "Large Egg (1 egg)", cals: 72, pro: 6.3, fat: 4.8, carb: 0.4, fib: 0 },
-            { name: "Avocado (100g)", cals: 160, pro: 2, fat: 15, carb: 9, fib: 7 },
-            { name: "Greek Yogurt (150g)", cals: 100, pro: 15, fat: 0.4, carb: 6, fib: 0 },
-            { name: "Banana (1 medium)", cals: 105, pro: 1.3, fat: 0.3, carb: 27, fib: 3 },
-            { name: "Salmon Fillet (100g)", cals: 206, pro: 22, fat: 12, carb: 0, fib: 0 },
-            { name: "Sweet Potato (150g)", cals: 130, pro: 2.5, fat: 0.2, carb: 30, fib: 4 },
-            { name: "Almonds (30g)", cals: 164, pro: 6, fat: 14, carb: 6, fib: 3.5 },
-            { name: "Cherry Bakewell Tart (1 tart)", cals: 190, pro: 2, fat: 8, carb: 27, fib: 1 },
-            { name: "Protein Bar (1 bar)", cals: 210, pro: 20, fat: 7, carb: 22, fib: 8 }
-        ];
 
         window.renderMealUI = function(meal) {
             const container = document.getElementById(`${meal}-items`);
@@ -705,30 +689,46 @@
             renderMealUI(meal);
         };
 
-        window.searchCleanFood = function() {
+        // Real Live Global Search
+        window.searchLiveGlobalFood = async function() {
             const input = document.getElementById('food-search-input');
             const resultsDiv = document.getElementById('food-results');
             if(!input || !resultsDiv) return;
 
-            const query = input.value.trim().toLowerCase();
+            const query = input.value.trim();
             if(!query) return;
 
-            const matches = cleanFoodDatabase.filter(f => f.name.toLowerCase().includes(query));
+            resultsDiv.innerHTML = `<p style="color: #666; text-align: center; padding: 1rem;">Searching global database for "${query}"...</p>`;
 
-            if(matches.length > 0) {
-                resultsDiv.innerHTML = matches.map(f => {
-                    const safeName = f.name.replace(/'/g, "\\'");
-                    return `
-                    <div style="padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #fafafa; border-radius: 8px; margin-bottom: 0.5rem;">
-                        <div>
-                            <strong style="color: #333;">${f.name}</strong><br>
-                            <span style="font-size: 0.85rem; color: #666;">${f.cals} kcal | Pro: ${f.pro}g | Carb: ${f.carb}g</span>
-                        </div>
-                        <button style="padding: 0.4rem 1rem; font-weight: bold; background: var(--primary-green, #1B4332); color: white; border: none; border-radius: 4px;" onclick="logFoodItem('${safeName}', ${f.cals}, ${f.pro}, ${f.fat}, ${f.carb}, ${f.fib})">ADD</button>
-                    </div>`;
-                }).join('');
-            } else {
-                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">No matches found. Try searching for chicken, oats, eggs, or salmon.</p>`;
+            try {
+                const res = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=5`);
+                const data = await res.json();
+
+                if(data.products && data.products.length > 0) {
+                    resultsDiv.innerHTML = data.products.map(p => {
+                        const name = (p.product_name || 'Unknown Item').replace(/'/g, "\\'");
+                        const brand = p.brands ? `(${p.brands})` : '';
+                        const n = p.nutriments || {};
+                        const cals = n['energy-kcal_100g'] || n['energy-kcal'] || 0;
+                        const pro = n['proteins_100g'] || 0;
+                        const fat = n['fat_100g'] || 0;
+                        const carb = n['carbohydrates_100g'] || 0;
+                        const fib = n['fiber_100g'] || 0;
+
+                        return `
+                        <div style="padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #fafafa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div>
+                                <strong style="color: #333;">${p.product_name || 'Unknown Item'} ${brand}</strong><br>
+                                <span style="font-size: 0.85rem; color: #666;">${Math.round(cals)} kcal per 100g | Pro: ${Math.round(pro)}g | Carb: ${Math.round(carb)}g</span>
+                            </div>
+                            <button style="padding: 0.4rem 1rem; font-weight: bold; background: var(--primary-green, #1B4332); color: white; border: none; border-radius: 4px;" onclick="logFoodItem('${name}', ${cals}, ${pro}, ${fat}, ${carb}, ${fib})">ADD</button>
+                        </div>`;
+                    }).join('');
+                } else {
+                    resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">No matches found for "${query}".</p>`;
+                }
+            } catch(err) {
+                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Error connecting to global food database.</p>`;
             }
         };
 
@@ -743,7 +743,6 @@
                 return;
             }
 
-            // Toggle / Wipe active scanner instance
             if (container.style.display === 'block') {
                 if (activeHtml5QrCode) {
                     try { await activeHtml5QrCode.stop(); } catch(e) {}
@@ -757,7 +756,6 @@
             container.style.display = 'block';
             resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Initializing rear camera...</p>`;
             
-            // Re-create a fresh instance every single time
             activeHtml5QrCode = new Html5Qrcode("reader-view");
             
             try {
@@ -765,28 +763,41 @@
                     { facingMode: "environment" },
                     { fps: 15, qrbox: { width: 250, height: 150 } },
                     async (decodedText) => {
-                        // Immediately hard-stop and clear the engine to drop the cached string buffer
                         if (activeHtml5QrCode) {
                             try { await activeHtml5QrCode.stop(); } catch(e) {}
                             try { activeHtml5QrCode.clear(); } catch(e) {}
                             activeHtml5QrCode = null;
                         }
                         container.style.display = 'none';
-                        
-                        // Dynamic rotation items for testing multi-scans
-                        let itemsList = [
-                            { name: "Cherry Bakewell Tart (1 tart)", cals: 190, pro: 2, fat: 8, carb: 27, fib: 1 },
-                            { name: "Organic Oats (50g portion)", cals: 190, pro: 6.5, fat: 3.5, carb: 34, fib: 5 },
-                            { name: "Protein Bar (1 bar)", cals: 210, pro: 20, fat: 7, carb: 22, fib: 8 }
-                        ];
-                        let item = itemsList[decodedText.length % itemsList.length];
+                        resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Barcode scanned (${decodedText}). Fetching product...</p>`;
 
-                        resultsDiv.innerHTML = `
-                            <div style="padding: 1rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px;">
-                                <strong style="color: #0056b3;">${item.name}</strong><br>
-                                <span style="font-size: 0.85rem; color: #555;">${item.cals} kcal per serving</span><br>
-                                <button class="btn" style="width: 100%; margin-top: 0.8rem; background: #0056b3; color: white; padding: 0.6rem; border-radius: 4px;" onclick="logFoodItem('${item.name.replace(/'/g, "\\'")}', ${item.cals}, ${item.pro}, ${item.fat}, ${item.carb}, ${item.fib})">LOG THIS ITEM</button>
-                            </div>`;
+                        try {
+                            const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${decodedText}.json`);
+                            const data = await res.json();
+
+                            if (data.status === 1 && data.product) {
+                                const p = data.product;
+                                const name = (p.product_name || 'Scanned Item').replace(/'/g, "\\'");
+                                const brand = p.brands ? `(${p.brands})` : '';
+                                const n = p.nutriments || {};
+                                const cals = n['energy-kcal_100g'] || n['energy-kcal'] || 0;
+                                const pro = n['proteins_100g'] || 0;
+                                const fat = n['fat_100g'] || 0;
+                                const carb = n['carbohydrates_100g'] || 0;
+                                const fib = n['fiber_100g'] || 0;
+
+                                resultsDiv.innerHTML = `
+                                    <div style="padding: 1rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px;">
+                                        <strong style="color: #0056b3;">${p.product_name || 'Scanned Item'} ${brand}</strong><br>
+                                        <span style="font-size: 0.85rem; color: #555;">${Math.round(cals)} kcal per 100g</span><br>
+                                        <button class="btn" style="width: 100%; margin-top: 0.8rem; background: #0056b3; color: white; padding: 0.6rem; border-radius: 4px;" onclick="logFoodItem('${name}', ${cals}, ${pro}, ${fat}, ${carb}, ${fib})">LOG THIS ITEM</button>
+                                    </div>`;
+                            } else {
+                                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Barcode (${decodedText}) not found in database.</p>`;
+                            }
+                        } catch(apiErr) {
+                            resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Error fetching scanned barcode data.</p>`;
+                        }
                     },
                     (errorMessage) => {}
                 );
@@ -798,6 +809,7 @@
         };
     </script>
 </div>
+
 
 
 
