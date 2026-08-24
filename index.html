@@ -397,7 +397,7 @@
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: VIP Unlock & Premium App Container -->
+                      <!-- RIGHT COLUMN: VIP Gateway & App Launchpad -->
             <div>
                 <!-- VIP APP UNLOCK CARD (Shown if Basic User) -->
                 <div class="dash-card" id="vip-unlock-card" style="background: linear-gradient(135deg, #095d28, #0d9b46); color: white;">
@@ -409,279 +409,22 @@
                     </form>
                 </div>
 
-                <!-- PREMIUM CLINICAL APP (Hidden unless unlocked) -->
+                <!-- DEDICATED VIP APP LAUNCHPAD (Shown when Unlocked) -->
                 <div id="premium-app-container" style="display: none;">
-                    <div class="dash-card">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem;">
-                            <h3 style="margin: 0; border: none; padding: 0;">Daily Health Journal</h3>
-                            <span style="background: var(--primary-sage); color: white; padding: 0.3rem 0.8rem; font-size: 0.7rem; font-family: 'Montserrat'; font-weight: bold; text-transform: uppercase; border-radius: 4px;">VIP Unlocked</span>
-                        </div>
-                        <p style="font-size: 0.95rem; color: #555;">Your advanced clinical tracking tools are active.</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-
-                <!-- VIP APP UNLOCK CARD (Shown if Basic User) -->
-                <div class="dash-card" id="vip-unlock-card" style="background: linear-gradient(135deg, #095d28, #0d9b46); color: white;">
-                    <h3 style="color: white; border-color: rgba(255,255,255,0.2);">Unlock Premium Patient App</h3>
-                    <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 1.5rem;">If you booked a functional medicine pathway, enter your unique VIP unlock code from your confirmation email below.</p>
-                    <form onsubmit="return unlockVipApp(event)" style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
-                        <input type="text" id="vip-code-input" placeholder="Enter Code (e.g. VIP-8291)" style="margin-bottom: 0; flex: 1; background: white; text-transform: uppercase;" required>
-                        <button type="submit" class="btn" style="background: white; color: var(--text-main); border: none;">Unlock App</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- RIGHT COLUMN: PREMIUM CLINICAL APP (Hidden unless unlocked) -->
-            <div id="premium-app-container" style="display: none;">
-                <!-- DAILY HEALTH JOURNAL -->
-                <div class="dash-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem;">
-                        <h3 style="margin: 0; border: none; padding: 0;">Daily Health Journal</h3>
-                        <span style="background: var(--primary-sage); color: white; padding: 0.3rem 0.8rem; font-size: 0.7rem; font-family: 'Montserrat'; font-weight: bold; text-transform: uppercase; border-radius: 4px;">VIP Unlocked</span>
-                    </div>
-                    <p style="font-size: 0.95rem; color: #555; margin-bottom: 2rem;">Log your daily metrics. Search the database or scan a barcode to automatically track exact macros and key micronutrients.</p>
-                    
-                    <form onsubmit="return submitDailyLog(event)">
+                    <div class="dash-card" style="background: linear-gradient(135deg, var(--text-main), #1a3a24); color: white; padding: 2.5rem; text-align: center;">
+                        <img src="./logo.png" alt="App Logo" style="height: 60px; margin-bottom: 1.5rem; filter: brightness(0) invert(1);">
+                        <span style="background: var(--primary-sage); color: white; padding: 0.3rem 0.8rem; font-size: 0.7rem; font-family: 'Montserrat'; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; border-radius: 4px; display: inline-block; margin-bottom: 1rem;">VIP Access Verified</span>
+                        <h3 style="color: white; font-size: 2rem; margin-bottom: 0.5rem; border: none; padding: 0;">The Natural Healing App</h3>
+                        <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 2rem;">Your protocol is active. Launch your secure client portal app or add it directly to your home screen for instant daily tracking.</p>
                         
-                        <!-- 1. FOOD & NUTRITION -->
-                        <div class="journal-accordion" onclick="toggleAccordion('journal-food')"><span>🥗 Advanced Nutrition Tracker</span> <span class="icon">+</span></div>
-                        <div class="journal-panel" id="journal-food">
-                            
-                            <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand); margin-bottom: 2rem; margin-top: 1rem;">
-                                <h4 style="font-family: 'Montserrat'; font-size: 0.8rem; color: var(--text-main); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">Live Database & Barcode</h4>
-                                <div style="display: flex; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap;">
-                                    <input type="text" id="food-search-query" placeholder="Search (e.g. Oats)..." style="margin-bottom: 0; background: white; flex: 1; min-width: 150px;">
-                                    <button type="button" class="btn" style="padding: 0 1rem;" onclick="searchFood()">Search</button>
-                                    <button type="button" class="btn btn-outline" style="padding: 0 1rem; background: white;" onclick="startBarcodeScanner()">📷 Scan</button>
-                                </div>
-                                <div id="reader"></div>
-                                <div id="food-search-results" style="max-height: 200px; overflow-y: auto;"></div>
-                                <div id="food-selection-panel" style="display: none;"></div>
-                            </div>
-
-                            <div class="meal-section">
-                                <h5>1. Breakfast</h5>
-                                <textarea id="log-brk-desc" placeholder="Exact foods & weights"></textarea>
-                                <div class="macro-grid">
-                                    <div><label>KCAL</label><input type="number" id="log-brk-cal" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    <div><label>PRO (g)</label><input type="number" id="log-brk-pro" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    <div><label>CARB (g)</label><input type="number" id="log-brk-car" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    <div><label>FAT (g)</label><input type="number" id="log-brk-fat" placeholder="0" oninput="updateDailyTotals()"></div>
-                                </div>
-                                <details style="outline: none;">
-                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 600;">+ Edit Fiber & Micros</summary>
-                                    <div class="micro-grid">
-                                        <div><label>FIBER (g)</label><input type="number" id="log-brk-fib" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>SOD (mg)</label><input type="number" id="log-brk-sod" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>POT (mg)</label><input type="number" id="log-brk-pot" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>CALC (mg)</label><input type="number" id="log-brk-calc" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>IRON (mg)</label><input type="number" id="log-brk-iron" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    </div>
-                                </details>
-                            </div>
-
-                            <div class="meal-section">
-                                <h5>2. Lunch</h5>
-                                <textarea id="log-lun-desc" placeholder="Exact foods & weights"></textarea>
-                                <div class="macro-grid">
-                                    <div><label>KCAL</label><input type="number" id="log-lun-cal" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    <div><label>PRO (g)</label><input type="number" id="log-lun-pro" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    <div><label>CARB (g)</label><input type="number" id="log-lun-car" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    <div><label>FAT (g)</label><input type="number" id="log-lun-fat" placeholder="0" oninput="updateDailyTotals()"></div>
-                                </div>
-                                <details style="outline: none;">
-                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 600;">+ Edit Fiber & Micros</summary>
-                                    <div class="micro-grid">
-                                        <div><label>FIBER (g)</label><input type="number" id="log-lun-fib" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>SOD (mg)</label><input type="number" id="log-lun-sod" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>POT (mg)</label><input type="number" id="log-lun-pot" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>CALC (mg)</label><input type="number" id="log-lun-calc" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>IRON (mg)</label><input type="number" id="log-lun-iron" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    </div>
-                                </details>
-                            </div>
-
-                            <div class="meal-section">
-                                <h5>3. Dinner</h5>
-                                <textarea id="log-din-desc" placeholder="Exact foods & weights"></textarea>
-                                <div class="macro-grid">
-                                    <div><label>KCAL</label><input type="number" id="log-din-cal" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    <div><label>PRO (g)</label><input type="number" id="log-din-pro" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    <div><label>CARB (g)</label><input type="number" id="log-din-car" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    <div><label>FAT (g)</label><input type="number" id="log-din-fat" placeholder="0" oninput="updateDailyTotals()"></div>
-                                </div>
-                                <details style="outline: none;">
-                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 600;">+ Edit Fiber & Micros</summary>
-                                    <div class="micro-grid">
-                                        <div><label>FIBER (g)</label><input type="number" id="log-din-fib" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>SOD (mg)</label><input type="number" id="log-din-sod" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>POT (mg)</label><input type="number" id="log-din-pot" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>CALC (mg)</label><input type="number" id="log-din-calc" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>IRON (mg)</label><input type="number" id="log-din-iron" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    </div>
-                                </details>
-                            </div>
-
-                            <div class="meal-section" style="border-bottom: none; margin-bottom: 0;">
-                                <h5>4. Snacks & Supplements</h5>
-                                <textarea id="log-snk-desc" placeholder="Exact foods, supplements, and any digestive symptoms"></textarea>
-                                <div class="macro-grid">
-                                    <div><label>KCAL</label><input type="number" id="log-snk-cal" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    <div><label>PRO (g)</label><input type="number" id="log-snk-pro" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    <div><label>CARB (g)</label><input type="number" id="log-snk-car" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    <div><label>FAT (g)</label><input type="number" id="log-snk-fat" placeholder="0" oninput="updateDailyTotals()"></div>
-                                </div>
-                                <details style="outline: none;">
-                                    <summary style="font-size: 0.75rem; font-family: 'Montserrat'; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 0; margin-bottom: 0.5rem; font-weight: 600;">+ Edit Fiber & Micros</summary>
-                                    <div class="micro-grid">
-                                        <div><label>FIBER (g)</label><input type="number" id="log-snk-fib" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>SOD (mg)</label><input type="number" id="log-snk-sod" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>POT (mg)</label><input type="number" id="log-snk-pot" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>CALC (mg)</label><input type="number" id="log-snk-calc" placeholder="0" oninput="updateDailyTotals()"></div>
-                                        <div><label>IRON (mg)</label><input type="number" id="log-snk-iron" placeholder="0" oninput="updateDailyTotals()"></div>
-                                    </div>
-                                </details>
-                            </div>
-
-                            <div class="daily-totals-macro">
-                                <div><span>CALORIES</span><strong id="tot-cal" style="font-size:1.8rem;">0</strong></div>
-                                <div><span>PROTEIN</span><strong id="tot-pro" style="font-size:1.3rem;">0g</strong></div>
-                                <div><span>CARBS</span><strong id="tot-car" style="font-size:1.3rem;">0g</strong></div>
-                                <div><span>FAT</span><strong id="tot-fat" style="font-size:1.3rem;">0g</strong></div>
-                            </div>
-                            <div class="daily-totals-micro">
-                                <div><span>FIBER</span><strong id="tot-fib" style="font-size:1.1rem; color:var(--text-main);">0g</strong></div>
-                                <div><span>SODIUM</span><strong id="tot-sod" style="font-size:1.1rem;">0mg</strong></div>
-                                <div><span>POTASSIUM</span><strong id="tot-pot" style="font-size:1.1rem;">0mg</strong></div>
-                                <div><span>CALCIUM</span><strong id="tot-calc" style="font-size:1.1rem;">0mg</strong></div>
-                                <div><span>IRON</span><strong id="tot-iron" style="font-size:1.1rem;">0mg</strong></div>
-                            </div>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <button type="button" class="btn" style="background: white; color: var(--text-main); width: 100%; padding: 1rem; font-size: 1rem;" onclick="alert('To install on iPhone: Tap the Share button in Safari and select Add to Home Screen.')">📲 Install App to Home Screen</button>
+                            <button type="button" class="btn btn-outline" style="border-color: rgba(255,255,255,0.4); color: white; width: 100%; padding: 1rem;" onclick="openScreen('screen-home')">Return to Clinic Home</button>
                         </div>
-
-                        <!-- 2. ACTIVITY -->
-                        <div class="journal-accordion" onclick="toggleAccordion('journal-activity')"><span>🏃‍♀️ Activity & Mood</span> <span class="icon">+</span></div>
-                        <div class="journal-panel" id="journal-activity">
-                            <label>Activity Type</label><input type="text" id="log-activity-type">
-                            <label>Duration (Mins)</label><input type="number" id="log-activity-dur">
-                            <label>Overall Mood</label>
-                            <select id="log-mood-rating"><option value="">Select...</option><option value="Great">Great</option><option value="Good">Good</option><option value="Okay">Okay</option><option value="Low">Low</option><option value="Anxious/Stressed">Anxious/Stressed</option></select>
-                        </div>
-
-                        <!-- 3. SLEEP -->
-                        <div class="journal-accordion" onclick="toggleAccordion('journal-sleep')"><span>💤 Sleep</span> <span class="icon">+</span></div>
-                        <div class="journal-panel" id="journal-sleep">
-                            <label>Hours Slept</label><input type="number" step="0.5" id="log-sleep-hours" placeholder="e.g. 7.5">
-                            <label>Sleep Quality (1-5)</label>
-                            <select id="log-sleep-quality"><option value="">Select...</option><option value="5">5 - Excellent</option><option value="4">4 - Good</option><option value="3">3 - Fair</option><option value="2">2 - Poor</option><option value="1">1 - Terrible</option></select>
-                        </div>
-
-                        <!-- 4. BOWEL -->
-                        <div class="journal-accordion" onclick="toggleAccordion('journal-bowel')"><span>🚽 Bowel Movements</span> <span class="icon">+</span></div>
-                        <div class="journal-panel" id="journal-bowel">
-                            <label>Type (Bristol Scale)</label>
-                            <select id="log-bowel-type">
-                                <option value="">Select type...</option>
-                                <option value="Type 1: Separate hard lumps">Type 1: Separate hard lumps</option>
-                                <option value="Type 2: Sausage-shaped, lumpy">Type 2: Sausage-shaped, lumpy</option>
-                                <option value="Type 3: Like a sausage but with cracks">Type 3: Like a sausage but with cracks</option>
-                                <option value="Type 4: Like a sausage, smooth & soft">Type 4: Like a sausage, smooth & soft (Ideal)</option>
-                                <option value="Type 5: Soft blobs with clear cut edges">Type 5: Soft blobs</option>
-                                <option value="Type 6: Fluffy pieces with ragged edges">Type 6: Fluffy/Mushy</option>
-                                <option value="Type 7: Watery, no solid pieces">Type 7: Watery/Liquid</option>
-                            </select>
-                            <label>Frequency Today</label><input type="number" id="log-bowel-freq" placeholder="How many times today?">
-                        </div>
-
-                        <!-- 5. HYDRATION -->
-                        <div class="journal-accordion" onclick="toggleAccordion('journal-water')"><span>💧 Hydration</span> <span class="icon">+</span></div>
-                        <div class="journal-panel" id="journal-water">
-                            <label>Water Intake</label><input type="text" id="log-water" placeholder="e.g. 2 Liters or 8 Glasses">
-                        </div>
-
-                        <!-- 6. VITALS -->
-                        <div class="journal-accordion" onclick="toggleAccordion('journal-meas')"><span>📏 Measurements & Vitals</span> <span class="icon">+</span></div>
-                        <div class="journal-panel" id="journal-meas">
-                            <label>Weight</label><input type="text" id="log-meas-weight" placeholder="e.g. 72 kg or 11.3 st">
-                            <label>Blood Pressure / Pulse (Optional)</label><input type="text" id="log-meas-bp" placeholder="e.g. 120/80">
-                        </div>
-
-                        <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Save & Submit Daily Log</button>
-                    </form>
-                </div>
-
-                <!-- COMPREHENSIVE MEDICAL INTAKE -->
-                <div class="dash-card">
-                    <h3>Comprehensive Medical Intake</h3>
-                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">Please complete this detailed functional health profile prior to your initial consultation.</p>
-                    
-                    <form onsubmit="return submitMedicalIntake(event)">
-                        <div class="form-row">
-                            <div><label>Age</label><input type="number" id="intake-age" required></div>
-                            <div><label>Sex</label><select id="intake-sex" required><option value="">Select</option><option value="Female">Female</option><option value="Male">Male</option></select></div>
-                        </div>
-                        <div class="form-row">
-                            <div><label>Height</label><input type="text" id="intake-height" required></div>
-                            <div><label>Weight</label><input type="text" id="intake-weight" required></div>
-                        </div>
-                        <label>Primary Treatment Aims</label>
-                        <textarea id="intake-aims" style="height:80px;" required></textarea>
-
-                        <div style="margin: 3rem 0; border-top: 1px solid var(--secondary-sand); padding-top: 2rem;">
-                            <h4 style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.2rem;">1. Immune & Digestion Systems</h4>
-                            <label>Have you ever been diagnosed with an autoimmune disease?</label>
-                            <input type="text" id="fm-immune-1" placeholder="Specify disease and when diagnosed">
-                            
-                            <label>Do you experience gas and/or bloating after eating? Any foods in particular?</label>
-                            <input type="text" id="fm-digest-1" placeholder="Specify triggers">
-                            
-                            <label>Do you experience skin itching, psoriasis, eczema, rosacea, or acne?</label>
-                            <input type="text" id="fm-digest-2" placeholder="Specify skin conditions">
-                        </div>
-
-                        <div style="margin: 3rem 0; border-top: 1px solid var(--secondary-sand); padding-top: 2rem;">
-                            <h4 style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.2rem;">2. Hormones, Thyroid & Blood Sugar</h4>
-                            <label>Do you get cravings for sugar OR salt?</label>
-                            <input type="text" id="fm-hormone-1" placeholder="Specify cravings">
-                            
-                            <label>When you wake up, do you feel energised or do you want to sleep longer?</label>
-                            <input type="text" id="fm-hormone-2" placeholder="Describe morning energy">
-                            
-                            <label>Do you get cold hands/feet, easily gain weight, or have constipation?</label>
-                            <input type="text" id="fm-thyroid-1" placeholder="Specify symptoms">
-                            
-                            <label>Do you feel tired/fatigued after a meal, or energized?</label>
-                            <input type="text" id="fm-blood-1" placeholder="Describe post-meal energy">
-                        </div>
-
-                        <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 2rem; border-radius: 8px; margin-bottom: 2.5rem; margin-top: 1rem;">
-                            <h4 style="font-family: 'Montserrat', sans-serif; color: var(--text-main); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;">Functional Medicine Informed Consent</h4>
-                            <p style="font-size: 0.95rem; color: #555; line-height: 1.7; margin-bottom: 1rem;">I understand in the practice of functional medicine, some treatments are considered "alternative" by the conventional medical community. I understand Functional Medicine is not a substitute for treatment from a primary care physician.</p>
-                            <div style="display: flex; align-items: flex-start; gap: 1rem; margin-top: 1.5rem; background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
-                                <input type="checkbox" id="fm-consent" required style="width: 24px; height: 24px; margin: 0; flex-shrink: 0;">
-                                <label style="text-transform: none; letter-spacing: 0; font-family: 'Montserrat'; font-size: 0.9rem; color: var(--text-main); font-weight: 500; margin: 0; line-height: 1.5;">I acknowledge I have carefully read and understand the above consent. I authorize medical treatment and use of e-mail correspondence.</label>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn" style="width: 100%;">Sign & Submit Intake File</button>
-                    </form>
-                </div>
-
-                <!-- SECURE MESSAGING -->
-                <div class="dash-card">
-                    <h3>Secure Clinical Chat</h3>
-                    <div class="chat-box" id="client-chat-box"></div>
-                    <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 1rem;">
-                        <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1;" required>
-                        <button type="submit" class="btn" style="padding: 0 1.5rem;">Send</button>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+
 
     <!-- PWA APP INSTALL OVERLAY -->
     <div class="pwa-overlay" id="pwa-install-overlay">
