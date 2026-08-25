@@ -273,6 +273,12 @@ function updateNavState(isLoggedIn) {
     document.getElementById('mobile-portal-link').style.display = isLoggedIn ? 'none' : 'block';
     document.getElementById('mobile-book-link').style.display = isLoggedIn ? 'none' : 'block';
     document.getElementById('mobile-logout-link').style.display = isLoggedIn ? 'block' : 'none';
+    
+    // NEW: Toggles the Testimonial form based on if they are logged in!
+    const testPrompt = document.getElementById('testimonial-login-prompt');
+    const testForm = document.getElementById('testimonial-submit-form');
+    if (testPrompt) testPrompt.style.display = isLoggedIn ? 'none' : 'block';
+    if (testForm) testForm.style.display = isLoggedIn ? 'block' : 'none';
 }
 
 window.unlockVipApp = async function(e) {
