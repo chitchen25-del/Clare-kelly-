@@ -43,9 +43,16 @@ nav {
 .nav-brand-logo { height: 45px; width: auto; cursor: pointer; transition: opacity 0.3s ease; object-fit: contain; }
 .nav-brand-logo:hover { opacity: 0.8; }
 
+/* Main Site Desktop Nav */
 .desktop-nav-links { display: none; align-items: center; gap: 2rem; }
 .nav-link-text { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); cursor: pointer; transition: color 0.3s; }
 .nav-link-text:hover { color: var(--primary-sage); }
+
+/* NEW: Admin Portal Desktop Nav (Hidden on mobile) */
+.desktop-admin-nav { display: none; align-items: center; gap: 1.5rem; }
+.desktop-admin-nav span { cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #888; transition: color 0.2s; }
+.desktop-admin-nav span:hover, .desktop-admin-nav span.active { color: var(--primary-sage); }
+
 .mobile-menu-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 6px; padding: 0.5rem; z-index: 102; }
 .mobile-menu-btn span { display: block; width: 30px; height: 1px; background-color: var(--text-main); transition: transform 0.3s ease; }
 
@@ -90,7 +97,6 @@ h2 { font-size: 2.8rem; margin-bottom: 1.5rem; }
 .pathway-card p { color: #555; font-size: 1rem; line-height: 1.7; margin: 0;}
 .pathway-number { font-family: 'Cormorant Garamond'; font-size: 2.5rem; color: var(--secondary-sand); margin-bottom: 1rem; display: block; line-height: 1; font-style: italic; }
 
-/* PRICING SECTION RESTORED */
 .pricing-section { padding: 8rem 6%; border-top: 1px solid var(--secondary-sand); background-color: var(--bg-color); }
 .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 1200px; margin: 4rem auto 0 auto; }
 .price-card { background: var(--card-bg); padding: 3rem 2rem; border-radius: 12px; border: 1px solid var(--secondary-sand); text-align: center; position: relative; transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
@@ -187,6 +193,10 @@ footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); col
     .nav-brand-logo { height: 60px; } 
     .mobile-menu-btn { display: none; }
     .desktop-nav-links { display: flex; }
+    
+    /* NEW: Display the Admin nav on large screens */
+    .desktop-admin-nav { display: flex !important; }
+
     .pathway-grid { grid-template-columns: repeat(3, 1fr); }
     .pricing-grid { grid-template-columns: repeat(3, 1fr); }
     .form-container { max-width: 500px; padding: 4rem; }
