@@ -445,8 +445,93 @@
                     </form>
                 </div>
             </div>
+<!-- STANDARD HEALTH QUESTIONNAIRE (Basic Users) -->
+                <div class="dash-card" id="basic-questionnaire-card">
+                    <h3>Standard Health Questionnaire</h3>
+                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">For physical therapies (Myofascial, Lymphatic, Bowen). Please complete this prior to your appointment.</p>
+                    
+                    <form onsubmit="return submitBasicIntake(event)">
+                        <!-- 1. Personal Info -->
+                        <h4 style="margin-bottom: 1rem; color: var(--text-main); font-family: 'Montserrat';">1. Personal Information</h4>
+                        <div class="form-row">
+                            <div><label>Full Name</label><input type="text" id="basic-name" required></div>
+                            <div><label>Date of Birth</label><input type="date" id="basic-dob" required></div>
+                        </div>
+                        <div class="form-row">
+                            <div><label>Phone Number</label><input type="tel" id="basic-phone" required></div>
+                            <div><label>Email Address</label><input type="email" id="basic-email" required></div>
+                        </div>
+                        <div class="form-row">
+                            <div><label>Emergency Contact Name</label><input type="text" id="basic-em-name" required></div>
+                            <div><label>Emergency Contact Phone</label><input type="tel" id="basic-em-phone" required></div>
+                        </div>
 
+                        <!-- 2. Chief Complaint -->
+                        <h4 style="margin-bottom: 1rem; margin-top: 2.5rem; color: var(--text-main); font-family: 'Montserrat';">2. Chief Complaint & Pain Description</h4>
+                        <label>What is your main reason for visit or area of discomfort?</label>
+                        <input type="text" id="basic-reason" required>
+                        
+                        <label>How long have you had these symptoms? (Weeks, months, or years)</label>
+                        <input type="text" id="basic-duration" required>
+                        
+                        <label>Rate your current pain level (0-10)</label>
+                        <select id="basic-pain" required>
+                            <option value="">Select...</option>
+                            <option value="0">0 - No Pain</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5 - Moderate</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10 - Severe Pain</option>
+                        </select>
+                        
+                        <label>Describe the sensation of the pain (Check all that apply):</label>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" value="Sharp/Dull" style="width:auto; margin:0;"> Sharp / Dull</label>
+                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" value="Aching/Throbbing" style="width:auto; margin:0;"> Aching / Throbbing</label>
+                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" value="Burning/Tingling/Numbness" style="width:auto; margin:0;"> Burning / Tingling / Numbness</label>
+                        </div>
+                        
+                        <label>Was there a specific event, accident, or injury that started the pain?</label>
+                        <input type="text" id="basic-event" placeholder="e.g. Car crash, sports injury, etc.">
 
+                        <!-- 3. Medical History -->
+                        <h4 style="margin-bottom: 1rem; margin-top: 2.5rem; color: var(--text-main); font-family: 'Montserrat';">3. Medical History & Health Conditions</h4>
+                        <label>Please check any conditions that affect you now or have affected you in the past:</label>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.8rem; margin-bottom: 1.5rem;">
+                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" style="width:auto; margin:0;"> Chronic pain / Fibromyalgia</label>
+                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" style="width:auto; margin:0;"> Arthritis / joint disorders</label>
+                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" style="width:auto; margin:0;"> Herniated / bulging discs</label>
+                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" style="width:auto; margin:0;"> Recent surgeries / broken bones</label>
+                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" style="width:auto; margin:0;"> Blood clots / circulatory issues</label>
+                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" style="width:auto; margin:0;"> Osteoporosis</label>
+                        </div>
+                        <label>Pregnancy (if yes, how many months?)</label>
+                        <input type="text" id="basic-pregnancy" placeholder="Leave blank if not applicable">
+
+                        <!-- 4. Meds & Treatments -->
+                        <h4 style="margin-bottom: 1rem; margin-top: 2.5rem; color: var(--text-main); font-family: 'Montserrat';">4. Medications & Current Treatments</h4>
+                        <label>Please list any prescription medications, over-the-counter drugs, or supplements you take:</label>
+                        <textarea id="basic-meds" style="height: 60px;"></textarea>
+                        <label>Have you received prior treatments for this issue (e.g., physical therapy, chiropractic, massage)?</label>
+                        <textarea id="basic-prior-treat" style="height: 60px;"></textarea>
+
+                        <!-- 5. Focus Areas -->
+                        <h4 style="margin-bottom: 1rem; margin-top: 2.5rem; color: var(--text-main); font-family: 'Montserrat';">5. Focus Areas & Preferences</h4>
+                        <label>Are there any specific areas you want the practitioner to focus on?</label>
+                        <input type="text" id="basic-focus">
+                        <label>Are there any areas of the body you want to avoid?</label>
+                        <input type="text" id="basic-avoid">
+
+                        <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Submit Questionnaire</button>
+                    </form>
+                </div>ok?
+                 
                                   <!-- RIGHT COLUMN: VIP Gateway & Secure Chat -->
             <div>
                 <!-- VIP APP UNLOCK CARD (Shown if Basic User) -->
