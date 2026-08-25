@@ -31,6 +31,9 @@ function getSupabase() {
 
 window.onload = async function() {
     try {
+        // NEW: Always load approved testimonials when the site boots up!
+        loadTestimonials();
+
         const db = getSupabase();
         if(db) {
             const { data: { session } } = await db.auth.getSession();
@@ -314,6 +317,7 @@ window.triggerPwaInstall = function() {
         alert("To install, tap your browser menu (three dots or share icon) and select 'Add to Home Screen'.");
     }
 }
+
 window.submitBasicIntake = async function(e) {
     e.preventDefault();
     const btn = e.target.querySelector('button[type="submit"]');
@@ -359,4 +363,62 @@ window.submitBasicIntake = async function(e) {
         btn.innerText = ogText;
     }
     return false;
+}
+
+// ================= TESTIMONIAL FUNCTIONS =================
+window.submitTestimonial = async function(e) {
+    e.preventDefault();
+    try {
+        const db = getSupabase();
+        const { data: { user } } = await db.auth.getUser();
+        if (!user) throw new Error("You must be logged in to submit a review.");
+
+        const name = document.getElementById('test-name').value.trim();
+        const rating = parseInt(document.getElementById('test-rating').value);
+        const content = document.getElementById('test-content').value.trim();
+
+        const { error } = await db.from('testimonials').insert([{
+            client_id: user.id,
+            client_name: name,
+            rating: rating,
+            content: content,
+            is_approved: false // Stays hidden until Clare approves it!
+        }]);
+
+        if (error) throw error;
+        
+        alert("Thank you! Your testimonial has been submitted successfully and is awaiting review.");
+        e.target.reset();
+    } catch(err) {
+        alert("Error submitting testimonial: " + err.message);
+    }
+    return false;
+}
+
+window.loadTestimonials = async function() {
+    try {
+        const db = getSupabase();
+        const feed = document.getElementById('testimonial-feed');
+        if (!feed) return;
+
+        // Only fetch testimonials where Clare has set is_approved to TRUE
+        const { data, error } = await db.from('testimonials').select('*').eq('is_approved', true).order('created_at', { ascending: false });
+        
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            feed.innerHTML = '<p style="color:#888; text-align:center; width:100%; font-style: italic;">Be the first to share your healing journey!</p>';
+            return;
+        }
+
+        feed.innerHTML = data.map(t => `
+            <div style="background: white; padding: 2.5rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 15px rgba(9,93,40,0.03);">
+                <div style="color: var(--gold-accent); margin-bottom: 1rem; font-size: 1.2rem; letter-spacing: 2px;">${'★'.repeat(t.rating)}${'☆'.repeat(5 - t.rating)}</div>
+                <p style="font-size: 1.05rem; color: #555; font-style: italic; margin-bottom: 1.5rem; line-height: 1.7;">"${t.content}"</p>
+                <h4 style="color: var(--text-main); font-family: 'Montserrat'; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">- ${t.client_name}</h4>
+            </div>
+        `).join('');
+    } catch(err) {
+        console.error("Error loading testimonials:", err.message);
+    }
 }
