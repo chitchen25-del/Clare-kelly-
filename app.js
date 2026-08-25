@@ -310,8 +310,47 @@ window.triggerPwaInstall = function() {
 }
 window.submitBasicIntake = async function(e) {
     e.preventDefault();
-    // Later, we can wire this up to save to Supabase. For now, it resets cleanly.
-    alert("Thank you! Your health questionnaire has been securely saved to your clinical file.");
-    e.target.reset();
+    const btn = e.target.querySelector('button[type="submit"]');
+    const ogText = btn.innerText;
+    btn.innerText = "Saving Questionnaire...";
+
+    try {
+        const db = getSupabase();
+        const { data: { user } } = await db.auth.getUser();
+        if (!user) throw new Error("Please log in to submit.");
+
+        // Magic trick: This grabs every single checked box (symptoms & history) and lumps them into a comma-separated list
+        const checkedBoxes = Array.from(document.querySelectorAll('#basic-questionnaire-card input[type="checkbox"]:checked'))
+                                  .map(cb => cb.parentElement.innerText.trim()).join(', ');
+
+        const { error } = await db.from('basic_intake').insert([{
+            client_id: user.id,
+            full_name: document.getElementById('basic-name').value,
+            dob: document.getElementById('basic-dob').value,
+            phone: document.getElementById('basic-phone').value,
+            email: document.getElementById('basic-email').value,
+            emergency_contact_name: document.getElementById('basic-em-name').value,
+            emergency_contact_phone: document.getElementById('basic-em-phone').value,
+            reason_for_visit: document.getElementById('basic-reason').value,
+            duration_of_symptoms: document.getElementById('basic-duration').value,
+            pain_level: document.getElementById('basic-pain').value,
+            checked_boxes: checkedBoxes,
+            specific_event: document.getElementById('basic-event').value,
+            pregnancy_months: document.getElementById('basic-pregnancy').value,
+            medications: document.getElementById('basic-meds').value,
+            prior_treatments: document.getElementById('basic-prior-treat').value,
+            focus_areas: document.getElementById('basic-focus').value,
+            avoid_areas: document.getElementById('basic-avoid').value
+        }]);
+
+        if (error) throw error;
+
+        alert("Thank you! Your health questionnaire has been securely saved to your clinical file.");
+        e.target.reset();
+    } catch(err) {
+        alert("Error saving questionnaire: " + err.message);
+    } finally {
+        btn.innerText = ogText;
+    }
     return false;
 }
