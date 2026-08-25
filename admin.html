@@ -474,6 +474,9 @@
                 const { data: msgs } = await db.from('messages').select('*').eq('client_id', clientId).order('created_at', { ascending: false });
                 const { data: pins } = await db.from('body_pins').select('*').eq('client_id', clientId);
                 
+                // Fetch the new questionnaires!
+                const { data: intakes } = await db.from('basic_intake').select('*').eq('client_id', clientId).order('created_at', { ascending: false });
+                
                 const clientName = (appts && appts.length > 0 && appts[0].client_name) ? appts[0].client_name : 'Patient Record';
 
                 detailContainer.innerHTML = `
@@ -487,7 +490,7 @@
 
                         <div class="tab-container">
                             <button class="tab-btn active" onclick="switchClientTab('timeline', this)">Clinical Timeline</button>
-                            <button class="tab-btn" onclick="switchClientTab('soap', this)">SOAP & Protocol</button>
+                            <button class="tab-btn" onclick="switchClientTab('soap', this)">SOAP & Intake</button>
                             <button class="tab-btn" onclick="switchClientTab('body', this)">Interactive Body Map</button>
                             <button class="tab-btn" onclick="switchClientTab('chat', this)">Secure Chat</button>
                         </div>
@@ -505,7 +508,21 @@
                         </div>
 
                         <div id="ctab-soap" class="tab-content">
-                            <h3 style="margin-bottom: 1rem;">Clinical SOAP Notes & Protocol</h3>
+                            <!-- NEW INTAKE QUESTIONNAIRE DISPLAY -->
+                            <h3 style="margin-bottom: 1rem;">Submitted Health Questionnaires</h3>
+                            ${intakes && intakes.length > 0 ? intakes.map(i => `
+                                <div class="data-block" style="border-left: 4px solid var(--primary-sage); background: white;">
+                                    <h4 style="color: var(--text-main); margin-bottom: 0.8rem; font-family: 'Montserrat';">Intake Submitted: ${new Date(i.created_at).toLocaleDateString()}</h4>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>Complaint:</strong> ${i.reason_for_visit} (${i.duration_of_symptoms}) | <strong>Pain Level:</strong> <span style="color:#a94442; font-weight:bold;">${i.pain_level}/10</span></p>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>Symptoms & History:</strong> ${i.checked_boxes || 'None checked'}</p>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>Specific Trigger/Event:</strong> ${i.specific_event || 'N/A'}</p>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>Medications & Supplements:</strong> ${i.medications || 'None'}</p>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>Prior Treatments:</strong> ${i.prior_treatments || 'None'}</p>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0;"><strong>Focus Areas:</strong> ${i.focus_areas || 'N/A'} | <strong>Avoid:</strong> ${i.avoid_areas || 'N/A'}</p>
+                                </div>
+                            `).join('') : '<p style="color:#888; font-size: 0.9rem; margin-bottom: 2rem;">No health questionnaires submitted yet.</p>'}
+                            
+                            <h3 style="margin-bottom: 1rem; margin-top: 2.5rem;">Clinical SOAP Notes & Protocol</h3>
                             <div class="soap-grid">
                                 <div class="data-block">
                                     <label>Subjective & Objective Findings</label>
@@ -519,6 +536,7 @@
                             <button class="btn" onclick="alert('SOAP notes saved securely!')">Save Clinical Notes</button>
                         </div>
 
+                        <!-- Rest of the profile stays exactly the same -->
                         <div id="ctab-body" class="tab-content">
                             <h3 style="margin-bottom: 1rem;">Interactive Body Map & Posture Vault</h3>
                             <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Click anywhere on the body figure below to drop a pin and record specific pain or tension notes for this patient.</p>
@@ -527,16 +545,12 @@
                                 <div>
                                     <div class="body-map-container" id="admin-body-map" onclick="dropBodyPin(event, '${clientId}')">
                                         <svg class="body-map-svg" viewBox="0 0 200 400">
-                                            <!-- Head -->
                                             <circle cx="100" cy="50" r="25"/>
-                                            <!-- Neck & Torso -->
                                             <path d="M90 75 L90 95 L60 105 L70 170 L90 170 L90 230 L75 300 L90 300 L100 240 L110 300 L125 300 L110 230 L110 170 L130 170 L140 105 L110 95 L110 75 Z"/>
-                                            <!-- Arms -->
                                             <path d="M60 105 L40 180 L55 185 L70 120 Z"/>
                                             <path d="M140 105 L160 180 L145 185 L130 120 Z"/>
                                         </svg>
                                         
-                                        <!-- Render Existing Pins -->
                                         ${pins ? pins.map(p => `<div class="map-pin" style="top: ${p.y_pos}%; left: ${p.x_pos}%;" title="${p.note}"></div>`).join('') : ''}
                                     </div>
                                     <p style="text-align: center; font-size: 0.75rem; color: #888;">Click figure to add a new pain pin.</p>
