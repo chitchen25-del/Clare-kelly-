@@ -963,26 +963,53 @@
             </div>
         </div>
               <!-- ================= SCREEN: TESTIMONIALS ================= -->
-    <div id="screen-testimonials" class="page-screen" style="overflow-y: auto; -webkit-overflow-scrolling: touch;">
+    <!-- ================= SCREEN 6: TESTIMONIALS ================= -->
+    <div id="screen-testimonials" class="page-screen">
         <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
-            <span class="section-subtitle">Client Experiences</span>
-            <h1 style="margin-top: 0.5rem; font-family: 'Playfair Display', serif;">Testimonials</h1>
+            <span class="section-subtitle">Verified Patient Stories</span>
+            <h1 style="margin-top: 0.5rem;">Testimonials</h1>
+            <p style="color: #666; max-width: 600px; margin: 1rem auto 0 auto;">Read about the experiences of our patients. If you are an existing patient, sign in to share your healing journey.</p>
         </div>
-        <section class="section" style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem; display: flex; flex-direction: column; gap: 2rem; width: 100%;">
+
+        <section class="section" style="padding-top: 4rem; padding-bottom: 4rem; flex-direction: column; align-items: center;">
             
-            <!-- REVIEW 1: JOHNNY -->
-            <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-left: 4px solid var(--primary-green, #1B4332);">
-                <div style="color: #f0ad4e; font-size: 1.2rem; margin-bottom: 1rem;">★★★★★</div>
-                <p style="font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #333; line-height: 1.7; margin-bottom: 1.5rem; font-style: italic;">
-                    "I had pain in my lower back and neck that woke me up several times a night, the pain in my neck was sometimes so severe if I turned my head it was extremely painful, well that was until I met Dr Brittany, who! let me tell you is nothing short of a miracle worker. The pain in my neck is pretty much non existent and I don’t wake up in pain anymore. My overall well being is amazingly good and also my worry of something being wrong with my spine was 100% taken away.<br><br>
-                    Dr Brittany is extremely knowledgeable and such a kind very pleasant supportive person. I have no hesitation in recommending natural healing to anyone and I wouldn’t be exaggerating to say life changing and all this in the space of 4 weeks. All the staff are extremely professional and very pleasant. Thank you natural healing for putting my health back together."
-                </p>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 0.9rem; font-weight: bold; color: var(--primary-green, #1B4332); text-transform: uppercase; letter-spacing: 0.5px;">— Johnny</span>
-                    <span style="font-size: 0.75rem; color: #888; font-style: italic;">Verified Patient Review</span>
+            <!-- THE DYNAMIC SUBMISSION BOX -->
+            <div id="auth-testimonial-box" style="width: 100%; max-width: 700px; margin-bottom: 4rem; text-align: center;">
+                
+                <!-- Shown to Logged OUT Users -->
+                <div id="testimonial-login-prompt" style="background: var(--bg-color); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--secondary-sand);">
+                    <h4 style="margin-bottom: 1rem; color: var(--text-main); font-family: 'Montserrat';">Share Your Experience</h4>
+                    <p style="font-size: 0.95rem; color: #555; margin-bottom: 1.5rem;">We only accept testimonials from verified patients. Please log in to your portal to submit your review.</p>
+                    <button class="btn" onclick="openScreen('screen-login')">Sign In to Post</button>
+                </div>
+
+                <!-- Shown to Logged IN Users -->
+                <div id="testimonial-submit-form" style="display: none; background: white; padding: 2.5rem; border-radius: 12px; border: 1px solid var(--primary-sage); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.05); text-align: left;">
+                    <h4 style="margin-bottom: 1.5rem; color: var(--text-main); font-family: 'Montserrat'; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem;">Write a Verified Testimonial</h4>
+                    <form onsubmit="return submitTestimonial(event)">
+                        <label>Your Name (As it will appear publicly)</label>
+                        <input type="text" id="test-name" required placeholder="e.g. Sarah T.">
+                        
+                        <label>Rating</label>
+                        <select id="test-rating" required>
+                            <option value="5">★★★★★ (5/5 - Excellent)</option>
+                            <option value="4">★★★★☆ (4/5 - Great)</option>
+                            <option value="3">★★★☆☆ (3/5 - Good)</option>
+                        </select>
+
+                        <label>Your Story</label>
+                        <textarea id="test-content" required placeholder="How did Clare and the clinic help you?" style="height: 120px;"></textarea>
+
+                        <button type="submit" class="btn" style="width: 100%;">Submit Testimonial</button>
+                        <p style="font-size: 0.75rem; color: #888; text-align: center; margin-top: 1rem; margin-bottom: 0;">Your testimonial will be reviewed by our clinic before publishing.</p>
+                    </form>
                 </div>
             </div>
 
+            <!-- THE PUBLIC FEED -->
+            <div id="testimonial-feed" style="width: 100%; max-width: 1000px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <p style="color: #888; text-align: center; width: 100%;">Loading patient stories...</p>
+            </div>
         </section>
     </div>
 
