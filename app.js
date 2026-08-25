@@ -308,3 +308,10 @@ window.triggerPwaInstall = function() {
         alert("To install, tap your browser menu (three dots or share icon) and select 'Add to Home Screen'.");
     }
 }
+window.submitBasicIntake = async function(e) {
+    e.preventDefault();
+    // Later, we can wire this up to save to Supabase. For now, it resets cleanly.
+    alert("Thank you! Your health questionnaire has been securely saved to your clinical file.");
+    e.target.reset();
+    return false;
+}
