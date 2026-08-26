@@ -46,32 +46,33 @@
 
     <nav>
         <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="openScreen('screen-home')">
+        
+        <!-- DESKTOP NAVIGATION -->
         <div class="desktop-nav-links">
             <span class="nav-link-text" onclick="openScreen('screen-about')">About Clare</span>
+            <span class="nav-link-text" onclick="openScreen('screen-testimonials')">Patient Stories</span>
+            <span class="nav-link-text" onclick="openScreen('screen-news')">Latest News</span>
             <button type="button" id="nav-portal-btn" class="btn btn-outline" onclick="openScreen('screen-login')">Patient Portal</button>
             <button type="button" id="nav-book-btn" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
             <button type="button" id="nav-logout-btn" class="btn btn-outline" style="display: none;" onclick="processLogout()">Sign Out</button>
         </div>
+        
         <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
             <span></span><span></span><span></span>
         </button>
     </nav>
 
-<div class="mobile-drawer" id="mobile-drawer">
-    <span style="position: absolute; top: calc(1.5rem + env(safe-area-inset-top)); right: 2rem; font-size: 2rem; cursor: pointer; color: var(--text-main);" onclick="toggleMobileMenu()">✕</span>
-    <span class="mobile-drawer-link" onclick="openScreen('screen-home')">Home</span>
-    <span class="mobile-drawer-link" onclick="openScreen('screen-about')">About Clare</span>
-    <span class="mobile-drawer-link" onclick="openScreen('screen-testimonials')">Testimonials</span>
-    <span class="mobile-drawer-link" onclick="openScreen('screen-news')">Latest News</span>
-    <span class="mobile-drawer-link" onclick="openScreen('screen-login')" id="mobile-portal-link">Patient Portal</span>
-    <span class="mobile-drawer-link" onclick="openScreen('screen-register')" id="mobile-book-link">Register & Book</span>
-    <span class="mobile-drawer-link" onclick="processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
-</div>
-
-
-
-
-
+    <!-- MOBILE NAVIGATION DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <span style="position: absolute; top: calc(1.5rem + env(safe-area-inset-top)); right: 2rem; font-size: 2rem; cursor: pointer; color: var(--text-main);" onclick="toggleMobileMenu()">✕</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-home')">Home</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-about')">About Clare</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-testimonials')">Patient Stories</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-news')">Latest News</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-login')" id="mobile-portal-link">Patient Portal</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-register')" id="mobile-book-link">Register & Book</span>
+        <span class="mobile-drawer-link" onclick="processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
+    </div>
 
     <!-- ================= SCREEN 1: HOME ================= -->
     <div id="screen-home" class="page-screen visible">
@@ -323,28 +324,29 @@
                         <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
                     </optgroup>
                 </select>
-                                      <!-- SERVICE DATE & TIME SELECTION -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                            <div>
-                                <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Appointment Date</label>
-                                <input type="date" id="portal-date" min="2026-01-01" required style="margin-bottom: 0;">
-                            </div>
-                            <div>
-                                <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Preferred Time</label>
-                                <select id="portal-time" required style="margin-bottom: 0;">
-                                    <option value="">-- Select Time --</option>
-                                    <option value="09:00">09:00 AM</option>
-                                    <option value="10:00">10:00 AM</option>
-                                    <option value="11:00">11:00 AM</option>
-                                    <option value="12:00">12:00 PM</option>
-                                    <option value="13:00">01:00 PM</option>
-                                    <option value="14:00">02:00 PM</option>
-                                    <option value="15:00">03:00 PM</option>
-                                    <option value="16:00">04:00 PM</option>
-                                </select>
-                            </div>
-                        </div>
+                <!-- SERVICE DATE & TIME SELECTION -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Appointment Date</label>
+                        <input type="date" id="portal-date-reg" min="2026-01-01" required style="margin-bottom: 0;">
+                    </div>
+                    <div>
+                        <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Preferred Time</label>
+                        <select id="portal-time-reg" required style="margin-bottom: 0;">
+                            <option value="">-- Select Time --</option>
+                            <option value="09:00">09:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">01:00 PM</option>
+                            <option value="14:00">02:00 PM</option>
+                            <option value="15:00">03:00 PM</option>
+                            <option value="16:00">04:00 PM</option>
+                        </select>
+                    </div>
+                </div>
 
+                <button type="submit" class="btn" style="width: 100%;">Create Account & Book</button>
             </form>
         </div>
     </div>
@@ -420,7 +422,7 @@
                                 <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
                             </optgroup>
                         </select>
-                                              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                             <div>
                                 <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Appointment Date</label>
                                 <input type="date" id="portal-date" min="2026-01-01" required style="margin-bottom: 0;">
@@ -444,8 +446,8 @@
                         <button type="submit" class="btn" style="width: 100%; padding: 0.9rem;">Confirm Booking</button>
                     </form>
                 </div>
-            </div>
-<!-- STANDARD HEALTH QUESTIONNAIRE (Basic Users) -->
+                
+                <!-- STANDARD HEALTH QUESTIONNAIRE (Basic Users) -->
                 <div class="dash-card" id="basic-questionnaire-card">
                     <h3>Standard Health Questionnaire</h3>
                     <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">For physical therapies (Myofascial, Lymphatic, Bowen). Please complete this prior to your appointment.</p>
@@ -530,9 +532,10 @@
 
                         <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Submit Questionnaire</button>
                     </form>
-                </div>ok?
+                </div>
+            </div>
                  
-                                  <!-- RIGHT COLUMN: VIP Gateway & Secure Chat -->
+            <!-- RIGHT COLUMN: VIP Gateway & Secure Chat -->
             <div>
                 <!-- VIP APP UNLOCK CARD (Shown if Basic User) -->
                 <div class="dash-card" id="vip-unlock-card" style="background: linear-gradient(135deg, #095d28, #0d9b46); color: white;">
@@ -545,391 +548,376 @@
                 </div>
 
                 <!-- DEDICATED VIP APP LAUNCHPAD (Shown when Unlocked) -->
-             <div id="premium-app-container" style="display: none; margin-top: 1.5rem; padding-bottom: 2rem;">
-    
-    <!-- CARD 1: THE LOBBY BOUNCER -->
-    <div class="dash-card pwa-install-card" style="background: var(--primary-green, #1B4332); color: white; padding: 2rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: white;">The Natural Healing App</h3>
-        <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 1.5rem;">Your VIP protocol is active. Add to your home screen to unlock your daily trackers and secure chat.</p>
-        <button class="btn" style="background: white; color: var(--primary-green, #1B4332); width: 100%; font-weight: bold; border: none; padding: 1rem; border-radius: 8px; font-size: 0.95rem;" onclick="triggerPwaInstall()">INSTALL APP TO UNLOCK</button>
-    </div>
-
-    <!-- CARD 2: MACRO & HYDRATION DASHBOARD -->
-    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1rem;">
-        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Daily Nutrition</h3>
-        
-        <div style="display: flex; justify-content: space-between; text-align: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem;">
-            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
-                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Cals</span>
-                <strong id="total-cals" style="display: block; font-size: 1.1rem; color: #333;">0</strong>
-            </div>
-            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
-                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Pro</span>
-                <strong id="total-pro" style="display: block; font-size: 1.1rem; color: #d9534f;">0g</strong>
-            </div>
-            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
-                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Fat</span>
-                <strong id="total-fat" style="display: block; font-size: 1.1rem; color: #f0ad4e;">0g</strong>
-            </div>
-            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
-                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Carb</span>
-                <strong id="total-carb" style="display: block; font-size: 1.1rem; color: #5bc0de;">0g</strong>
-            </div>
-            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
-                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Fib</span>
-                <strong id="total-fib" style="display: block; font-size: 1.1rem; color: #5cb85c;">0g</strong>
-            </div>
-        </div>
-
-        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Water Intake</label>
-        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
-            <button style="flex: 1; padding: 0.8rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px; color: #0056b3; font-weight: bold;" onclick="alert('Logged 250ml')">+ 250ml</button>
-            <button style="flex: 1; padding: 0.8rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px; color: #0056b3; font-weight: bold;" onclick="alert('Logged 500ml')">+ 500ml</button>
-        </div>
-        <div style="background: #eee; height: 10px; border-radius: 5px; overflow: hidden; margin-bottom: 1rem;">
-            <div style="background: #5bc0de; width: 0%; height: 100%;"></div>
-        </div>
-    </div>
-
-    <!-- CARD 3: LIVE GLOBAL FOOD DATABASE -->
-    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
-        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Food Diary</h3>
-        
-        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-            <input type="text" id="food-search-input" placeholder="Search any food (e.g., lazy garlic, chicken)..." style="flex: 1; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #fafafa;" onkeydown="if(event.key === 'Enter') searchLiveGlobalFood()">
-            <button class="btn" style="background: #333; color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="searchLiveGlobalFood()">🔍</button>
-            <button class="btn" style="background: var(--primary-green, #1B4332); color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="forceBarcodeScanner()">📷</button>
-        </div>
-        
-        <div id="interactive-barcode-container" style="width: 100%; display: none; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; background: #000;">
-            <div id="reader-view" style="width: 100%;"></div>
-        </div>
-        
-        <div id="food-results" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: #555;"></div>
-
-        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-                    <strong style="color: #444;">Breakfast</strong>
-                    <span id="breakfast-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
-                </div>
-                <div id="breakfast-items" style="font-size: 0.85rem; color: #666;"></div>
-            </div>
-            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-                    <strong style="color: #444;">Lunch</strong>
-                    <span id="lunch-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
-                </div>
-                <div id="lunch-items" style="font-size: 0.85rem; color: #666;"></div>
-            </div>
-            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-                    <strong style="color: #444;">Dinner</strong>
-                    <span id="dinner-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
-                </div>
-                <div id="dinner-items" style="font-size: 0.85rem; color: #666;"></div>
-            </div>
-            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-                    <strong style="color: #444;">Snacks</strong>
-                    <span id="snacks-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
-                </div>
-                <div id="snacks-items" style="font-size: 0.85rem; color: #666;"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CARD 4: LIFESTYLE & BODY METRICS -->
-    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
-        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Lifestyle Metrics</h3>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-            <div>
-                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Steps</label>
-                <input type="number" placeholder="e.g. 8500" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
-            </div>
-            <div>
-                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Weight (kg/lbs)</label>
-                <input type="number" placeholder="e.g. 70.5" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
-            </div>
-            <div>
-                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Sleep (Hours)</label>
-                <input type="number" step="0.5" placeholder="e.g. 7.5" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
-            </div>
-            <div>
-                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Mood</label>
-                <select style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; background: white;">
-                    <option value="">Select...</option>
-                    <option value="great">😁 Great</option>
-                    <option value="good">🙂 Good</option>
-                    <option value="okay">😐 Okay</option>
-                    <option value="low">😔 Low</option>
-                    <option value="stressed">😫 Stressed</option>
-                </select>
-            </div>
-        </div>
-
-        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Daily Protocol / Supplements</label>
-        <div style="background: #fafafa; padding: 1rem; border: 1px solid #eee; border-radius: 8px; display: flex; flex-direction: column; gap: 0.8rem;">
-            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; color: #333;">
-                <input type="checkbox" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-green, #1B4332);"> AM Protocol Complete
-            </label>
-            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; color: #333;">
-                <input type="checkbox" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-green, #1B4332);"> PM Protocol Complete
-            </label>
-        </div>
-    </div>
-
-    <!-- CARD 5: GUT HEALTH & BRISTOL STOOL CHART -->
-    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
-        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Gut Health</h3>
-        
-        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Bristol Stool Scale</label>
-        <select style="width: 100%; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; font-size: 0.95rem; background: white;">
-            <option value="">Select B.M. Type...</option>
-            <option value="1">Type 1 - Separate hard lumps</option>
-            <option value="2">Type 2 - Sausage-shaped, lumpy</option>
-            <option value="3">Type 3 - Sausage with cracks</option>
-            <option value="4">Type 4 - Smooth, soft sausage (Ideal)</option>
-            <option value="5">Type 5 - Soft blobs, clear edges</option>
-            <option value="6">Type 6 - Fluffy pieces, mushy</option>
-            <option value="7">Type 7 - Watery, no solid pieces</option>
-        </select>
-
-        <div style="background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 1rem;">
-            <p style="font-size: 0.75rem; text-align: center; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 0; margin-bottom: 0.8rem; font-weight: bold;">Reference Guide</p>
-            <div style="display: grid; grid-template-columns: 1fr; gap: 0.6rem; font-size: 0.85rem;">
-                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #8b5a2b; width: 12px; height: 12px; border-radius: 50%;"></span> <strong>Type 1-2:</strong> Constipation (Hard/Lumpy)</div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #a0522d; width: 12px; height: 12px; border-radius: 4px;"></span> <strong>Type 3-4:</strong> Ideal/Normal (Smooth sausage)</div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #cd853f; width: 12px; height: 4px; border-radius: 2px;"></span> <strong>Type 5-7:</strong> Diarrhea (Mushy/Liquid)</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- SAVE BUTTON -->
-    <div style="margin-top: 1.5rem;">
-        <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 1.2rem; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);" onclick="submitDailyLog(event)">SAVE DAILY METRICS</button>
-    </div>
-
-    <!-- EMBEDDED JAVASCRIPT: Real OpenFoodFacts API Engine -->
-    <script>
-        if (typeof dailyTotals === 'undefined') {
-            var dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
-            var mealData = { breakfast: [], lunch: [], dinner: [], snacks: [] };
-        }
-
-        window.renderMealUI = function(meal) {
-            const container = document.getElementById(`${meal}-items`);
-            const kcalSpan = document.getElementById(`${meal}-kcal`);
-            if(!container || !kcalSpan) return;
-            
-            const totalMealCals = mealData[meal].reduce((sum, item) => sum + item.cals, 0);
-            kcalSpan.innerText = Math.round(totalMealCals) + ' kcal';
-            
-            if (mealData[meal].length === 0) {
-                container.innerHTML = '';
-                return;
-            }
-
-            container.innerHTML = mealData[meal].map((i, index) => `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px dashed #eee;">
-                    <span>• ${i.name} (${Math.round(i.cals)} kcal)</span>
-                    <button style="background: #a94442; color: white; border: none; border-radius: 4px; padding: 0.2rem 0.5rem; font-size: 0.75rem; font-weight: bold; cursor: pointer;" onclick="removeFoodItem('${meal}', ${index})">×</button>
-                </div>
-            `).join('');
-        };
-
-        window.updateDashboardTotals = function() {
-            dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
-            ['breakfast', 'lunch', 'dinner', 'snacks'].forEach(meal => {
-                mealData[meal].forEach(i => {
-                    dailyTotals.cals += i.cals;
-                    dailyTotals.pro += i.pro;
-                    dailyTotals.fat += i.fat;
-                    dailyTotals.carb += i.carb;
-                    dailyTotals.fib += i.fib;
-                });
-            });
-
-            if(document.getElementById('total-cals')) {
-                document.getElementById('total-cals').innerText = Math.round(dailyTotals.cals);
-                document.getElementById('total-pro').innerText = Math.round(dailyTotals.pro) + 'g';
-                document.getElementById('total-fat').innerText = Math.round(dailyTotals.fat) + 'g';
-                document.getElementById('total-carb').innerText = Math.round(dailyTotals.carb) + 'g';
-                document.getElementById('total-fib').innerText = Math.round(dailyTotals.fib) + 'g';
-            }
-        };
-
-        window.logFoodItem = function(name, cals, pro, fat, carb, fib) {
-            const meal = prompt("Log to which meal?\nType: breakfast, lunch, dinner, or snacks").toLowerCase().trim();
-            if(!mealData[meal]) {
-                alert("Invalid meal category. Please type: breakfast, lunch, dinner, or snacks");
-                return;
-            }
-
-            mealData[meal].push({ name, cals, pro, fat, carb, fib });
-            updateDashboardTotals();
-            renderMealUI(meal);
-            
-            document.getElementById('food-search-input').value = '';
-            document.getElementById('food-results').innerHTML = `<p style="color: green; text-align: center; font-weight: bold;">Successfully added ${name} to ${meal}!</p>`;
-        };
-
-        window.removeFoodItem = function(meal, index) {
-            mealData[meal].splice(index, 1);
-            updateDashboardTotals();
-            renderMealUI(meal);
-        };
-
-        // Real Live Global Search
-        window.searchLiveGlobalFood = async function() {
-            const input = document.getElementById('food-search-input');
-            const resultsDiv = document.getElementById('food-results');
-            if(!input || !resultsDiv) return;
-
-            const query = input.value.trim();
-            if(!query) return;
-
-            resultsDiv.innerHTML = `<p style="color: #666; text-align: center; padding: 1rem;">Searching global database for "${query}"...</p>`;
-
-            try {
-                const res = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=5`);
-                const data = await res.json();
-
-                if(data.products && data.products.length > 0) {
-                    resultsDiv.innerHTML = data.products.map(p => {
-                        const name = (p.product_name || 'Unknown Item').replace(/'/g, "\\'");
-                        const brand = p.brands ? `(${p.brands})` : '';
-                        const n = p.nutriments || {};
-                        const cals = n['energy-kcal_100g'] || n['energy-kcal'] || 0;
-                        const pro = n['proteins_100g'] || 0;
-                        const fat = n['fat_100g'] || 0;
-                        const carb = n['carbohydrates_100g'] || 0;
-                        const fib = n['fiber_100g'] || 0;
-
-                        return `
-                        <div style="padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #fafafa; border-radius: 8px; margin-bottom: 0.5rem;">
-                            <div>
-                                <strong style="color: #333;">${p.product_name || 'Unknown Item'} ${brand}</strong><br>
-                                <span style="font-size: 0.85rem; color: #666;">${Math.round(cals)} kcal per 100g | Pro: ${Math.round(pro)}g | Carb: ${Math.round(carb)}g</span>
-                            </div>
-                            <button style="padding: 0.4rem 1rem; font-weight: bold; background: var(--primary-green, #1B4332); color: white; border: none; border-radius: 4px;" onclick="logFoodItem('${name}', ${cals}, ${pro}, ${fat}, ${carb}, ${fib})">ADD</button>
-                        </div>`;
-                    }).join('');
-                } else {
-                    resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">No matches found for "${query}".</p>`;
-                }
-            } catch(err) {
-                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Error connecting to global food database.</p>`;
-            }
-        };
-
-        let activeHtml5QrCode = null;
-        window.forceBarcodeScanner = async function() {
-            const container = document.getElementById('interactive-barcode-container');
-            const resultsDiv = document.getElementById('food-results');
-            if(!container || !resultsDiv) return;
-            
-            if (!window.Html5Qrcode) {
-                resultsDiv.innerHTML = "<p style='color:#a94442; text-align:center;'>Scanner engine loading. Please wait a second and retry.</p>";
-                return;
-            }
-
-            if (container.style.display === 'block') {
-                if (activeHtml5QrCode) {
-                    try { await activeHtml5QrCode.stop(); } catch(e) {}
-                    try { activeHtml5QrCode.clear(); } catch(e) {}
-                    activeHtml5QrCode = null;
-                }
-                container.style.display = 'none';
-                return;
-            }
-            
-            container.style.display = 'block';
-            resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Initializing rear camera...</p>`;
-            
-            activeHtml5QrCode = new Html5Qrcode("reader-view");
-            
-            try {
-                await activeHtml5QrCode.start(
-                    { facingMode: "environment" },
-                    { fps: 15, qrbox: { width: 250, height: 150 } },
-                    async (decodedText) => {
-                        if (activeHtml5QrCode) {
-                            try { await activeHtml5QrCode.stop(); } catch(e) {}
-                            try { activeHtml5QrCode.clear(); } catch(e) {}
-                            activeHtml5QrCode = null;
-                        }
-                        container.style.display = 'none';
-                        resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Barcode scanned (${decodedText}). Fetching product...</p>`;
-
-                        try {
-                            const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${decodedText}.json`);
-                            const data = await res.json();
-
-                            if (data.status === 1 && data.product) {
-                                const p = data.product;
-                                const name = (p.product_name || 'Scanned Item').replace(/'/g, "\\'");
-                                const brand = p.brands ? `(${p.brands})` : '';
-                                const n = p.nutriments || {};
-                                const cals = n['energy-kcal_100g'] || n['energy-kcal'] || 0;
-                                const pro = n['proteins_100g'] || 0;
-                                const fat = n['fat_100g'] || 0;
-                                const carb = n['carbohydrates_100g'] || 0;
-                                const fib = n['fiber_100g'] || 0;
-
-                                resultsDiv.innerHTML = `
-                                    <div style="padding: 1rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px;">
-                                        <strong style="color: #0056b3;">${p.product_name || 'Scanned Item'} ${brand}</strong><br>
-                                        <span style="font-size: 0.85rem; color: #555;">${Math.round(cals)} kcal per 100g</span><br>
-                                        <button class="btn" style="width: 100%; margin-top: 0.8rem; background: #0056b3; color: white; padding: 0.6rem; border-radius: 4px;" onclick="logFoodItem('${name}', ${cals}, ${pro}, ${fat}, ${carb}, ${fib})">LOG THIS ITEM</button>
-                                    </div>`;
-                            } else {
-                                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Barcode (${decodedText}) not found in database.</p>`;
-                            }
-                        } catch(apiErr) {
-                            resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Error fetching scanned barcode data.</p>`;
-                        }
-                    },
-                    (errorMessage) => {}
-                );
-                resultsDiv.innerHTML = `<p style="font-size: 0.85rem; color: #666; text-align: center;">Point camera at product barcode...</p>`;
-            } catch(err) {
-                container.style.display = 'none';
-                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Camera permission denied or unavailable.</p>`;
-            }
-        };
-    </script>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    <!-- SECURE CLINICAL CHAT (Stacked Directly Underneath) -->
-                    <div class="dash-card" id="chat-section-card" style="border-top: 4px solid var(--primary-sage);">
-                        <h3 style="margin-bottom: 1.2rem;">Secure Clinical Chat</h3>
-                        <div class="chat-box" id="client-chat-box" style="height: 220px; background: var(--bg-color); border: 1px solid var(--secondary-sand); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; overflow-y: auto;">
-                            <p style="color: #888; font-size: 0.9rem; text-align: center; margin-top: 4rem;">No messages yet. Send a note to Clare below!</p>
-                        </div>
-                        <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.8rem;">
-                            <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1;" required>
-                            <button type="submit" class="btn" style="padding: 0 1.5rem;">Send</button>
-                        </form>
+                <div id="premium-app-container" style="display: none; margin-top: 1.5rem; padding-bottom: 2rem;">
+                    <!-- CARD 1: THE LOBBY BOUNCER -->
+                    <div class="dash-card pwa-install-card" style="background: var(--primary-green, #1B4332); color: white; padding: 2rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: white;">The Natural Healing App</h3>
+                        <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 1.5rem;">Your VIP protocol is active. Add to your home screen to unlock your daily trackers and secure chat.</p>
+                        <button class="btn" style="background: white; color: var(--primary-green, #1B4332); width: 100%; font-weight: bold; border: none; padding: 1rem; border-radius: 8px; font-size: 0.95rem;" onclick="triggerPwaInstall()">INSTALL APP TO UNLOCK</button>
                     </div>
+
+                    <!-- CARD 2: MACRO & HYDRATION DASHBOARD -->
+                    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1rem;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Daily Nutrition</h3>
+                        
+                        <div style="display: flex; justify-content: space-between; text-align: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem;">
+                            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
+                                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Cals</span>
+                                <strong id="total-cals" style="display: block; font-size: 1.1rem; color: #333;">0</strong>
+                            </div>
+                            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
+                                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Pro</span>
+                                <strong id="total-pro" style="display: block; font-size: 1.1rem; color: #d9534f;">0g</strong>
+                            </div>
+                            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
+                                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Fat</span>
+                                <strong id="total-fat" style="display: block; font-size: 1.1rem; color: #f0ad4e;">0g</strong>
+                            </div>
+                            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
+                                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Carb</span>
+                                <strong id="total-carb" style="display: block; font-size: 1.1rem; color: #5bc0de;">0g</strong>
+                            </div>
+                            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
+                                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Fib</span>
+                                <strong id="total-fib" style="display: block; font-size: 1.1rem; color: #5cb85c;">0g</strong>
+                            </div>
+                        </div>
+
+                        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Water Intake</label>
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <button style="flex: 1; padding: 0.8rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px; color: #0056b3; font-weight: bold;" onclick="alert('Logged 250ml')">+ 250ml</button>
+                            <button style="flex: 1; padding: 0.8rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px; color: #0056b3; font-weight: bold;" onclick="alert('Logged 500ml')">+ 500ml</button>
+                        </div>
+                        <div style="background: #eee; height: 10px; border-radius: 5px; overflow: hidden; margin-bottom: 1rem;">
+                            <div style="background: #5bc0de; width: 0%; height: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 3: LIVE GLOBAL FOOD DATABASE -->
+                    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Food Diary</h3>
+                        
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                            <input type="text" id="food-search-input" placeholder="Search any food (e.g., lazy garlic, chicken)..." style="flex: 1; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #fafafa;" onkeydown="if(event.key === 'Enter') searchLiveGlobalFood()">
+                            <button class="btn" style="background: #333; color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="searchLiveGlobalFood()">🔍</button>
+                            <button class="btn" style="background: var(--primary-green, #1B4332); color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="forceBarcodeScanner()">📷</button>
+                        </div>
+                        
+                        <div id="interactive-barcode-container" style="width: 100%; display: none; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; background: #000;">
+                            <div id="reader-view" style="width: 100%;"></div>
+                        </div>
+                        
+                        <div id="food-results" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: #555;"></div>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                                    <strong style="color: #444;">Breakfast</strong>
+                                    <span id="breakfast-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
+                                </div>
+                                <div id="breakfast-items" style="font-size: 0.85rem; color: #666;"></div>
+                            </div>
+                            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                                    <strong style="color: #444;">Lunch</strong>
+                                    <span id="lunch-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
+                                </div>
+                                <div id="lunch-items" style="font-size: 0.85rem; color: #666;"></div>
+                            </div>
+                            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                                    <strong style="color: #444;">Dinner</strong>
+                                    <span id="dinner-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
+                                </div>
+                                <div id="dinner-items" style="font-size: 0.85rem; color: #666;"></div>
+                            </div>
+                            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                                    <strong style="color: #444;">Snacks</strong>
+                                    <span id="snacks-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
+                                </div>
+                                <div id="snacks-items" style="font-size: 0.85rem; color: #666;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 4: LIFESTYLE & BODY METRICS -->
+                    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Lifestyle Metrics</h3>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div>
+                                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Steps</label>
+                                <input type="number" placeholder="e.g. 8500" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Weight (kg/lbs)</label>
+                                <input type="number" placeholder="e.g. 70.5" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Sleep (Hours)</label>
+                                <input type="number" step="0.5" placeholder="e.g. 7.5" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Mood</label>
+                                <select style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; background: white;">
+                                    <option value="">Select...</option>
+                                    <option value="great">😁 Great</option>
+                                    <option value="good">🙂 Good</option>
+                                    <option value="okay">😐 Okay</option>
+                                    <option value="low">😔 Low</option>
+                                    <option value="stressed">😫 Stressed</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Daily Protocol / Supplements</label>
+                        <div style="background: #fafafa; padding: 1rem; border: 1px solid #eee; border-radius: 8px; display: flex; flex-direction: column; gap: 0.8rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; color: #333;">
+                                <input type="checkbox" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-green, #1B4332);"> AM Protocol Complete
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; color: #333;">
+                                <input type="checkbox" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-green, #1B4332);"> PM Protocol Complete
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- CARD 5: GUT HEALTH & BRISTOL STOOL CHART -->
+                    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Gut Health</h3>
+                        
+                        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Bristol Stool Scale</label>
+                        <select style="width: 100%; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; font-size: 0.95rem; background: white;">
+                            <option value="">Select B.M. Type...</option>
+                            <option value="1">Type 1 - Separate hard lumps</option>
+                            <option value="2">Type 2 - Sausage-shaped, lumpy</option>
+                            <option value="3">Type 3 - Sausage with cracks</option>
+                            <option value="4">Type 4 - Smooth, soft sausage (Ideal)</option>
+                            <option value="5">Type 5 - Soft blobs, clear edges</option>
+                            <option value="6">Type 6 - Fluffy pieces, mushy</option>
+                            <option value="7">Type 7 - Watery, no solid pieces</option>
+                        </select>
+
+                        <div style="background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 1rem;">
+                            <p style="font-size: 0.75rem; text-align: center; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 0; margin-bottom: 0.8rem; font-weight: bold;">Reference Guide</p>
+                            <div style="display: grid; grid-template-columns: 1fr; gap: 0.6rem; font-size: 0.85rem;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #8b5a2b; width: 12px; height: 12px; border-radius: 50%;"></span> <strong>Type 1-2:</strong> Constipation (Hard/Lumpy)</div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #a0522d; width: 12px; height: 12px; border-radius: 4px;"></span> <strong>Type 3-4:</strong> Ideal/Normal (Smooth sausage)</div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #cd853f; width: 12px; height: 4px; border-radius: 2px;"></span> <strong>Type 5-7:</strong> Diarrhea (Mushy/Liquid)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SAVE BUTTON -->
+                    <div style="margin-top: 1.5rem;">
+                        <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 1.2rem; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);" onclick="submitDailyLog(event)">SAVE DAILY METRICS</button>
+                    </div>
+
+                    <!-- EMBEDDED JAVASCRIPT: Real OpenFoodFacts API Engine -->
+                    <script>
+                        if (typeof dailyTotals === 'undefined') {
+                            var dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
+                            var mealData = { breakfast: [], lunch: [], dinner: [], snacks: [] };
+                        }
+
+                        window.renderMealUI = function(meal) {
+                            const container = document.getElementById(`${meal}-items`);
+                            const kcalSpan = document.getElementById(`${meal}-kcal`);
+                            if(!container || !kcalSpan) return;
+                            
+                            const totalMealCals = mealData[meal].reduce((sum, item) => sum + item.cals, 0);
+                            kcalSpan.innerText = Math.round(totalMealCals) + ' kcal';
+                            
+                            if (mealData[meal].length === 0) {
+                                container.innerHTML = '';
+                                return;
+                            }
+
+                            container.innerHTML = mealData[meal].map((i, index) => `
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px dashed #eee;">
+                                    <span>• ${i.name} (${Math.round(i.cals)} kcal)</span>
+                                    <button style="background: #a94442; color: white; border: none; border-radius: 4px; padding: 0.2rem 0.5rem; font-size: 0.75rem; font-weight: bold; cursor: pointer;" onclick="removeFoodItem('${meal}', ${index})">×</button>
+                                </div>
+                            `).join('');
+                        };
+
+                        window.updateDashboardTotals = function() {
+                            dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
+                            ['breakfast', 'lunch', 'dinner', 'snacks'].forEach(meal => {
+                                mealData[meal].forEach(i => {
+                                    dailyTotals.cals += i.cals;
+                                    dailyTotals.pro += i.pro;
+                                    dailyTotals.fat += i.fat;
+                                    dailyTotals.carb += i.carb;
+                                    dailyTotals.fib += i.fib;
+                                });
+                            });
+
+                            if(document.getElementById('total-cals')) {
+                                document.getElementById('total-cals').innerText = Math.round(dailyTotals.cals);
+                                document.getElementById('total-pro').innerText = Math.round(dailyTotals.pro) + 'g';
+                                document.getElementById('total-fat').innerText = Math.round(dailyTotals.fat) + 'g';
+                                document.getElementById('total-carb').innerText = Math.round(dailyTotals.carb) + 'g';
+                                document.getElementById('total-fib').innerText = Math.round(dailyTotals.fib) + 'g';
+                            }
+                        };
+
+                        window.logFoodItem = function(name, cals, pro, fat, carb, fib) {
+                            const meal = prompt("Log to which meal?\nType: breakfast, lunch, dinner, or snacks").toLowerCase().trim();
+                            if(!mealData[meal]) {
+                                alert("Invalid meal category. Please type: breakfast, lunch, dinner, or snacks");
+                                return;
+                            }
+
+                            mealData[meal].push({ name, cals, pro, fat, carb, fib });
+                            updateDashboardTotals();
+                            renderMealUI(meal);
+                            
+                            document.getElementById('food-search-input').value = '';
+                            document.getElementById('food-results').innerHTML = `<p style="color: green; text-align: center; font-weight: bold;">Successfully added ${name} to ${meal}!</p>`;
+                        };
+
+                        window.removeFoodItem = function(meal, index) {
+                            mealData[meal].splice(index, 1);
+                            updateDashboardTotals();
+                            renderMealUI(meal);
+                        };
+
+                        // Real Live Global Search
+                        window.searchLiveGlobalFood = async function() {
+                            const input = document.getElementById('food-search-input');
+                            const resultsDiv = document.getElementById('food-results');
+                            if(!input || !resultsDiv) return;
+
+                            const query = input.value.trim();
+                            if(!query) return;
+
+                            resultsDiv.innerHTML = `<p style="color: #666; text-align: center; padding: 1rem;">Searching global database for "${query}"...</p>`;
+
+                            try {
+                                const res = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=5`);
+                                const data = await res.json();
+
+                                if(data.products && data.products.length > 0) {
+                                    resultsDiv.innerHTML = data.products.map(p => {
+                                        const name = (p.product_name || 'Unknown Item').replace(/'/g, "\\'");
+                                        const brand = p.brands ? `(${p.brands})` : '';
+                                        const n = p.nutriments || {};
+                                        const cals = n['energy-kcal_100g'] || n['energy-kcal'] || 0;
+                                        const pro = n['proteins_100g'] || 0;
+                                        const fat = n['fat_100g'] || 0;
+                                        const carb = n['carbohydrates_100g'] || 0;
+                                        const fib = n['fiber_100g'] || 0;
+
+                                        return `
+                                        <div style="padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #fafafa; border-radius: 8px; margin-bottom: 0.5rem;">
+                                            <div>
+                                                <strong style="color: #333;">${p.product_name || 'Unknown Item'} ${brand}</strong><br>
+                                                <span style="font-size: 0.85rem; color: #666;">${Math.round(cals)} kcal per 100g | Pro: ${Math.round(pro)}g | Carb: ${Math.round(carb)}g</span>
+                                            </div>
+                                            <button style="padding: 0.4rem 1rem; font-weight: bold; background: var(--primary-green, #1B4332); color: white; border: none; border-radius: 4px;" onclick="logFoodItem('${name}', ${cals}, ${pro}, ${fat}, ${carb}, ${fib})">ADD</button>
+                                        </div>`;
+                                    }).join('');
+                                } else {
+                                    resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">No matches found for "${query}".</p>`;
+                                }
+                            } catch(err) {
+                                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Error connecting to global food database.</p>`;
+                            }
+                        };
+
+                        let activeHtml5QrCode = null;
+                        window.forceBarcodeScanner = async function() {
+                            const container = document.getElementById('interactive-barcode-container');
+                            const resultsDiv = document.getElementById('food-results');
+                            if(!container || !resultsDiv) return;
+                            
+                            if (!window.Html5Qrcode) {
+                                resultsDiv.innerHTML = "<p style='color:#a94442; text-align:center;'>Scanner engine loading. Please wait a second and retry.</p>";
+                                return;
+                            }
+
+                            if (container.style.display === 'block') {
+                                if (activeHtml5QrCode) {
+                                    try { await activeHtml5QrCode.stop(); } catch(e) {}
+                                    try { activeHtml5QrCode.clear(); } catch(e) {}
+                                    activeHtml5QrCode = null;
+                                }
+                                container.style.display = 'none';
+                                return;
+                            }
+                            
+                            container.style.display = 'block';
+                            resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Initializing rear camera...</p>`;
+                            
+                            activeHtml5QrCode = new Html5Qrcode("reader-view");
+                            
+                            try {
+                                await activeHtml5QrCode.start(
+                                    { facingMode: "environment" },
+                                    { fps: 15, qrbox: { width: 250, height: 150 } },
+                                    async (decodedText) => {
+                                        if (activeHtml5QrCode) {
+                                            try { await activeHtml5QrCode.stop(); } catch(e) {}
+                                            try { activeHtml5QrCode.clear(); } catch(e) {}
+                                            activeHtml5QrCode = null;
+                                        }
+                                        container.style.display = 'none';
+                                        resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Barcode scanned (${decodedText}). Fetching product...</p>`;
+
+                                        try {
+                                            const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${decodedText}.json`);
+                                            const data = await res.json();
+
+                                            if (data.status === 1 && data.product) {
+                                                const p = data.product;
+                                                const name = (p.product_name || 'Scanned Item').replace(/'/g, "\\'");
+                                                const brand = p.brands ? `(${p.brands})` : '';
+                                                const n = p.nutriments || {};
+                                                const cals = n['energy-kcal_100g'] || n['energy-kcal'] || 0;
+                                                const pro = n['proteins_100g'] || 0;
+                                                const fat = n['fat_100g'] || 0;
+                                                const carb = n['carbohydrates_100g'] || 0;
+                                                const fib = n['fiber_100g'] || 0;
+
+                                                resultsDiv.innerHTML = `
+                                                    <div style="padding: 1rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px;">
+                                                        <strong style="color: #0056b3;">${p.product_name || 'Scanned Item'} ${brand}</strong><br>
+                                                        <span style="font-size: 0.85rem; color: #555;">${Math.round(cals)} kcal per 100g</span><br>
+                                                        <button class="btn" style="width: 100%; margin-top: 0.8rem; background: #0056b3; color: white; padding: 0.6rem; border-radius: 4px;" onclick="logFoodItem('${name}', ${cals}, ${pro}, ${fat}, ${carb}, ${fib})">LOG THIS ITEM</button>
+                                                    </div>`;
+                                            } else {
+                                                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Barcode (${decodedText}) not found in database.</p>`;
+                                            }
+                                        } catch(apiErr) {
+                                            resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Error fetching scanned barcode data.</p>`;
+                                        }
+                                    },
+                                    (errorMessage) => {}
+                                );
+                                resultsDiv.innerHTML = `<p style="font-size: 0.85rem; color: #666; text-align: center;">Point camera at product barcode...</p>`;
+                            } catch(err) {
+                                container.style.display = 'none';
+                                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Camera permission denied or unavailable.</p>`;
+                            }
+                        };
+                    </script>
+                </div>
+
+                <!-- SECURE CLINICAL CHAT (Stacked Directly Underneath) -->
+                <div class="dash-card" id="chat-section-card" style="border-top: 4px solid var(--primary-sage);">
+                    <h3 style="margin-bottom: 1.2rem;">Secure Clinical Chat</h3>
+                    <div class="chat-box" id="client-chat-box" style="height: 220px; background: var(--bg-color); border: 1px solid var(--secondary-sand); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; overflow-y: auto;">
+                        <p style="color: #888; font-size: 0.9rem; text-align: center; margin-top: 4rem;">No messages yet. Send a note to Clare below!</p>
+                    </div>
+                    <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.8rem;">
+                        <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1;" required>
+                        <button type="submit" class="btn" style="padding: 0 1.5rem;">Send</button>
+                    </form>
                 </div>
             </div>
-
-
+        </div>
+    </div>
 
     <!-- PWA APP INSTALL OVERLAY -->
     <div class="pwa-overlay" id="pwa-install-overlay">
@@ -946,23 +934,6 @@
         </div>
     </div>
 
-    <footer>
-        <div class="footer-logo-wrapper">
-            <img src="./logo.png" alt="The Natural Healing Clinic" class="footer-brand-logo">
-        </div>
-        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; width: 100%;">
-            <div class="footer-col" style="text-align: left;">
-                <h4>The Natural Healing Clinic</h4>
-                <p>13 Cronk Drine, Union Mills</p>
-                <p>Isle of Man, IM4 4NG</p>
-            </div>
-            <div class="footer-col" style="text-align: right;">
-                <h4>Contact & Hours</h4>
-                <p>Tel: 07624 202 121</p>
-                <p>Mon & Fri: 10:00 - 15:00</p>
-            </div>
-        </div>
-              <!-- ================= SCREEN: TESTIMONIALS ================= -->
     <!-- ================= SCREEN 6: TESTIMONIALS ================= -->
     <div id="screen-testimonials" class="page-screen">
         <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
@@ -1013,8 +984,7 @@
         </section>
     </div>
 
-
-    <!-- ================= SCREEN: LATEST NEWS ================= -->
+    <!-- ================= SCREEN 7: LATEST NEWS ================= -->
     <div id="screen-news" class="page-screen">
         <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
             <span class="section-subtitle">Clinic Updates</span>
@@ -1034,11 +1004,26 @@
         </section>
     </div>
 
-
+    <footer>
+        <div class="footer-logo-wrapper">
+            <img src="./logo.png" alt="The Natural Healing Clinic" class="footer-brand-logo">
+        </div>
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; width: 100%;">
+            <div class="footer-col" style="text-align: left;">
+                <h4>The Natural Healing Clinic</h4>
+                <p>13 Cronk Drine, Union Mills</p>
+                <p>Isle of Man, IM4 4NG</p>
+            </div>
+            <div class="footer-col" style="text-align: right;">
+                <h4>Contact & Hours</h4>
+                <p>Tel: 07624 202 121</p>
+                <p>Mon & Fri: 10:00 - 15:00</p>
+            </div>
+        </div>
     </footer>
 
     <!-- Link to your external JS file -->
-<script src="./app.js?v=2"></script>
+    <script src="./app.js?v=2"></script>
 
 </body>
 </html>
