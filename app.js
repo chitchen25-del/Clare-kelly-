@@ -31,8 +31,8 @@ function getSupabase() {
 
 window.onload = async function() {
     try {
-        // NEW: Always load approved testimonials when the site boots up!
         loadTestimonials();
+        loadNews();
 
         const db = getSupabase();
         if(db) {
@@ -79,7 +79,7 @@ window.processRegistration = async function(e) {
         const email = document.getElementById('reg-email').value.trim();
         const pass = document.getElementById('reg-password').value.trim();
         const service = document.getElementById('reg-service').value;
-        const date = document.getElementById('reg-date').value;
+        const date = document.getElementById('reg-date').value || document.getElementById('portal-date-reg').value;
 
         const isFunctional = service.includes('Functional') || service.includes('Gut Reset') || service.includes('Health Audit');
         let vipCode = null;
@@ -179,7 +179,6 @@ async function loadClientDashboard(db, user) {
     document.getElementById('portal-welcome-title').innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
 
     try {
-        // limit(1).maybeSingle() protects you from duplicate database rows crashing the load
         const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
         
         const isVip = tier && (tier.is_premium === true || tier.is_premium === 'true');
@@ -191,22 +190,19 @@ async function loadClientDashboard(db, user) {
             if(appContainer) {
                 appContainer.style.display = 'block';
                 
-                // --- THE MAGIC DOOR LOGIC (Works on Android & iOS) ---
                 const isAppMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
                 
                 const premiumCards = appContainer.querySelectorAll('.dash-card');
                 
                 if(premiumCards.length > 0) {
-                    const installCard = premiumCards[0]; // First card is the green "Install App" banner
+                    const installCard = premiumCards[0]; 
                     
                     if (isAppMode) {
-                        // THEY ARE IN THE APP: Hide the install prompt, reveal all VIP features
                         installCard.style.display = 'none';
                         for(let i = 1; i < premiumCards.length; i++) {
                             premiumCards[i].style.display = 'block';
                         }
                     } else {
-                        // THEY ARE IN SAFARI/CHROME: Show ONLY install prompt, lock everything else behind the door
                         installCard.style.display = 'block';
                         for(let i = 1; i < premiumCards.length; i++) {
                             premiumCards[i].style.display = 'none';
@@ -221,7 +217,6 @@ async function loadClientDashboard(db, user) {
 
         const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
 
-        // Natively formats time to 12-hour clean display without external functions
         list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => `
             <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); background: white;">
                 <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${new Date(a.appointment_time).toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
@@ -277,7 +272,6 @@ function updateNavState(isLoggedIn) {
     document.getElementById('mobile-book-link').style.display = isLoggedIn ? 'none' : 'block';
     document.getElementById('mobile-logout-link').style.display = isLoggedIn ? 'block' : 'none';
     
-    // NEW: Toggles the Testimonial form based on if they are logged in!
     const testPrompt = document.getElementById('testimonial-login-prompt');
     const testForm = document.getElementById('testimonial-submit-form');
     if (testPrompt) testPrompt.style.display = isLoggedIn ? 'none' : 'block';
@@ -329,7 +323,6 @@ window.submitBasicIntake = async function(e) {
         const { data: { user } } = await db.auth.getUser();
         if (!user) throw new Error("Please log in to submit.");
 
-        // Magic trick: This grabs every single checked box (symptoms & history) and lumps them into a comma-separated list
         const checkedBoxes = Array.from(document.querySelectorAll('#basic-questionnaire-card input[type="checkbox"]:checked'))
                                   .map(cb => cb.parentElement.innerText.trim()).join(', ');
 
@@ -365,7 +358,6 @@ window.submitBasicIntake = async function(e) {
     return false;
 }
 
-// ================= TESTIMONIAL FUNCTIONS =================
 window.submitTestimonial = async function(e) {
     e.preventDefault();
     try {
@@ -382,7 +374,7 @@ window.submitTestimonial = async function(e) {
             client_name: name,
             rating: rating,
             content: content,
-            is_approved: false // Stays hidden until Clare approves it!
+            is_approved: false 
         }]);
 
         if (error) throw error;
@@ -401,7 +393,6 @@ window.loadTestimonials = async function() {
         const feed = document.getElementById('testimonial-feed');
         if (!feed) return;
 
-        // Only fetch testimonials where Clare has set is_approved to TRUE
         const { data, error } = await db.from('testimonials').select('*').eq('is_approved', true).order('created_at', { ascending: false });
         
         if (error) throw error;
@@ -420,5 +411,37 @@ window.loadTestimonials = async function() {
         `).join('');
     } catch(err) {
         console.error("Error loading testimonials:", err.message);
+    }
+}
+
+window.loadNews = async function() {
+    try {
+        const db = getSupabase();
+        const feed = document.getElementById('public-news-feed');
+        if (!feed) return;
+
+        const { data, error } = await db.from('clinic_news').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            feed.innerHTML = '<p style="color:#888; text-align:center; font-style: italic;">No news updates published yet.</p>';
+            return;
+        }
+
+        feed.innerHTML = data.map(n => `
+            <div style="background: #fafafa; padding: 2rem; border-radius: 12px; border: 1px solid #eee; display: flex; flex-direction: column; gap: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                ${n.image_url ? `<img src="${n.image_url}" alt="${n.title}" style="width: 100%; max-height: 350px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
+                <div>
+                    <span style="font-size: 0.8rem; color: #888; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Clinic Update • ${new Date(n.created_at).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</span>
+                    <h3 style="color: #333; margin: 0.4rem 0 0.8rem 0; font-size: 1.4rem;">${n.title}</h3>
+                    <p style="color: #555; font-size: 0.95rem; line-height: 1.6; margin: 0;">${n.description}</p>
+                </div>
+                <div>
+                    <a href="${n.pdf_url}" target="_blank" style="display: inline-block; background: var(--primary-sage); color: white; padding: 0.7rem 1.2rem; border-radius: 6px; text-decoration: none; font-size: 0.9rem; font-weight: bold;">📄 View Document (PDF)</a>
+                </div>
+            </div>
+        `).join('');
+    } catch(err) {
+        console.error("Error loading news:", err.message);
     }
 }
