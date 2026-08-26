@@ -125,19 +125,75 @@
             </div>
         </section>
 
-        <section class="pricing-section">
-            <div style="text-align: center; max-width: 700px; margin: 0 auto;">
-                <span class="section-subtitle">Pillar 1: Deep Transformation</span>
-                <h2>Functional Medicine</h2>
+        <!-- ================= TIERED CLINICAL SERVICES ================= -->
+        <section class="pricing-section" style="padding-top: 6rem; padding-bottom: 6rem;">
+            
+            <!-- BRONZE / BREAD & BUTTER -->
+            <div style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto;">
+                <span class="section-subtitle">The Foundation</span>
+                <h2>Core Clinical Therapies</h2>
+                <p style="color: #555;">Our primary, hands-on physical therapies. Designed to provide immediate relief from pain, clear systemic inflammation, and restore structural mobility.</p>
             </div>
-            <div class="pricing-grid">
+            
+            <div class="pricing-grid" style="margin-top: 2rem;">
+                <div class="price-card featured" style="transform: none; border-color: var(--primary-sage); box-shadow: 0 10px 30px rgba(13,155,70,0.08);">
+                    <div>
+                        <div class="price-title">Myofascial Release</div>
+                        <div class="price-duration">Hands-On Therapy</div>
+                        <div class="price-amount" style="font-size: 3rem;">£70<span style="font-size: 1rem; color: #888; text-decoration: none;"> / session</span></div>
+                        <ul class="price-features">
+                            <li>Deep tissue pain relief</li>
+                            <li>Restores structural alignment</li>
+                            <li>Releases chronic tension patterns</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Book Treatment</button>
+                </div>
+
+                <div class="price-card featured" style="transform: none; border-color: var(--primary-sage); box-shadow: 0 10px 30px rgba(13,155,70,0.08);">
+                    <div>
+                        <div class="price-title">Lymphatic Drainage</div>
+                        <div class="price-duration">Advanced Clearing</div>
+                        <div class="price-amount" style="font-size: 3rem;">£70<span style="font-size: 1rem; color: #888; text-decoration: none;"> / session</span></div>
+                        <ul class="price-features">
+                            <li>Reduces systemic inflammation</li>
+                            <li>Clears edema and fluid retention</li>
+                            <li>Accelerates injury recovery</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Book Treatment</button>
+                </div>
+
+                <div class="price-card featured" style="transform: none; border-color: var(--primary-sage); box-shadow: 0 10px 30px rgba(13,155,70,0.08);">
+                    <div>
+                        <div class="price-title">Taster & Reset Bundles</div>
+                        <div class="price-duration">Targeted Relief</div>
+                        <div class="price-amount" style="font-size: 3rem;">£70<span style="font-size: 1rem; color: #888; text-decoration: none;"> / pkg</span></div>
+                        <ul class="price-features">
+                            <li>Migraine & Neck Reset Package</li>
+                            <li>Clarity Drainage Package</li>
+                            <li>Add-on Infrared Targeted (£15)</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Book Package</button>
+                </div>
+            </div>
+
+            <!-- SILVER / MID-RANGE -->
+            <div style="text-align: center; max-width: 800px; margin: 6rem auto 3rem auto;">
+                <span class="section-subtitle">Targeted Interventions</span>
+                <h2>Mid-Range Functional Programmes</h2>
+                <p style="color: #555;">Short-term, highly focused protocols to reset your baseline health, balance your gut microbiome, and identify core physiological dysfunctions.</p>
+            </div>
+
+            <div class="pricing-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top: 2rem;">
                 <div class="price-card">
                     <div>
                         <div class="price-title">Performance Health Audit</div>
                         <div class="price-duration">Functional Kickstart</div>
-                        <div class="price-amount">£175</div>
+                        <div class="price-amount" style="font-size: 2.8rem;">£175</div>
                         <ul class="price-features">
-                            <li>90-minute deep-dive functional consultation</li>
+                            <li>90-minute functional consultation</li>
                             <li>Full symptom timeline review</li>
                             <li>Top 3 root-cause priorities identified</li>
                         </ul>
@@ -145,26 +201,11 @@
                     <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Health Audit</button>
                 </div>
 
-                <div class="price-card featured">
-                    <div class="featured-badge">Comprehensive Protocol</div>
-                    <div>
-                        <div class="price-title">360° Burnout & Adrenal Protocol</div>
-                        <div class="price-duration">12-Week Executive Program</div>
-                        <div class="price-amount">£1,450</div>
-                        <ul class="price-features">
-                            <li>Complete root-cause functional health investigation</li>
-                            <li>Bi-weekly hands-on Vagal/Bowen resets</li>
-                            <li>Curated functional supplementation blueprint</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Apply For Protocol</button>
-                </div>
-
                 <div class="price-card">
                     <div>
                         <div class="price-title">The Gut Reset</div>
                         <div class="price-duration">21-Day Programme</div>
-                        <div class="price-amount">£297 <span>£500</span></div>
+                        <div class="price-amount" style="font-size: 2.8rem;">£297 <span>£500</span></div>
                         <ul class="price-features">
                             <li>60-min functional gut assessment</li>
                             <li>Personalised 21-day protocol</li>
@@ -173,41 +214,62 @@
                     </div>
                     <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Gut Reset</button>
                 </div>
+                
+                <div class="price-card">
+                    <div>
+                        <div class="price-title">30-Day Kickstart Cleanse</div>
+                        <div class="price-duration">Systemic Detox</div>
+                        <div class="price-amount" style="font-size: 2.8rem;">£355</div>
+                        <ul class="price-features">
+                            <li>Guided 30-day clearing protocol</li>
+                            <li>Eliminates metabolic waste</li>
+                            <li>Access to secure patient app</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Kickstart</button>
+                </div>
             </div>
-        </section>
 
-        <section class="section" style="background-color: var(--card-bg); border-top: 1px solid var(--secondary-sand); width: 100%; max-width: 100%;">
-            <div style="width: 100%; max-width: 1200px; margin: 0 auto;">
-                <div style="text-align: center; margin-bottom: 4rem;">
-                    <span class="section-subtitle">Clinical Therapies</span>
-                    <h2>Our Treatments & Services</h2>
-                    <p style="color: #555; max-width: 600px; margin: 0 auto;">Beyond our functional medicine protocols, we offer targeted hands-on therapies to relieve pain, clear inflammation, and restore mobility.</p>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; text-align: left;">
-                    <div style="background: var(--bg-color); padding: 2.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
-                        <h4 style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Hands-On Therapies</h4>
-                        <ul class="help-list" style="margin-top: 0;">
-                            <li>Myofascial Release Therapy</li>
-                            <li>Advanced Lymphatic Drainage</li>
-                            <li>Infrared Targeted Treatment</li>
-                            <li>Vagal Nerve & Bowen Resets</li>
+            <!-- GOLD / HIGH-END -->
+            <div style="text-align: center; max-width: 800px; margin: 6rem auto 3rem auto;">
+                <span class="section-subtitle">Deep Transformation</span>
+                <h2>Comprehensive Functional Pathways</h2>
+                <p style="color: #555;">Our most elite, high-touch programs. Designed for patients with complex, chronic conditions requiring extensive support, specialized testing, and VIP clinical access.</p>
+            </div>
+
+            <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem;">
+                <div style="background: var(--card-bg); border: 1px solid var(--secondary-sand); border-radius: 12px; padding: 3rem; display: flex; flex-wrap: wrap; gap: 3rem; align-items: center; box-shadow: 0 10px 40px rgba(9, 93, 40, 0.03);">
+                    <div style="flex: 1; min-width: 280px;">
+                        <div class="price-duration" style="margin-bottom: 0.5rem;">Intensive Clinical Support</div>
+                        <h3 style="font-family: 'Cormorant Garamond'; font-size: 2.2rem; margin-bottom: 1rem; color: var(--text-main);">90-Day Functional Medicine Programme</h3>
+                        <ul class="price-features" style="margin-bottom: 0;">
+                            <li>Bespoke protocol adapting as you heal over 3 months</li>
+                            <li>Advanced interpretation of Nordic Laboratory tests</li>
+                            <li>Priority clinical reviews and pathway adjustments</li>
+                            <li>VIP App Access (Daily trackers & direct chat with Clare)</li>
                         </ul>
                     </div>
-                    
-                    <div style="background: var(--bg-color); padding: 2.5rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
-                        <h4 style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.5rem;">Packages & Bundles</h4>
-                        <ul class="help-list" style="margin-top: 0;">
-                            <li>Migraine & Neck Reset Package</li>
-                            <li>Clarity Drainage Package</li>
-                            <li>Taster Trio Therapy Bundle</li>
-                            <li>Nordic Lab Functional Testing</li>
-                        </ul>
+                    <div style="text-align: center; min-width: 200px;">
+                        <div class="price-amount" style="font-size: 3.5rem; margin-bottom: 1rem;">£950</div>
+                        <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Apply For Protocol</button>
                     </div>
                 </div>
-                
-                <div style="text-align: center; margin-top: 3.5rem;">
-                    <button type="button" class="btn" onclick="openScreen('screen-register')">Book A Treatment</button>
+
+                <div style="background: var(--card-bg); border: 1px solid var(--primary-sage); border-radius: 12px; padding: 3rem; display: flex; flex-wrap: wrap; gap: 3rem; align-items: center; box-shadow: 0 15px 50px rgba(13, 155, 70, 0.08);">
+                    <div style="flex: 1; min-width: 280px;">
+                        <div class="price-duration" style="margin-bottom: 0.5rem; color: var(--primary-sage);">12-Week Executive Program</div>
+                        <h3 style="font-family: 'Cormorant Garamond'; font-size: 2.2rem; margin-bottom: 1rem; color: var(--text-main);">360° Burnout & Adrenal Protocol</h3>
+                        <ul class="price-features" style="margin-bottom: 0;">
+                            <li>Complete root-cause functional health investigation</li>
+                            <li>Bi-weekly hands-on Vagal Nerve & Bowen resets</li>
+                            <li>Curated functional supplementation blueprint</li>
+                            <li>VIP App Access (Daily trackers & direct chat with Clare)</li>
+                        </ul>
+                    </div>
+                    <div style="text-align: center; min-width: 200px;">
+                        <div class="price-amount" style="font-size: 3.5rem; margin-bottom: 1rem;">£1,450</div>
+                        <button type="button" class="btn" style="width: 100%; background: var(--primary-sage); color: white;" onclick="openScreen('screen-register')">Apply For Protocol</button>
+                    </div>
                 </div>
             </div>
         </section>
