@@ -988,19 +988,15 @@
     <div id="screen-news" class="page-screen">
         <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
             <span class="section-subtitle">Clinic Updates</span>
-            <h1 style="margin-top: 0.5rem; font-family: 'Playfair Display', serif;">Latest News & PDFs</h1>
+            <h1 style="margin-top: 0.5rem;">Latest News & PDFs</h1>
         </div>
         <section class="section" style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
-            <div style="background: #fafafa; padding: 2rem; border-radius: 12px; border: 1px solid #eee; display: flex; flex-direction: column; gap: 1rem;">
-                <div>
-                    <span style="font-size: 0.8rem; color: #888; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Clinic Update • August 2026</span>
-                    <h3 style="font-family: 'Playfair Display', serif; color: #333; margin: 0.4rem 0 0.8rem 0; font-size: 1.4rem;">Expanding Our Patient Wellness Portal</h3>
-                    <p style="color: #555; font-size: 0.95rem; line-height: 1.6; margin: 0;">We are thrilled to roll out our brand new mobile-friendly web app features, allowing active patients to securely track daily habits, macros, gut health protocols, and direct messages with the clinic seamlessly from their home screens.</p>
-                </div>
-                <div>
-                    <a href="./patient-portal-guide.pdf" target="_blank" style="display: inline-block; background: var(--primary-green, #1B4332); color: white; padding: 0.7rem 1.2rem; border-radius: 6px; text-decoration: none; font-size: 0.9rem; font-weight: bold;">📄 Download User Guide (PDF)</a>
-                </div>
+            
+            <!-- THE DYNAMIC FEED CONTAINER -->
+            <div id="public-news-feed" style="display: flex; flex-direction: column; gap: 2rem;">
+                <p style="color: #888; text-align: center;">Loading latest updates...</p>
             </div>
+            
         </section>
     </div>
 
