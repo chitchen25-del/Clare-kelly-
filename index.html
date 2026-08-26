@@ -52,6 +52,7 @@
             <span class="nav-link-text" onclick="openScreen('screen-about')">About Clare</span>
             <span class="nav-link-text" onclick="openScreen('screen-testimonials')">Patient Stories</span>
             <span class="nav-link-text" onclick="openScreen('screen-news')">Latest News</span>
+            <span class="nav-link-text" onclick="openScreen('screen-contact')">Contact</span>
             <button type="button" id="nav-portal-btn" class="btn btn-outline" onclick="openScreen('screen-login')">Patient Portal</button>
             <button type="button" id="nav-book-btn" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
             <button type="button" id="nav-logout-btn" class="btn btn-outline" style="display: none;" onclick="processLogout()">Sign Out</button>
@@ -69,6 +70,7 @@
         <span class="mobile-drawer-link" onclick="openScreen('screen-about')">About Clare</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-testimonials')">Patient Stories</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-news')">Latest News</span>
+        <span class="mobile-drawer-link" onclick="openScreen('screen-contact')">Contact</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-login')" id="mobile-portal-link">Patient Portal</span>
         <span class="mobile-drawer-link" onclick="openScreen('screen-register')" id="mobile-book-link">Register & Book</span>
         <span class="mobile-drawer-link" onclick="processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
@@ -1089,6 +1091,35 @@
                 <p style="color: #888; text-align: center;">Loading latest updates...</p>
             </div>
             
+        </section>
+    </div>
+
+    <!-- ================= SCREEN 8: CONTACT ================= -->
+    <div id="screen-contact" class="page-screen">
+        <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
+            <span class="section-subtitle">Get In Touch</span>
+            <h1 style="margin-top: 0.5rem;">Contact The Clinic</h1>
+            <p style="color: #666; max-width: 600px; margin: 1rem auto 0 auto;">Have a question before booking? Send Clare a direct message and she will get back to you as soon as she is out of clinic.</p>
+        </div>
+        <section class="section" style="padding-top: 4rem; padding-bottom: 4rem; flex-direction: column; align-items: center;">
+            <div style="width: 100%; max-width: 600px; background: white; padding: 3rem 2.5rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.05);">
+                <form onsubmit="return submitPublicContact(event)">
+                    <label>Your Name</label>
+                    <input type="text" id="contact-name" required placeholder="e.g. Jane Doe">
+                    
+                    <label>Email Address</label>
+                    <input type="email" id="contact-email" required placeholder="To reply to you">
+                    
+                    <label>Phone Number (Optional)</label>
+                    <input type="tel" id="contact-phone" placeholder="If you'd prefer a text or call">
+
+                    <label>How can we help?</label>
+                    <textarea id="contact-message" required placeholder="Ask about treatments, availability, or your specific condition..." style="height: 150px;"></textarea>
+
+                    <button type="submit" id="contact-btn" class="btn" style="width: 100%;">Send Message</button>
+                    <p style="font-size: 0.75rem; color: #888; text-align: center; margin-top: 1rem; margin-bottom: 0;">We aim to respond to all inquiries within 24 hours.</p>
+                </form>
+            </div>
         </section>
     </div>
 
