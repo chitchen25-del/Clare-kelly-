@@ -43,12 +43,10 @@ nav {
 .nav-brand-logo { height: 45px; width: auto; cursor: pointer; transition: opacity 0.3s ease; object-fit: contain; }
 .nav-brand-logo:hover { opacity: 0.8; }
 
-/* Main Site Desktop Nav */
 .desktop-nav-links { display: none; align-items: center; gap: 2rem; }
 .nav-link-text { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); cursor: pointer; transition: color 0.3s; }
 .nav-link-text:hover { color: var(--primary-sage); }
 
-/* NEW: Admin Portal Desktop Nav (Hidden on mobile) */
 .desktop-admin-nav { display: none; align-items: center; gap: 1.5rem; }
 .desktop-admin-nav span { cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #888; transition: color 0.2s; }
 .desktop-admin-nav span:hover, .desktop-admin-nav span.active { color: var(--primary-sage); }
@@ -194,7 +192,6 @@ footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); col
     .mobile-menu-btn { display: none; }
     .desktop-nav-links { display: flex; }
     
-    /* NEW: Display the Admin nav on large screens */
     .desktop-admin-nav { display: flex !important; }
 
     .pathway-grid { grid-template-columns: repeat(3, 1fr); }
@@ -203,19 +200,20 @@ footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); col
     .dashboard-container { grid-template-columns: 2fr 1fr; padding: 0 6%; margin: 4rem auto; gap: 3rem; }
     footer { flex-direction: row; text-align: left; justify-content: space-between; padding: 0 6% 6rem 6%; }
 }
-/* ================= PREMIUM PORTAL & DASHBOARD UPGRADES ================= */
+
 .dashboard-container {
-    max-width: 1200px;
-    margin: 3rem auto;
-    padding: 0 2rem;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
+    max-width: 1200px !important;
+    margin: 3rem auto !important;
+    padding: 0 2rem !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
 }
+
 @media(min-width: 900px) {
     .dashboard-container {
-        grid-template-columns: 1fr 1fr;
-        align-items: start;
+        grid-template-columns: 1fr 1fr !important;
+        align-items: start !important;
     }
 }
 .portal-welcome-banner {
@@ -270,20 +268,4 @@ footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); col
     outline: none;
     border-color: var(--primary-sage);
     background: white;
-}
-/* ================= DASHBOARD GRID FIX ================= */
-.dashboard-container {
-    max-width: 1200px !important;
-    margin: 3rem auto !important;
-    padding: 0 2rem !important;
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 2.5rem !important;
-}
-
-@media(min-width: 900px) {
-    .dashboard-container {
-        grid-template-columns: 1fr 1fr !important;
-        align-items: start !important;
-    }
 }
