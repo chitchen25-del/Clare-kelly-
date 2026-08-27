@@ -65,9 +65,8 @@
                 </div>
             </div>
 
-            <!-- COLLAPSIBLE HEALTH QUESTIONNAIRE -->
+            <!-- COLLAPSIBLE HEALTH QUESTIONNAIRE (Stays hidden by default) -->
             <div class="dash-card" id="basic-questionnaire-card" style="background: white; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem; overflow: hidden;">
-                <!-- ACCORDION HEADER (Clickable to expand/collapse) -->
                 <div id="questionnaire-header" onclick="toggleQuestionnaireAccordion()" style="padding: 1.5rem 2rem; background: var(--card-bg); cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid transparent; transition: background 0.2s;">
                     <div>
                         <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin: 0; color: var(--text-main);">Standard Health Questionnaire</h4>
@@ -76,7 +75,7 @@
                     <span id="accordion-icon" style="font-size: 1.5rem; font-weight: bold; color: var(--primary-sage);">+</span>
                 </div>
 
-                <!-- ACCORDION BODY (Hidden by default) -->
+                <!-- STYLED EXPLICITLY TO BE HIDDEN ON LOAD -->
                 <div id="questionnaire-panel" style="display: none; padding: 2rem; border-top: 1px solid var(--secondary-sand); background: white;">
                     <form onsubmit="return submitBasicIntakeAndHide(event)">
                         <h4 style="margin-bottom: 1rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 0.9rem;">1. Personal Information</h4>
@@ -148,7 +147,7 @@
         </div>
     </div>
 
-    <!-- ROBUST SCRIPT: ACCORDION & SMART INSTALL -->
+    <!-- SCRIPT LOGIC -->
     <script>
         let deferredInstallPrompt = null;
 
@@ -166,7 +165,6 @@
                 }
                 deferredInstallPrompt = null;
             } else {
-                // If browser blocks automated prompt, display a clean, massive instruction box tailored for older patients
                 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
                 if (isIOS) {
                     alert("To put the Clinic App on your phone screen:\n\n1. Look at the bottom of your Safari screen and tap the Share button (the square with an arrow pointing up).\n\n2. Scroll down the list and tap 'Add to Home Screen'.\n\nThat's it!");
@@ -200,7 +198,6 @@
         }
     </script>
 
-    <!-- Link to external JS file -->
     <script src="./app.js?v=2"></script>
 </body>
 </html>
