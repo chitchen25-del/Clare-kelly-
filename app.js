@@ -13,14 +13,6 @@ window.openScreen = function(screenId) {
 
 window.toggleMobileMenu = function() { document.getElementById('mobile-drawer').classList.toggle('open'); }
 
-window.toggleAccordion = function(id) {
-    const panel = document.getElementById(id);
-    const btn = panel.previousElementSibling;
-    panel.classList.toggle('show');
-    btn.classList.toggle('active');
-    btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
-}
-
 const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
 
@@ -184,6 +176,7 @@ async function loadClientDashboard(db, user) {
     try {
         const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
         
+        // Strict check to ensure standard users don't see VIP features
         const isVip = tier && (tier.is_premium === true || tier.is_premium === 'true');
         const unlockCard = document.getElementById('vip-unlock-card');
         const appContainer = document.getElementById('premium-app-container');
