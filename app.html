@@ -16,40 +16,60 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./style.css?version=6">
+    <link rel="stylesheet" href="./style.css?version=7">
+    <style>
+        .page-screen { display: none; }
+        .page-screen.visible { display: block; }
+        .app-bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0; background: white;
+            border-top: 1px solid var(--secondary-sand); display: flex; justify-content: space-around;
+            padding: 0.6rem 0; z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        }
+        .app-nav-item {
+            background: none; border: none; font-size: 0.7rem; font-family: 'Montserrat', sans-serif;
+            font-weight: 600; color: #666; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer;
+        }
+        .app-nav-item.active { color: var(--primary-sage); }
+        .app-nav-item span.icon { font-size: 1.2rem; }
+        body { padding-bottom: 70px; }
+    </style>
 </head>
 <body style="background-color: var(--bg-color);">
 
-    <!-- TOP BRAND & SIGN OUT BAR (ADMIN BUTTON REMOVED) -->
-    <div style="background-color: var(--card-bg); padding: 1.5rem 6%; border-bottom: 1px solid var(--secondary-sand); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;">
+    <!-- TOP BRAND & SIGN OUT BAR -->
+    <div style="background-color: var(--card-bg); padding: 1.2rem 6%; border-bottom: 1px solid var(--secondary-sand); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;">
         <div style="display: flex; align-items: center; gap: 1rem;">
-            <img src="./logo.png" alt="Logo" style="height: 40px; cursor: pointer;" onclick="location.href='./index.html'">
+            <img src="./logo.png" alt="Logo" style="height: 35px; cursor: pointer;" onclick="openAppScreen('screen-dashboard', event)">
             <div>
-                <h1 id="portal-welcome-title" style="font-size: 1.3rem; margin: 0; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main);">VIP Patient Portal</h1>
-                <span style="font-size: 0.7rem; color: var(--primary-sage); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Isle of Man Practice</span>
+                <h1 id="portal-welcome-title" style="font-size: 1.1rem; margin: 0; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main);">VIP Patient Portal</h1>
+                <span style="font-size: 0.65rem; color: var(--primary-sage); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Isle of Man Practice</span>
             </div>
         </div>
-        <div style="display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap;">
-            <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.7rem; color: #a94442; border-color: #a94442;" onclick="processLogout()">Sign Out</button>
+        <div>
+            <button class="btn btn-outline" style="padding: 0.3rem 0.8rem; font-size: 0.7rem; color: #a94442; border-color: #a94442;" onclick="processLogout()">Sign Out</button>
         </div>
     </div>
 
-    <!-- MAIN DASHBOARD CONTAINER -->
-    <div class="dashboard-container" style="max-width: 1200px; margin: 2.5rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;">
-        
-        <!-- LEFT COLUMN -->
-        <div>
-            <!-- FOOLPROOF APP INSTALL BUTTON CARD -->
-            <div class="dash-card" style="background: linear-gradient(135deg, var(--primary-sage), #0a4d22); color: white; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; text-align: center; box-shadow: 0 10px 30px rgba(9, 93, 40, 0.15);">
-                <img src="./logo.png" alt="App Icon" style="height: 45px; width: 45px; background: white; border-radius: 10px; padding: 4px; margin-bottom: 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-                <h3 style="color: white; font-size: 1.2rem; margin-bottom: 0.4rem; font-family: 'Montserrat', sans-serif;">Save App to Phone Screen</h3>
-                <p style="font-size: 0.85rem; opacity: 0.95; margin-bottom: 1.2rem; line-height: 1.4;">Tap below to instantly add your clinic portal shortcut to your home screen.</p>
-                <button type="button" class="btn" style="background: white; color: var(--text-main); width: 100%; font-size: 0.95rem; padding: 0.8rem; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" onclick="handleSmartInstall()">📥 ADD APP TO HOME SCREEN</button>
+    <!-- MAIN CONTAINER -->
+    <div style="max-width: 800px; margin: 2rem auto; padding: 0 1rem;">
+
+        <!-- 1. DASHBOARD SCREEN -->
+        <div id="screen-dashboard" class="page-screen visible">
+            <!-- App Install Card -->
+            <div class="dash-card" style="background: linear-gradient(135deg, var(--primary-sage), #0a4d22); color: white; border-radius: 12px; padding: 1.8rem; margin-bottom: 1.5rem; text-align: center;">
+                <h3 style="color: white; font-size: 1.1rem; margin-bottom: 0.3rem; font-family: 'Montserrat';">Save Clinic App to Phone</h3>
+                <p style="font-size: 0.82rem; opacity: 0.95; margin-bottom: 1rem;">Add shortcut to your home screen for instant access.</p>
+                <button type="button" class="btn" style="background: white; color: var(--text-main); width: 100%; font-size: 0.9rem; padding: 0.7rem; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" onclick="handleSmartInstall()">📥 ADD APP TO HOME SCREEN</button>
             </div>
 
-            <!-- APPOINTMENTS BOOKING CARD -->
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
-                <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Book Another Session</h3>
+            <!-- Appointments & Booking -->
+            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem;">
+                <h3 style="font-family: 'Montserrat'; font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Your Appointments</h3>
+                <div id="client-appointments-list"><p style="color: #888; font-size: 0.9rem;">Loading schedule...</p></div>
+            </div>
+
+            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem;">
+                <h3 style="font-family: 'Montserrat'; font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Book Another Session</h3>
                 <form onsubmit="return bookNewSession(event)">
                     <label>Treatment Pathway</label>
                     <select id="portal-service" required style="margin-bottom: 1rem;">
@@ -59,92 +79,136 @@
                         <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950</option>
                     </select>
                     <label>Appointment Date & Time</label>
-                    <input type="datetime-local" id="portal-date" onchange="validateBusinessHours(this)" required style="margin-bottom: 1.5rem;">
+                    <input type="datetime-local" id="portal-date" onchange="validateBusinessHours(this)" required style="margin-bottom: 1rem;">
                     <button type="submit" class="btn" style="width: 100%;">Confirm Booking</button>
                 </form>
             </div>
 
-            <!-- COLLAPSIBLE HEALTH QUESTIONNAIRE -->
-            <div class="dash-card" id="basic-questionnaire-card" style="background: white; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem; overflow: hidden;">
-                <div id="questionnaire-header" onclick="toggleAccordion('basic-questionnaire-panel')" style="padding: 1.5rem 2rem; background: var(--card-bg); cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            <!-- Standard Health Questionnaire Accordion -->
+            <div class="dash-card" id="basic-questionnaire-card" style="background: white; border-radius: 12px; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem; overflow: hidden;">
+                <div id="questionnaire-header" onclick="toggleAccordion('basic-questionnaire-panel')" style="padding: 1.2rem 1.5rem; background: var(--card-bg); cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin: 0; color: var(--text-main);">Standard Health Questionnaire</h4>
-                        <span style="font-size: 0.8rem; color: var(--primary-sage); font-weight: 600;">Required prior to physical therapies (Tap to open)</span>
+                        <h4 style="font-family: 'Montserrat'; font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--text-main);">Standard Health Questionnaire</h4>
+                        <span style="font-size: 0.75rem; color: var(--primary-sage); font-weight: 600;">Required prior to physical therapies (Tap to open)</span>
                     </div>
-                    <span id="accordion-icon" style="font-size: 1.5rem; font-weight: bold; color: var(--primary-sage);">+</span>
+                    <span id="accordion-icon" style="font-size: 1.3rem; font-weight: bold; color: var(--primary-sage);">+</span>
                 </div>
-
-                <div id="basic-questionnaire-panel" style="display: none; padding: 2rem; border-top: 1px solid var(--secondary-sand); background: white;">
+                <div id="basic-questionnaire-panel" style="display: none; padding: 1.5rem; border-top: 1px solid var(--secondary-sand); background: white;">
                     <form onsubmit="return submitBasicIntake(event)">
-                        <h4 style="margin-bottom: 1rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 0.9rem;">1. Personal Information</h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                            <div><label>Full Name</label><input type="text" id="basic-name" required style="margin-bottom:0;"></div>
-                            <div><label>Date of Birth</label><input type="date" id="basic-dob" required style="margin-bottom:0;"></div>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                            <div><label>Phone Number</label><input type="tel" id="basic-phone" required style="margin-bottom:0;"></div>
-                            <div><label>Email Address</label><input type="email" id="basic-email" required style="margin-bottom:0;"></div>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                            <div><label>Emergency Contact Name</label><input type="text" id="basic-em-name" required style="margin-bottom:0;"></div>
-                            <div><label>Emergency Contact Phone</label><input type="tel" id="basic-em-phone" required style="margin-bottom:0;"></div>
-                        </div>
-
-                        <h4 style="margin-bottom: 1rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 0.9rem;">2. Chief Complaint & Pain Description</h4>
-                        <label>Main reason for visit / area of discomfort?</label>
-                        <input type="text" id="basic-reason" required>
-                        <label>How long have you had these symptoms?</label>
-                        <input type="text" id="basic-duration" required>
+                        <label>Full Name</label><input type="text" id="basic-name" required>
+                        <label>Date of Birth</label><input type="date" id="basic-dob" required>
+                        <label>Phone Number</label><input type="tel" id="basic-phone" required>
+                        <label>Email Address</label><input type="email" id="basic-email" required>
+                        <label>Main reason for visit / discomfort?</label><input type="text" id="basic-reason" required>
                         <label>Rate current pain level (0-10)</label>
-                        <select id="basic-pain" required style="margin-bottom: 1.5rem;">
+                        <select id="basic-pain" required style="margin-bottom: 1.2rem;">
                             <option value="">Select...</option>
                             <option value="0">0 - No Pain</option>
-                            <option value="3">3 - Mild</option>
                             <option value="5">5 - Moderate</option>
-                            <option value="8">8 - Severe</option>
                             <option value="10">10 - Excruciating</option>
                         </select>
-
                         <button type="submit" class="btn" style="width: 100%;">Submit Questionnaire</button>
                     </form>
                 </div>
             </div>
 
-            <!-- VIP UNLOCK CARD (Shows if not VIP) -->
-            <div class="dash-card" id="vip-unlock-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); display: none;">
-                <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">Unlock VIP Patient App</h3>
-                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Enter your 4-digit VIP code from your email confirmation to unlock daily food tracking, water logs, and direct chat.</p>
+            <!-- VIP Unlock Card (Shows if not VIP) -->
+            <div class="dash-card" id="vip-unlock-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand); display: none;">
+                <h3 style="font-family: 'Montserrat'; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem;">Unlock VIP Patient App Features</h3>
+                <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.2rem;">Enter your 4-digit VIP code from your email confirmation to unlock Nutrition, Supplements, Mood Journal, Exercise tracking, and direct chat.</p>
                 <form onsubmit="return unlockVipApp(event)">
                     <input type="text" id="vip-code-input" placeholder="e.g. VIP-4821" required style="text-transform: uppercase; text-align: center; font-weight: bold; letter-spacing: 2px;">
                     <button type="submit" class="btn" style="width: 100%;">Unlock Features</button>
                 </form>
             </div>
+        </div>
 
-            <!-- PREMIUM APP CONTAINER (Hidden unless VIP is unlocked) -->
-            <div id="premium-app-container" style="display: none;">
-                <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
-                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Daily Nutrition & Trackers</h3>
-                    <p style="font-size: 0.9rem; color: #666;">Your active macro targets and daily health logs.</p>
+        <!-- 2. NUTRITION SCREEN (VIP Only) -->
+        <div id="screen-nutrition" class="page-screen">
+            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand);">
+                <h3 style="font-family: 'Montserrat'; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">🥗 Daily Nutrition & Food Log</h3>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Track your meals and macros for the day.</p>
+                <form onsubmit="return submitDailyLog(event)">
+                    <label>Meal Type</label>
+                    <select id="food-meal-type" style="margin-bottom: 1rem;">
+                        <option value="Breakfast">Breakfast</option>
+                        <option value="Lunch">Lunch</option>
+                        <option value="Dinner">Dinner</option>
+                        <option value="Snacks">Snacks</option>
+                    </select>
+                    <label>Food Description & Cals</label>
+                    <input type="text" id="food-desc" placeholder="e.g. Avocado Toast (350 kcal)" required style="margin-bottom: 1rem;">
+                    <button type="submit" class="btn" style="width: 100%;">Log Food Item</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 3. SUPPLEMENTS SCREEN (VIP Only) -->
+        <div id="screen-supplements" class="page-screen">
+            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand);">
+                <h3 style="font-family: 'Montserrat'; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">💊 Supplement Stack</h3>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Check off what you are currently taking and specify your dosage.</p>
+                <div id="supplements-list-container">
+                    <!-- Dynamic Supplement Checkboxes -->
+                    <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
+                        <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="supp-check" value="Magnesium Glycinate"> <strong>Magnesium Glycinate</strong> (Dosage: <input type="text" placeholder="e.g. 400mg" style="display:inline-block; width:120px; margin-bottom:0; padding:4px 8px;">)</label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="supp-check" value="Omega-3 Fish Oil"> <strong>Omega-3 Fish Oil</strong> (Dosage: <input type="text" placeholder="e.g. 2000mg" style="display:inline-block; width:120px; margin-bottom:0; padding:4px 8px;">)</label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="supp-check" value="Vitamin D3 + K2"> <strong>Vitamin D3 + K2</strong> (Dosage: <input type="text" placeholder="e.g. 4000 IU" style="display:inline-block; width:120px; margin-bottom:0; padding:4px 8px;">)</label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="supp-check" value="Probiotic Blend"> <strong>Probiotic Blend</strong> (Dosage: <input type="text" placeholder="e.g. 1 capsule" style="display:inline-block; width:120px; margin-bottom:0; padding:4px 8px;">)</label>
+                    </div>
+                    <button type="button" class="btn" style="width: 100%;" onclick="saveSupplements()">Save Supplement Stack</button>
                 </div>
             </div>
         </div>
-             
-        <!-- RIGHT COLUMN -->
-        <div>
-            <!-- YOUR APPOINTMENTS -->
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem; border-top: 4px solid var(--primary-sage);">
-                <h3 style="margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; font-size: 1.1rem;">
-                    <span>Your Appointments</span>
-                    <span style="font-size: 0.75rem; color: var(--primary-sage); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Live Schedule</span>
-                </h3>
-                <div id="client-appointments-list"><p style="color: #888; font-size: 0.95rem;">Loading schedule...</p></div>
-            </div>
 
-            <!-- SECURE CLINICAL CHAT -->
-            <div class="dash-card" id="chat-section-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); border-top: 4px solid var(--text-main);">
-                <h3 style="margin-bottom: 1.2rem; font-size: 1.1rem;">Secure Clinical Chat with Clare</h3>
-                <div class="chat-box" id="client-chat-box" style="height: 250px; background: var(--bg-color); border: 1px solid var(--secondary-sand); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; overflow-y: auto;">
-                    <p style="color: #888; font-size: 0.90rem; text-align: center; margin-top: 4rem;">No messages yet. Send a direct note to Clare below!</p>
+        <!-- 4. MOOD & JOURNAL SCREEN (VIP Only) -->
+        <div id="screen-mood" class="page-screen">
+            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand);">
+                <h3 style="font-family: 'Montserrat'; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">🧠 Mood & Daily Journal</h3>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">How are you feeling today? Log your mood and write personal notes.</p>
+                <form onsubmit="return saveMoodJournal(event)">
+                    <label>Select Today's Mood</label>
+                    <select id="mood-select" required style="margin-bottom: 1rem;">
+                        <option value="">-- Choose Mood --</option>
+                        <option value="😄 Great / Energized">😄 Great / Energized</option>
+                        <option value="🙂 Good / Stable">🙂 Good / Stable</option>
+                        <option value="😐 Neutral / Tired">😐 Neutral / Tired</option>
+                        <option value="Low / Stressed">Low / Stressed</option>
+                        <option value="pain">Pain / Flaring</option>
+                    </select>
+                    <label>Journal Notes & Reflections</label>
+                    <textarea id="mood-notes" rows="4" placeholder="Write any reflections, symptom details, or notes for Clare..." style="width: 100%; padding: 0.8rem; border: 1px solid var(--secondary-sand); border-radius: 6px; margin-bottom: 1.2rem; font-family: inherit;"></textarea>
+                    <button type="submit" class="btn" style="width: 100%;">Save Daily Journal</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 5. EXERCISE SCREEN (VIP Only) -->
+        <div id="screen-exercise" class="page-screen">
+            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand);">
+                <h3 style="font-family: 'Montserrat'; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">🏃 Exercise & Step Tracker</h3>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Log your daily steps and workouts, or connect a smart tracker.</p>
+                <form onsubmit="return saveExerciseLog(event)">
+                    <label>Daily Step Count</label>
+                    <input type="number" id="exercise-steps" placeholder="e.g. 8500" style="margin-bottom: 1rem;">
+                    <label>Workout Type</label>
+                    <input type="text" id="exercise-type" placeholder="e.g. Pilates, Walking, Myofascial Stretch" style="margin-bottom: 1rem;">
+                    <label>Duration (Minutes)</label>
+                    <input type="number" id="exercise-duration" placeholder="e.g. 45" style="margin-bottom: 1.2rem;">
+                    <button type="submit" class="btn" style="width: 100%;">Save Activity</button>
+                </form>
+                <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--secondary-sand); text-align: center;">
+                    <button type="button" class="btn btn-outline" style="width: 100%; border-color: var(--primary-sage); color: var(--primary-sage);" onclick="alert('Smart tracker sync (Apple Health / Google Fit) is ready to link.')">⌚ Connect Smart Tracker</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. CHAT SCREEN (VIP Only) -->
+        <div id="screen-chat" class="page-screen">
+            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand);">
+                <h3 style="font-family: 'Montserrat'; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">💬 Secure Clinical Chat with Clare</h3>
+                <div class="chat-box" id="client-chat-box" style="height: 300px; background: var(--bg-color); border: 1px solid var(--secondary-sand); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; overflow-y: auto;">
+                    <p style="color: #888; font-size: 0.9rem; text-align: center; margin-top: 5rem;">No messages yet. Send a direct note to Clare below!</p>
                 </div>
                 <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.8rem;">
                     <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1; background: var(--bg-color);" required>
@@ -152,9 +216,32 @@
                 </form>
             </div>
         </div>
+
     </div>
 
-    <!-- GLOBAL SCRIPT FOR APP INSTALL & ROBUST ACCORDION -->
+    <!-- BOTTOM APP NAVIGATION BAR (VIP gated via JS if needed, or shown for active users) -->
+    <nav class="app-bottom-nav" id="app-bottom-navigation">
+        <button class="app-nav-item active" onclick="openAppScreen('screen-dashboard', event)">
+            <span class="icon">🏠</span>Dashboard
+        </button>
+        <button class="app-nav-item vip-nav-item" onclick="openAppScreen('screen-nutrition', event)" style="display:none;">
+            <span class="icon">🥗</span>Nutrition
+        </button>
+        <button class="app-nav-item vip-nav-item" onclick="openAppScreen('screen-supplements', event)" style="display:none;">
+            <span class="icon">💊</span>Supplements
+        </button>
+        <button class="app-nav-item vip-nav-item" onclick="openAppScreen('screen-mood', event)" style="display:none;">
+            <span class="icon">🧠</span>Mood
+        </button>
+        <button class="app-nav-item vip-nav-item" onclick="openAppScreen('screen-exercise', event)" style="display:none;">
+            <span class="icon">🏃</span>Exercise
+        </button>
+        <button class="app-nav-item vip-nav-item" onclick="openAppScreen('screen-chat', event)" style="display:none;">
+            <span class="icon">💬</span>Chat
+        </button>
+    </nav>
+
+    <!-- GLOBAL SCRIPT FOR APP NAVIGATION & ACCORDION -->
     <script>
         let deferredInstallPrompt = null;
 
@@ -178,6 +265,18 @@
             }
         }
 
+        window.openAppScreen = function(screenId, event) {
+            document.querySelectorAll('.page-screen').forEach(el => el.classList.remove('visible'));
+            const target = document.getElementById(screenId);
+            if(target) target.classList.add('visible');
+
+            document.querySelectorAll('.app-nav-item').forEach(el => el.classList.remove('active'));
+            if(event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         window.toggleAccordion = function(panelId) {
             const panel = document.getElementById(panelId);
             const icon = document.getElementById('accordion-icon');
@@ -192,6 +291,6 @@
         }
     </script>
 
-    <script src="./app.js?v=4"></script>
+    <script src="./app.js?v=8"></script>
 </body>
 </html>
