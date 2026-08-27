@@ -3,9 +3,15 @@ const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
 
 const BREVO_API_KEY = 'xkeysib-YOUR_ACTUAL_BREVO_API_KEY_HERE';
 
+// Singleton to prevent iOS PWA storage fragmentation
+let supabaseInstance = null;
+
 function getSupabase() {
     if(!window.supabase) return null;
-    return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    if(!supabaseInstance) {
+        supabaseInstance = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
+    return supabaseInstance;
 }
 
 window.onload = async function() {
@@ -127,9 +133,12 @@ window.processClientLogin = async function(e) {
         const passInput = document.getElementById('login-password');
         if(!emailInput || !passInput) throw new Error("Form elements missing.");
 
-        const email = emailInput.value.trim();
+        // Lowercasing to fix iOS auto-capitalization bugs
+        const email = emailInput.value.trim().toLowerCase();
         const pass = passInput.value.trim();
         const db = getSupabase();
+
+        if (!db) throw new Error("Database client failed to initialize. Please check connection.");
 
         const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
         if (error) throw new Error(error.message);
@@ -174,7 +183,7 @@ window.bookNewSession = async function(e) {
                     'content-type': 'application/json'
                 },
                 body: JSON.stringify({
-                    sender: { name: "The Natural Healing Clinic", email: "stephen@creasingmatrix.com" },
+                    sender: { name: "The Natural Healing Clinic", email: "clare.claretownsend82@gmail.com" },
                     to: [{ email: user.email, name: clientName }],
                     subject: "Your VIP App Access Code",
                     htmlContent: `<html><body><p>Hello ${clientName},</p><p>Your booking for <b>${serviceName}</b> is confirmed.</p><p>Your VIP Code is: <b>${vipCode}</b></p></body></html>`
