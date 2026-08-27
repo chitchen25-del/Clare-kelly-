@@ -31,9 +31,6 @@
         </div>
         <div style="display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap;">
             <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.7rem; border-color: var(--primary-sage); color: var(--primary-sage);" onclick="location.href='./admin.html'">⚙️ Admin Records</button>
-            <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 0.4rem 1rem; border-radius: 20px; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 600; color: var(--text-main);">
-                <span id="current-date-display">Thu 27 Aug 2026</span>
-            </div>
             <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.7rem; color: #a94442; border-color: #a94442;" onclick="processLogout()">Sign Out</button>
         </div>
     </div>
@@ -41,63 +38,64 @@
     <!-- MAIN DASHBOARD CONTAINER -->
     <div class="dashboard-container" style="max-width: 1200px; margin: 2.5rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;">
         
-        <!-- LEFT COLUMN: App Install, Progress, Questionnaire & Check-ins -->
+        <!-- LEFT COLUMN -->
         <div>
-            <!-- FOOLPROOF APP INSTALL BANNER -->
-            <div class="dash-card" style="background: linear-gradient(135deg, #095d28, #0d9b46); color: white; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; text-align: center; box-shadow: 0 10px 30px rgba(9, 93, 40, 0.15);">
-                <img src="./logo.png" alt="App Icon" style="height: 50px; width: 50px; background: white; border-radius: 12px; padding: 4px; margin-bottom: 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-                <h3 style="color: white; font-size: 1.25rem; margin-bottom: 0.4rem; font-family: 'Montserrat', sans-serif;">Save App to Phone</h3>
-                <p style="font-size: 0.9rem; opacity: 0.95; margin-bottom: 1.2rem; line-height: 1.4;">Tap below to instantly add your clinic portal shortcut to your home screen.</p>
-                <button id="smart-install-btn" class="btn" style="background: white; color: var(--text-main); width: 100%; font-size: 1rem; padding: 0.9rem; border-radius: 8px; font-weight: bold; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" onclick="handleSmartInstall()">📥 ADD APP TO HOME SCREEN</button>
-            </div>
-
-            <!-- PROGRESS & TARGETS CARD -->
+            <!-- APPOINTMENTS BOOKING CARD -->
             <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin: 0; color: #111;">Protocol Progress</h3>
-                    <span style="font-size: 0.75rem; color: var(--primary-sage); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Active Pathway</span>
-                </div>
-                <p style="font-size: 0.95rem; color: #555; margin-bottom: 1.5rem;">Consistency is key to root-cause recovery.</p>
-                
-                <div style="text-align: center; padding: 1.5rem; background: var(--bg-color); border-radius: 50%; width: 110px; height: 110px; margin: 0 auto 1.5rem auto; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--primary-sage);">
-                    <span style="font-size: 1.8rem; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main); line-height: 1;">3</span>
-                    <span style="font-size: 0.65rem; color: #666; text-transform: uppercase; margin-top: 4px;">of 5 daily hits</span>
-                </div>
+                <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Book Another Session</h3>
+                <form onsubmit="return bookNewSession(event)">
+                    <label>Treatment Pathway</label>
+                    <select id="portal-service" required style="margin-bottom: 1rem;">
+                        <option value="">-- Choose a Service or Test --</option>
+                        <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
+                        <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70</option>
+                        <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950</option>
+                    </select>
+                    <label>Appointment Date & Time</label>
+                    <input type="datetime-local" id="portal-date" onchange="validateBusinessHours(this)" required style="margin-bottom: 1.5rem;">
+                    <button type="submit" class="btn" style="width: 100%;">Confirm Booking</button>
+                </form>
             </div>
 
-            <!-- COLLAPSIBLE HEALTH QUESTIONNAIRE (Stays hidden by default) -->
+            <!-- COLLAPSIBLE HEALTH QUESTIONNAIRE -->
             <div class="dash-card" id="basic-questionnaire-card" style="background: white; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem; overflow: hidden;">
-                <div id="questionnaire-header" onclick="toggleQuestionnaireAccordion()" style="padding: 1.5rem 2rem; background: var(--card-bg); cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid transparent; transition: background 0.2s;">
+                <div id="questionnaire-header" onclick="toggleAccordion('basic-questionnaire-panel')" style="padding: 1.5rem 2rem; background: var(--card-bg); cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin: 0; color: var(--text-main);">Standard Health Questionnaire</h4>
                         <span style="font-size: 0.8rem; color: var(--primary-sage); font-weight: 600;">Required prior to physical therapies (Tap to open)</span>
                     </div>
-                    <span id="accordion-icon" style="font-size: 1.5rem; font-weight: bold; color: var(--primary-sage);">+</span>
+                    <span class="icon" style="font-size: 1.5rem; font-weight: bold; color: var(--primary-sage);">+</span>
                 </div>
 
-                <!-- STYLED EXPLICITLY TO BE HIDDEN ON LOAD -->
-                <div id="questionnaire-panel" style="display: none; padding: 2rem; border-top: 1px solid var(--secondary-sand); background: white;">
-                    <form onsubmit="return submitBasicIntakeAndHide(event)">
+                <div id="basic-questionnaire-panel" class="accordion-panel" style="display: none; padding: 2rem; border-top: 1px solid var(--secondary-sand); background: white;">
+                    <form onsubmit="return submitBasicIntake(event)">
                         <h4 style="margin-bottom: 1rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 0.9rem;">1. Personal Information</h4>
-                        <div class="form-row">
-                            <div><label>Full Name</label><input type="text" id="basic-name" required></div>
-                            <div><label>Date of Birth</label><input type="date" id="basic-dob" required></div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div><label>Full Name</label><input type="text" id="basic-name" required style="margin-bottom:0;"></div>
+                            <div><label>Date of Birth</label><input type="date" id="basic-dob" required style="margin-bottom:0;"></div>
                         </div>
-                        <div class="form-row">
-                            <div><label>Phone Number</label><input type="tel" id="basic-phone" required></div>
-                            <div><label>Email Address</label><input type="email" id="basic-email" required></div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div><label>Phone Number</label><input type="tel" id="basic-phone" required style="margin-bottom:0;"></div>
+                            <div><label>Email Address</label><input type="email" id="basic-email" required style="margin-bottom:0;"></div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div><label>Emergency Contact Name</label><input type="text" id="basic-em-name" required style="margin-bottom:0;"></div>
+                            <div><label>Emergency Contact Phone</label><input type="tel" id="basic-em-phone" required style="margin-bottom:0;"></div>
                         </div>
 
-                        <h4 style="margin-bottom: 1rem; margin-top: 2rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 0.9rem;">2. Chief Complaint & Pain Description</h4>
+                        <h4 style="margin-bottom: 1rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 0.9rem;">2. Chief Complaint & Pain Description</h4>
                         <label>Main reason for visit / area of discomfort?</label>
                         <input type="text" id="basic-reason" required>
-                        
-                        <label>Rate your current pain level (0-10)</label>
+                        <label>How long have you had these symptoms?</label>
+                        <input type="text" id="basic-duration" required>
+                        <label>Rate current pain level (0-10)</label>
                         <select id="basic-pain" required style="margin-bottom: 1.5rem;">
                             <option value="">Select...</option>
                             <option value="0">0 - No Pain</option>
+                            <option value="3">3 - Mild</option>
                             <option value="5">5 - Moderate</option>
-                            <option value="10">10 - Severe Pain</option>
+                            <option value="8">8 - Severe</option>
+                            <option value="10">10 - Excruciating</option>
                         </select>
 
                         <button type="submit" class="btn" style="width: 100%;">Submit Questionnaire</button>
@@ -105,24 +103,26 @@
                 </div>
             </div>
 
-            <!-- ADVANCED WELLNESS CHECK-IN SUITE -->
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
-                <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">Clinical Wellness Check-in</h4>
-                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">How well do you feel today across key metrics?</p>
-                
-                <div style="margin-bottom: 1.2rem;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">
-                        <span>Overall Vitality / Wellbeing</span>
-                        <strong id="val-vitality" style="color: var(--primary-sage);">7/10</strong>
-                    </div>
-                    <input type="range" min="1" max="10" value="7" style="width: 100%; accent-color: var(--primary-sage); cursor: pointer;" oninput="document.getElementById('val-vitality').innerText = this.value + '/10'">
-                </div>
+            <!-- VIP UNLOCK CARD (Shows if not VIP) -->
+            <div class="dash-card" id="vip-unlock-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); display: none;">
+                <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">Unlock VIP Patient App</h3>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Enter your 4-digit VIP code from your email confirmation to unlock daily food tracking, water logs, and direct chat.</p>
+                <form onsubmit="return unlockVipApp(event)">
+                    <input type="text" id="vip-code-input" placeholder="e.g. VIP-4821" required style="text-transform: uppercase; text-align: center; font-weight: bold; letter-spacing: 2px;">
+                    <button type="submit" class="btn" style="width: 100%;">Unlock Features</button>
+                </form>
+            </div>
 
-                <button class="btn" style="width: 100%;" onclick="alert('Detailed wellness check-in securely transmitted to Clare!')">Save Daily Metrics</button>
+            <!-- PREMIUM APP CONTAINER (Hidden unless VIP is unlocked) -->
+            <div id="premium-app-container" style="display: none;">
+                <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Daily Nutrition</h3>
+                    <p style="font-size: 0.9rem; color: #666;">Your active macro targets and daily tracking feed.</p>
+                </div>
             </div>
         </div>
              
-        <!-- RIGHT COLUMN: Appointments & Secure Clinical Chat -->
+        <!-- RIGHT COLUMN -->
         <div>
             <!-- YOUR APPOINTMENTS -->
             <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem; border-top: 4px solid var(--primary-sage);">
@@ -146,57 +146,6 @@
             </div>
         </div>
     </div>
-
-    <!-- SCRIPT LOGIC -->
-    <script>
-        let deferredInstallPrompt = null;
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredInstallPrompt = e;
-        });
-
-        async function handleSmartInstall() {
-            if (deferredInstallPrompt) {
-                deferredInstallPrompt.prompt();
-                const { outcome } = await deferredInstallPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    console.log('User installed the app');
-                }
-                deferredInstallPrompt = null;
-            } else {
-                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-                if (isIOS) {
-                    alert("To put the Clinic App on your phone screen:\n\n1. Look at the bottom of your Safari screen and tap the Share button (the square with an arrow pointing up).\n\n2. Scroll down the list and tap 'Add to Home Screen'.\n\nThat's it!");
-                } else {
-                    alert("To put the Clinic App on your phone screen:\n\n1. Tap the menu dots (top right of your browser).\n\n2. Tap 'Add to Home Screen' or 'Install App'.");
-                }
-            }
-        }
-
-        function toggleQuestionnaireAccordion() {
-            const panel = document.getElementById('questionnaire-panel');
-            const icon = document.getElementById('accordion-icon');
-            const header = document.getElementById('questionnaire-header');
-            
-            if (panel.style.display === 'block') {
-                panel.style.display = 'none';
-                icon.innerText = '+';
-                header.style.borderBottom = '1px solid transparent';
-            } else {
-                panel.style.display = 'block';
-                icon.innerText = '−';
-                header.style.borderBottom = '1px solid var(--secondary-sand)';
-            }
-        }
-
-        function submitBasicIntakeAndHide(e) {
-            e.preventDefault();
-            alert("Questionnaire submitted successfully to Clare's records!");
-            document.getElementById('basic-questionnaire-card').style.display = 'none';
-            return false;
-        }
-    </script>
 
     <script src="./app.js?v=2"></script>
 </body>
