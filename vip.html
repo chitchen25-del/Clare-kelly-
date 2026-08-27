@@ -117,11 +117,31 @@
         <div class="vip-card">
             <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">💊 Your Supplement Stack</h3>
             <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Select what you are taking and specify your precise dosages.</p>
-            <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
-                <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="vip-supp" value="Magnesium Glycinate"> <strong>Magnesium Glycinate</strong> (Dosage: <input type="text" placeholder="e.g. 400mg" style="display:inline-block; width:110px; margin-bottom:0; padding:4px;">)</label>
-                <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="vip-supp" value="Omega-3 Fish Oil"> <strong>Omega-3 Fish Oil</strong> (Dosage: <input type="text" placeholder="e.g. 2000mg" style="display:inline-block; width:110px; margin-bottom:0; padding:4px;">)</label>
-                <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="vip-supp" value="Vitamin D3 + K2"> <strong>Vitamin D3 + K2</strong> (Dosage: <input type="text" placeholder="e.g. 4000 IU" style="display:inline-block; width:110px; margin-bottom:0; padding:4px;">)</label>
-                <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="vip-supp" value="Probiotic Blend"> <strong>Probiotic Blend</strong> (Dosage: <input type="text" placeholder="e.g. 1 capsule" style="display:inline-block; width:110px; margin-bottom:0; padding:4px;">)</label>
+            <div style="display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 1.5rem;">
+                <div style="background: #f9f8f6; padding: 1rem; border-radius: 8px; border: 1px solid #e0d8cc;">
+                    <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; color: #222; margin-bottom: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" class="vip-supp" value="Magnesium Glycinate" style="width: 20px; height: 20px; accent-color: #095d28;"> Magnesium Glycinate
+                    </label>
+                    <input type="text" placeholder="Dosage (e.g. 400mg)" style="margin-bottom: 0; background: white;">
+                </div>
+                <div style="background: #f9f8f6; padding: 1rem; border-radius: 8px; border: 1px solid #e0d8cc;">
+                    <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; color: #222; margin-bottom: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" class="vip-supp" value="Omega-3 Fish Oil" style="width: 20px; height: 20px; accent-color: #095d28;"> Omega-3 Fish Oil
+                    </label>
+                    <input type="text" placeholder="Dosage (e.g. 2000mg)" style="margin-bottom: 0; background: white;">
+                </div>
+                <div style="background: #f9f8f6; padding: 1rem; border-radius: 8px; border: 1px solid #e0d8cc;">
+                    <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; color: #222; margin-bottom: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" class="vip-supp" value="Vitamin D3 + K2" style="width: 20px; height: 20px; accent-color: #095d28;"> Vitamin D3 + K2
+                    </label>
+                    <input type="text" placeholder="Dosage (e.g. 4000 IU)" style="margin-bottom: 0; background: white;">
+                </div>
+                <div style="background: #f9f8f6; padding: 1rem; border-radius: 8px; border: 1px solid #e0d8cc;">
+                    <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; color: #222; margin-bottom: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" class="vip-supp" value="Probiotic Blend" style="width: 20px; height: 20px; accent-color: #095d28;"> Probiotic Blend
+                    </label>
+                    <input type="text" placeholder="Dosage (e.g. 1 capsule)" style="margin-bottom: 0; background: white;">
+                </div>
             </div>
             <button type="button" class="vip-btn" onclick="saveVipSupplements()">Save Supplement Stack</button>
         </div>
@@ -248,13 +268,15 @@
         window.saveVipSupplements = async function() {
             const db = getDb();
             const { data: { user } } = await db.auth.getUser();
-            for(let cb of document.querySelectorAll('.vip-supp')) {
+            const blocks = document.querySelectorAll('.vip-supp');
+            for(let cb of blocks) {
                 if(cb.checked) {
-                    const dosage = cb.parentElement.querySelector('input').value;
+                    const dosageInput = cb.closest('div').querySelector('input[type="text"]');
+                    const dosage = dosageInput ? dosageInput.value : '';
                     await db.from('client_supplements').upsert([{ client_id: user.id, supplement_name: cb.value, is_active: true, dosage: dosage }], { onConflict: 'client_id,supplement_name' });
                 }
             }
-            alert("Supplement stack saved!");
+            alert("Supplement stack saved successfully!");
         };
 
         window.saveVipMood = async function(e) {
