@@ -20,16 +20,18 @@ function getSupabase() {
 }
 
 window.onload = async function() {
+    // FORCE DASHBOARD VISIBLE IMMEDIATELY SO IT NEVER RENDERS BLANK
+    window.openScreen('screen-dashboard');
+
     try {
         const db = getSupabase();
         if(db) {
             const { data: { session } } = await db.auth.getSession();
-            if(session) {
-                openScreen('screen-dashboard'); 
+            if(session && session.user) {
                 loadClientDashboard(db, session.user);
             }
         }
-    } catch(err) { console.log("No active session."); }
+    } catch(err) { console.log("No active session or error loading:", err.message); }
 };
 
 window.validateBusinessHours = function(input) {
@@ -49,7 +51,7 @@ window.processClientLogin = async function(e) {
         const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
         if (error) throw new Error(error.message);
         if (data.user) {
-            openScreen('screen-dashboard'); 
+            window.openScreen('screen-dashboard'); 
             loadClientDashboard(db, data.user);
         }
     } catch (err) { alert("Login Failed: " + err.message); }
@@ -61,6 +63,7 @@ window.bookNewSession = async function(e) {
     try {
         const db = getSupabase();
         const { data: { user } } = await db.auth.getUser();
+        if(!user) throw new Error("Please log in first.");
 
         const serviceName = document.getElementById('portal-service').value;
         const appointmentTime = document.getElementById('portal-date').value;
@@ -166,7 +169,6 @@ window.unlockVipApp = async function(e) {
     return false;
 };
 
-// NEW APP LOGIC FOR SUPPLEMENTS, MOOD, EXERCISE, NUTRITION
 window.submitDailyLog = async function(e) {
     e.preventDefault();
     alert("Food item logged successfully!");
