@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>The Natural Healing Clinic | Isle of Man</title>
     
-   <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Clinic App">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Clinic App">
 
     <link rel="apple-touch-icon" href="/logo.png">
-    
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiVGhlIE5hdHVyYWwgSGVhbGluZyBDbGluaWMiLCJzaG9ydF9uYW1lIjoiQ2xpbmljIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmM2YxZWYiLCJ0aGVtZV9jb2xvciI6IiMwOTVkMjgiLCJpY29ucyI6W3sic3JjIjoiLi9sb2dvLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -22,40 +21,24 @@
 <body>
 
     <script>
-        window.openScreen = function(screenId) {
-            try {
-                document.querySelectorAll('.page-screen').forEach(el => el.classList.remove('visible'));
-                const target = document.getElementById(screenId);
-                if(target) {
-                    target.classList.add('visible');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-                const drawer = document.getElementById('mobile-drawer');
-                if(drawer) drawer.classList.remove('open');
-            } catch (err) { console.error(err.message); }
-        }
-        function toggleMobileMenu() { document.getElementById('mobile-drawer').classList.toggle('open'); }
-        function toggleAccordion(id) {
-            const panel = document.getElementById(id);
-            const btn = panel.previousElementSibling;
-            panel.classList.toggle('show');
-            btn.classList.toggle('active');
-            btn.querySelector('.icon').innerText = panel.classList.contains('show') ? '−' : '+';
+        function toggleMobileMenu() { 
+            const drawer = document.getElementById('mobile-drawer');
+            if(drawer) drawer.classList.toggle('open'); 
         }
     </script>
 
     <nav>
-        <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="openScreen('screen-home')">
+        <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="location.href='./index.html'">
         
         <!-- DESKTOP NAVIGATION -->
         <div class="desktop-nav-links">
-            <span class="nav-link-text" onclick="openScreen('screen-about')">About Clare</span>
-            <span class="nav-link-text" onclick="openScreen('screen-testimonials')">Patient Stories</span>
-            <span class="nav-link-text" onclick="openScreen('screen-news')">Latest News</span>
-            <span class="nav-link-text" onclick="openScreen('screen-contact')">Contact</span>
-            <button type="button" id="nav-portal-btn" class="btn btn-outline" onclick="openScreen('screen-login')">Patient Portal</button>
-            <button type="button" id="nav-book-btn" class="btn" onclick="openScreen('screen-register')">Register & Book</button>
-            <button type="button" id="nav-logout-btn" class="btn btn-outline" style="display: none;" onclick="processLogout()">Sign Out</button>
+            <span class="nav-link-text" style="color: var(--primary-sage); font-weight: 700;">Home</span>
+            <span class="nav-link-text" onclick="location.href='./about.html'">About Clare</span>
+            <span class="nav-link-text" onclick="location.href='./testimonials.html'">Patient Stories</span>
+            <span class="nav-link-text" onclick="location.href='./news.html'">Latest News</span>
+            <span class="nav-link-text" onclick="location.href='./contact.html'">Contact</span>
+            <button type="button" class="btn btn-outline" onclick="location.href='./app.html'">Patient Portal</button>
+            <button type="button" class="btn" onclick="location.href='#register-section'">Register & Book</button>
         </div>
         
         <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
@@ -66,20 +49,18 @@
     <!-- MOBILE NAVIGATION DRAWER -->
     <div class="mobile-drawer" id="mobile-drawer">
         <span style="position: absolute; top: calc(1.5rem + env(safe-area-inset-top)); right: 2rem; font-size: 2rem; cursor: pointer; color: var(--text-main);" onclick="toggleMobileMenu()">✕</span>
-        <span class="mobile-drawer-link" onclick="openScreen('screen-home')">Home</span>
-        <span class="mobile-drawer-link" onclick="openScreen('screen-about')">About Clare</span>
-        <span class="mobile-drawer-link" onclick="openScreen('screen-testimonials')">Patient Stories</span>
-        <span class="mobile-drawer-link" onclick="openScreen('screen-news')">Latest News</span>
-        <span class="mobile-drawer-link" onclick="openScreen('screen-contact')">Contact</span>
-        <span class="mobile-drawer-link" onclick="openScreen('screen-login')" id="mobile-portal-link">Patient Portal</span>
-        <span class="mobile-drawer-link" onclick="openScreen('screen-register')" id="mobile-book-link">Register & Book</span>
-        <span class="mobile-drawer-link" onclick="processLogout()" id="mobile-logout-link" style="display: none; color: #a94442;">Sign Out</span>
+        <span class="mobile-drawer-link" onclick="location.href='./index.html'">Home</span>
+        <span class="mobile-drawer-link" onclick="location.href='./about.html'">About Clare</span>
+        <span class="mobile-drawer-link" onclick="location.href='./testimonials.html'">Patient Stories</span>
+        <span class="mobile-drawer-link" onclick="location.href='./news.html'">Latest News</span>
+        <span class="mobile-drawer-link" onclick="location.href='./contact.html'">Contact</span>
+        <span class="mobile-drawer-link" onclick="location.href='./app.html'">Patient Portal</span>
     </div>
 
-    <!-- ================= SCREEN 1: HOME ================= -->
-    <div id="screen-home" class="page-screen visible">
+    <!-- ================= HOME SCREEN ================= -->
+    <div id="screen-home" class="page-screen visible" style="display: block; position: static;">
         
-        <!-- THE GEMINI AWESOME HERO SECTION -->
+        <!-- HERO SECTION -->
         <section class="hero" id="home-hero" style="position: relative; padding: 6rem 5% 5rem 5%; text-align: center; background: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat; border-bottom: 1px solid var(--secondary-sand); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 75vh;">
             
             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(243, 241, 239, 0.7); z-index: 1;"></div>
@@ -93,8 +74,8 @@
                 <p style="font-size: 1.2rem; color: #333; font-style: italic; margin: 0 auto 2.5rem auto; font-family: 'Cormorant Garamond', serif; max-width: 550px; line-height: 1.5; font-weight: 500;">"Imagine a life without chronic pain. Meticulous functional medicine and advanced soft-tissue therapy designed for your exact biology."</p>
                 
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; width: 100%;">
-                    <button type="button" class="btn" style="padding: 1rem 2.5rem; font-size: 0.85rem;" onclick="openScreen('screen-register')">Make An Appointment</button>
-                    <button type="button" class="btn btn-outline" style="padding: 1rem 2.5rem; font-size: 0.85rem; background: white; border-color: var(--primary-sage);" onclick="openScreen('screen-about')">Meet Clare</button>
+                    <button type="button" class="btn" style="padding: 1rem 2.5rem; font-size: 0.85rem;" onclick="location.href='#register-section'">Make An Appointment</button>
+                    <button type="button" class="btn btn-outline" style="padding: 1rem 2.5rem; font-size: 0.85rem; background: white; border-color: var(--primary-sage);" onclick="location.href='./about.html'">Meet Clare</button>
                 </div>
                 
             </div>
@@ -102,16 +83,12 @@
 
         <section class="section">
             <div class="section-image-wrapper" style="position: relative; padding-bottom: 2.5rem;">
-                
                 <div style="overflow: hidden; border-radius: 200px 200px 10px 10px; box-shadow: 0 20px 40px rgba(9,93,40,0.08); height: 480px; position: relative;">
                     <img src="https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?auto=format&fit=crop&w=800&q=80" 
-                         alt="Zen stacked stones representing holistic alignment" 
-                         style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); cursor: pointer;"
-                         onmouseover="this.style.transform='scale(1.06)'"
-                         onmouseout="this.style.transform='scale(1)'">
+                         alt="Zen stacked stones" 
+                         style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
-                
-                <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.8); padding: 1.5rem 2rem; border-radius: 12px; width: 85%; text-align: center; box-shadow: 0 15px 35px rgba(9,93,40,0.12); z-index: 10;">
+                <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.8); padding: 1.5rem 2rem; border-radius: 12px; width: 85%; text-align: center; box-shadow: 0 15px 35px rgba(9,93,40,0.12); z-index: 10;">
                     <span style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--primary-sage); text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 0.5rem;">Evidence-Informed Care</span>
                     <p style="font-family: 'Cormorant Garamond', serif; font-style: italic; color: #444; margin: 0; font-size: 1.1rem;">Root-cause functional protocols designed for rapid, sustainable recovery.</p>
                 </div>
@@ -151,8 +128,6 @@
 
         <!-- ================= TIERED CLINICAL SERVICES ================= -->
         <section class="pricing-section" style="padding-top: 6rem; padding-bottom: 6rem;">
-            
-            <!-- BRONZE / BREAD & BUTTER -->
             <div style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto;">
                 <span class="section-subtitle">The Foundation</span>
                 <h2>Core Clinical Therapies</h2>
@@ -164,101 +139,50 @@
                     <div>
                         <div class="price-title">Myofascial Release</div>
                         <div class="price-duration">Hands-On Therapy</div>
-                        <div class="price-amount" style="font-size: 3rem;">£70<span style="font-size: 1rem; color: #888; text-decoration: none;"> / session</span></div>
+                        <div class="price-amount" style="font-size: 3rem;">£70<span style="font-size: 1rem; color: #888;"> / session</span></div>
                         <ul class="price-features">
                             <li>Deep tissue pain relief</li>
                             <li>Restores structural alignment</li>
                             <li>Releases chronic tension patterns</li>
                         </ul>
                     </div>
-                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Book Treatment</button>
+                    <button type="button" class="btn" style="width: 100%;" onclick="location.href='#register-section'">Book Treatment</button>
                 </div>
 
                 <div class="price-card featured" style="transform: none; border-color: var(--primary-sage); box-shadow: 0 10px 30px rgba(13,155,70,0.08);">
                     <div>
                         <div class="price-title">Lymphatic Drainage</div>
                         <div class="price-duration">Advanced Clearing</div>
-                        <div class="price-amount" style="font-size: 3rem;">£70<span style="font-size: 1rem; color: #888; text-decoration: none;"> / session</span></div>
+                        <div class="price-amount" style="font-size: 3rem;">£70<span style="font-size: 1rem; color: #888;"> / session</span></div>
                         <ul class="price-features">
                             <li>Reduces systemic inflammation</li>
                             <li>Clears edema and fluid retention</li>
                             <li>Accelerates injury recovery</li>
                         </ul>
                     </div>
-                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Book Treatment</button>
+                    <button type="button" class="btn" style="width: 100%;" onclick="location.href='#register-section'">Book Treatment</button>
                 </div>
 
                 <div class="price-card featured" style="transform: none; border-color: var(--primary-sage); box-shadow: 0 10px 30px rgba(13,155,70,0.08);">
                     <div>
                         <div class="price-title">Taster & Reset Bundles</div>
                         <div class="price-duration">Targeted Relief</div>
-                        <div class="price-amount" style="font-size: 3rem;">£70<span style="font-size: 1rem; color: #888; text-decoration: none;"> / pkg</span></div>
+                        <div class="price-amount" style="font-size: 3rem;">£70<span style="font-size: 1rem; color: #888;"> / pkg</span></div>
                         <ul class="price-features">
                             <li>Migraine & Neck Reset Package</li>
                             <li>Clarity Drainage Package</li>
                             <li>Add-on Infrared Targeted (£15)</li>
                         </ul>
                     </div>
-                    <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Book Package</button>
+                    <button type="button" class="btn" style="width: 100%;" onclick="location.href='#register-section'">Book Package</button>
                 </div>
             </div>
 
-            <!-- SILVER / MID-RANGE -->
-            <div style="text-align: center; max-width: 800px; margin: 6rem auto 3rem auto;">
-                <span class="section-subtitle">Targeted Interventions</span>
-                <h2>Mid-Range Functional Programmes</h2>
-                <p style="color: #555;">Short-term, highly focused protocols to reset your baseline health, balance your gut microbiome, and identify core physiological dysfunctions.</p>
-            </div>
-
-            <div class="pricing-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top: 2rem;">
-                <div class="price-card">
-                    <div>
-                        <div class="price-title">Performance Health Audit</div>
-                        <div class="price-duration">Functional Kickstart</div>
-                        <div class="price-amount" style="font-size: 2.8rem;">£175</div>
-                        <ul class="price-features">
-                            <li>90-minute functional consultation</li>
-                            <li>Full symptom timeline review</li>
-                            <li>Top 3 root-cause priorities identified</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Health Audit</button>
-                </div>
-
-                <div class="price-card">
-                    <div>
-                        <div class="price-title">The Gut Reset</div>
-                        <div class="price-duration">21-Day Programme</div>
-                        <div class="price-amount" style="font-size: 2.8rem;">£297 <span>£500</span></div>
-                        <ul class="price-features">
-                            <li>60-min functional gut assessment</li>
-                            <li>Personalised 21-day protocol</li>
-                            <li>Curated supplement guidance</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Gut Reset</button>
-                </div>
-                
-                <div class="price-card">
-                    <div>
-                        <div class="price-title">30-Day Kickstart Cleanse</div>
-                        <div class="price-duration">Systemic Detox</div>
-                        <div class="price-amount" style="font-size: 2.8rem;">£355</div>
-                        <ul class="price-features">
-                            <li>Guided 30-day clearing protocol</li>
-                            <li>Eliminates metabolic waste</li>
-                            <li>Access to secure patient app</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn btn-outline" style="width: 100%;" onclick="openScreen('screen-register')">Book Kickstart</button>
-                </div>
-            </div>
-
-            <!-- GOLD / HIGH-END -->
+            <!-- HIGH-END PATHWAYS -->
             <div style="text-align: center; max-width: 800px; margin: 6rem auto 3rem auto;">
                 <span class="section-subtitle">Deep Transformation</span>
                 <h2>Comprehensive Functional Pathways</h2>
-                <p style="color: #555;">Our most elite, high-touch programs. Designed for patients with complex, chronic conditions requiring extensive support, specialized testing, and VIP clinical access.</p>
+                <p style="color: #555;">Our most elite, high-touch programs for complex, chronic conditions.</p>
             </div>
 
             <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem;">
@@ -269,852 +193,54 @@
                         <ul class="price-features" style="margin-bottom: 0;">
                             <li>Bespoke protocol adapting as you heal over 3 months</li>
                             <li>Advanced interpretation of Nordic Laboratory tests</li>
-                            <li>Priority clinical reviews and pathway adjustments</li>
                             <li>VIP App Access (Daily trackers & direct chat with Clare)</li>
                         </ul>
                     </div>
                     <div style="text-align: center; min-width: 200px;">
                         <div class="price-amount" style="font-size: 3.5rem; margin-bottom: 1rem;">£950</div>
-                        <button type="button" class="btn" style="width: 100%;" onclick="openScreen('screen-register')">Apply For Protocol</button>
-                    </div>
-                </div>
-
-                <div style="background: var(--card-bg); border: 1px solid var(--primary-sage); border-radius: 12px; padding: 3rem; display: flex; flex-wrap: wrap; gap: 3rem; align-items: center; box-shadow: 0 15px 50px rgba(13, 155, 70, 0.08);">
-                    <div style="flex: 1; min-width: 280px;">
-                        <div class="price-duration" style="margin-bottom: 0.5rem; color: var(--primary-sage);">12-Week Executive Program</div>
-                        <h3 style="font-family: 'Cormorant Garamond'; font-size: 2.2rem; margin-bottom: 1rem; color: var(--text-main);">360° Burnout & Adrenal Protocol</h3>
-                        <ul class="price-features" style="margin-bottom: 0;">
-                            <li>Complete root-cause functional health investigation</li>
-                            <li>Bi-weekly hands-on Vagal Nerve & Bowen resets</li>
-                            <li>Curated functional supplementation blueprint</li>
-                            <li>VIP App Access (Daily trackers & direct chat with Clare)</li>
-                        </ul>
-                    </div>
-                    <div style="text-align: center; min-width: 200px;">
-                        <div class="price-amount" style="font-size: 3.5rem; margin-bottom: 1rem;">£1,450</div>
-                        <button type="button" class="btn" style="width: 100%; background: var(--primary-sage); color: white;" onclick="openScreen('screen-register')">Apply For Protocol</button>
+                        <button type="button" class="btn" style="width: 100%;" onclick="location.href='#register-section'">Apply For Protocol</button>
                     </div>
                 </div>
             </div>
         </section>
-    </div>
 
-    <!-- ================= SCREEN 2: ABOUT ================= -->
-    <div id="screen-about" class="page-screen">
-        <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
-            <span class="section-subtitle">Clinical Leadership</span>
-            <h1 style="margin-top: 0.5rem;">About Clare Townsend</h1>
-        </div>
-        <section class="section">
-            <div class="section-image-wrapper">
-                <video width="100%" controls playsinline poster="./clare-profile.avif" preload="metadata" style="border-radius: 8px; box-shadow: 0 25px 60px rgba(9, 93, 40, 0.08); object-fit: cover; max-height: 600px; background: var(--secondary-sand);">
-                    <source src="./clare-video.mp4.MOV" type="video/mp4">
-                    <source src="./clare-video.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-            <div class="section-text">
-                <span class="section-subtitle">Practitioner Profile</span>
-                <h2 style="font-size: 2.2rem;">Bridging Functional Medicine & Advanced Soft-Tissue Therapy</h2>
-                <p style="margin-bottom: 1.2rem; color: #555;">Clare Townsend is a premier functional health and soft-tissue specialist based in the Isle of Man. With 19 years of dedicated clinical practice, Clare has cultivated a highly unique, dual-modality approach that sets her clinic apart.</p>
-                <p style="margin-bottom: 1.2rem; color: #555;">By seamlessly blending the root-cause diagnostics of functional medicine with advanced, hands-on physical therapies, she doesn't just manage symptoms—she repairs the whole system. This comprehensive methodology allows Clare to resolve complex chronic pain, systemic inflammation, and deep-seated physical trauma, delivering true, long-lasting results for her patients.</p>
-                <p style="margin-bottom: 2rem; color: #555;">At <strong>The Natural Healing Clinic</strong>, Clare’s mission is clear: to guide you out of pain and back to optimal performance in a realistic, structured timeframe.</p>
-                <button type="button" class="btn" onclick="openScreen('screen-register')">Book Consultation</button>
-            </div>
-        </section>
-    </div>
-
-    <!-- ================= SCREEN 3: LOGIN ================= -->
-    <div id="screen-login" class="page-screen">
-        <div class="form-container">
-            <img src="./logo.png" alt="Logo" class="portal-logo">
-            <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; font-family: 'Montserrat'; font-weight: 600;">Patient Portal</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 2.5rem; font-size: 0.95rem;">Access your appointments and manage your care.</p>
-            <form onsubmit="return processClientLogin(event)">
-                <label>Email Address</label>
-                <input type="email" id="login-email" placeholder="Enter your email" required>
-                <label>Password</label>
-                <input type="password" id="login-password" placeholder="Enter your password" required>
-                
-                <div style="text-align: right; margin-top: -1rem; margin-bottom: 1.5rem;">
-                    <span style="font-size: 0.75rem; color: var(--primary-sage); cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 600;" onclick="openScreen('screen-forgot')">Forgot Password?</span>
-                </div>
-
-                <button type="submit" id="client-login-btn" class="btn" style="width: 100%;">Secure Login</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ================= SCREEN 3B: FORGOT PASSWORD ================= -->
-    <div id="screen-forgot" class="page-screen">
-        <div class="form-container">
-            <img src="./logo.png" alt="Logo" class="portal-logo">
-            <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; font-family: 'Montserrat'; font-weight: 600;">Reset Password</h2>
-            <form onsubmit="return processPasswordReset(event)">
-                <label>Email Address</label>
-                <input type="email" id="forgot-email" placeholder="Enter your email" required>
-                <button type="submit" id="reset-btn" class="btn" style="width: 100%; margin-top: 1rem;">Send Reset Link</button>
-                <button type="button" class="btn btn-outline" style="width: 100%; margin-top: 1rem;" onclick="openScreen('screen-login')">Back to Login</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ================= SCREEN 4: REGISTER ================= -->
-    <div id="screen-register" class="page-screen">
-        <div class="form-container">
-            <img src="./logo.png" alt="Logo" class="portal-logo">
-            <h2 style="font-size: 1.8rem; margin-bottom: 2.5rem; font-family: 'Montserrat'; font-weight: 600;">Patient Registration</h2>
-            <form onsubmit="return processRegistration(event)">
-                <label>Full Name</label><input type="text" id="reg-name" required>
-                <label>Email Address</label><input type="email" id="reg-email" required>
-                <label>Create Password</label><input type="password" id="reg-password" required>
-                <label>Treatment Pathway</label>
-                <select id="reg-service" required>
-                    <option value="">-- Choose a Service or Test --</option>
-                    <optgroup label="Myofascial Release Therapy">
+        <!-- REGISTRATION / BOOKING ANCHOR SECTION -->
+        <div id="register-section" style="padding: 4rem 5%; background: var(--card-bg); border-top: 1px solid var(--secondary-sand);">
+            <div class="form-container" style="margin: 0 auto;">
+                <img src="./logo.png" alt="Logo" class="portal-logo">
+                <h2 style="font-size: 1.8rem; margin-bottom: 2.5rem; font-family: 'Montserrat'; font-weight: 600; text-align: center;">Patient Registration</h2>
+                <form onsubmit="return processRegistration(event)">
+                    <label>Full Name</label><input type="text" id="reg-name" required>
+                    <label>Email Address</label><input type="email" id="reg-email" required>
+                    <label>Create Password</label><input type="password" id="reg-password" required>
+                    <label>Treatment Pathway</label>
+                    <select id="reg-service" required>
+                        <option value="">-- Choose a Service or Test --</option>
                         <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
-                        <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release (Castletown) — £80</option>
-                    </optgroup>
-                    <optgroup label="Lymphatic Treatment">
                         <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70</option>
-                        <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment (Castletown) — £80</option>
-                    </optgroup>
-                    <optgroup label="Infrared Targeted Treatment">
-                        <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment (Union Mills) — £50</option>
-                        <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment (Castletown) — £60</option>
-                        <option value="Infrared Add-on (£15)">Infrared Add-on to Lymphatic/Myofascial — £15</option>
-                    </optgroup>
-                    <optgroup label="Taster Gift Packages & Bundles">
-                        <option value="Migraine & Neck Reset (£70)">Migraine & Neck Reset Package — £70</option>
-                        <option value="Clarity Drainage (£70)">Clarity Drainage Package — £70</option>
-                        <option value="Gut Mini Reset 10 Days (£80)">Gut Mini Reset (10 Days) — £80</option>
-                        <option value="Taster Trio Bundle (£195)">Taster Trio Bundle — £195</option>
-                    </optgroup>
-                    <optgroup label="Functional Medicine Pathways">
-                        <option value="Discovery Call (£0)">Discovery Phone Call (20m) — Free</option>
-                        <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90m) — £350 (VIP App Access)</option>
                         <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950 (VIP App Access)</option>
-                        <option value="Parasite Cleanse (£150)">Parasite Cleanse (3, 5, or 10 day) — £150</option>
-                        <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse (excl. supplements) — £355</option>
-                        <option value="Functional Testing Review (£350)">Functional Testing Review (90m) — £350</option>
-                    </optgroup>
-                    <optgroup label="Nordic Laboratories Functional Testing">
-                        <option value="Comprehensive Gut Health Test (£325)">Comprehensive Gut Health Test (Stool) — From £325</option>
-                        <option value="Gut Health + Barrier Function Test (£405)">Gut Health + Barrier Function Test (Stool) — From £405</option>
-                        <option value="SIBO Breath Test (£181)">SIBO Breath Test (Breath) — From £181</option>
-                        <option value="Extended Stool Analysis (£489)">Extended Stool Analysis (2-day Stool) — From £489</option>
-                        <option value="Organic Acids Test OAT (£328)">Organic Acids Test (OAT - Urine) — From £328</option>
-                        <option value="Omega-3 & Vitamin D Test (£150)">Omega-3 & Vitamin D Test (Blood spot) — From £150</option>
-                        <option value="DUTCH Complete Hormone Test (£269)">DUTCH Complete Hormone Test (Dried urine) — From £269</option>
-                        <option value="Mould & Environmental Toxin Screen (£269)">Mould & Environmental Toxin Screen (Urine) — £269</option>
-                        <option value="MycoTOX Profile (£408)">MycoTOX Profile (Urine) — £408</option>
-                        <option value="Glyphosate Test (£156)">Glyphosate Test (Urine) — £156</option>
-                        <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
-                    </optgroup>
-                </select>
-                <!-- SERVICE DATE & TIME SELECTION -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                    <div>
-                        <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Appointment Date</label>
-                        <input type="date" id="portal-date-reg" min="2026-01-01" required style="margin-bottom: 0;">
-                    </div>
-                    <div>
-                        <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Preferred Time</label>
-                        <select id="portal-time-reg" required style="margin-bottom: 0;">
-                            <option value="">-- Select Time --</option>
-                            <option value="09:00">09:00 AM</option>
-                            <option value="10:00">10:00 AM</option>
-                            <option value="11:00">11:00 AM</option>
-                            <option value="12:00">12:00 PM</option>
-                            <option value="13:00">01:00 PM</option>
-                            <option value="14:00">02:00 PM</option>
-                            <option value="15:00">03:00 PM</option>
-                            <option value="16:00">04:00 PM</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn" style="width: 100%;">Create Account & Book</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ================= SCREEN 5: CLIENT DASHBOARD (TWO-TIER) ================= -->
-    <div id="screen-dashboard" class="page-screen">
-        <div style="background-color: var(--card-bg); padding: 3rem 6%; border-bottom: 1px solid var(--secondary-sand);">
-            <div style="max-width: 1300px; margin: 0 auto; display: flex; align-items: center; gap: 1.5rem;">
-                <img src="./logo.png" alt="Logo" style="height: 50px;">
-                <div>
-                    <h1 id="portal-welcome-title" style="font-size: 1.8rem; margin-bottom: 0;">Patient Portal</h1>
-                    <p style="color: #666; font-style: italic; font-size: 0.9rem; margin: 0;">Manage your appointments.</p>
-                </div>
-            </div>
-        </div>
-
-             <div class="dashboard-container" style="max-width: 1200px; margin: 3rem auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;">
-            
-                     <!-- LEFT COLUMN: Appointments & Booking (Upgraded Aesthetic) -->
-            <div>
-                <div class="dash-card" style="border-top: 4px solid var(--primary-sage);">
-                    <h3 style="margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
-                        <span>Your Appointments</span>
-                        <span style="font-size: 0.75rem; color: var(--primary-sage); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Live Schedule</span>
-                    </h3>
-                    <div id="client-appointments-list"><p style="color: #888; font-size: 0.95rem;">Loading schedule...</p></div>
-                </div>
-
-                <div class="dash-card" id="new-booking-card" style="border-top: 4px solid var(--text-main);">
-                    <h3 style="margin-bottom: 1.5rem;">Book Another Session</h3>
-                    <form onsubmit="return bookNewSession(event)">
-                        <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Treatment Pathway</label>
-                        <select id="portal-service" required style="margin-bottom: 1.2rem;">
-                            <option value="">-- Choose a Service or Test --</option>
-                            <optgroup label="Myofascial Release Therapy">
-                                <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
-                                <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release (Castletown) — £80</option>
-                            </optgroup>
-                            <optgroup label="Lymphatic Treatment">
-                                <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70</option>
-                                <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment (Castletown) — £80</option>
-                            </optgroup>
-                            <optgroup label="Infrared Targeted Treatment">
-                                <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment (Union Mills) — £50</option>
-                                <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment (Castletown) — £60</option>
-                                <option value="Infrared Add-on (£15)">Infrared Add-on to Lymphatic/Myofascial — £15</option>
-                            </optgroup>
-                            <optgroup label="Taster Gift Packages & Bundles">
-                                <option value="Migraine & Neck Reset (£70)">Migraine & Neck Reset Package — £70</option>
-                                <option value="Clarity Drainage (£70)">Clarity Drainage Package — £70</option>
-                                <option value="Gut Mini Reset 10 Days (£80)">Gut Mini Reset (10 Days) — £80</option>
-                                <option value="Taster Trio Bundle (£195)">Taster Trio Bundle — £195</option>
-                            </optgroup>
-                            <optgroup label="Functional Medicine Pathways">
-                                <option value="Discovery Call (£0)">Discovery Phone Call (20m) — Free</option>
-                                <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90m) — £350 (VIP App Access)</option>
-                                <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950 (VIP App Access)</option>
-                                <option value="Parasite Cleanse (£150)">Parasite Cleanse (3, 5, or 10 day) — £150</option>
-                                <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse (excl. supplements) — £355</option>
-                                <option value="Functional Testing Review (£350)">Functional Testing Review (90m) — £350</option>
-                            </optgroup>
-                            <optgroup label="Nordic Laboratories Functional Testing">
-                                <option value="Comprehensive Gut Health Test (£325)">Comprehensive Gut Health Test (Stool) — From £325</option>
-                                <option value="Gut Health + Barrier Function Test (£405)">Gut Health + Barrier Function Test (Stool) — From £405</option>
-                                <option value="SIBO Breath Test (£181)">SIBO Breath Test (Breath) — From £181</option>
-                                <option value="Extended Stool Analysis (£489)">Extended Stool Analysis (2-day Stool) — From £489</option>
-                                <option value="Organic Acids Test OAT (£328)">Organic Acids Test (OAT - Urine) — From £328</option>
-                                <option value="Omega-3 & Vitamin D Test (£150)">Omega-3 & Vitamin D Test (Blood spot) — From £150</option>
-                                <option value="DUTCH Complete Hormone Test (£269)">DUTCH Complete Hormone Test (Dried urine) — From £269</option>
-                                <option value="Mould & Environmental Toxin Screen (£269)">Mould & Environmental Toxin Screen (Urine) — £269</option>
-                                <option value="MycoTOX Profile (£408)">MycoTOX Profile (Urine) — £408</option>
-                                <option value="Glyphosate Test (£156)">Glyphosate Test (Urine) — £156</option>
-                                <option value="Liver Detox Profile (£152)">Liver Detox Profile (Urine) — £152</option>
-                            </optgroup>
-                        </select>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                            <div>
-                                <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Appointment Date</label>
-                                <input type="date" id="portal-date" min="2026-01-01" required style="margin-bottom: 0;">
-                            </div>
-                            <div>
-                                <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Preferred Time</label>
-                                <select id="portal-time" required style="margin-bottom: 0;">
-                                    <option value="">-- Select Time --</option>
-                                    <option value="09:00">09:00 AM</option>
-                                    <option value="10:00">10:00 AM</option>
-                                    <option value="11:00">11:00 AM</option>
-                                    <option value="12:00">12:00 PM</option>
-                                    <option value="13:00">01:00 PM</option>
-                                    <option value="14:00">02:00 PM</option>
-                                    <option value="15:00">03:00 PM</option>
-                                    <option value="16:00">04:00 PM</option>
-                                </select>
-                            </div>
+                    </select>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase;">Appointment Date</label>
+                            <input type="date" id="portal-date-reg" min="2026-01-01" required style="margin-bottom: 0;">
                         </div>
-
-                        <button type="submit" class="btn" style="width: 100%; padding: 0.9rem;">Confirm Booking</button>
-                    </form>
-                </div>
-                
-                <!-- STANDARD HEALTH QUESTIONNAIRE (Basic Users) -->
-                <div class="dash-card" id="basic-questionnaire-card">
-                    <h3>Standard Health Questionnaire</h3>
-                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 2rem;">For physical therapies (Myofascial, Lymphatic, Bowen). Please complete this prior to your appointment.</p>
-                    
-                    <form onsubmit="return submitBasicIntake(event)">
-                        <!-- 1. Personal Info -->
-                        <h4 style="margin-bottom: 1rem; color: var(--text-main); font-family: 'Montserrat';">1. Personal Information</h4>
-                        <div class="form-row">
-                            <div><label>Full Name</label><input type="text" id="basic-name" required></div>
-                            <div><label>Date of Birth</label><input type="date" id="basic-dob" required></div>
-                        </div>
-                        <div class="form-row">
-                            <div><label>Phone Number</label><input type="tel" id="basic-phone" required></div>
-                            <div><label>Email Address</label><input type="email" id="basic-email" required></div>
-                        </div>
-                        <div class="form-row">
-                            <div><label>Emergency Contact Name</label><input type="text" id="basic-em-name" required></div>
-                            <div><label>Emergency Contact Phone</label><input type="tel" id="basic-em-phone" required></div>
-                        </div>
-
-                        <!-- 2. Chief Complaint -->
-                        <h4 style="margin-bottom: 1rem; margin-top: 2.5rem; color: var(--text-main); font-family: 'Montserrat';">2. Chief Complaint & Pain Description</h4>
-                        <label>What is your main reason for visit or area of discomfort?</label>
-                        <input type="text" id="basic-reason" required>
-                        
-                        <label>How long have you had these symptoms? (Weeks, months, or years)</label>
-                        <input type="text" id="basic-duration" required>
-                        
-                        <label>Rate your current pain level (0-10)</label>
-                        <select id="basic-pain" required>
-                            <option value="">Select...</option>
-                            <option value="0">0 - No Pain</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5 - Moderate</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10 - Severe Pain</option>
-                        </select>
-                        
-                        <label>Describe the sensation of the pain (Check all that apply):</label>
-                        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
-                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" value="Sharp/Dull" style="width:auto; margin:0;"> Sharp / Dull</label>
-                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" value="Aching/Throbbing" style="width:auto; margin:0;"> Aching / Throbbing</label>
-                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" value="Burning/Tingling/Numbness" style="width:auto; margin:0;"> Burning / Tingling / Numbness</label>
-                        </div>
-                        
-                        <label>Was there a specific event, accident, or injury that started the pain?</label>
-                        <input type="text" id="basic-event" placeholder="e.g. Car crash, sports injury, etc.">
-
-                        <!-- 3. Medical History -->
-                        <h4 style="margin-bottom: 1rem; margin-top: 2.5rem; color: var(--text-main); font-family: 'Montserrat';">3. Medical History & Health Conditions</h4>
-                        <label>Please check any conditions that affect you now or have affected you in the past:</label>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.8rem; margin-bottom: 1.5rem;">
-                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" style="width:auto; margin:0;"> Chronic pain / Fibromyalgia</label>
-                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" style="width:auto; margin:0;"> Arthritis / joint disorders</label>
-                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" style="width:auto; margin:0;"> Herniated / bulging discs</label>
-                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" style="width:auto; margin:0;"> Recent surgeries / broken bones</label>
-                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" style="width:auto; margin:0;"> Blood clots / circulatory issues</label>
-                            <label style="display:flex; align-items:center; gap:0.5rem; text-transform:none; letter-spacing:0; font-weight:normal;"><input type="checkbox" style="width:auto; margin:0;"> Osteoporosis</label>
-                        </div>
-                        <label>Pregnancy (if yes, how many months?)</label>
-                        <input type="text" id="basic-pregnancy" placeholder="Leave blank if not applicable">
-
-                        <!-- 4. Meds & Treatments -->
-                        <h4 style="margin-bottom: 1rem; margin-top: 2.5rem; color: var(--text-main); font-family: 'Montserrat';">4. Medications & Current Treatments</h4>
-                        <label>Please list any prescription medications, over-the-counter drugs, or supplements you take:</label>
-                        <textarea id="basic-meds" style="height: 60px;"></textarea>
-                        <label>Have you received prior treatments for this issue (e.g., physical therapy, chiropractic, massage)?</label>
-                        <textarea id="basic-prior-treat" style="height: 60px;"></textarea>
-
-                        <!-- 5. Focus Areas -->
-                        <h4 style="margin-bottom: 1rem; margin-top: 2.5rem; color: var(--text-main); font-family: 'Montserrat';">5. Focus Areas & Preferences</h4>
-                        <label>Are there any specific areas you want the practitioner to focus on?</label>
-                        <input type="text" id="basic-focus">
-                        <label>Are there any areas of the body you want to avoid?</label>
-                        <input type="text" id="basic-avoid">
-
-                        <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Submit Questionnaire</button>
-                    </form>
-                </div>
-            </div>
-                 
-            <!-- RIGHT COLUMN: VIP Gateway & Secure Chat -->
-            <div>
-                <!-- VIP APP UNLOCK CARD (Shown if Basic User) -->
-                <div class="dash-card" id="vip-unlock-card" style="background: linear-gradient(135deg, #095d28, #0d9b46); color: white;">
-                    <h3 style="color: white; border-color: rgba(255,255,255,0.2);">Unlock Premium Patient App</h3>
-                    <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 1.5rem;">If you booked a functional medicine pathway, enter your unique VIP unlock code from your confirmation email below.</p>
-                    <form onsubmit="return unlockVipApp(event)" style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
-                        <input type="text" id="vip-code-input" placeholder="Enter Code (e.g. VIP-8291)" style="margin-bottom: 0; flex: 1; background: white; text-transform: uppercase; color: var(--text-main);" required>
-                        <button type="submit" class="btn" style="background: white; color: var(--text-main); border: none;">Unlock App</button>
-                    </form>
-                </div>
-
-                <!-- DEDICATED VIP APP LAUNCHPAD (Shown when Unlocked) -->
-                <div id="premium-app-container" style="display: none; margin-top: 1.5rem; padding-bottom: 2rem;">
-                    <!-- CARD 1: THE LOBBY BOUNCER -->
-                    <div class="dash-card pwa-install-card" style="background: var(--primary-green, #1B4332); color: white; padding: 2rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: white;">The Natural Healing App</h3>
-                        <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 1.5rem;">Your VIP protocol is active. Add to your home screen to unlock your daily trackers and secure chat.</p>
-                        <button class="btn" style="background: white; color: var(--primary-green, #1B4332); width: 100%; font-weight: bold; border: none; padding: 1rem; border-radius: 8px; font-size: 0.95rem;" onclick="triggerPwaInstall()">INSTALL APP TO UNLOCK</button>
-                    </div>
-
-                    <!-- CARD 2: MACRO & HYDRATION DASHBOARD -->
-                    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1rem;">
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Daily Nutrition</h3>
-                        
-                        <div style="display: flex; justify-content: space-between; text-align: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem;">
-                            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
-                                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Cals</span>
-                                <strong id="total-cals" style="display: block; font-size: 1.1rem; color: #333;">0</strong>
-                            </div>
-                            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
-                                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Pro</span>
-                                <strong id="total-pro" style="display: block; font-size: 1.1rem; color: #d9534f;">0g</strong>
-                            </div>
-                            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
-                                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Fat</span>
-                                <strong id="total-fat" style="display: block; font-size: 1.1rem; color: #f0ad4e;">0g</strong>
-                            </div>
-                            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
-                                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Carb</span>
-                                <strong id="total-carb" style="display: block; font-size: 1.1rem; color: #5bc0de;">0g</strong>
-                            </div>
-                            <div style="flex: 1; min-width: 60px; background: #fafafa; padding: 0.8rem 0.5rem; border-radius: 8px; border: 1px solid #eee;">
-                                <span style="font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold;">Fib</span>
-                                <strong id="total-fib" style="display: block; font-size: 1.1rem; color: #5cb85c;">0g</strong>
-                            </div>
-                        </div>
-
-                        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Water Intake</label>
-                        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
-                            <button style="flex: 1; padding: 0.8rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px; color: #0056b3; font-weight: bold;" onclick="alert('Logged 250ml')">+ 250ml</button>
-                            <button style="flex: 1; padding: 0.8rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px; color: #0056b3; font-weight: bold;" onclick="alert('Logged 500ml')">+ 500ml</button>
-                        </div>
-                        <div style="background: #eee; height: 10px; border-radius: 5px; overflow: hidden; margin-bottom: 1rem;">
-                            <div style="background: #5bc0de; width: 0%; height: 100%;"></div>
+                        <div>
+                            <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase;">Preferred Time</label>
+                            <select id="portal-time-reg" required style="margin-bottom: 0;">
+                                <option value="">-- Select Time --</option>
+                                <option value="09:00">09:00 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="12:00">12:00 PM</option>
+                            </select>
                         </div>
                     </div>
-
-                    <!-- CARD 3: LIVE GLOBAL FOOD DATABASE -->
-                    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Food Diary</h3>
-                        
-                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                            <input type="text" id="food-search-input" placeholder="Search any food (e.g., lazy garlic, chicken)..." style="flex: 1; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #fafafa;" onkeydown="if(event.key === 'Enter') searchLiveGlobalFood()">
-                            <button class="btn" style="background: #333; color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="searchLiveGlobalFood()">🔍</button>
-                            <button class="btn" style="background: var(--primary-green, #1B4332); color: white; padding: 0.9rem 1.2rem; border-radius: 8px; border: none; font-weight: bold;" onclick="forceBarcodeScanner()">📷</button>
-                        </div>
-                        
-                        <div id="interactive-barcode-container" style="width: 100%; display: none; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; background: #000;">
-                            <div id="reader-view" style="width: 100%;"></div>
-                        </div>
-                        
-                        <div id="food-results" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: #555;"></div>
-
-                        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-                                    <strong style="color: #444;">Breakfast</strong>
-                                    <span id="breakfast-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
-                                </div>
-                                <div id="breakfast-items" style="font-size: 0.85rem; color: #666;"></div>
-                            </div>
-                            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-                                    <strong style="color: #444;">Lunch</strong>
-                                    <span id="lunch-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
-                                </div>
-                                <div id="lunch-items" style="font-size: 0.85rem; color: #666;"></div>
-                            </div>
-                            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-                                    <strong style="color: #444;">Dinner</strong>
-                                    <span id="dinner-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
-                                </div>
-                                <div id="dinner-items" style="font-size: 0.85rem; color: #666;"></div>
-                            </div>
-                            <div style="padding: 1rem; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-                                    <strong style="color: #444;">Snacks</strong>
-                                    <span id="snacks-kcal" style="font-size: 0.85rem; color: #888;">0 kcal</span>
-                                </div>
-                                <div id="snacks-items" style="font-size: 0.85rem; color: #666;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CARD 4: LIFESTYLE & BODY METRICS -->
-                    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Lifestyle Metrics</h3>
-                        
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                            <div>
-                                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Steps</label>
-                                <input type="number" placeholder="e.g. 8500" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
-                            </div>
-                            <div>
-                                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Weight (kg/lbs)</label>
-                                <input type="number" placeholder="e.g. 70.5" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
-                            </div>
-                            <div>
-                                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Sleep (Hours)</label>
-                                <input type="number" step="0.5" placeholder="e.g. 7.5" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
-                            </div>
-                            <div>
-                                <label style="font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase;">Mood</label>
-                                <select style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; background: white;">
-                                    <option value="">Select...</option>
-                                    <option value="great">😁 Great</option>
-                                    <option value="good">🙂 Good</option>
-                                    <option value="okay">😐 Okay</option>
-                                    <option value="low">😔 Low</option>
-                                    <option value="stressed">😫 Stressed</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Daily Protocol / Supplements</label>
-                        <div style="background: #fafafa; padding: 1rem; border: 1px solid #eee; border-radius: 8px; display: flex; flex-direction: column; gap: 0.8rem;">
-                            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; color: #333;">
-                                <input type="checkbox" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-green, #1B4332);"> AM Protocol Complete
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; color: #333;">
-                                <input type="checkbox" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-green, #1B4332);"> PM Protocol Complete
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- CARD 5: GUT HEALTH & BRISTOL STOOL CHART -->
-                    <div class="dash-card" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 1.5rem;">
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 0.5rem;">Gut Health</h3>
-                        
-                        <label style="font-size: 0.85rem; font-weight: bold; color: #444; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Bristol Stool Scale</label>
-                        <select style="width: 100%; padding: 0.9rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; font-size: 0.95rem; background: white;">
-                            <option value="">Select B.M. Type...</option>
-                            <option value="1">Type 1 - Separate hard lumps</option>
-                            <option value="2">Type 2 - Sausage-shaped, lumpy</option>
-                            <option value="3">Type 3 - Sausage with cracks</option>
-                            <option value="4">Type 4 - Smooth, soft sausage (Ideal)</option>
-                            <option value="5">Type 5 - Soft blobs, clear edges</option>
-                            <option value="6">Type 6 - Fluffy pieces, mushy</option>
-                            <option value="7">Type 7 - Watery, no solid pieces</option>
-                        </select>
-
-                        <div style="background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 1rem;">
-                            <p style="font-size: 0.75rem; text-align: center; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 0; margin-bottom: 0.8rem; font-weight: bold;">Reference Guide</p>
-                            <div style="display: grid; grid-template-columns: 1fr; gap: 0.6rem; font-size: 0.85rem;">
-                                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #8b5a2b; width: 12px; height: 12px; border-radius: 50%;"></span> <strong>Type 1-2:</strong> Constipation (Hard/Lumpy)</div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #a0522d; width: 12px; height: 12px; border-radius: 4px;"></span> <strong>Type 3-4:</strong> Ideal/Normal (Smooth sausage)</div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="background: #cd853f; width: 12px; height: 4px; border-radius: 2px;"></span> <strong>Type 5-7:</strong> Diarrhea (Mushy/Liquid)</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SAVE BUTTON -->
-                    <div style="margin-top: 1.5rem;">
-                        <button class="btn" style="width: 100%; background: var(--primary-green, #1B4332); color: white; padding: 1.2rem; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);" onclick="submitDailyLog(event)">SAVE DAILY METRICS</button>
-                    </div>
-
-                    <!-- EMBEDDED JAVASCRIPT: Real OpenFoodFacts API Engine -->
-                    <script>
-                        if (typeof dailyTotals === 'undefined') {
-                            var dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
-                            var mealData = { breakfast: [], lunch: [], dinner: [], snacks: [] };
-                        }
-
-                        window.renderMealUI = function(meal) {
-                            const container = document.getElementById(`${meal}-items`);
-                            const kcalSpan = document.getElementById(`${meal}-kcal`);
-                            if(!container || !kcalSpan) return;
-                            
-                            const totalMealCals = mealData[meal].reduce((sum, item) => sum + item.cals, 0);
-                            kcalSpan.innerText = Math.round(totalMealCals) + ' kcal';
-                            
-                            if (mealData[meal].length === 0) {
-                                container.innerHTML = '';
-                                return;
-                            }
-
-                            container.innerHTML = mealData[meal].map((i, index) => `
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px dashed #eee;">
-                                    <span>• ${i.name} (${Math.round(i.cals)} kcal)</span>
-                                    <button style="background: #a94442; color: white; border: none; border-radius: 4px; padding: 0.2rem 0.5rem; font-size: 0.75rem; font-weight: bold; cursor: pointer;" onclick="removeFoodItem('${meal}', ${index})">×</button>
-                                </div>
-                            `).join('');
-                        };
-
-                        window.updateDashboardTotals = function() {
-                            dailyTotals = { cals: 0, pro: 0, fat: 0, carb: 0, fib: 0 };
-                            ['breakfast', 'lunch', 'dinner', 'snacks'].forEach(meal => {
-                                mealData[meal].forEach(i => {
-                                    dailyTotals.cals += i.cals;
-                                    dailyTotals.pro += i.pro;
-                                    dailyTotals.fat += i.fat;
-                                    dailyTotals.carb += i.carb;
-                                    dailyTotals.fib += i.fib;
-                                });
-                            });
-
-                            if(document.getElementById('total-cals')) {
-                                document.getElementById('total-cals').innerText = Math.round(dailyTotals.cals);
-                                document.getElementById('total-pro').innerText = Math.round(dailyTotals.pro) + 'g';
-                                document.getElementById('total-fat').innerText = Math.round(dailyTotals.fat) + 'g';
-                                document.getElementById('total-carb').innerText = Math.round(dailyTotals.carb) + 'g';
-                                document.getElementById('total-fib').innerText = Math.round(dailyTotals.fib) + 'g';
-                            }
-                        };
-
-                        window.logFoodItem = function(name, cals, pro, fat, carb, fib) {
-                            const meal = prompt("Log to which meal?\nType: breakfast, lunch, dinner, or snacks").toLowerCase().trim();
-                            if(!mealData[meal]) {
-                                alert("Invalid meal category. Please type: breakfast, lunch, dinner, or snacks");
-                                return;
-                            }
-
-                            mealData[meal].push({ name, cals, pro, fat, carb, fib });
-                            updateDashboardTotals();
-                            renderMealUI(meal);
-                            
-                            document.getElementById('food-search-input').value = '';
-                            document.getElementById('food-results').innerHTML = `<p style="color: green; text-align: center; font-weight: bold;">Successfully added ${name} to ${meal}!</p>`;
-                        };
-
-                        window.removeFoodItem = function(meal, index) {
-                            mealData[meal].splice(index, 1);
-                            updateDashboardTotals();
-                            renderMealUI(meal);
-                        };
-
-                        // Real Live Global Search
-                        window.searchLiveGlobalFood = async function() {
-                            const input = document.getElementById('food-search-input');
-                            const resultsDiv = document.getElementById('food-results');
-                            if(!input || !resultsDiv) return;
-
-                            const query = input.value.trim();
-                            if(!query) return;
-
-                            resultsDiv.innerHTML = `<p style="color: #666; text-align: center; padding: 1rem;">Searching global database for "${query}"...</p>`;
-
-                            try {
-                                const res = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=5`);
-                                const data = await res.json();
-
-                                if(data.products && data.products.length > 0) {
-                                    resultsDiv.innerHTML = data.products.map(p => {
-                                        const name = (p.product_name || 'Unknown Item').replace(/'/g, "\\'");
-                                        const brand = p.brands ? `(${p.brands})` : '';
-                                        const n = p.nutriments || {};
-                                        const cals = n['energy-kcal_100g'] || n['energy-kcal'] || 0;
-                                        const pro = n['proteins_100g'] || 0;
-                                        const fat = n['fat_100g'] || 0;
-                                        const carb = n['carbohydrates_100g'] || 0;
-                                        const fib = n['fiber_100g'] || 0;
-
-                                        return `
-                                        <div style="padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #fafafa; border-radius: 8px; margin-bottom: 0.5rem;">
-                                            <div>
-                                                <strong style="color: #333;">${p.product_name || 'Unknown Item'} ${brand}</strong><br>
-                                                <span style="font-size: 0.85rem; color: #666;">${Math.round(cals)} kcal per 100g | Pro: ${Math.round(pro)}g | Carb: ${Math.round(carb)}g</span>
-                                            </div>
-                                            <button style="padding: 0.4rem 1rem; font-weight: bold; background: var(--primary-green, #1B4332); color: white; border: none; border-radius: 4px;" onclick="logFoodItem('${name}', ${cals}, ${pro}, ${fat}, ${carb}, ${fib})">ADD</button>
-                                        </div>`;
-                                    }).join('');
-                                } else {
-                                    resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">No matches found for "${query}".</p>`;
-                                }
-                            } catch(err) {
-                                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Error connecting to global food database.</p>`;
-                            }
-                        };
-
-                        let activeHtml5QrCode = null;
-                        window.forceBarcodeScanner = async function() {
-                            const container = document.getElementById('interactive-barcode-container');
-                            const resultsDiv = document.getElementById('food-results');
-                            if(!container || !resultsDiv) return;
-                            
-                            if (!window.Html5Qrcode) {
-                                resultsDiv.innerHTML = "<p style='color:#a94442; text-align:center;'>Scanner engine loading. Please wait a second and retry.</p>";
-                                return;
-                            }
-
-                            if (container.style.display === 'block') {
-                                if (activeHtml5QrCode) {
-                                    try { await activeHtml5QrCode.stop(); } catch(e) {}
-                                    try { activeHtml5QrCode.clear(); } catch(e) {}
-                                    activeHtml5QrCode = null;
-                                }
-                                container.style.display = 'none';
-                                return;
-                            }
-                            
-                            container.style.display = 'block';
-                            resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Initializing rear camera...</p>`;
-                            
-                            activeHtml5QrCode = new Html5Qrcode("reader-view");
-                            
-                            try {
-                                await activeHtml5QrCode.start(
-                                    { facingMode: "environment" },
-                                    { fps: 15, qrbox: { width: 250, height: 150 } },
-                                    async (decodedText) => {
-                                        if (activeHtml5QrCode) {
-                                            try { await activeHtml5QrCode.stop(); } catch(e) {}
-                                            try { activeHtml5QrCode.clear(); } catch(e) {}
-                                            activeHtml5QrCode = null;
-                                        }
-                                        container.style.display = 'none';
-                                        resultsDiv.innerHTML = `<p style="color: #0056b3; text-align: center;">Barcode scanned (${decodedText}). Fetching product...</p>`;
-
-                                        try {
-                                            const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${decodedText}.json`);
-                                            const data = await res.json();
-
-                                            if (data.status === 1 && data.product) {
-                                                const p = data.product;
-                                                const name = (p.product_name || 'Scanned Item').replace(/'/g, "\\'");
-                                                const brand = p.brands ? `(${p.brands})` : '';
-                                                const n = p.nutriments || {};
-                                                const cals = n['energy-kcal_100g'] || n['energy-kcal'] || 0;
-                                                const pro = n['proteins_100g'] || 0;
-                                                const fat = n['fat_100g'] || 0;
-                                                const carb = n['carbohydrates_100g'] || 0;
-                                                const fib = n['fiber_100g'] || 0;
-
-                                                resultsDiv.innerHTML = `
-                                                    <div style="padding: 1rem; background: #eef7ff; border: 1px solid #cce5ff; border-radius: 8px;">
-                                                        <strong style="color: #0056b3;">${p.product_name || 'Scanned Item'} ${brand}</strong><br>
-                                                        <span style="font-size: 0.85rem; color: #555;">${Math.round(cals)} kcal per 100g</span><br>
-                                                        <button class="btn" style="width: 100%; margin-top: 0.8rem; background: #0056b3; color: white; padding: 0.6rem; border-radius: 4px;" onclick="logFoodItem('${name}', ${cals}, ${pro}, ${fat}, ${carb}, ${fib})">LOG THIS ITEM</button>
-                                                    </div>`;
-                                            } else {
-                                                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Barcode (${decodedText}) not found in database.</p>`;
-                                            }
-                                        } catch(apiErr) {
-                                            resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Error fetching scanned barcode data.</p>`;
-                                        }
-                                    },
-                                    (errorMessage) => {}
-                                );
-                                resultsDiv.innerHTML = `<p style="font-size: 0.85rem; color: #666; text-align: center;">Point camera at product barcode...</p>`;
-                            } catch(err) {
-                                container.style.display = 'none';
-                                resultsDiv.innerHTML = `<p style="color: #a94442; text-align: center;">Camera permission denied or unavailable.</p>`;
-                            }
-                        };
-                    </script>
-                </div>
-
-                <!-- SECURE CLINICAL CHAT (Stacked Directly Underneath) -->
-                <div class="dash-card" id="chat-section-card" style="border-top: 4px solid var(--primary-sage);">
-                    <h3 style="margin-bottom: 1.2rem;">Secure Clinical Chat</h3>
-                    <div class="chat-box" id="client-chat-box" style="height: 220px; background: var(--bg-color); border: 1px solid var(--secondary-sand); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; overflow-y: auto;">
-                        <p style="color: #888; font-size: 0.9rem; text-align: center; margin-top: 4rem;">No messages yet. Send a note to Clare below!</p>
-                    </div>
-                    <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.8rem;">
-                        <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1;" required>
-                        <button type="submit" class="btn" style="padding: 0 1.5rem;">Send</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- PWA APP INSTALL OVERLAY -->
-    <div class="pwa-overlay" id="pwa-install-overlay">
-        <div class="pwa-card">
-            <img src="./logo.png" alt="App Icon" class="pwa-icon">
-            <h2 class="pwa-title">Install The App</h2>
-            <p class="pwa-subtitle">For the best experience and to easily track your daily health journals, install our secure patient portal directly to your phone.</p>
-            <div class="pwa-steps" id="pwa-instruction-text">
-                <strong>1.</strong> Tap the browser menu (usually three dots in the top right).<br><br>
-                <strong>2.</strong> Select <b>Add to Home Screen</b> or <b>Install App</b>.
-            </div>
-            <button class="btn" style="width: 100%;" onclick="closePwaOverlay()">I've Installed It</button>
-            <button class="pwa-close-btn" onclick="closePwaOverlay()">Continue in browser</button>
-        </div>
-    </div>
-
-    <!-- ================= SCREEN 6: TESTIMONIALS ================= -->
-    <div id="screen-testimonials" class="page-screen">
-        <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
-            <span class="section-subtitle">Verified Patient Stories</span>
-            <h1 style="margin-top: 0.5rem;">Testimonials</h1>
-            <p style="color: #666; max-width: 600px; margin: 1rem auto 0 auto;">Read about the experiences of our patients. If you are an existing patient, sign in to share your healing journey.</p>
-        </div>
-
-        <section class="section" style="padding-top: 4rem; padding-bottom: 4rem; flex-direction: column; align-items: center;">
-            
-            <!-- THE DYNAMIC SUBMISSION BOX -->
-            <div id="auth-testimonial-box" style="width: 100%; max-width: 700px; margin-bottom: 4rem; text-align: center;">
-                
-                <!-- Shown to Logged OUT Users -->
-                <div id="testimonial-login-prompt" style="background: var(--bg-color); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--secondary-sand);">
-                    <h4 style="margin-bottom: 1rem; color: var(--text-main); font-family: 'Montserrat';">Share Your Experience</h4>
-                    <p style="font-size: 0.95rem; color: #555; margin-bottom: 1.5rem;">We only accept testimonials from verified patients. Please log in to your portal to submit your review.</p>
-                    <button class="btn" onclick="openScreen('screen-login')">Sign In to Post</button>
-                </div>
-
-                <!-- Shown to Logged IN Users -->
-                <div id="testimonial-submit-form" style="display: none; background: white; padding: 2.5rem; border-radius: 12px; border: 1px solid var(--primary-sage); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.05); text-align: left;">
-                    <h4 style="margin-bottom: 1.5rem; color: var(--text-main); font-family: 'Montserrat'; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 0.8rem;">Write a Verified Testimonial</h4>
-                    <form onsubmit="return submitTestimonial(event)">
-                        <label>Your Name (As it will appear publicly)</label>
-                        <input type="text" id="test-name" required placeholder="e.g. Sarah T.">
-                        
-                        <label>Rating</label>
-                        <select id="test-rating" required>
-                            <option value="5">★★★★★ (5/5 - Excellent)</option>
-                            <option value="4">★★★★☆ (4/5 - Great)</option>
-                            <option value="3">★★★☆☆ (3/5 - Good)</option>
-                        </select>
-
-                        <label>Your Story</label>
-                        <textarea id="test-content" required placeholder="How did Clare and the clinic help you?" style="height: 120px;"></textarea>
-
-                        <button type="submit" class="btn" style="width: 100%;">Submit Testimonial</button>
-                        <p style="font-size: 0.75rem; color: #888; text-align: center; margin-top: 1rem; margin-bottom: 0;">Your testimonial will be reviewed by our clinic before publishing.</p>
-                    </form>
-                </div>
-            </div>
-
-            <!-- THE PUBLIC FEED -->
-            <div id="testimonial-feed" style="width: 100%; max-width: 1000px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                <p style="color: #888; text-align: center; width: 100%;">Loading patient stories...</p>
-            </div>
-        </section>
-    </div>
-
-    <!-- ================= SCREEN 7: LATEST NEWS ================= -->
-    <div id="screen-news" class="page-screen">
-        <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
-            <span class="section-subtitle">Clinic Updates</span>
-            <h1 style="margin-top: 0.5rem;">Latest News & PDFs</h1>
-        </div>
-        <section class="section" style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
-            
-            <!-- THE DYNAMIC FEED CONTAINER -->
-            <div id="public-news-feed" style="display: flex; flex-direction: column; gap: 2rem;">
-                <p style="color: #888; text-align: center;">Loading latest updates...</p>
-            </div>
-            
-        </section>
-    </div>
-
-    <!-- ================= SCREEN 8: CONTACT ================= -->
-    <div id="screen-contact" class="page-screen">
-        <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
-            <span class="section-subtitle">Get In Touch</span>
-            <h1 style="margin-top: 0.5rem;">Contact The Clinic</h1>
-            <p style="color: #666; max-width: 600px; margin: 1rem auto 0 auto;">Have a question before booking? Send Clare a direct message and she will get back to you as soon as she is out of clinic.</p>
-        </div>
-        <section class="section" style="padding-top: 4rem; padding-bottom: 4rem; flex-direction: column; align-items: center;">
-            <div style="width: 100%; max-width: 600px; background: white; padding: 3rem 2.5rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.05);">
-                <form onsubmit="return submitPublicContact(event)">
-                    <label>Your Name</label>
-                    <input type="text" id="contact-name" required placeholder="e.g. Jane Doe">
-                    
-                    <label>Email Address</label>
-                    <input type="email" id="contact-email" required placeholder="To reply to you">
-                    
-                    <label>Phone Number (Optional)</label>
-                    <input type="tel" id="contact-phone" placeholder="If you'd prefer a text or call">
-
-                    <label>How can we help?</label>
-                    <textarea id="contact-message" required placeholder="Ask about treatments, availability, or your specific condition..." style="height: 150px;"></textarea>
-
-                    <button type="submit" id="contact-btn" class="btn" style="width: 100%;">Send Message</button>
-                    <p style="font-size: 0.75rem; color: #888; text-align: center; margin-top: 1rem; margin-bottom: 0;">We aim to respond to all inquiries within 24 hours.</p>
+                    <button type="submit" class="btn" style="width: 100%;">Create Account & Book</button>
                 </form>
             </div>
-        </section>
+        </div>
+
     </div>
 
     <footer>
@@ -1124,8 +250,7 @@
         <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; width: 100%;">
             <div class="footer-col" style="text-align: left;">
                 <h4>The Natural Healing Clinic</h4>
-                <p>13 Cronk Drine, Union Mills</p>
-                <p>Isle of Man, IM4 4NG</p>
+                <p>13 Cronk Drine, Union Mills, Isle of Man, IM4 4NG</p>
             </div>
             <div class="footer-col" style="text-align: right;">
                 <h4>Contact & Hours</h4>
@@ -1135,7 +260,7 @@
         </div>
     </footer>
 
-    <!-- Service Worker Registration Script -->
+    <!-- Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -1146,8 +271,7 @@
         }
     </script>
 
-    <!-- Link to your external JS file -->
+    <!-- Link to external JS file -->
     <script src="./app.js?v=2"></script>
-
 </body>
 </html>
