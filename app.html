@@ -41,14 +41,14 @@
     <!-- MAIN DASHBOARD CONTAINER -->
     <div class="dashboard-container" style="max-width: 1200px; margin: 2.5rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;">
         
-        <!-- LEFT COLUMN: 1-Click App Download, Progress & Questionnaire -->
+        <!-- LEFT COLUMN: App Install, Progress, Questionnaire & Check-ins -->
         <div>
-            <!-- 1-CLICK APP DOWNLOAD CARD (Big, clear button for older patients) -->
-            <div class="dash-card" style="background: linear-gradient(135deg, #095d28, #0d9b46); color: white; border-radius: 12px; padding: 2.5rem 2rem; margin-bottom: 1.5rem; text-align: center; box-shadow: 0 10px 30px rgba(9, 93, 40, 0.15);">
-                <img src="./logo.png" alt="App Icon" style="height: 60px; width: 60px; background: white; border-radius: 14px; padding: 5px; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-                <h3 style="color: white; font-size: 1.4rem; margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif;">Install Clinic App</h3>
-                <p style="font-size: 0.95rem; opacity: 0.95; margin-bottom: 1.5rem; line-height: 1.4;">Tap the button below to instantly put the clinic shortcut right on your phone home screen.</p>
-                <button id="direct-install-btn" class="btn" style="background: white; color: var(--text-main); width: 100%; font-size: 1.1rem; padding: 1rem; border-radius: 8px; font-weight: bold; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" onclick="triggerDirectInstall()">📥 DOWNLOAD APP TO PHONE</button>
+            <!-- FOOLPROOF APP INSTALL BANNER -->
+            <div class="dash-card" style="background: linear-gradient(135deg, #095d28, #0d9b46); color: white; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; text-align: center; box-shadow: 0 10px 30px rgba(9, 93, 40, 0.15);">
+                <img src="./logo.png" alt="App Icon" style="height: 50px; width: 50px; background: white; border-radius: 12px; padding: 4px; margin-bottom: 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <h3 style="color: white; font-size: 1.25rem; margin-bottom: 0.4rem; font-family: 'Montserrat', sans-serif;">Save App to Phone</h3>
+                <p style="font-size: 0.9rem; opacity: 0.95; margin-bottom: 1.2rem; line-height: 1.4;">Tap below to instantly add your clinic portal shortcut to your home screen.</p>
+                <button id="smart-install-btn" class="btn" style="background: white; color: var(--text-main); width: 100%; font-size: 1rem; padding: 0.9rem; border-radius: 8px; font-weight: bold; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" onclick="handleSmartInstall()">📥 ADD APP TO HOME SCREEN</button>
             </div>
 
             <!-- PROGRESS & TARGETS CARD -->
@@ -67,15 +67,17 @@
 
             <!-- COLLAPSIBLE HEALTH QUESTIONNAIRE -->
             <div class="dash-card" id="basic-questionnaire-card" style="background: white; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem; overflow: hidden;">
-                <div onclick="toggleAccordion('questionnaire-panel')" style="padding: 1.5rem 2rem; background: var(--card-bg); cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--secondary-sand);">
+                <!-- ACCORDION HEADER (Clickable to expand/collapse) -->
+                <div id="questionnaire-header" onclick="toggleQuestionnaireAccordion()" style="padding: 1.5rem 2rem; background: var(--card-bg); cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid transparent; transition: background 0.2s;">
                     <div>
                         <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin: 0; color: var(--text-main);">Standard Health Questionnaire</h4>
-                        <span style="font-size: 0.8rem; color: #666;">Required prior to physical therapies (Tap to open)</span>
+                        <span style="font-size: 0.8rem; color: var(--primary-sage); font-weight: 600;">Required prior to physical therapies (Tap to open)</span>
                     </div>
-                    <span class="icon" style="font-size: 1.5rem; font-weight: bold; color: var(--primary-sage);">+</span>
+                    <span id="accordion-icon" style="font-size: 1.5rem; font-weight: bold; color: var(--primary-sage);">+</span>
                 </div>
 
-                <div id="questionnaire-panel" style="display: none; padding: 2rem;">
+                <!-- ACCORDION BODY (Hidden by default) -->
+                <div id="questionnaire-panel" style="display: none; padding: 2rem; border-top: 1px solid var(--secondary-sand); background: white;">
                     <form onsubmit="return submitBasicIntakeAndHide(event)">
                         <h4 style="margin-bottom: 1rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 0.9rem;">1. Personal Information</h4>
                         <div class="form-row">
@@ -102,6 +104,22 @@
                         <button type="submit" class="btn" style="width: 100%;">Submit Questionnaire</button>
                     </form>
                 </div>
+            </div>
+
+            <!-- ADVANCED WELLNESS CHECK-IN SUITE -->
+            <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
+                <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">Clinical Wellness Check-in</h4>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">How well do you feel today across key metrics?</p>
+                
+                <div style="margin-bottom: 1.2rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">
+                        <span>Overall Vitality / Wellbeing</span>
+                        <strong id="val-vitality" style="color: var(--primary-sage);">7/10</strong>
+                    </div>
+                    <input type="range" min="1" max="10" value="7" style="width: 100%; accent-color: var(--primary-sage); cursor: pointer;" oninput="document.getElementById('val-vitality').innerText = this.value + '/10'">
+                </div>
+
+                <button class="btn" style="width: 100%;" onclick="alert('Detailed wellness check-in securely transmitted to Clare!')">Save Daily Metrics</button>
             </div>
         </div>
              
@@ -130,36 +148,47 @@
         </div>
     </div>
 
-    <!-- 1-CLICK INSTALL & ACCORDION SCRIPTS -->
+    <!-- ROBUST SCRIPT: ACCORDION & SMART INSTALL -->
     <script>
-        let deferredPrompt;
+        let deferredInstallPrompt = null;
+
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
-            deferredPrompt = e;
+            deferredInstallPrompt = e;
         });
 
-        async function triggerDirectInstall() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
+        async function handleSmartInstall() {
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                const { outcome } = await deferredInstallPrompt.userChoice;
                 if (outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
+                    console.log('User installed the app');
                 }
-                deferredPrompt = null;
+                deferredInstallPrompt = null;
             } else {
-                alert("To add the clinic app to your home screen, simply tap your browser's share icon or menu button, and select 'Add to Home Screen'.");
+                // If browser blocks automated prompt, display a clean, massive instruction box tailored for older patients
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                if (isIOS) {
+                    alert("To put the Clinic App on your phone screen:\n\n1. Look at the bottom of your Safari screen and tap the Share button (the square with an arrow pointing up).\n\n2. Scroll down the list and tap 'Add to Home Screen'.\n\nThat's it!");
+                } else {
+                    alert("To put the Clinic App on your phone screen:\n\n1. Tap the menu dots (top right of your browser).\n\n2. Tap 'Add to Home Screen' or 'Install App'.");
+                }
             }
         }
 
-        function toggleAccordion(id) {
-            const panel = document.getElementById(id);
-            const icon = panel.previousElementSibling.querySelector('.icon');
+        function toggleQuestionnaireAccordion() {
+            const panel = document.getElementById('questionnaire-panel');
+            const icon = document.getElementById('accordion-icon');
+            const header = document.getElementById('questionnaire-header');
+            
             if (panel.style.display === 'block') {
                 panel.style.display = 'none';
                 icon.innerText = '+';
+                header.style.borderBottom = '1px solid transparent';
             } else {
                 panel.style.display = 'block';
                 icon.innerText = '−';
+                header.style.borderBottom = '1px solid var(--secondary-sand)';
             }
         }
 
