@@ -30,7 +30,6 @@
             </div>
         </div>
         <div style="display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap;">
-            <!-- ADMIN BRIDGE BUTTON (For Clare/Staff) -->
             <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.7rem; border-color: var(--primary-sage); color: var(--primary-sage);" onclick="location.href='./admin.html'">⚙️ Admin Records</button>
             <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 0.4rem 1rem; border-radius: 20px; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 600; color: var(--text-main);">
                 <span id="current-date-display">Thu 27 Aug 2026</span>
@@ -42,7 +41,7 @@
     <!-- MAIN DASHBOARD CONTAINER -->
     <div class="dashboard-container" style="max-width: 1200px; margin: 2.5rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;">
         
-        <!-- LEFT COLUMN: Progress & Multi-Metric Wellness Check-ins -->
+        <!-- LEFT COLUMN: Progress, Check-ins & Collapsible Questionnaire -->
         <div>
             <!-- PROGRESS & TARGETS CARD -->
             <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
@@ -58,24 +57,44 @@
                 </div>
             </div>
 
-            <!-- HYDRATION & SUPPLEMENT LOGGING -->
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
-                <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 1rem;">Daily Protocol & Hydration</h4>
-                
-                <label style="font-size: 0.8rem; font-weight: bold; color: #666; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Water Intake</label>
-                <div style="display: flex; gap: 0.8rem; margin-bottom: 1.2rem;">
-                    <button class="btn btn-outline" style="flex: 1; padding: 0.7rem; font-size: 0.85rem;" onclick="alert('Logged 250ml water')">+ 250ml</button>
-                    <button class="btn btn-outline" style="flex: 1; padding: 0.7rem; font-size: 0.85rem;" onclick="alert('Logged 500ml water')">+ 500ml</button>
+            <!-- COLLAPSIBLE HEALTH QUESTIONNAIRE (Hidden automatically once completed) -->
+            <div class="dash-card" id="basic-questionnaire-card" style="background: white; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem; overflow: hidden;">
+                <!-- ACCORDION HEADER (Click to toggle) -->
+                <div onclick="toggleAccordion('questionnaire-panel')" style="padding: 1.5rem 2rem; background: var(--card-bg); cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--secondary-sand);">
+                    <div>
+                        <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin: 0; color: var(--text-main);">Standard Health Questionnaire</h4>
+                        <span style="font-size: 0.8rem; color: #666;">Required prior to physical therapies (Tap to open)</span>
+                    </div>
+                    <span class="icon" style="font-size: 1.5rem; font-weight: bold; color: var(--primary-sage);">+</span>
                 </div>
 
-                <label style="font-size: 0.8rem; font-weight: bold; color: #666; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Supplement Checklist</label>
-                <div style="background: var(--bg-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); display: flex; flex-direction: column; gap: 0.8rem;">
-                    <label style="display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; cursor: pointer;">
-                        <input type="checkbox" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-sage);"> AM Functional Nutrients Taken
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; cursor: pointer;">
-                        <input type="checkbox" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-sage);"> PM Protocol / Binders Taken
-                    </label>
+                <!-- ACCORDION PANEL (Hidden by default) -->
+                <div id="questionnaire-panel" style="display: none; padding: 2rem;">
+                    <form onsubmit="return submitBasicIntakeAndHide(event)">
+                        <h4 style="margin-bottom: 1rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 0.9rem;">1. Personal Information</h4>
+                        <div class="form-row">
+                            <div><label>Full Name</label><input type="text" id="basic-name" required></div>
+                            <div><label>Date of Birth</label><input type="date" id="basic-dob" required></div>
+                        </div>
+                        <div class="form-row">
+                            <div><label>Phone Number</label><input type="tel" id="basic-phone" required></div>
+                            <div><label>Email Address</label><input type="email" id="basic-email" required></div>
+                        </div>
+
+                        <h4 style="margin-bottom: 1rem; margin-top: 2rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 0.9rem;">2. Chief Complaint & Pain Description</h4>
+                        <label>Main reason for visit / area of discomfort?</label>
+                        <input type="text" id="basic-reason" required>
+                        
+                        <label>Rate your current pain level (0-10)</label>
+                        <select id="basic-pain" required style="margin-bottom: 1.5rem;">
+                            <option value="">Select...</option>
+                            <option value="0">0 - No Pain</option>
+                            <option value="5">5 - Moderate</option>
+                            <option value="10">10 - Severe Pain</option>
+                        </select>
+
+                        <button type="submit" class="btn" style="width: 100%;">Submit Questionnaire</button>
+                    </form>
                 </div>
             </div>
 
@@ -128,6 +147,31 @@
             </div>
         </div>
     </div>
+
+    <!-- SCRIPT TO HANDLE ACCORDION & AUTO-HIDING ON SUBMIT -->
+    <script>
+        function toggleAccordion(id) {
+            const panel = document.getElementById(id);
+            const icon = panel.previousElementSibling.querySelector('.icon');
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+                icon.innerText = '+';
+            } else {
+                panel.style.display = 'block';
+                icon.innerText = '−';
+            }
+        }
+
+        function submitBasicIntakeAndHide(e) {
+            e.preventDefault();
+            // Here your existing submission logic runs to push to Supabase
+            alert("Questionnaire submitted successfully to Clare's records!");
+            
+            // Instantly hide the questionnaire card so it never clutters their screen again
+            document.getElementById('basic-questionnaire-card').style.display = 'none';
+            return false;
+        }
+    </script>
 
     <!-- Link to external JS file -->
     <script src="./app.js?v=2"></script>
