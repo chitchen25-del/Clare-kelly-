@@ -16,43 +16,56 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./style.css?version=11">
+    <link rel="stylesheet" href="./style.css?version=12">
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+        }
         .page-screen { display: none; }
         .page-screen.visible { display: block; }
-        .app-bottom-nav {
+        
+        /* FORCE BOTTOM DOCK PINNED PROPERLY */
+        nav.app-bottom-nav {
             position: fixed !important;
             bottom: 0 !important;
             left: 0 !important;
             right: 0 !important;
             width: 100% !important;
-            background: white !important;
-            border-top: 1px solid var(--secondary-sand) !important;
+            background: #ffffff !important;
+            border-top: 1px solid var(--secondary-sand, #e0d8cc) !important;
             display: flex !important;
             justify-content: space-around !important;
             align-items: center !important;
-            padding: 0.6rem 0 !important;
-            z-index: 99999 !important;
+            padding: 0.8rem 0 env(safe-area-inset-bottom, 10px) !important;
+            z-index: 999999 !important;
             box-shadow: 0 -4px 20px rgba(0,0,0,0.08) !important;
         }
         .app-nav-item {
             background: none; border: none; font-size: 0.65rem; font-family: 'Montserrat', sans-serif;
-            font-weight: 600; color: #666; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer;
+            font-weight: 600; color: #666; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer;
         }
         .app-nav-item.active { color: var(--primary-sage); }
-        .app-nav-item span.icon { font-size: 1.1rem; }
-        body { padding-bottom: 90px !important; margin: 0; }
+        .app-nav-item span.icon { font-size: 1.3rem; }
+        
+        .main-app-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 100px 1rem;
+        }
     </style>
 </head>
-<body style="background-color: var(--bg-color);">
+<body>
 
     <!-- TOP BRAND & SIGN OUT BAR -->
-    <div style="background-color: var(--card-bg); padding: 1.2rem 6%; border-bottom: 1px solid var(--secondary-sand); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-            <img src="./logo.png" alt="Logo" style="height: 35px; cursor: pointer;" onclick="location.href='./index.html'">
+    <div style="background-color: var(--card-bg, #fff); padding: 1rem 5%; border-bottom: 1px solid var(--secondary-sand, #e0d8cc); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;">
+        <div style="display: flex; align-items: center; gap: 0.8rem;">
+            <img src="./logo.png" alt="Logo" style="height: 48px; width: auto; object-fit: contain; cursor: pointer;" onclick="location.href='./index.html'">
             <div>
-                <h1 id="portal-welcome-title" style="font-size: 1.1rem; margin: 0; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main);">VIP Patient Portal</h1>
-                <span style="font-size: 0.65rem; color: var(--primary-sage); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Isle of Man Practice</span>
+                <h1 id="portal-welcome-title" style="font-size: 1.05rem; margin: 0; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main);">VIP Patient Portal</h1>
+                <span style="font-size: 0.6rem; color: var(--primary-sage); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Isle of Man Practice</span>
             </div>
         </div>
         <div>
@@ -60,14 +73,14 @@
         </div>
     </div>
 
-    <!-- MAIN CONTAINER -->
-    <div style="max-width: 800px; margin: 2rem auto; padding: 0 1rem;">
+    <!-- MAIN CONTAINER WRAPPER -->
+    <div class="main-app-wrapper">
 
         <!-- 0. LOGIN / AUTH SCREEN -->
         <div id="screen-login" class="page-screen">
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); max-width: 450px; margin: 3rem auto; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+            <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); max-width: 450px; margin: 2rem auto; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
                 <div style="text-align: center; margin-bottom: 1.5rem;">
-                    <img src="./logo.png" alt="Logo" style="height: 50px; margin-bottom: 0.5rem;">
+                    <img src="./logo.png" alt="Logo" style="height: 60px; width: auto; object-fit: contain; margin-bottom: 0.5rem;">
                     <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--text-main); margin: 0;">Patient Portal Sign In</h2>
                     <p style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Access your appointments, questionnaire, and clinical trackers.</p>
                 </div>
@@ -85,6 +98,7 @@
         <div id="screen-dashboard" class="page-screen">
             <!-- App Install Card -->
             <div class="dash-card" style="background: linear-gradient(135deg, var(--primary-sage), #0a4d22); color: white; border-radius: 12px; padding: 1.8rem; margin-bottom: 1.5rem; text-align: center;">
+                <img src="./logo.png" alt="App Icon" style="height: 45px; width: 45px; background: white; border-radius: 10px; padding: 4px; margin-bottom: 0.8rem; object-fit: contain;">
                 <h3 style="color: white; font-size: 1.1rem; margin-bottom: 0.3rem; font-family: 'Montserrat';">Save Clinic App to Phone</h3>
                 <p style="font-size: 0.82rem; opacity: 0.95; margin-bottom: 1rem;">Add shortcut to your home screen for instant access.</p>
                 <button type="button" class="btn" style="background: white; color: var(--text-main); width: 100%; font-size: 0.9rem; padding: 0.7rem; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" onclick="handleSmartInstall()">📥 ADD APP TO HOME SCREEN</button>
@@ -246,7 +260,7 @@
 
     </div>
 
-    <!-- BOTTOM APP NAVIGATION BAR (Pinned cleanly to bottom) -->
+    <!-- BOTTOM APP NAVIGATION BAR -->
     <nav class="app-bottom-nav" id="app-bottom-navigation" style="display: none;">
         <button class="app-nav-item active" onclick="openAppScreen('screen-dashboard', event)">
             <span class="icon">🏠</span>Dashboard
@@ -318,6 +332,6 @@
         }
     </script>
 
-    <script src="./app.js?version=11"></script>
+    <script src="./app.js?version=12"></script>
 </body>
 </html>
