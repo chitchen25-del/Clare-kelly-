@@ -20,18 +20,33 @@ function getSupabase() {
 }
 
 window.onload = async function() {
-    // FORCE DASHBOARD VISIBLE IMMEDIATELY SO IT NEVER RENDERS BLANK
-    window.openScreen('screen-dashboard');
-
     try {
         const db = getSupabase();
         if(db) {
             const { data: { session } } = await db.auth.getSession();
             if(session && session.user) {
+                const navBar = document.getElementById('app-bottom-navigation');
+                const signoutBtn = document.getElementById('nav-signout-btn');
+                if(navBar) navBar.style.display = 'flex';
+                if(signoutBtn) signoutBtn.style.display = 'inline-block';
+                
+                window.openScreen('screen-dashboard'); 
                 loadClientDashboard(db, session.user);
+            } else {
+                const navBar = document.getElementById('app-bottom-navigation');
+                const signoutBtn = document.getElementById('nav-signout-btn');
+                if(navBar) navBar.style.display = 'none';
+                if(signoutBtn) signoutBtn.style.display = 'none';
+                
+                window.openScreen('screen-login');
             }
+        } else {
+            window.openScreen('screen-login');
         }
-    } catch(err) { console.log("No active session or error loading:", err.message); }
+    } catch(err) { 
+        console.error("Session load error:", err.message);
+        window.openScreen('screen-login');
+    }
 };
 
 window.validateBusinessHours = function(input) {
@@ -51,6 +66,11 @@ window.processClientLogin = async function(e) {
         const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
         if (error) throw new Error(error.message);
         if (data.user) {
+            const navBar = document.getElementById('app-bottom-navigation');
+            const signoutBtn = document.getElementById('nav-signout-btn');
+            if(navBar) navBar.style.display = 'flex';
+            if(signoutBtn) signoutBtn.style.display = 'inline-block';
+
             window.openScreen('screen-dashboard'); 
             loadClientDashboard(db, data.user);
         }
@@ -68,7 +88,6 @@ window.bookNewSession = async function(e) {
         const serviceName = document.getElementById('portal-service').value;
         const appointmentTime = document.getElementById('portal-date').value;
         const clientName = user.user_metadata?.full_name || user.email;
-        const formattedDate = new Date(appointmentTime).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short', hour12: true });
 
         const isFunctional = serviceName.includes('Functional') || serviceName.includes('Gut Reset') || serviceName.includes('Health Audit');
         let vipCode = null;
@@ -259,7 +278,7 @@ window.processLogout = async function() {
     try {
         const db = getSupabase();
         if(db) await db.auth.signOut();
-        location.href = './index.html';
+        location.href = './app.html';
     } catch(err) { alert("Error signing out: " + err.message); }
 }
 
