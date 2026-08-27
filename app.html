@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-title" content="Clinic App">
     
     <link rel="apple-touch-icon" href="/logo.png">
-    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiVGhlIE5hdHVyYWwgSGVhbGluZyBDbGluaWMiLCJzaG9ydF9uYW1lIjoiQ2xpbmljIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmM2YxZWYiLCJ0aGVtZV9jb2xvciI6IiMwOTVkMjgiLCJpY29ucyI6W3sic3JjIjoiLi9sb2dvLnpuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiVGhlIE5hdHVyYWwgSGVhbGluZyBDbGluaWMiLCJzaG9ydF9uYW1lIjoiQ2xpbmljIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmM2YxZWYiLCJ0aGVtZV9jb2xvciI6IiMwOTVkMjgiLCJpY29ucyI6W3sic3JjIjoiLi9sb2dvLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -20,7 +20,7 @@
 </head>
 <body style="background-color: var(--bg-color);">
 
-    <!-- TOP BRAND & ADMIN BRIDGE BAR -->
+    <!-- TOP BRAND & SIGN OUT BAR (ADMIN BUTTON REMOVED) -->
     <div style="background-color: var(--card-bg); padding: 1.5rem 6%; border-bottom: 1px solid var(--secondary-sand); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;">
         <div style="display: flex; align-items: center; gap: 1rem;">
             <img src="./logo.png" alt="Logo" style="height: 40px; cursor: pointer;" onclick="location.href='./index.html'">
@@ -30,7 +30,6 @@
             </div>
         </div>
         <div style="display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap;">
-            <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.7rem; border-color: var(--primary-sage); color: var(--primary-sage);" onclick="location.href='./admin.html'">⚙️ Admin Records</button>
             <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.7rem; color: #a94442; border-color: #a94442;" onclick="processLogout()">Sign Out</button>
         </div>
     </div>
@@ -193,6 +192,6 @@
         }
     </script>
 
-    <script src="./app.js?v=3"></script>
+    <script src="./app.js?v=4"></script>
 </body>
 </html>
