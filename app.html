@@ -40,6 +40,14 @@
         
         <!-- LEFT COLUMN -->
         <div>
+            <!-- FOOLPROOF APP INSTALL BUTTON CARD -->
+            <div class="dash-card" style="background: linear-gradient(135deg, var(--primary-sage), #0a4d22); color: white; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; text-align: center; box-shadow: 0 10px 30px rgba(9, 93, 40, 0.15);">
+                <img src="./logo.png" alt="App Icon" style="height: 45px; width: 45px; background: white; border-radius: 10px; padding: 4px; margin-bottom: 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <h3 style="color: white; font-size: 1.2rem; margin-bottom: 0.4rem; font-family: 'Montserrat', sans-serif;">Save App to Phone Screen</h3>
+                <p style="font-size: 0.85rem; opacity: 0.95; margin-bottom: 1.2rem; line-height: 1.4;">Tap below to instantly add your clinic portal shortcut to your home screen.</p>
+                <button type="button" class="btn" style="background: white; color: var(--text-main); width: 100%; font-size: 0.95rem; padding: 0.8rem; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" onclick="handleSmartInstall()">📥 ADD APP TO HOME SCREEN</button>
+            </div>
+
             <!-- APPOINTMENTS BOOKING CARD -->
             <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
                 <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Book Another Session</h3>
@@ -64,10 +72,10 @@
                         <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin: 0; color: var(--text-main);">Standard Health Questionnaire</h4>
                         <span style="font-size: 0.8rem; color: var(--primary-sage); font-weight: 600;">Required prior to physical therapies (Tap to open)</span>
                     </div>
-                    <span class="icon" style="font-size: 1.5rem; font-weight: bold; color: var(--primary-sage);">+</span>
+                    <span id="accordion-icon" style="font-size: 1.5rem; font-weight: bold; color: var(--primary-sage);">+</span>
                 </div>
 
-                <div id="basic-questionnaire-panel" class="accordion-panel" style="display: none; padding: 2rem; border-top: 1px solid var(--secondary-sand); background: white;">
+                <div id="basic-questionnaire-panel" style="display: none; padding: 2rem; border-top: 1px solid var(--secondary-sand); background: white;">
                     <form onsubmit="return submitBasicIntake(event)">
                         <h4 style="margin-bottom: 1rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 0.9rem;">1. Personal Information</h4>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
@@ -116,8 +124,8 @@
             <!-- PREMIUM APP CONTAINER (Hidden unless VIP is unlocked) -->
             <div id="premium-app-container" style="display: none;">
                 <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
-                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Daily Nutrition</h3>
-                    <p style="font-size: 0.9rem; color: #666;">Your active macro targets and daily tracking feed.</p>
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Daily Nutrition & Trackers</h3>
+                    <p style="font-size: 0.9rem; color: #666;">Your active macro targets and daily health logs.</p>
                 </div>
             </div>
         </div>
@@ -146,6 +154,43 @@
             </div>
         </div>
     </div>
+
+    <!-- FOOLPROOF SCRIPT FOR ACCORDION & APP INSTALL -->
+    <script>
+        let deferredInstallPrompt = null;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredInstallPrompt = e;
+        });
+
+        async function handleSmartInstall() {
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                const { outcome } = await deferredInstallPrompt.userChoice;
+                deferredInstallPrompt = null;
+            } else {
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                if (isIOS) {
+                    alert("To put the Clinic App on your phone screen:\n\n1. Tap the Share button at the bottom of your Safari screen.\n\n2. Scroll down and tap 'Add to Home Screen'.");
+                } else {
+                    alert("To put the Clinic App on your phone screen:\n\n1. Tap the menu dots (top right of your browser).\n\n2. Tap 'Add to Home Screen' or 'Install App'.");
+                }
+            }
+        }
+
+        window.toggleAccordion = function(panelId) {
+            const panel = document.getElementById(panelId);
+            const icon = document.getElementById('accordion-icon');
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+                if(icon) icon.innerText = '+';
+            } else {
+                panel.style.display = 'block';
+                if(icon) icon.innerText = '−';
+            }
+        }
+    </script>
 
     <script src="./app.js?v=2"></script>
 </body>
