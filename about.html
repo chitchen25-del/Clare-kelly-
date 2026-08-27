@@ -1,1 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>About Clare & Patient Stories | The Natural Healing Clinic</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css?version=6">
+</head>
+<body>
+    <nav>
+        <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="location.href='./index.html'">
+        <div class="desktop-nav-links">
+            <span class="nav-link-text" onclick="location.href='./index.html'">Home</span>
+            <span class="nav-link-text" style="color: var(--primary-sage); font-weight: 700;">About Clare</span>
+            <span class="nav-link-text" onclick="location.href='./contact.html'">Contact</span>
+            <button type="button" class="btn btn-outline" onclick="location.href='./app.html'">Patient Portal</button>
+        </div>
+    </nav>
+
+    <!-- ABOUT CLARE SECTION -->
+    <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
+        <span class="section-subtitle">Clinical Leadership</span>
+        <h1 style="margin-top: 0.5rem;">About Clare Townsend</h1>
+    </div>
+
+    <section class="section" style="max-width: 1100px; margin: 4rem auto; padding: 0 5%; display: flex; gap: 4rem; align-items: center; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 300px;">
+            <video width="100%" controls playsinline poster="./clare-profile.avif" preload="metadata" style="border-radius: 8px; box-shadow: 0 25px 60px rgba(9, 93, 40, 0.08); object-fit: cover; max-height: 500px; background: var(--secondary-sand);">
+                <source src="./clare-video.mp4.MOV" type="video/mp4">
+                <source src="./clare-video.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div style="flex: 1; min-width: 300px;">
+            <span class="section-subtitle">Practitioner Profile</span>
+            <h2 style="font-size: 2.2rem; margin-bottom: 1.5rem;">Bridging Functional Medicine & Advanced Soft-Tissue Therapy</h2>
+            <p style="margin-bottom: 1.2rem; color: #555;">Clare Townsend is a premier functional health and soft-tissue specialist based in the Isle of Man. With 19 years of dedicated clinical practice, Clare has cultivated a highly unique, dual-modality approach that sets her clinic apart.</p>
+            <p style="margin-bottom: 2rem; color: #555;">By blending root-cause diagnostics with advanced physical therapies, she resolves complex chronic pain and systemic inflammation, delivering lasting results.</p>
+            <button type="button" class="btn" onclick="location.href='./index.html#register'">Book Consultation</button>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo-wrapper"><img src="./logo.png" alt="Logo" class="footer-brand-logo"></div>
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; width: 100%;">
+            <div class="footer-col" style="text-align: left;"><h4>The Natural Healing Clinic</h4><p>13 Cronk Drine, Union Mills, Isle of Man</p></div>
+            <div class="footer-col" style="text-align: right;"><h4>Contact</h4><p>Tel: 07624 202 121</p></div>
+        </div>
+    </footer>
+    <script src="./app.js?v=2"></script>
+</body>
+</html>
 
