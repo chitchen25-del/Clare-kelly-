@@ -43,7 +43,7 @@
             </div>
         </div>
         <div>
-            <button id="nav-signout-btn" class="btn btn-outline" style="padding: 0.3rem 0.8rem; font-size: 0.7rem; color: #a94442; border-color: #a94442; display: none;" onclick="processLogout()">Sign Out</button>
+            <button id="nav-signout-btn" class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 600; color: #a94442; border: 1px solid #a94442; border-radius: 6px; background: white; cursor: pointer; display: none;" onclick="processLogout()">Sign Out</button>
         </div>
     </div>
 
@@ -63,7 +63,7 @@
                     <input type="email" id="login-email" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
                     <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Password</label>
                     <input type="password" id="login-password" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1.5rem;">
-                    <button type="submit" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Sign In to Portal</button>
+                    <button type="submit" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;">Sign In to Portal</button>
                 </form>
             </div>
         </div>
@@ -76,7 +76,7 @@
                 <img src="./logo.png" alt="App Icon" style="height: 45px; width: 45px; background: white; border-radius: 10px; padding: 4px; margin-bottom: 0.8rem; object-fit: contain;">
                 <h3 style="color: white; font-size: 1.1rem; margin-bottom: 0.3rem;">Your VIP App is Unlocked</h3>
                 <p style="font-size: 0.82rem; opacity: 0.95; margin-bottom: 1rem;">Launch your full-screen health tracker with zero browser bars.</p>
-                <button type="button" style="background: white; color: #222; width: 100%; font-size: 0.95rem; padding: 0.8rem; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" onclick="location.href='./vip.html'">🚀 LAUNCH VIP APP</button>
+                <button type="button" style="background: white; color: #095d28; width: 100%; font-size: 1rem; padding: 1rem; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.1s ease;" onclick="location.href='./vip.html'">🚀 LAUNCH VIP APP</button>
             </div>
 
             <!-- App Install Card (Supports Android One-Click & iOS Guide) -->
@@ -84,7 +84,7 @@
                 <img src="./logo.png" alt="App Icon" style="height: 40px; width: 40px; background: #f3f1ef; border-radius: 10px; padding: 4px; margin-bottom: 0.6rem; object-fit: contain;">
                 <h3 style="font-size: 1.05rem; margin-bottom: 0.3rem; font-weight: 700;">Save App to Phone Screen</h3>
                 <p style="font-size: 0.82rem; color: #666; margin-bottom: 1rem;">Tap below to instantly install your clinic portal shortcut.</p>
-                <button type="button" id="native-install-btn" style="background: #095d28; color: white; width: 100%; font-size: 0.85rem; padding: 0.7rem; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" onclick="handleNativeInstall()">📥 INSTALL APP TO HOME SCREEN</button>
+                <button type="button" id="native-install-btn" style="background: #095d28; color: white; width: 100%; font-size: 1rem; padding: 1rem; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;" onclick="handleNativeInstall()">📥 INSTALL APP TO HOME SCREEN</button>
             </div>
 
             <!-- Appointments & Booking -->
@@ -105,7 +105,7 @@
                     </select>
                     <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Appointment Date & Time</label>
                     <input type="datetime-local" id="portal-date" onchange="validateBusinessHours(this)" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
-                    <button type="submit" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Confirm Booking</button>
+                    <button type="submit" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;">Confirm Booking</button>
                 </form>
             </div>
 
@@ -132,7 +132,7 @@
                             <option value="5">5 - Moderate</option>
                             <option value="10">10 - Excruciating</option>
                         </select>
-                        <button type="submit" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Submit Questionnaire</button>
+                        <button type="submit" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;">Submit Questionnaire</button>
                     </form>
                 </div>
             </div>
@@ -143,7 +143,7 @@
                 <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.2rem;">Enter your 4-digit VIP code from your programme confirmation to unlock your dedicated native app launcher.</p>
                 <form onsubmit="return unlockVipPortal(event)">
                     <input type="text" id="vip-code-input" placeholder="e.g. VIP-4821" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; text-transform: uppercase; text-align: center; font-weight: bold; letter-spacing: 2px; margin-bottom:1rem;">
-                    <button type="submit" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Unlock VIP App</button>
+                    <button type="submit" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;">Unlock VIP App</button>
                 </form>
             </div>
 
@@ -154,8 +154,8 @@
                     <p style="color: #888; font-size: 0.9rem; text-align: center; margin-top: 4rem;">No messages yet. Send a direct note to Clare below!</p>
                 </div>
                 <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.8rem;">
-                    <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1; background: #f9f8f6; padding:0.8rem; border:1px solid #ccc; border-radius:6px;" required>
-                    <button type="submit" style="padding: 0 1.5rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Send</button>
+                    <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1; background: #f9f8f6; padding:1rem; border:1px solid #ccc; border-radius:8px; font-size: 1rem;" required>
+                    <button type="submit" style="padding: 0 1.8rem; background: #095d28; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;">Send</button>
                 </form>
             </div>
 
