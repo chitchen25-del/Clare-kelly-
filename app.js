@@ -79,7 +79,7 @@ window.processRegistration = async function(e) {
         const email = document.getElementById('reg-email').value.trim();
         const pass = document.getElementById('reg-password').value.trim();
         const service = document.getElementById('reg-service').value;
-        const date = document.getElementById('reg-date').value || document.getElementById('portal-date-reg').value;
+        const date = document.getElementById('reg-date')?.value || document.getElementById('portal-date-reg')?.value || new Date().toISOString();
 
         const isFunctional = service.includes('Functional') || service.includes('Gut Reset') || service.includes('Health Audit');
         let vipCode = null;
@@ -176,7 +176,10 @@ window.rescheduleAppointment = async function(id) {
 
 async function loadClientDashboard(db, user) {
     const list = document.getElementById('client-appointments-list');
-    document.getElementById('portal-welcome-title').innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
+    const welcomeTitle = document.getElementById('portal-welcome-title');
+    if(welcomeTitle) {
+        welcomeTitle.innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
+    }
 
     try {
         const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
@@ -187,29 +190,7 @@ async function loadClientDashboard(db, user) {
 
         if (isVip) {
             if(unlockCard) unlockCard.style.display = 'none';
-            if(appContainer) {
-                appContainer.style.display = 'block';
-                
-                const isAppMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-                
-                const premiumCards = appContainer.querySelectorAll('.dash-card');
-                
-                if(premiumCards.length > 0) {
-                    const installCard = premiumCards[0]; 
-                    
-                    if (isAppMode) {
-                        installCard.style.display = 'none';
-                        for(let i = 1; i < premiumCards.length; i++) {
-                            premiumCards[i].style.display = 'block';
-                        }
-                    } else {
-                        installCard.style.display = 'block';
-                        for(let i = 1; i < premiumCards.length; i++) {
-                            premiumCards[i].style.display = 'none';
-                        }
-                    }
-                }
-            }
+            if(appContainer) appContainer.style.display = 'block';
         } else {
             if(unlockCard) unlockCard.style.display = 'block';
             if(appContainer) appContainer.style.display = 'none';
@@ -217,14 +198,16 @@ async function loadClientDashboard(db, user) {
 
         const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
 
-        list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => `
-            <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); background: white;">
-                <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${new Date(a.appointment_time).toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
-                <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
-                    <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; flex: 1;" onclick="rescheduleAppointment('${a.id}')">Reschedule</button>
-                    <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; color: #a94442; border-color: #a94442; flex: 1;" onclick="cancelAppointment('${a.id}')">Cancel</button>
-                </div>
-            </div>`).join('');
+        if(list) {
+            list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.95rem;">No appointments booked.</p>' : appts.map(a => `
+                <div style="padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); background: white;">
+                    <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem;">${new Date(a.appointment_time).toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })}</strong><br><span style="font-size:0.95rem; color:var(--sage-hover);">${a.service_name}</span></div>
+                    <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
+                        <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; flex: 1;" onclick="rescheduleAppointment('${a.id}')">Reschedule</button>
+                        <button class="btn btn-outline" style="min-height: 35px; padding: 0.4rem 1rem; color: #a94442; border-color: #a94442; flex: 1;" onclick="cancelAppointment('${a.id}')">Cancel</button>
+                    </div>
+                </div>`).join('');
+        }
     } catch(err) { console.error("Dashboard error:", err.message); }
 }
 
@@ -237,7 +220,8 @@ window.submitDailyLog = async function(e) {
 window.handleClientMessage = async function(e) {
     e.preventDefault();
     alert("Message sent to Clare!");
-    document.getElementById('client-msg-input').value = '';
+    const input = document.getElementById('client-msg-input');
+    if(input) input.value = '';
     return false;
 };
 
@@ -251,31 +235,21 @@ window.startBarcodeScanner = function() {
 
 window.updateDailyTotals = function() {};
 
-window.closePwaOverlay = function() {
-    const overlay = document.getElementById('pwa-install-overlay');
-    if(overlay) overlay.style.display = 'none';
-};
-
 window.processLogout = async function() {
     try {
         const db = getSupabase();
         if(db) await db.auth.signOut();
-        location.reload();
+        location.href = './index.html';
     } catch(err) { alert("Error signing out: " + err.message); }
 }
 
 function updateNavState(isLoggedIn) {
-    document.getElementById('nav-portal-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
-    document.getElementById('nav-book-btn').style.display = isLoggedIn ? 'none' : 'inline-block';
-    document.getElementById('nav-logout-btn').style.display = isLoggedIn ? 'inline-block' : 'none';
-    document.getElementById('mobile-portal-link').style.display = isLoggedIn ? 'none' : 'block';
-    document.getElementById('mobile-book-link').style.display = isLoggedIn ? 'none' : 'block';
-    document.getElementById('mobile-logout-link').style.display = isLoggedIn ? 'block' : 'none';
-    
-    const testPrompt = document.getElementById('testimonial-login-prompt');
-    const testForm = document.getElementById('testimonial-submit-form');
-    if (testPrompt) testPrompt.style.display = isLoggedIn ? 'none' : 'block';
-    if (testForm) testForm.style.display = isLoggedIn ? 'block' : 'none';
+    const pBtn = document.getElementById('nav-portal-btn');
+    const bBtn = document.getElementById('nav-book-btn');
+    const lBtn = document.getElementById('nav-logout-btn');
+    if(pBtn) pBtn.style.display = isLoggedIn ? 'none' : 'inline-block';
+    if(bBtn) bBtn.style.display = isLoggedIn ? 'none' : 'inline-block';
+    if(lBtn) lBtn.style.display = isLoggedIn ? 'inline-block' : 'none';
 }
 
 window.unlockVipApp = async function(e) {
@@ -302,15 +276,6 @@ window.unlockVipApp = async function(e) {
     }
     return false;
 };
-
-window.triggerPwaInstall = function() {
-    const overlay = document.getElementById('pwa-install-overlay');
-    if(overlay) {
-        overlay.style.display = 'flex';
-    } else {
-        alert("To install, tap your browser menu (three dots or share icon) and select 'Add to Home Screen'.");
-    }
-}
 
 window.submitBasicIntake = async function(e) {
     e.preventDefault();
@@ -394,7 +359,6 @@ window.loadTestimonials = async function() {
         if (!feed) return;
 
         const { data, error } = await db.from('testimonials').select('*').eq('is_approved', true).order('created_at', { ascending: false });
-        
         if (error) throw error;
 
         if (!data || data.length === 0) {
