@@ -9,8 +9,6 @@ window.openScreen = function(screenId) {
     } catch (err) { console.error(err.message); }
 }
 
-window.toggleMobileMenu = function() { document.getElementById('mobile-drawer')?.classList.toggle('open'); }
-
 const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
 
@@ -155,8 +153,8 @@ async function loadClientDashboard(db, user) {
 
         if(list) {
             list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.9rem;">No appointments booked.</p>' : appts.map(a => `
-                <div style="padding: 1.2rem; margin-bottom: 0.8rem; border-radius: 8px; border: 1px solid var(--secondary-sand); background: white;">
-                    <div><strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1rem;">${new Date(a.appointment_time).toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })}</strong><br><span style="font-size:0.9rem; color:var(--sage-hover);">${a.service_name}</span></div>
+                <div style="padding: 1.2rem; margin-bottom: 0.8rem; border-radius: 8px; border: 1px solid #e0d8cc; background: white;">
+                    <div><strong style="color: #222; font-family: 'Montserrat'; font-size: 1rem;">${new Date(a.appointment_time).toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })}</strong><br><span style="font-size:0.9rem; color:#095d28;">${a.service_name}</span></div>
                     <div style="display: flex; gap: 0.8rem; margin-top: 0.8rem;">
                         <button class="btn btn-outline" style="min-height: 32px; padding: 0.3rem 0.8rem; flex: 1; font-size: 0.75rem;" onclick="rescheduleAppointment('${a.id}')">Reschedule</button>
                         <button class="btn btn-outline" style="min-height: 32px; padding: 0.3rem 0.8rem; color: #a94442; border-color: #a94442; flex: 1; font-size: 0.75rem;" onclick="cancelAppointment('${a.id}')">Cancel</button>
