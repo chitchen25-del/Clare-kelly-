@@ -41,8 +41,16 @@
     <!-- MAIN DASHBOARD CONTAINER -->
     <div class="dashboard-container" style="max-width: 1200px; margin: 2.5rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;">
         
-        <!-- LEFT COLUMN: Progress, Check-ins & Collapsible Questionnaire -->
+        <!-- LEFT COLUMN: 1-Click App Download, Progress & Questionnaire -->
         <div>
+            <!-- 1-CLICK APP DOWNLOAD CARD (Big, clear button for older patients) -->
+            <div class="dash-card" style="background: linear-gradient(135deg, #095d28, #0d9b46); color: white; border-radius: 12px; padding: 2.5rem 2rem; margin-bottom: 1.5rem; text-align: center; box-shadow: 0 10px 30px rgba(9, 93, 40, 0.15);">
+                <img src="./logo.png" alt="App Icon" style="height: 60px; width: 60px; background: white; border-radius: 14px; padding: 5px; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <h3 style="color: white; font-size: 1.4rem; margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif;">Install Clinic App</h3>
+                <p style="font-size: 0.95rem; opacity: 0.95; margin-bottom: 1.5rem; line-height: 1.4;">Tap the button below to instantly put the clinic shortcut right on your phone home screen.</p>
+                <button id="direct-install-btn" class="btn" style="background: white; color: var(--text-main); width: 100%; font-size: 1.1rem; padding: 1rem; border-radius: 8px; font-weight: bold; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" onclick="triggerDirectInstall()">📥 DOWNLOAD APP TO PHONE</button>
+            </div>
+
             <!-- PROGRESS & TARGETS CARD -->
             <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -57,9 +65,8 @@
                 </div>
             </div>
 
-            <!-- COLLAPSIBLE HEALTH QUESTIONNAIRE (Hidden automatically once completed) -->
+            <!-- COLLAPSIBLE HEALTH QUESTIONNAIRE -->
             <div class="dash-card" id="basic-questionnaire-card" style="background: white; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem; overflow: hidden;">
-                <!-- ACCORDION HEADER (Click to toggle) -->
                 <div onclick="toggleAccordion('questionnaire-panel')" style="padding: 1.5rem 2rem; background: var(--card-bg); cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--secondary-sand);">
                     <div>
                         <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin: 0; color: var(--text-main);">Standard Health Questionnaire</h4>
@@ -68,7 +75,6 @@
                     <span class="icon" style="font-size: 1.5rem; font-weight: bold; color: var(--primary-sage);">+</span>
                 </div>
 
-                <!-- ACCORDION PANEL (Hidden by default) -->
                 <div id="questionnaire-panel" style="display: none; padding: 2rem;">
                     <form onsubmit="return submitBasicIntakeAndHide(event)">
                         <h4 style="margin-bottom: 1rem; color: var(--text-main); font-family: 'Montserrat'; font-size: 0.9rem;">1. Personal Information</h4>
@@ -97,30 +103,6 @@
                     </form>
                 </div>
             </div>
-
-            <!-- ADVANCED WELLNESS CHECK-IN SUITE -->
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
-                <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">Clinical Wellness Check-in</h4>
-                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">How well do you feel today across key metrics?</p>
-                
-                <div style="margin-bottom: 1.2rem;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">
-                        <span>Overall Vitality / Wellbeing</span>
-                        <strong id="val-vitality" style="color: var(--primary-sage);">7/10</strong>
-                    </div>
-                    <input type="range" min="1" max="10" value="7" style="width: 100%; accent-color: var(--primary-sage); cursor: pointer;" oninput="document.getElementById('val-vitality').innerText = this.value + '/10'">
-                </div>
-
-                <div style="margin-bottom: 1.5rem;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">
-                        <span>Sleep Quality & Restfulness</span>
-                        <strong id="val-sleep" style="color: var(--primary-sage);">8/10</strong>
-                    </div>
-                    <input type="range" min="1" max="10" value="8" style="width: 100%; accent-color: var(--primary-sage); cursor: pointer;" oninput="document.getElementById('val-sleep').innerText = this.value + '/10'">
-                </div>
-
-                <button class="btn" style="width: 100%;" onclick="alert('Detailed wellness check-in securely transmitted to Clare!')">Save Daily Metrics</button>
-            </div>
         </div>
              
         <!-- RIGHT COLUMN: Appointments & Secure Clinical Chat -->
@@ -148,8 +130,27 @@
         </div>
     </div>
 
-    <!-- SCRIPT TO HANDLE ACCORDION & AUTO-HIDING ON SUBMIT -->
+    <!-- 1-CLICK INSTALL & ACCORDION SCRIPTS -->
     <script>
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        async function triggerDirectInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                }
+                deferredPrompt = null;
+            } else {
+                alert("To add the clinic app to your home screen, simply tap your browser's share icon or menu button, and select 'Add to Home Screen'.");
+            }
+        }
+
         function toggleAccordion(id) {
             const panel = document.getElementById(id);
             const icon = panel.previousElementSibling.querySelector('.icon');
@@ -164,10 +165,7 @@
 
         function submitBasicIntakeAndHide(e) {
             e.preventDefault();
-            // Here your existing submission logic runs to push to Supabase
             alert("Questionnaire submitted successfully to Clare's records!");
-            
-            // Instantly hide the questionnaire card so it never clutters their screen again
             document.getElementById('basic-questionnaire-card').style.display = 'none';
             return false;
         }
