@@ -1,14 +1,3 @@
-window.openScreen = function(screenId) {
-    try {
-        document.querySelectorAll('.page-screen').forEach(el => el.classList.remove('visible'));
-        const target = document.getElementById(screenId);
-        if(target) {
-            target.classList.add('visible');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    } catch (err) { console.error(err.message); }
-}
-
 const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
 
@@ -23,29 +12,44 @@ window.onload = async function() {
         if(db) {
             const { data: { session } } = await db.auth.getSession();
             if(session && session.user) {
-                const navBar = document.getElementById('app-bottom-navigation');
-                const signoutBtn = document.getElementById('nav-signout-btn');
-                if(navBar) navBar.style.display = 'flex';
-                if(signoutBtn) signoutBtn.style.display = 'inline-block';
-                
-                window.openScreen('screen-dashboard'); 
-                loadClientDashboard(db, session.user);
+                showDashboard(session.user, db);
             } else {
-                const navBar = document.getElementById('app-bottom-navigation');
-                const signoutBtn = document.getElementById('nav-signout-btn');
-                if(navBar) navBar.style.display = 'none';
-                if(signoutBtn) signoutBtn.style.display = 'none';
-                
-                window.openScreen('screen-login');
+                showLogin();
             }
         } else {
-            window.openScreen('screen-login');
+            showLogin();
         }
     } catch(err) { 
         console.error("Session load error:", err.message);
-        window.openScreen('screen-login');
+        showLogin();
     }
 };
+
+function showLogin() {
+    const loginSec = document.getElementById('section-login');
+    const dashSec = document.getElementById('section-dashboard');
+    const signoutBtn = document.getElementById('nav-signout-btn');
+    
+    if(loginSec) loginSec.style.display = 'block';
+    if(dashSec) dashSec.style.display = 'none';
+    if(signoutBtn) signoutBtn.style.display = 'none';
+}
+
+function showDashboard(user, db) {
+    const loginSec = document.getElementById('section-login');
+    const dashSec = document.getElementById('section-dashboard');
+    const signoutBtn = document.getElementById('nav-signout-btn');
+    
+    if(loginSec) loginSec.style.display = 'none';
+    if(dashSec) dashSec.style.display = 'block';
+    if(signoutBtn) signoutBtn.style.display = 'inline-block';
+    
+    const welcomeTitle = document.getElementById('portal-welcome-title');
+    if(welcomeTitle) {
+        welcomeTitle.innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
+    }
+    loadClientDashboard(db, user);
+}
 
 window.validateBusinessHours = function(input) {
     const val = input.value;
@@ -64,13 +68,7 @@ window.processClientLogin = async function(e) {
         const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
         if (error) throw new Error(error.message);
         if (data.user) {
-            const navBar = document.getElementById('app-bottom-navigation');
-            const signoutBtn = document.getElementById('nav-signout-btn');
-            if(navBar) navBar.style.display = 'flex';
-            if(signoutBtn) signoutBtn.style.display = 'inline-block';
-
-            window.openScreen('screen-dashboard'); 
-            loadClientDashboard(db, data.user);
+            showDashboard(data.user, db);
         }
     } catch (err) { alert("Login Failed: " + err.message); }
     return false;
@@ -86,14 +84,6 @@ window.bookNewSession = async function(e) {
         const serviceName = document.getElementById('portal-service').value;
         const appointmentTime = document.getElementById('portal-date').value;
         const clientName = user.user_metadata?.full_name || user.email;
-
-        const isFunctional = serviceName.includes('Functional') || serviceName.includes('Gut Reset') || serviceName.includes('Health Audit');
-        let vipCode = null;
-
-        if (isFunctional) {
-            vipCode = 'VIP-' + Math.floor(1000 + Math.random() * 9000);
-            await db.from('client_tiers').upsert([{ client_id: user.id, is_premium: true, unlock_code: vipCode }]);
-        }
 
         await db.from('appointments').insert([{ client_id: user.id, client_name: clientName, service_name: serviceName, appointment_time: appointmentTime, status: 'confirmed' }]);
 
@@ -129,26 +119,7 @@ window.rescheduleAppointment = async function(id) {
 
 async function loadClientDashboard(db, user) {
     const list = document.getElementById('client-appointments-list');
-    const welcomeTitle = document.getElementById('portal-welcome-title');
-    if(welcomeTitle) {
-        welcomeTitle.innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
-    }
-
     try {
-        const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
-        
-        const isVip = tier && (tier.is_premium === true || tier.is_premium === 'true');
-        const unlockCard = document.getElementById('vip-unlock-card');
-        const vipNavItems = document.querySelectorAll('.vip-nav-item');
-
-        if (isVip) {
-            if(unlockCard) unlockCard.style.display = 'none';
-            vipNavItems.forEach(item => item.style.display = 'flex');
-        } else {
-            if(unlockCard) unlockCard.style.display = 'block';
-            vipNavItems.forEach(item => item.style.display = 'none');
-        }
-
         const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
 
         if(list) {
@@ -164,106 +135,6 @@ async function loadClientDashboard(db, user) {
     } catch(err) { console.error("Dashboard error:", err.message); }
 }
 
-window.unlockVipApp = async function(e) {
-    e.preventDefault();
-    try {
-        const db = getSupabase();
-        const { data: { user } } = await db.auth.getUser();
-        if(!user) throw new Error("You must be logged in.");
-
-        const enteredCode = document.getElementById('vip-code-input').value.trim().toUpperCase();
-        const { data: tier, error } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
-        if(error) throw new Error("Could not verify client tier.");
-
-        if(tier && tier.unlock_code === enteredCode) {
-            await db.from('client_tiers').update({ is_premium: true }).eq('client_id', user.id);
-            alert("VIP App Unlocked Successfully!");
-            loadClientDashboard(db, user);
-        } else {
-            alert("Invalid unlock code.");
-        }
-    } catch(err) { alert("Error unlocking: " + err.message); }
-    return false;
-};
-
-window.submitDailyLog = async function(e) {
-    e.preventDefault();
-    alert("Food item logged successfully!");
-    e.target.reset();
-    return false;
-};
-
-window.saveSupplements = async function() {
-    try {
-        const db = getSupabase();
-        const { data: { user } } = await db.auth.getUser();
-        if(!user) throw new Error("Not logged in");
-
-        const checkboxes = document.querySelectorAll('.supp-check');
-        for(let cb of checkboxes) {
-            if(cb.checked) {
-                const dosageInput = cb.parentElement.querySelector('input[type="text"]');
-                const dosage = dosageInput ? dosageInput.value : '';
-                await db.from('client_supplements').upsert([{
-                    client_id: user.id,
-                    supplement_name: cb.value,
-                    is_active: true,
-                    dosage: dosage
-                }], { onConflict: 'client_id,supplement_name' });
-            }
-        }
-        alert("Supplement stack saved successfully!");
-    } catch(err) { alert("Error saving supplements: " + err.message); }
-};
-
-window.saveMoodJournal = async function(e) {
-    e.preventDefault();
-    try {
-        const db = getSupabase();
-        const { data: { user } } = await db.auth.getUser();
-        if(!user) throw new Error("Not logged in");
-
-        const mood = document.getElementById('mood-select').value;
-        const notes = document.getElementById('mood-notes').value;
-
-        const { error } = await db.from('client_moods').insert([{
-            client_id: user.id,
-            mood: mood,
-            journal_notes: notes
-        }]);
-        if(error) throw error;
-
-        alert("Daily mood & journal saved successfully!");
-        e.target.reset();
-    } catch(err) { alert("Error saving mood: " + err.message); }
-    return false;
-};
-
-window.saveExerciseLog = async function(e) {
-    e.preventDefault();
-    try {
-        const db = getSupabase();
-        const { data: { user } } = await db.auth.getUser();
-        if(!user) throw new Error("Not logged in");
-
-        const steps = parseInt(document.getElementById('exercise-steps').value) || 0;
-        const type = document.getElementById('exercise-type').value;
-        const duration = parseInt(document.getElementById('exercise-duration').value) || 0;
-
-        const { error } = await db.from('client_exercises').insert([{
-            client_id: user.id,
-            steps: steps,
-            workout_type: type,
-            duration_minutes: duration
-        }]);
-        if(error) throw error;
-
-        alert("Exercise & steps logged successfully!");
-        e.target.reset();
-    } catch(err) { alert("Error saving exercise: " + err.message); }
-    return false;
-};
-
 window.handleClientMessage = async function(e) {
     e.preventDefault();
     alert("Message sent to Clare!");
@@ -276,7 +147,7 @@ window.processLogout = async function() {
     try {
         const db = getSupabase();
         if(db) await db.auth.signOut();
-        location.href = './app.html';
+        showLogin();
     } catch(err) { alert("Error signing out: " + err.message); }
 }
 
