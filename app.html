@@ -16,7 +16,8 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./style.css?version=20">
+    <!-- Version bumped to 23 to break the Safari cache -->
+    <link rel="stylesheet" href="./style.css?version=23">
     <style>
         * { box-sizing: border-box; }
         html, body {
@@ -58,12 +59,12 @@
                     <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: #222; margin: 0;">Patient Portal Sign In</h2>
                     <p style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Access your appointments and clinic questionnaire.</p>
                 </div>
-                <form onsubmit="return processClientLogin(event)">
+                <form id="portal-login-form" onsubmit="return handleLoginSubmit(event)">
                     <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Email Address</label>
                     <input type="email" id="login-email" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
                     <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Password</label>
                     <input type="password" id="login-password" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1.5rem;">
-                    <button type="submit" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;">Sign In to Portal</button>
+                    <button type="submit" id="login-submit-btn" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;">Sign In to Portal</button>
                 </form>
             </div>
         </div>
@@ -163,8 +164,31 @@
 
     </div>
 
-    <!-- GLOBAL SCRIPT -->
+    <!-- GLOBAL SCRIPT & SAFETY HANDLER -->
     <script>
+        async function handleLoginSubmit(event) {
+            event.preventDefault();
+            const btn = document.getElementById('login-submit-btn');
+            const originalText = btn.innerText;
+            btn.innerText = 'Signing in...';
+            btn.disabled = true;
+
+            try {
+                if (typeof processClientLogin === 'function') {
+                    await processClientLogin(event);
+                } else {
+                    alert('Error: processClientLogin function is missing or app.js failed to load.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Sign in error: ' + (err.message || err));
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+            return false;
+        }
+
         let deferredInstallPrompt = null;
 
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -174,14 +198,12 @@
 
         async function handleNativeInstall() {
             if (deferredInstallPrompt) {
-                // Triggers automated native install prompt on Android / Chrome
                 deferredInstallPrompt.prompt();
                 const { outcome } = await deferredInstallPrompt.userChoice;
                 if (outcome === 'accepted') {
                     deferredInstallPrompt = null;
                 }
             } else {
-                // Fallback guide for iOS Safari
                 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
                 if (isIOS) {
                     alert("To put the Clinic Portal on your home screen:\n\n1. Tap the Share button at the bottom of your Safari screen.\n\n2. Scroll down and tap 'Add to Home Screen'.");
@@ -205,6 +227,20 @@
         }
     </script>
 
-    <script src="./app.js?version=20"></script>
+    <!-- CACHE BUSTER: Force unregister stuck Service Workers -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister().then(function(boolean) {
+                        console.log('Old Service worker aggressively unregistered to fix cache lock.');
+                    });
+                }
+            });
+        }
+    </script>
+
+    <!-- Version bumped to 23 to break the Safari cache -->
+    <script src="./app.js?version=23"></script>
 </body>
 </html>
