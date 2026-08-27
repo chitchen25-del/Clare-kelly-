@@ -16,7 +16,7 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./style.css?version=19">
+    <link rel="stylesheet" href="./style.css?version=20">
     <style>
         * { box-sizing: border-box; }
         html, body {
@@ -71,7 +71,7 @@
         <!-- DASHBOARD SECTION -->
         <div id="section-dashboard" class="portal-section">
             
-            <!-- VIP App Launcher Card (Shows if VIP) -->
+            <!-- VIP App Launcher Card (Only visible if VIP unlocked) -->
             <div id="vip-launcher-card" style="background: linear-gradient(135deg, #095d28, #0a4d22); color: white; border-radius: 12px; padding: 1.8rem; margin-bottom: 1.5rem; text-align: center; box-shadow: 0 10px 30px rgba(9, 93, 40, 0.15); display: none;">
                 <img src="./logo.png" alt="App Icon" style="height: 45px; width: 45px; background: white; border-radius: 10px; padding: 4px; margin-bottom: 0.8rem; object-fit: contain;">
                 <h3 style="color: white; font-size: 1.1rem; margin-bottom: 0.3rem;">Your VIP App is Unlocked</h3>
@@ -79,12 +79,12 @@
                 <button type="button" style="background: white; color: #222; width: 100%; font-size: 0.95rem; padding: 0.8rem; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" onclick="location.href='./vip.html'">🚀 LAUNCH VIP APP</button>
             </div>
 
-            <!-- App Install Card -->
+            <!-- App Install Card (Supports Android One-Click & iOS Guide) -->
             <div style="background: #ffffff; color: #222; border-radius: 12px; padding: 1.8rem; margin-bottom: 1.5rem; text-align: center; border: 1px solid #e0d8cc; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
                 <img src="./logo.png" alt="App Icon" style="height: 40px; width: 40px; background: #f3f1ef; border-radius: 10px; padding: 4px; margin-bottom: 0.6rem; object-fit: contain;">
                 <h3 style="font-size: 1.05rem; margin-bottom: 0.3rem; font-weight: 700;">Save App to Phone Screen</h3>
-                <p style="font-size: 0.82rem; color: #666; margin-bottom: 1rem;">Tap below to instantly add your clinic portal shortcut to your home screen.</p>
-                <button type="button" style="background: #095d28; color: white; width: 100%; font-size: 0.85rem; padding: 0.7rem; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" onclick="handleSmartInstall()">📥 ADD PORTAL TO HOME SCREEN</button>
+                <p style="font-size: 0.82rem; color: #666; margin-bottom: 1rem;">Tap below to instantly install your clinic portal shortcut.</p>
+                <button type="button" id="native-install-btn" style="background: #095d28; color: white; width: 100%; font-size: 0.85rem; padding: 0.7rem; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" onclick="handleNativeInstall()">📥 INSTALL APP TO HOME SCREEN</button>
             </div>
 
             <!-- Appointments & Booking -->
@@ -137,7 +137,7 @@
                 </div>
             </div>
 
-            <!-- VIP Code Unlock Card (If user is not yet VIP) -->
+            <!-- VIP Code Unlock Card (Locked state) -->
             <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.02);" id="vip-unlock-card">
                 <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">Unlock VIP Patient App</h3>
                 <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.2rem;">Enter your 4-digit VIP code from your programme confirmation to unlock your dedicated native app launcher.</p>
@@ -172,17 +172,21 @@
             deferredInstallPrompt = e;
         });
 
-        async function handleSmartInstall() {
+        async function handleNativeInstall() {
             if (deferredInstallPrompt) {
+                // Triggers automated native install prompt on Android / Chrome
                 deferredInstallPrompt.prompt();
                 const { outcome } = await deferredInstallPrompt.userChoice;
-                deferredInstallPrompt = null;
+                if (outcome === 'accepted') {
+                    deferredInstallPrompt = null;
+                }
             } else {
+                // Fallback guide for iOS Safari
                 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
                 if (isIOS) {
-                    alert("To put the Clinic Portal on your phone screen:\n\n1. Tap the Share button at the bottom of your Safari screen.\n\n2. Scroll down and tap 'Add to Home Screen'.");
+                    alert("To put the Clinic Portal on your home screen:\n\n1. Tap the Share button at the bottom of your Safari screen.\n\n2. Scroll down and tap 'Add to Home Screen'.");
                 } else {
-                    alert("To put the Clinic Portal on your phone screen:\n\n1. Tap the menu dots (top right of your browser).\n\n2. Tap 'Add to Home Screen' or 'Install App'.");
+                    alert("App shortcut installation is ready. If your browser prompt doesn't appear automatically, check your browser menu settings and select 'Install App' or 'Add to Home Screen'.");
                 }
             }
         }
@@ -201,6 +205,6 @@
         }
     </script>
 
-    <script src="./app.js?version=19"></script>
+    <script src="./app.js?version=20"></script>
 </body>
 </html>
