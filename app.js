@@ -48,8 +48,48 @@ function showDashboard(user, db) {
     if(welcomeTitle) {
         welcomeTitle.innerText = `Welcome, ${user.user_metadata?.full_name || user.email}`;
     }
+    checkVipStatus(db, user);
     loadClientDashboard(db, user);
 }
+
+async function checkVipStatus(db, user) {
+    try {
+        const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
+        const isVip = tier && (tier.is_premium === true || tier.is_premium === 'true');
+        const launcherCard = document.getElementById('vip-launcher-card');
+        const unlockCard = document.getElementById('vip-unlock-card');
+
+        if (isVip) {
+            if(launcherCard) launcherCard.style.display = 'block';
+            if(unlockCard) unlockCard.style.display = 'none';
+        } else {
+            if(launcherCard) launcherCard.style.display = 'none';
+            if(unlockCard) unlockCard.style.display = 'block';
+        }
+    } catch(err) { console.error("VIP check error:", err.message); }
+}
+
+window.unlockVipPortal = async function(e) {
+    e.preventDefault();
+    try {
+        const db = getSupabase();
+        const { data: { user } } = await db.auth.getUser();
+        if(!user) throw new Error("You must be logged in.");
+
+        const enteredCode = document.getElementById('vip-code-input').value.trim().toUpperCase();
+        const { data: tier, error } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
+        if(error) throw new Error("Could not verify client tier.");
+
+        if(tier && tier.unlock_code === enteredCode) {
+            await db.from('client_tiers').update({ is_premium: true }).eq('client_id', user.id);
+            alert("VIP App Unlocked! Launching app...");
+            location.href = './vip.html';
+        } else {
+            alert("Invalid unlock code.");
+        }
+    } catch(err) { alert("Error unlocking: " + err.message); }
+    return false;
+};
 
 window.validateBusinessHours = function(input) {
     const val = input.value;
@@ -85,10 +125,19 @@ window.bookNewSession = async function(e) {
         const appointmentTime = document.getElementById('portal-date').value;
         const clientName = user.user_metadata?.full_name || user.email;
 
+        const isFunctional = serviceName.includes('Functional') || serviceName.includes('Gut Reset') || serviceName.includes('Health Audit');
+        let vipCode = null;
+
+        if (isFunctional) {
+            vipCode = 'VIP-' + Math.floor(1000 + Math.random() * 9000);
+            await db.from('client_tiers').upsert([{ client_id: user.id, is_premium: true, unlock_code: vipCode }]);
+        }
+
         await db.from('appointments').insert([{ client_id: user.id, client_name: clientName, service_name: serviceName, appointment_time: appointmentTime, status: 'confirmed' }]);
 
         alert("Appointment booked successfully!"); 
         loadClientDashboard(db, user);
+        checkVipStatus(db, user);
     } catch(err) { alert("Error booking session: " + err.message); }
     return false;
 };
