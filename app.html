@@ -20,87 +20,91 @@
 </head>
 <body style="background-color: var(--bg-color);">
 
-    <!-- TOP BRAND BAR -->
+    <!-- TOP BRAND & ADMIN BRIDGE BAR -->
     <div style="background-color: var(--card-bg); padding: 1.5rem 6%; border-bottom: 1px solid var(--secondary-sand); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;">
         <div style="display: flex; align-items: center; gap: 1rem;">
             <img src="./logo.png" alt="Logo" style="height: 40px; cursor: pointer;" onclick="location.href='./index.html'">
-            <h1 id="portal-welcome-title" style="font-size: 1.4rem; margin: 0; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main);">Patient Portal</h1>
+            <div>
+                <h1 id="portal-welcome-title" style="font-size: 1.3rem; margin: 0; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main);">VIP Patient Portal</h1>
+                <span style="font-size: 0.7rem; color: var(--primary-sage); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Isle of Man Practice</span>
+            </div>
         </div>
-        <div style="display: flex; gap: 1rem; align-items: center;">
-            <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 0.4rem 1rem; border-radius: 20px; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 600; color: var(--primary-sage);">
+        <div style="display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap;">
+            <!-- ADMIN BRIDGE BUTTON (For Clare/Staff) -->
+            <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.7rem; border-color: var(--primary-sage); color: var(--primary-sage);" onclick="location.href='./admin.html'">⚙️ Admin Records</button>
+            <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 0.4rem 1rem; border-radius: 20px; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 600; color: var(--text-main);">
                 <span id="current-date-display">Thu 27 Aug 2026</span>
             </div>
-            <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.65rem;" onclick="processLogout()">Sign Out</button>
+            <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.7rem; color: #a94442; border-color: #a94442;" onclick="processLogout()">Sign Out</button>
         </div>
     </div>
 
     <!-- MAIN DASHBOARD CONTAINER -->
-    <div class="dashboard-container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+    <div class="dashboard-container" style="max-width: 1200px; margin: 2.5rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;">
         
-        <!-- LEFT COLUMN: Progress & Daily Check-in Cards -->
+        <!-- LEFT COLUMN: Progress & Multi-Metric Wellness Check-ins -->
         <div>
             <!-- PROGRESS & TARGETS CARD -->
             <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin: 0; color: #111;">Progress</h3>
-                    <span style="font-size: 0.75rem; color: var(--primary-sage); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Keep going!</span>
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin: 0; color: #111;">Protocol Progress</h3>
+                    <span style="font-size: 0.75rem; color: var(--primary-sage); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Active Pathway</span>
                 </div>
-                <p style="font-size: 0.95rem; color: #555; margin-bottom: 1.5rem;">Continue smashing targets!</p>
+                <p style="font-size: 0.95rem; color: #555; margin-bottom: 1.5rem;">Consistency is key to root-cause recovery.</p>
                 
                 <div style="text-align: center; padding: 1.5rem; background: var(--bg-color); border-radius: 50%; width: 110px; height: 110px; margin: 0 auto 1.5rem auto; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--primary-sage);">
-                    <span style="font-size: 1.8rem; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main); line-height: 1;">1</span>
-                    <span style="font-size: 0.65rem; color: #666; text-transform: uppercase; margin-top: 4px;">of 9 hits</span>
-                </div>
-
-                <div style="background: rgba(13,155,70,0.1); border: 1px solid var(--primary-sage); padding: 0.8rem 1.2rem; border-radius: 8px; text-align: center; cursor: pointer;" onclick="alert('Reviewing your daily wellness targets...')">
-                    <span style="font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 700; color: var(--primary-sage);">ℹ Learn How</span>
+                    <span style="font-size: 1.8rem; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main); line-height: 1;">3</span>
+                    <span style="font-size: 0.65rem; color: #666; text-transform: uppercase; margin-top: 4px;">of 5 daily hits</span>
                 </div>
             </div>
 
-            <!-- CALORIES & MACRO PROGRESS BARS -->
+            <!-- HYDRATION & SUPPLEMENT LOGGING -->
             <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin: 0;">Calories</h4>
-                    <span style="font-size: 0.85rem; color: #666;">0 of 2,182 kcal</span>
-                </div>
-                <div style="background: #eee; height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 1.5rem;">
-                    <div style="background: var(--primary-sage); width: 0%; height: 100%;"></div>
+                <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 1rem;">Daily Protocol & Hydration</h4>
+                
+                <label style="font-size: 0.8rem; font-weight: bold; color: #666; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Water Intake</label>
+                <div style="display: flex; gap: 0.8rem; margin-bottom: 1.2rem;">
+                    <button class="btn btn-outline" style="flex: 1; padding: 0.7rem; font-size: 0.85rem;" onclick="alert('Logged 250ml water')">+ 250ml</button>
+                    <button class="btn btn-outline" style="flex: 1; padding: 0.7rem; font-size: 0.85rem;" onclick="alert('Logged 500ml water')">+ 500ml</button>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="background: var(--bg-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
-                        <span style="font-size: 0.7rem; color: #666; text-transform: uppercase; font-weight: bold;">Protein</span>
-                        <strong style="display: block; font-size: 1.1rem; color: #333; margin-top: 4px;">0g <span style="font-size: 0.75rem; color: #888; font-weight: normal;">of 160g</span></strong>
-                    </div>
-                    <div style="background: var(--bg-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
-                        <span style="font-size: 0.7rem; color: #666; text-transform: uppercase; font-weight: bold;">Fibre</span>
-                        <strong style="display: block; font-size: 1.1rem; color: #333; margin-top: 4px;">0g <span style="font-size: 0.75rem; color: #888; font-weight: normal;">of 29g</span></strong>
-                    </div>
+                <label style="font-size: 0.8rem; font-weight: bold; color: #666; display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Supplement Checklist</label>
+                <div style="background: var(--bg-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand); display: flex; flex-direction: column; gap: 0.8rem;">
+                    <label style="display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; cursor: pointer;">
+                        <input type="checkbox" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-sage);"> AM Functional Nutrients Taken
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; cursor: pointer;">
+                        <input type="checkbox" style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-sage);"> PM Protocol / Binders Taken
+                    </label>
                 </div>
             </div>
 
-            <!-- SWISH CHECK-IN: HOW WELL DO YOU FEEL? -->
+            <!-- ADVANCED WELLNESS CHECK-IN SUITE -->
             <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                    <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin: 0;">Daily Wellness Check-in</h4>
-                    <span style="font-size: 1.2rem;">😊</span>
-                </div>
-                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">How well do you feel today?</p>
+                <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">Clinical Wellness Check-in</h4>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">How well do you feel today across key metrics?</p>
                 
-                <div style="margin-bottom: 1.5rem;">
-                    <input type="range" min="1" max="10" value="7" style="width: 100%; accent-color: var(--primary-sage); cursor: pointer;" oninput="document.getElementById('wellness-score-val').innerText = this.value + '/10'">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; margin-top: 0.5rem;">
-                        <span>Needs Support</span>
-                        <strong id="wellness-score-val" style="color: var(--primary-sage);">7/10</strong>
-                        <span>Thriving</span>
+                <div style="margin-bottom: 1.2rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">
+                        <span>Overall Vitality / Wellbeing</span>
+                        <strong id="val-vitality" style="color: var(--primary-sage);">7/10</strong>
                     </div>
+                    <input type="range" min="1" max="10" value="7" style="width: 100%; accent-color: var(--primary-sage); cursor: pointer;" oninput="document.getElementById('val-vitality').innerText = this.value + '/10'">
                 </div>
 
-                <button class="btn" style="width: 100%;" onclick="alert('Daily wellness rating logged successfully!')">Save Wellness Score</button>
+                <div style="margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">
+                        <span>Sleep Quality & Restfulness</span>
+                        <strong id="val-sleep" style="color: var(--primary-sage);">8/10</strong>
+                    </div>
+                    <input type="range" min="1" max="10" value="8" style="width: 100%; accent-color: var(--primary-sage); cursor: pointer;" oninput="document.getElementById('val-sleep').innerText = this.value + '/10'">
+                </div>
+
+                <button class="btn" style="width: 100%;" onclick="alert('Detailed wellness check-in securely transmitted to Clare!')">Save Daily Metrics</button>
             </div>
         </div>
              
-        <!-- RIGHT COLUMN: Appointments & Secure Chat -->
+        <!-- RIGHT COLUMN: Appointments & Secure Clinical Chat -->
         <div>
             <!-- YOUR APPOINTMENTS -->
             <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem; border-top: 4px solid var(--primary-sage);">
@@ -113,9 +117,9 @@
 
             <!-- SECURE CLINICAL CHAT -->
             <div class="dash-card" id="chat-section-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); border-top: 4px solid var(--text-main);">
-                <h3 style="margin-bottom: 1.2rem; font-size: 1.1rem;">Secure Clinical Chat</h3>
-                <div class="chat-box" id="client-chat-box" style="height: 200px; background: var(--bg-color); border: 1px solid var(--secondary-sand); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; overflow-y: auto;">
-                    <p style="color: #888; font-size: 0.9rem; text-align: center; margin-top: 3rem;">No messages yet. Send a note to Clare below!</p>
+                <h3 style="margin-bottom: 1.2rem; font-size: 1.1rem;">Secure Clinical Chat with Clare</h3>
+                <div class="chat-box" id="client-chat-box" style="height: 250px; background: var(--bg-color); border: 1px solid var(--secondary-sand); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; overflow-y: auto;">
+                    <p style="color: #888; font-size: 0.9rem; text-align: center; margin-top: 4rem;">No messages yet. Send a direct note to Clare below!</p>
                 </div>
                 <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.8rem;">
                     <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1; background: var(--bg-color);" required>
