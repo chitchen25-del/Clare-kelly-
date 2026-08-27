@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Clinic App">
 
-    <link rel="apple-touch-icon" href="/logo.png">
+    <link rel="apple-touch-icon" href="./logo.png">
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiVGhlIE5hdHVyYWwgSGVhbGluZyBDbGluaWMiLCJzaG9ydF9uYW1lIjoiQ2xpbmljIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmM2YxZWYiLCJ0aGVtZV9jb2xvciI6IiMwOTVkMjgiLCJpY29ucyI6W3sic3JjIjoiLi9sb2dvLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,6 +17,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="./style.css?version=6">
+
+    <style>
+        /* Bottom Navigation Bar Icon Scaling & Sizing Fix */
+        .bottom-nav, .mobile-tab-bar, nav.bottom-bar, .app-bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 12px 0;
+            background: #ffffff;
+            border-top: 1px solid #e0d8cc;
+        }
+
+        .bottom-nav img, .bottom-bar img, .mobile-tab-bar img, .app-bottom-nav img,
+        .bottom-nav svg, .bottom-bar svg, .mobile-tab-bar svg, .app-bottom-nav svg {
+            width: 32px !important;
+            height: 32px !important;
+            object-fit: contain;
+            margin-bottom: 4px;
+        }
+
+        .bottom-nav span, .bottom-bar span, .mobile-tab-bar span, .app-bottom-nav span {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #2c2c2c;
+        }
+    </style>
 </head>
 <body>
 
