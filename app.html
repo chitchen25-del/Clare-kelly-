@@ -16,7 +16,7 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./style.css?version=13">
+    <link rel="stylesheet" href="./style.css?version=15">
     <style>
         * { box-sizing: border-box; }
         html, body {
@@ -30,7 +30,7 @@
         .page-screen { display: none; }
         .page-screen.visible { display: block; }
         
-        /* BULLETPROOF BOTTOM DOCK */
+        /* STRICTLY MANAGED BOTTOM DOCK */
         nav.app-bottom-nav {
             position: fixed;
             bottom: 0;
@@ -91,14 +91,13 @@
                     <input type="email" id="login-email" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
                     <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Password</label>
                     <input type="password" id="login-password" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1.5rem;">
-                    <button type="submit" class="btn" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Sign In to Portal</button>
+                    <button type="submit" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Sign In to Portal</button>
                 </form>
             </div>
         </div>
 
         <!-- 1. DASHBOARD SCREEN -->
         <div id="screen-dashboard" class="page-screen">
-            <!-- App Install Card -->
             <div style="background: linear-gradient(135deg, #095d28, #0a4d22); color: white; border-radius: 12px; padding: 1.8rem; margin-bottom: 1.5rem; text-align: center;">
                 <img src="./logo.png" alt="App Icon" style="height: 45px; width: 45px; background: white; border-radius: 10px; padding: 4px; margin-bottom: 0.8rem; object-fit: contain;">
                 <h3 style="color: white; font-size: 1.1rem; margin-bottom: 0.3rem;">Save Clinic App to Phone</h3>
@@ -106,7 +105,6 @@
                 <button type="button" style="background: white; color: #222; width: 100%; font-size: 0.9rem; padding: 0.7rem; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" onclick="handleSmartInstall()">📥 ADD APP TO HOME SCREEN</button>
             </div>
 
-            <!-- Appointments & Booking -->
             <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; margin-bottom: 1.5rem;">
                 <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Your Appointments</h3>
                 <div id="client-appointments-list"><p style="color: #888; font-size: 0.9rem;">Loading schedule...</p></div>
@@ -128,7 +126,6 @@
                 </form>
             </div>
 
-            <!-- Standard Health Questionnaire Accordion -->
             <div style="background: white; border-radius: 12px; border: 1px solid #e0d8cc; margin-bottom: 1.5rem; overflow: hidden;">
                 <div id="questionnaire-header" onclick="toggleAccordion('basic-questionnaire-panel')" style="padding: 1.2rem 1.5rem; background: #f9f8f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
                     <div>
@@ -156,7 +153,6 @@
                 </div>
             </div>
 
-            <!-- VIP Unlock Card -->
             <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; display: none;" id="vip-unlock-card">
                 <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem;">Unlock VIP Patient App Features</h3>
                 <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.2rem;">Enter your 4-digit VIP code from your email confirmation to unlock Nutrition, Supplements, Mood Journal, Exercise tracking, and direct chat.</p>
@@ -262,7 +258,7 @@
 
     </div>
 
-    <!-- BOTTOM APP NAVIGATION BAR -->
+    <!-- BOTTOM APP NAVIGATION BAR (Strictly controlled by auth state) -->
     <nav class="app-bottom-nav" id="app-bottom-navigation" style="display: none;">
         <button class="app-nav-item active" onclick="openAppScreen('screen-dashboard', event)">
             <span class="icon">🏠</span>Dashboard
@@ -334,6 +330,6 @@
         }
     </script>
 
-    <script src="./app.js?version=13"></script>
+    <script src="./app.js?version=15"></script>
 </body>
 </html>
