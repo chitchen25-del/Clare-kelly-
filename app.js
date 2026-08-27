@@ -1,7 +1,6 @@
 const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
 
-// Brevo API Configuration
 const BREVO_API_KEY = 'xkeysib-YOUR_ACTUAL_BREVO_API_KEY_HERE';
 
 function getSupabase() {
@@ -23,7 +22,7 @@ window.onload = async function() {
             showLogin();
         }
     } catch(err) { 
-        console.error("Session initialization failure:", err.message);
+        console.error("Session load error:", err.message);
         showLogin();
     }
 };
@@ -59,7 +58,7 @@ async function checkVipStatus(db, user) {
     try {
         const { data: tier, error } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
         if(error) throw error;
-        
+
         const isVip = tier && (tier.is_premium === true || tier.is_premium === 'true');
         const launcherCard = document.getElementById('vip-launcher-card');
         const unlockCard = document.getElementById('vip-unlock-card');
@@ -85,7 +84,7 @@ window.unlockVipPortal = async function(e) {
 
         const inputField = document.getElementById('vip-code-input');
         if(!inputField) throw new Error("Input element missing.");
-        
+
         const enteredCode = inputField.value.trim().toUpperCase();
         const { data: tier, error } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
         if(error) throw new Error("Could not verify client tier database record.");
@@ -93,7 +92,7 @@ window.unlockVipPortal = async function(e) {
         if(tier && tier.unlock_code === enteredCode) {
             const { updateError } = await db.from('client_tiers').update({ is_premium: true }).eq('client_id', user.id);
             if(updateError) throw updateError;
-            
+
             alert("VIP App Successfully Unlocked! Launching experience...");
             location.href = './vip.html';
         } else {
@@ -131,10 +130,10 @@ window.processClientLogin = async function(e) {
         const email = emailInput.value.trim();
         const pass = passInput.value.trim();
         const db = getSupabase();
-        
+
         const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
         if (error) throw new Error(error.message);
-        
+
         if (data.user) {
             showDashboard(data.user, db);
         }
@@ -164,48 +163,31 @@ window.bookNewSession = async function(e) {
 
         if (isFunctional) {
             vipCode = 'VIP-' + Math.floor(1000 + Math.random() * 9000);
-            const { tierError } = await db.from('client_tiers').upsert([{ client_id: user.id, is_premium: true, unlock_code: vipCode }]);
+            const { error: tierError } = await db.from('client_tiers').upsert([{ client_id: user.id, is_premium: true, unlock_code: vipCode }]);
             if(tierError) console.error("Tier record upsert warning:", tierError);
 
-            // BREVO TRANSACTIONAL EMAIL DISPATCH SYSTEM
-            const emailPayload = {
-                sender: { name: "The Natural Healing Clinic", email: "stephen@creasingmatrix.com" },
-                to: [{ email: user.email, name: clientName }],
-                subject: "Your VIP App Access Code — The Natural Healing Clinic",
-                htmlContent: `
-                    <div style="font-family: Montserrat, Arial, sans-serif; padding: 24px; color: #222; max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e0d8cc; border-radius: 12px;">
-                        <h2 style="color: #095d28; margin-top: 0;">Booking Confirmed: ${serviceName}</h2>
-                        <p>Hello ${clientName},</p>
-                        <p>Thank you for booking your program with us at our Union Mills practice. Your appointment is secured for <strong>${new Date(appointmentTime).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' })}</strong>.</p>
-                        <div style="background: #f3f1ef; padding: 20px; border-radius: 8px; border: 1px solid #e0d8cc; margin: 20px 0;">
-                            <h3 style="margin-top: 0; color: #095d28;">Your VIP App Unlock Code</h3>
-                            <p style="margin-bottom: 10px;">Use the 4-digit code below to unlock your full-screen native app health tracker:</p>
-                            <div style="font-size: 1.8rem; font-weight: bold; letter-spacing: 4px; color: #222; background: white; padding: 12px; text-align: center; border-radius: 6px; border: 1px dashed #095d28;">${vipCode}</div>
-                        </div>
-                        <p>Warm regards,<br><strong>The Natural Healing Clinic Team</strong></p>
-                    </div>
-                `
-            };
+            const brevoRes = await fetch('https://api.brevo.com/v3/smtp/email', {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'api-key': BREVO_API_KEY,
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    sender: { name: "The Natural Healing Clinic", email: "stephen@creasingmatrix.com" },
+                    to: [{ email: user.email, name: clientName }],
+                    subject: "Your VIP App Access Code",
+                    htmlContent: `<html><body><p>Hello ${clientName},</p><p>Your booking for <b>${serviceName}</b> is confirmed.</p><p>Your VIP Code is: <b>${vipCode}</b></p></body></html>`
+                })
+            });
 
-            try {
-                const brevoResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
-                    method: 'POST',
-                    headers: {
-                        'accept': 'application/json',
-                        'api-key': BREVO_API_KEY,
-                        'content-type': 'application/json'
-                    },
-                    body: JSON.stringify(emailPayload)
-                });
-                if(!brevoResponse.ok) {
-                    console.error("Brevo API transmission rejected with status:", brevoResponse.status);
-                }
-            } catch(emailErr) {
-                console.error("Brevo network dispatch failure:", emailErr);
+            if (!brevoRes.ok) {
+                const errData = await brevoRes.json();
+                console.error("Brevo Error Response:", errData);
             }
         }
 
-        const { apptError } = await db.from('appointments').insert([{ 
+        const { error: apptError } = await db.from('appointments').insert([{ 
             client_id: user.id, 
             client_name: clientName, 
             service_name: serviceName, 
@@ -214,10 +196,10 @@ window.bookNewSession = async function(e) {
         }]);
         if(apptError) throw apptError;
 
-        alert("Appointment booked successfully! " + (vipCode ? "Confirmation email with your VIP access code has been dispatched via Brevo." : "")); 
+        alert("Appointment booked successfully! Confirmation email dispatched."); 
         loadClientDashboard(db, user);
         checkVipStatus(db, user);
-        
+
         serviceSelect.value = "";
         dateInput.value = "";
     } catch(err) { 
@@ -232,7 +214,7 @@ window.cancelAppointment = async function(id) {
         const db = getSupabase();
         const { error } = await db.from('appointments').delete().eq('id', id);
         if(error) throw error;
-        
+
         const { data: { user } } = await db.auth.getUser();
         if(user) loadClientDashboard(db, user);
     } catch(err) { 
@@ -247,7 +229,7 @@ window.rescheduleAppointment = async function(id) {
         const db = getSupabase();
         const { error } = await db.from('appointments').update({ appointment_time: newDate }).eq('id', id);
         if(error) throw error;
-        
+
         alert("Appointment successfully rescheduled.");
         const { data: { user } } = await db.auth.getUser();
         if(user) loadClientDashboard(db, user);
