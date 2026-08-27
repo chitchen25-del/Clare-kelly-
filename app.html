@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-title" content="Clinic App">
     
     <link rel="apple-touch-icon" href="/logo.png">
-    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiVGhlIE5hdHVyYWwgSGVhbGluZyBDbGluaWMiLCJzaG9ydF9uYW1lIjoiQ2xpbmljIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmM2YxZWYiLCJ0aGVtZV9jb2xvciI6IiMwOTVkMjgiLCJpY29ucyI6W3sic3JjIjoiLi9sb2dvLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiVGhlIE5hdHVyYWwgSGVhbGluZyBDbGluaWMiLCJzaG9ydF9uYW1lIjoiQ2xpbmljIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmM2YxZWYiLCJ0aGVtZV9jb2xvciI6IiMwOTVkMjgiLCJpY29ucyI6W3sic3JjIjoiLi9sb2dvLnpuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -145,7 +145,7 @@
             <div class="dash-card" id="chat-section-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); border-top: 4px solid var(--text-main);">
                 <h3 style="margin-bottom: 1.2rem; font-size: 1.1rem;">Secure Clinical Chat with Clare</h3>
                 <div class="chat-box" id="client-chat-box" style="height: 250px; background: var(--bg-color); border: 1px solid var(--secondary-sand); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; overflow-y: auto;">
-                    <p style="color: #888; font-size: 0.9rem; text-align: center; margin-top: 4rem;">No messages yet. Send a direct note to Clare below!</p>
+                    <p style="color: #888; font-size: 0.90rem; text-align: center; margin-top: 4rem;">No messages yet. Send a direct note to Clare below!</p>
                 </div>
                 <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.8rem;">
                     <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1; background: var(--bg-color);" required>
@@ -155,7 +155,7 @@
         </div>
     </div>
 
-    <!-- FOOLPROOF SCRIPT FOR ACCORDION & APP INSTALL -->
+    <!-- GLOBAL SCRIPT FOR APP INSTALL & ROBUST ACCORDION -->
     <script>
         let deferredInstallPrompt = null;
 
@@ -182,6 +182,7 @@
         window.toggleAccordion = function(panelId) {
             const panel = document.getElementById(panelId);
             const icon = document.getElementById('accordion-icon');
+            if (!panel) return;
             if (panel.style.display === 'block') {
                 panel.style.display = 'none';
                 if(icon) icon.innerText = '+';
@@ -192,6 +193,6 @@
         }
     </script>
 
-    <script src="./app.js?v=2"></script>
+    <script src="./app.js?v=3"></script>
 </body>
 </html>
