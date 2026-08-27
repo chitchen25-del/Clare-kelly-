@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Patient Portal | The Natural Healing Clinic</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Clinic App">
+    
+    <link rel="apple-touch-icon" href="/logo.png">
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiVGhlIE5hdHVyYWwgSGVhbGluZyBDbGluaWMiLCJzaG9ydF9uYW1lIjoiQ2xpbmljIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmM2YxZWYiLCJ0aGVtZV9jb2xvciI6IiMwOTVkMjgiLCJpY29ucyI6W3sic3JjIjoiLi9sb2dvLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="./style.css?version=6">
+</head>
+<body style="background-color: var(--bg-color);">
+
+    <!-- TOP BRAND BAR -->
+    <div style="background-color: var(--card-bg); padding: 1.5rem 6%; border-bottom: 1px solid var(--secondary-sand); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <img src="./logo.png" alt="Logo" style="height: 40px; cursor: pointer;" onclick="location.href='./index.html'">
+            <h1 id="portal-welcome-title" style="font-size: 1.4rem; margin: 0; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main);">Patient Portal</h1>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <div style="background: var(--bg-color); border: 1px solid var(--secondary-sand); padding: 0.4rem 1rem; border-radius: 20px; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 600; color: var(--primary-sage);">
+                <span id="current-date-display">Thu 27 Aug 2026</span>
+            </div>
+            <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.65rem;" onclick="processLogout()">Sign Out</button>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD CONTAINER -->
+    <div class="dashboard-container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+        
+        <!-- LEFT COLUMN: Progress & Daily Check-in Cards -->
+        <div>
+            <!-- PROGRESS & TARGETS CARD -->
+            <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; margin: 0; color: #111;">Progress</h3>
+                    <span style="font-size: 0.75rem; color: var(--primary-sage); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Keep going!</span>
+                </div>
+                <p style="font-size: 0.95rem; color: #555; margin-bottom: 1.5rem;">Continue smashing targets!</p>
+                
+                <div style="text-align: center; padding: 1.5rem; background: var(--bg-color); border-radius: 50%; width: 110px; height: 110px; margin: 0 auto 1.5rem auto; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--primary-sage);">
+                    <span style="font-size: 1.8rem; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main); line-height: 1;">1</span>
+                    <span style="font-size: 0.65rem; color: #666; text-transform: uppercase; margin-top: 4px;">of 9 hits</span>
+                </div>
+
+                <div style="background: rgba(13,155,70,0.1); border: 1px solid var(--primary-sage); padding: 0.8rem 1.2rem; border-radius: 8px; text-align: center; cursor: pointer;" onclick="alert('Reviewing your daily wellness targets...')">
+                    <span style="font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 700; color: var(--primary-sage);">ℹ Learn How</span>
+                </div>
+            </div>
+
+            <!-- CALORIES & MACRO PROGRESS BARS -->
+            <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin: 0;">Calories</h4>
+                    <span style="font-size: 0.85rem; color: #666;">0 of 2,182 kcal</span>
+                </div>
+                <div style="background: #eee; height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 1.5rem;">
+                    <div style="background: var(--primary-sage); width: 0%; height: 100%;"></div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="background: var(--bg-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
+                        <span style="font-size: 0.7rem; color: #666; text-transform: uppercase; font-weight: bold;">Protein</span>
+                        <strong style="display: block; font-size: 1.1rem; color: #333; margin-top: 4px;">0g <span style="font-size: 0.75rem; color: #888; font-weight: normal;">of 160g</span></strong>
+                    </div>
+                    <div style="background: var(--bg-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--secondary-sand);">
+                        <span style="font-size: 0.7rem; color: #666; text-transform: uppercase; font-weight: bold;">Fibre</span>
+                        <strong style="display: block; font-size: 1.1rem; color: #333; margin-top: 4px;">0g <span style="font-size: 0.75rem; color: #888; font-weight: normal;">of 29g</span></strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SWISH CHECK-IN: HOW WELL DO YOU FEEL? -->
+            <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin: 0;">Daily Wellness Check-in</h4>
+                    <span style="font-size: 1.2rem;">😊</span>
+                </div>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">How well do you feel today?</p>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <input type="range" min="1" max="10" value="7" style="width: 100%; accent-color: var(--primary-sage); cursor: pointer;" oninput="document.getElementById('wellness-score-val').innerText = this.value + '/10'">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; margin-top: 0.5rem;">
+                        <span>Needs Support</span>
+                        <strong id="wellness-score-val" style="color: var(--primary-sage);">7/10</strong>
+                        <span>Thriving</span>
+                    </div>
+                </div>
+
+                <button class="btn" style="width: 100%;" onclick="alert('Daily wellness rating logged successfully!')">Save Wellness Score</button>
+            </div>
+        </div>
+             
+        <!-- RIGHT COLUMN: Appointments & Secure Chat -->
+        <div>
+            <!-- YOUR APPOINTMENTS -->
+            <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 1.5rem; border-top: 4px solid var(--primary-sage);">
+                <h3 style="margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; font-size: 1.1rem;">
+                    <span>Your Appointments</span>
+                    <span style="font-size: 0.75rem; color: var(--primary-sage); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Live Schedule</span>
+                </h3>
+                <div id="client-appointments-list"><p style="color: #888; font-size: 0.95rem;">Loading schedule...</p></div>
+            </div>
+
+            <!-- SECURE CLINICAL CHAT -->
+            <div class="dash-card" id="chat-section-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); box-shadow: 0 4px 20px rgba(0,0,0,0.02); border-top: 4px solid var(--text-main);">
+                <h3 style="margin-bottom: 1.2rem; font-size: 1.1rem;">Secure Clinical Chat</h3>
+                <div class="chat-box" id="client-chat-box" style="height: 200px; background: var(--bg-color); border: 1px solid var(--secondary-sand); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; overflow-y: auto;">
+                    <p style="color: #888; font-size: 0.9rem; text-align: center; margin-top: 3rem;">No messages yet. Send a note to Clare below!</p>
+                </div>
+                <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.8rem;">
+                    <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1; background: var(--bg-color);" required>
+                    <button type="submit" class="btn" style="padding: 0 1.5rem;">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to external JS file -->
+    <script src="./app.js?v=2"></script>
+</body>
+</html>
