@@ -79,13 +79,11 @@
     <!-- ================= SCREEN 1: HOME ================= -->
     <div id="screen-home" class="page-screen visible">
         
-        <!-- THE NEW GEMINI AWESOME HERO SECTION -->
+        <!-- THE GEMINI AWESOME HERO SECTION -->
         <section class="hero" id="home-hero" style="position: relative; padding: 6rem 5% 5rem 5%; text-align: center; background: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat; border-bottom: 1px solid var(--secondary-sand); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 75vh;">
             
-            <!-- Darker Background Overlay to Mute the Image -->
             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(243, 241, 239, 0.7); z-index: 1;"></div>
             
-            <!-- Frosted Glass Text Container for Perfect Contrast -->
             <div style="position: relative; z-index: 2; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.8); padding: 3.5rem 2rem; border-radius: 24px; box-shadow: 0 10px 40px rgba(9,93,40,0.06);">
                 
                 <span style="display: inline-block; padding: 0.4rem 1.2rem; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(13, 155, 70, 0.2); border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: var(--primary-sage); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.5rem;">Isle of Man • Clinical Wellness</span>
@@ -105,9 +103,7 @@
         <section class="section">
             <div class="section-image-wrapper" style="position: relative; padding-bottom: 2.5rem;">
                 
-                <!-- THE GEMINI AWESOME ARCH -->
                 <div style="overflow: hidden; border-radius: 200px 200px 10px 10px; box-shadow: 0 20px 40px rgba(9,93,40,0.08); height: 480px; position: relative;">
-                    <!-- Direct feed to a premium Unsplash image of Zen stones -->
                     <img src="https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?auto=format&fit=crop&w=800&q=80" 
                          alt="Zen stacked stones representing holistic alignment" 
                          style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); cursor: pointer;"
@@ -115,7 +111,6 @@
                          onmouseout="this.style.transform='scale(1)'">
                 </div>
                 
-                <!-- THE PREMIUM GLASSMORPHISM BADGE -->
                 <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.8); padding: 1.5rem 2rem; border-radius: 12px; width: 85%; text-align: center; box-shadow: 0 15px 35px rgba(9,93,40,0.12); z-index: 10;">
                     <span style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--primary-sage); text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 0.5rem;">Evidence-Informed Care</span>
                     <p style="font-family: 'Cormorant Garamond', serif; font-style: italic; color: #444; margin: 0; font-size: 1.1rem;">Root-cause functional protocols designed for rapid, sustainable recovery.</p>
@@ -312,7 +307,6 @@
         </div>
         <section class="section">
             <div class="section-image-wrapper">
-                <!-- ADDED POSTER IMAGE TO VIDEO TO FIX BLANK GREY BOX -->
                 <video width="100%" controls playsinline poster="./clare-profile.avif" preload="metadata" style="border-radius: 8px; box-shadow: 0 25px 60px rgba(9, 93, 40, 0.08); object-fit: cover; max-height: 600px; background: var(--secondary-sand);">
                     <source src="./clare-video.mp4.MOV" type="video/mp4">
                     <source src="./clare-video.mp4" type="video/mp4">
@@ -1140,6 +1134,17 @@
             </div>
         </div>
     </footer>
+
+    <!-- Service Worker Registration Script -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registered successfully!', reg.scope))
+                    .catch(err => console.log('Service Worker registration failed: ', err));
+            });
+        }
+    </script>
 
     <!-- Link to your external JS file -->
     <script src="./app.js?v=2"></script>
