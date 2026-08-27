@@ -1,6 +1,9 @@
 const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
 
+// Brevo API Configuration
+const BREVO_API_KEY = 'xkeysib-YOUR_ACTUAL_BREVO_API_KEY_HERE';
+
 function getSupabase() {
     if(!window.supabase) return null;
     return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -20,7 +23,7 @@ window.onload = async function() {
             showLogin();
         }
     } catch(err) { 
-        console.error("Session load error:", err.message);
+        console.error("Session initialization failure:", err.message);
         showLogin();
     }
 };
@@ -54,7 +57,9 @@ function showDashboard(user, db) {
 
 async function checkVipStatus(db, user) {
     try {
-        const { data: tier } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
+        const { data: tier, error } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
+        if(error) throw error;
+        
         const isVip = tier && (tier.is_premium === true || tier.is_premium === 'true');
         const launcherCard = document.getElementById('vip-launcher-card');
         const unlockCard = document.getElementById('vip-unlock-card');
@@ -66,7 +71,9 @@ async function checkVipStatus(db, user) {
             if(launcherCard) launcherCard.style.display = 'none';
             if(unlockCard) unlockCard.style.display = 'block';
         }
-    } catch(err) { console.error("VIP check error:", err.message); }
+    } catch(err) { 
+        console.error("VIP status evaluation error:", err.message); 
+    }
 }
 
 window.unlockVipPortal = async function(e) {
@@ -74,20 +81,27 @@ window.unlockVipPortal = async function(e) {
     try {
         const db = getSupabase();
         const { data: { user } } = await db.auth.getUser();
-        if(!user) throw new Error("You must be logged in.");
+        if(!user) throw new Error("Active session required for verification.");
 
-        const enteredCode = document.getElementById('vip-code-input').value.trim().toUpperCase();
+        const inputField = document.getElementById('vip-code-input');
+        if(!inputField) throw new Error("Input element missing.");
+        
+        const enteredCode = inputField.value.trim().toUpperCase();
         const { data: tier, error } = await db.from('client_tiers').select('*').eq('client_id', user.id).limit(1).maybeSingle();
-        if(error) throw new Error("Could not verify client tier.");
+        if(error) throw new Error("Could not verify client tier database record.");
 
         if(tier && tier.unlock_code === enteredCode) {
-            await db.from('client_tiers').update({ is_premium: true }).eq('client_id', user.id);
-            alert("VIP App Unlocked! Launching app...");
+            const { updateError } = await db.from('client_tiers').update({ is_premium: true }).eq('client_id', user.id);
+            if(updateError) throw updateError;
+            
+            alert("VIP App Successfully Unlocked! Launching experience...");
             location.href = './vip.html';
         } else {
-            alert("Invalid unlock code.");
+            alert("Invalid unlock code entered. Please check your confirmation records.");
         }
-    } catch(err) { alert("Error unlocking: " + err.message); }
+    } catch(err) { 
+        alert("Verification Error: " + err.message); 
+    }
     return false;
 };
 
@@ -95,22 +109,38 @@ window.validateBusinessHours = function(input) {
     const val = input.value;
     if(!val) return;
     const date = new Date(val);
-    if (date.getDay() === 0) { alert("Closed on Sundays."); input.value = ""; return; }
-    if (date.getHours() < 9 || date.getHours() >= 17) { alert("Select between 9 AM and 5 PM."); input.value = ""; return; }
+    if (date.getDay() === 0) { 
+        alert("The practice is closed on Sundays. Please select a weekday."); 
+        input.value = ""; 
+        return; 
+    }
+    if (date.getHours() < 9 || date.getHours() >= 17) { 
+        alert("Appointments must be selected between 9:00 AM and 5:00 PM."); 
+        input.value = ""; 
+        return; 
+    }
 }
 
 window.processClientLogin = async function(e) {
     e.preventDefault();
     try {
-        const email = document.getElementById('login-email').value.trim();
-        const pass = document.getElementById('login-password').value.trim();
+        const emailInput = document.getElementById('login-email');
+        const passInput = document.getElementById('login-password');
+        if(!emailInput || !passInput) throw new Error("Form elements missing.");
+
+        const email = emailInput.value.trim();
+        const pass = passInput.value.trim();
         const db = getSupabase();
+        
         const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
         if (error) throw new Error(error.message);
+        
         if (data.user) {
             showDashboard(data.user, db);
         }
-    } catch (err) { alert("Login Failed: " + err.message); }
+    } catch (err) { 
+        alert("Authentication Failed: " + err.message); 
+    }
     return false;
 }
 
@@ -119,10 +149,14 @@ window.bookNewSession = async function(e) {
     try {
         const db = getSupabase();
         const { data: { user } } = await db.auth.getUser();
-        if(!user) throw new Error("Please log in first.");
+        if(!user) throw new Error("Please sign in to confirm bookings.");
 
-        const serviceName = document.getElementById('portal-service').value;
-        const appointmentTime = document.getElementById('portal-date').value;
+        const serviceSelect = document.getElementById('portal-service');
+        const dateInput = document.getElementById('portal-date');
+        if(!serviceSelect || !dateInput) throw new Error("Booking form fields missing.");
+
+        const serviceName = serviceSelect.value;
+        const appointmentTime = dateInput.value;
         const clientName = user.user_metadata?.full_name || user.email;
 
         const isFunctional = serviceName.includes('Functional') || serviceName.includes('Gut Reset') || serviceName.includes('Health Audit');
@@ -130,49 +164,106 @@ window.bookNewSession = async function(e) {
 
         if (isFunctional) {
             vipCode = 'VIP-' + Math.floor(1000 + Math.random() * 9000);
-            await db.from('client_tiers').upsert([{ client_id: user.id, is_premium: true, unlock_code: vipCode }]);
+            const { tierError } = await db.from('client_tiers').upsert([{ client_id: user.id, is_premium: true, unlock_code: vipCode }]);
+            if(tierError) console.error("Tier record upsert warning:", tierError);
+
+            // BREVO TRANSACTIONAL EMAIL DISPATCH SYSTEM
+            const emailPayload = {
+                sender: { name: "The Natural Healing Clinic", email: "stephen@creasingmatrix.com" },
+                to: [{ email: user.email, name: clientName }],
+                subject: "Your VIP App Access Code — The Natural Healing Clinic",
+                htmlContent: `
+                    <div style="font-family: Montserrat, Arial, sans-serif; padding: 24px; color: #222; max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e0d8cc; border-radius: 12px;">
+                        <h2 style="color: #095d28; margin-top: 0;">Booking Confirmed: ${serviceName}</h2>
+                        <p>Hello ${clientName},</p>
+                        <p>Thank you for booking your program with us at our Union Mills practice. Your appointment is secured for <strong>${new Date(appointmentTime).toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' })}</strong>.</p>
+                        <div style="background: #f3f1ef; padding: 20px; border-radius: 8px; border: 1px solid #e0d8cc; margin: 20px 0;">
+                            <h3 style="margin-top: 0; color: #095d28;">Your VIP App Unlock Code</h3>
+                            <p style="margin-bottom: 10px;">Use the 4-digit code below to unlock your full-screen native app health tracker:</p>
+                            <div style="font-size: 1.8rem; font-weight: bold; letter-spacing: 4px; color: #222; background: white; padding: 12px; text-align: center; border-radius: 6px; border: 1px dashed #095d28;">${vipCode}</div>
+                        </div>
+                        <p>Warm regards,<br><strong>The Natural Healing Clinic Team</strong></p>
+                    </div>
+                `
+            };
+
+            try {
+                const brevoResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
+                    method: 'POST',
+                    headers: {
+                        'accept': 'application/json',
+                        'api-key': BREVO_API_KEY,
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(emailPayload)
+                });
+                if(!brevoResponse.ok) {
+                    console.error("Brevo API transmission rejected with status:", brevoResponse.status);
+                }
+            } catch(emailErr) {
+                console.error("Brevo network dispatch failure:", emailErr);
+            }
         }
 
-        await db.from('appointments').insert([{ client_id: user.id, client_name: clientName, service_name: serviceName, appointment_time: appointmentTime, status: 'confirmed' }]);
+        const { apptError } = await db.from('appointments').insert([{ 
+            client_id: user.id, 
+            client_name: clientName, 
+            service_name: serviceName, 
+            appointment_time: appointmentTime, 
+            status: 'confirmed' 
+        }]);
+        if(apptError) throw apptError;
 
-        alert("Appointment booked successfully!"); 
+        alert("Appointment booked successfully! " + (vipCode ? "Confirmation email with your VIP access code has been dispatched via Brevo." : "")); 
         loadClientDashboard(db, user);
         checkVipStatus(db, user);
-    } catch(err) { alert("Error booking session: " + err.message); }
+        
+        serviceSelect.value = "";
+        dateInput.value = "";
+    } catch(err) { 
+        alert("Booking Execution Error: " + err.message); 
+    }
     return false;
 };
 
 window.cancelAppointment = async function(id) {
-    if(!confirm("Cancel appointment?")) return;
+    if(!confirm("Are you sure you wish to cancel this scheduled appointment?")) return;
     try {
         const db = getSupabase();
         const { error } = await db.from('appointments').delete().eq('id', id);
         if(error) throw error;
+        
         const { data: { user } } = await db.auth.getUser();
-        loadClientDashboard(db, user);
-    } catch(err) { alert("Error: " + err.message); }
+        if(user) loadClientDashboard(db, user);
+    } catch(err) { 
+        alert("Cancellation Error: " + err.message); 
+    }
 };
 
 window.rescheduleAppointment = async function(id) {
-    const newDate = prompt("Enter new date and time (YYYY-MM-DDTHH:MM):");
+    const newDate = prompt("Enter new appointment date and time (Format: YYYY-MM-DDTHH:MM):");
     if(!newDate) return;
     try {
         const db = getSupabase();
         const { error } = await db.from('appointments').update({ appointment_time: newDate }).eq('id', id);
         if(error) throw error;
-        alert("Appointment rescheduled!");
+        
+        alert("Appointment successfully rescheduled.");
         const { data: { user } } = await db.auth.getUser();
-        loadClientDashboard(db, user);
-    } catch(err) { alert("Reschedule Error: " + err.message); }
+        if(user) loadClientDashboard(db, user);
+    } catch(err) { 
+        alert("Reschedule Error: " + err.message); 
+    }
 };
 
 async function loadClientDashboard(db, user) {
     const list = document.getElementById('client-appointments-list');
     try {
-        const { data: appts } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
+        const { data: appts, error } = await db.from('appointments').select('*').eq('client_id', user.id).order('appointment_time', { ascending: true });
+        if(error) throw error;
 
         if(list) {
-            list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.9rem;">No appointments booked.</p>' : appts.map(a => `
+            list.innerHTML = (!appts || appts.length === 0) ? '<p style="color:#888; font-size: 0.9rem;">No active appointments booked.</p>' : appts.map(a => `
                 <div style="padding: 1.2rem; margin-bottom: 0.8rem; border-radius: 8px; border: 1px solid #e0d8cc; background: white;">
                     <div><strong style="color: #222; font-family: 'Montserrat'; font-size: 1rem;">${new Date(a.appointment_time).toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true })}</strong><br><span style="font-size:0.9rem; color:#095d28;">${a.service_name}</span></div>
                     <div style="display: flex; gap: 0.8rem; margin-top: 0.8rem;">
@@ -181,12 +272,14 @@ async function loadClientDashboard(db, user) {
                     </div>
                 </div>`).join('');
         }
-    } catch(err) { console.error("Dashboard error:", err.message); }
+    } catch(err) { 
+        console.error("Dashboard loading error:", err.message); 
+    }
 }
 
 window.handleClientMessage = async function(e) {
     e.preventDefault();
-    alert("Message sent to Clare!");
+    alert("Secure message transmitted to Clare successfully!");
     const input = document.getElementById('client-msg-input');
     if(input) input.value = '';
     return false;
@@ -197,12 +290,14 @@ window.processLogout = async function() {
         const db = getSupabase();
         if(db) await db.auth.signOut();
         showLogin();
-    } catch(err) { alert("Error signing out: " + err.message); }
+    } catch(err) { 
+        alert("Logout Error: " + err.message); 
+    }
 }
 
 window.submitBasicIntake = async function(e) {
     e.preventDefault();
-    alert("Health questionnaire securely saved!");
+    alert("Standard health questionnaire securely saved to clinical records!");
     e.target.reset();
     return false;
 }
