@@ -16,56 +16,58 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./style.css?version=12">
+    <link rel="stylesheet" href="./style.css?version=13">
     <style>
+        * { box-sizing: border-box; }
         html, body {
-            height: 100%;
+            width: 100%;
+            min-height: 100vh;
             margin: 0;
             padding: 0;
-            background-color: var(--bg-color);
+            background-color: var(--bg-color, #f3f1ef);
+            font-family: 'Montserrat', sans-serif;
         }
         .page-screen { display: none; }
         .page-screen.visible { display: block; }
         
-        /* FORCE BOTTOM DOCK PINNED PROPERLY */
+        /* BULLETPROOF BOTTOM DOCK */
         nav.app-bottom-nav {
-            position: fixed !important;
-            bottom: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            width: 100% !important;
-            background: #ffffff !important;
-            border-top: 1px solid var(--secondary-sand, #e0d8cc) !important;
-            display: flex !important;
-            justify-content: space-around !important;
-            align-items: center !important;
-            padding: 0.8rem 0 env(safe-area-inset-bottom, 10px) !important;
-            z-index: 999999 !important;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.08) !important;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            border-top: 1px solid #e0d8cc;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.7rem 0;
+            z-index: 999999;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
         }
         .app-nav-item {
             background: none; border: none; font-size: 0.65rem; font-family: 'Montserrat', sans-serif;
             font-weight: 600; color: #666; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer;
         }
-        .app-nav-item.active { color: var(--primary-sage); }
-        .app-nav-item span.icon { font-size: 1.3rem; }
+        .app-nav-item.active { color: var(--primary-sage, #095d28); }
+        .app-nav-item span.icon { font-size: 1.2rem; }
         
         .main-app-wrapper {
             max-width: 800px;
             margin: 0 auto;
-            padding: 1.5rem 1rem 100px 1rem;
+            padding: 1.5rem 1rem 110px 1rem;
         }
     </style>
 </head>
 <body>
 
     <!-- TOP BRAND & SIGN OUT BAR -->
-    <div style="background-color: var(--card-bg, #fff); padding: 1rem 5%; border-bottom: 1px solid var(--secondary-sand, #e0d8cc); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;">
+    <div style="background-color: #ffffff; padding: 1rem 5%; border-bottom: 1px solid #e0d8cc; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;">
         <div style="display: flex; align-items: center; gap: 0.8rem;">
-            <img src="./logo.png" alt="Logo" style="height: 48px; width: auto; object-fit: contain; cursor: pointer;" onclick="location.href='./index.html'">
+            <img src="./logo.png" alt="Logo" style="height: 44px; width: auto; object-fit: contain; cursor: pointer;" onclick="location.href='./index.html'">
             <div>
-                <h1 id="portal-welcome-title" style="font-size: 1.05rem; margin: 0; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-main);">VIP Patient Portal</h1>
-                <span style="font-size: 0.6rem; color: var(--primary-sage); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Isle of Man Practice</span>
+                <h1 id="portal-welcome-title" style="font-size: 1.05rem; margin: 0; font-family: 'Montserrat', sans-serif; font-weight: 700; color: #222;">VIP Patient Portal</h1>
+                <span style="font-size: 0.6rem; color: #095d28; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Isle of Man Practice</span>
             </div>
         </div>
         <div>
@@ -78,18 +80,18 @@
 
         <!-- 0. LOGIN / AUTH SCREEN -->
         <div id="screen-login" class="page-screen">
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid var(--secondary-sand); max-width: 450px; margin: 2rem auto; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+            <div style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid #e0d8cc; max-width: 450px; margin: 2rem auto; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
                 <div style="text-align: center; margin-bottom: 1.5rem;">
-                    <img src="./logo.png" alt="Logo" style="height: 60px; width: auto; object-fit: contain; margin-bottom: 0.5rem;">
-                    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--text-main); margin: 0;">Patient Portal Sign In</h2>
+                    <img src="./logo.png" alt="Logo" style="height: 55px; width: auto; object-fit: contain; margin-bottom: 0.5rem;">
+                    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: #222; margin: 0;">Patient Portal Sign In</h2>
                     <p style="font-size: 0.85rem; color: #666; margin-top: 0.3rem;">Access your appointments, questionnaire, and clinical trackers.</p>
                 </div>
                 <form onsubmit="return processClientLogin(event)">
-                    <label>Email Address</label>
-                    <input type="email" id="login-email" required style="margin-bottom: 1rem;">
-                    <label>Password</label>
-                    <input type="password" id="login-password" required style="margin-bottom: 1.5rem;">
-                    <button type="submit" class="btn" style="width: 100%;">Sign In to Portal</button>
+                    <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Email Address</label>
+                    <input type="email" id="login-email" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
+                    <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Password</label>
+                    <input type="password" id="login-password" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1.5rem;">
+                    <button type="submit" class="btn" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Sign In to Portal</button>
                 </form>
             </div>
         </div>
@@ -97,119 +99,119 @@
         <!-- 1. DASHBOARD SCREEN -->
         <div id="screen-dashboard" class="page-screen">
             <!-- App Install Card -->
-            <div class="dash-card" style="background: linear-gradient(135deg, var(--primary-sage), #0a4d22); color: white; border-radius: 12px; padding: 1.8rem; margin-bottom: 1.5rem; text-align: center;">
+            <div style="background: linear-gradient(135deg, #095d28, #0a4d22); color: white; border-radius: 12px; padding: 1.8rem; margin-bottom: 1.5rem; text-align: center;">
                 <img src="./logo.png" alt="App Icon" style="height: 45px; width: 45px; background: white; border-radius: 10px; padding: 4px; margin-bottom: 0.8rem; object-fit: contain;">
-                <h3 style="color: white; font-size: 1.1rem; margin-bottom: 0.3rem; font-family: 'Montserrat';">Save Clinic App to Phone</h3>
+                <h3 style="color: white; font-size: 1.1rem; margin-bottom: 0.3rem;">Save Clinic App to Phone</h3>
                 <p style="font-size: 0.82rem; opacity: 0.95; margin-bottom: 1rem;">Add shortcut to your home screen for instant access.</p>
-                <button type="button" class="btn" style="background: white; color: var(--text-main); width: 100%; font-size: 0.9rem; padding: 0.7rem; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" onclick="handleSmartInstall()">📥 ADD APP TO HOME SCREEN</button>
+                <button type="button" style="background: white; color: #222; width: 100%; font-size: 0.9rem; padding: 0.7rem; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" onclick="handleSmartInstall()">📥 ADD APP TO HOME SCREEN</button>
             </div>
 
             <!-- Appointments & Booking -->
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem;">
-                <h3 style="font-family: 'Montserrat'; font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Your Appointments</h3>
+            <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Your Appointments</h3>
                 <div id="client-appointments-list"><p style="color: #888; font-size: 0.9rem;">Loading schedule...</p></div>
             </div>
 
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem;">
-                <h3 style="font-family: 'Montserrat'; font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Book Another Session</h3>
+            <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Book Another Session</h3>
                 <form onsubmit="return bookNewSession(event)">
-                    <label>Treatment Pathway</label>
-                    <select id="portal-service" required style="margin-bottom: 1rem;">
+                    <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Treatment Pathway</label>
+                    <select id="portal-service" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
                         <option value="">-- Choose a Service or Test --</option>
                         <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
                         <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70</option>
                         <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950</option>
                     </select>
-                    <label>Appointment Date & Time</label>
-                    <input type="datetime-local" id="portal-date" onchange="validateBusinessHours(this)" required style="margin-bottom: 1rem;">
-                    <button type="submit" class="btn" style="width: 100%;">Confirm Booking</button>
+                    <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Appointment Date & Time</label>
+                    <input type="datetime-local" id="portal-date" onchange="validateBusinessHours(this)" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
+                    <button type="submit" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Confirm Booking</button>
                 </form>
             </div>
 
             <!-- Standard Health Questionnaire Accordion -->
-            <div class="dash-card" id="basic-questionnaire-card" style="background: white; border-radius: 12px; border: 1px solid var(--secondary-sand); margin-bottom: 1.5rem; overflow: hidden;">
-                <div id="questionnaire-header" onclick="toggleAccordion('basic-questionnaire-panel')" style="padding: 1.2rem 1.5rem; background: var(--card-bg); cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            <div style="background: white; border-radius: 12px; border: 1px solid #e0d8cc; margin-bottom: 1.5rem; overflow: hidden;">
+                <div id="questionnaire-header" onclick="toggleAccordion('basic-questionnaire-panel')" style="padding: 1.2rem 1.5rem; background: #f9f8f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <h4 style="font-family: 'Montserrat'; font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--text-main);">Standard Health Questionnaire</h4>
-                        <span style="font-size: 0.75rem; color: var(--primary-sage); font-weight: 600;">Required prior to physical therapies (Tap to open)</span>
+                        <h4 style="font-size: 0.95rem; font-weight: 700; margin: 0; color: #222;">Standard Health Questionnaire</h4>
+                        <span style="font-size: 0.75rem; color: #095d28; font-weight: 600;">Required prior to physical therapies (Tap to open)</span>
                     </div>
-                    <span id="accordion-icon" style="font-size: 1.3rem; font-weight: bold; color: var(--primary-sage);">+</span>
+                    <span id="accordion-icon" style="font-size: 1.3rem; font-weight: bold; color: #095d28;">+</span>
                 </div>
-                <div id="basic-questionnaire-panel" style="display: none; padding: 1.5rem; border-top: 1px solid var(--secondary-sand); background: white;">
+                <div id="basic-questionnaire-panel" style="display: none; padding: 1.5rem; border-top: 1px solid #e0d8cc; background: white;">
                     <form onsubmit="return submitBasicIntake(event)">
-                        <label>Full Name</label><input type="text" id="basic-name" required>
-                        <label>Date of Birth</label><input type="date" id="basic-dob" required>
-                        <label>Phone Number</label><input type="tel" id="basic-phone" required>
-                        <label>Email Address</label><input type="email" id="basic-email" required>
-                        <label>Main reason for visit / discomfort?</label><input type="text" id="basic-reason" required>
-                        <label>Rate current pain level (0-10)</label>
-                        <select id="basic-pain" required style="margin-bottom: 1.2rem;">
+                        <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Full Name</label><input type="text" id="basic-name" required style="width:100%; padding:0.7rem; border:1px solid #ccc; border-radius:6px; margin-bottom:1rem;">
+                        <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Date of Birth</label><input type="date" id="basic-dob" required style="width:100%; padding:0.7rem; border:1px solid #ccc; border-radius:6px; margin-bottom:1rem;">
+                        <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Phone Number</label><input type="tel" id="basic-phone" required style="width:100%; padding:0.7rem; border:1px solid #ccc; border-radius:6px; margin-bottom:1rem;">
+                        <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Email Address</label><input type="email" id="basic-email" required style="width:100%; padding:0.7rem; border:1px solid #ccc; border-radius:6px; margin-bottom:1rem;">
+                        <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Main reason for visit / discomfort?</label><input type="text" id="basic-reason" required style="width:100%; padding:0.7rem; border:1px solid #ccc; border-radius:6px; margin-bottom:1rem;">
+                        <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Rate current pain level (0-10)</label>
+                        <select id="basic-pain" required style="width:100%; padding:0.7rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1.2rem;">
                             <option value="">Select...</option>
                             <option value="0">0 - No Pain</option>
                             <option value="5">5 - Moderate</option>
                             <option value="10">10 - Excruciating</option>
                         </select>
-                        <button type="submit" class="btn" style="width: 100%;">Submit Questionnaire</button>
+                        <button type="submit" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Submit Questionnaire</button>
                     </form>
                 </div>
             </div>
 
             <!-- VIP Unlock Card -->
-            <div class="dash-card" id="vip-unlock-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand); display: none;">
-                <h3 style="font-family: 'Montserrat'; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem;">Unlock VIP Patient App Features</h3>
+            <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; display: none;" id="vip-unlock-card">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem;">Unlock VIP Patient App Features</h3>
                 <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.2rem;">Enter your 4-digit VIP code from your email confirmation to unlock Nutrition, Supplements, Mood Journal, Exercise tracking, and direct chat.</p>
                 <form onsubmit="return unlockVipApp(event)">
-                    <input type="text" id="vip-code-input" placeholder="e.g. VIP-4821" required style="text-transform: uppercase; text-align: center; font-weight: bold; letter-spacing: 2px;">
-                    <button type="submit" class="btn" style="width: 100%;">Unlock Features</button>
+                    <input type="text" id="vip-code-input" placeholder="e.g. VIP-4821" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; text-transform: uppercase; text-align: center; font-weight: bold; letter-spacing: 2px; margin-bottom:1rem;">
+                    <button type="submit" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Unlock Features</button>
                 </form>
             </div>
         </div>
 
         <!-- 2. NUTRITION SCREEN -->
         <div id="screen-nutrition" class="page-screen">
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand);">
-                <h3 style="font-family: 'Montserrat'; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">🥗 Daily Nutrition & Food Log</h3>
+            <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">🥗 Daily Nutrition & Food Log</h3>
                 <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Track your meals and macros for the day.</p>
                 <form onsubmit="return submitDailyLog(event)">
-                    <label>Meal Type</label>
-                    <select id="food-meal-type" style="margin-bottom: 1rem;">
+                    <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Meal Type</label>
+                    <select id="food-meal-type" style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
                         <option value="Breakfast">Breakfast</option>
                         <option value="Lunch">Lunch</option>
                         <option value="Dinner">Dinner</option>
                         <option value="Snacks">Snacks</option>
                     </select>
-                    <label>Food Description & Cals</label>
-                    <input type="text" id="food-desc" placeholder="e.g. Avocado Toast (350 kcal)" required style="margin-bottom: 1rem;">
-                    <button type="submit" class="btn" style="width: 100%;">Log Food Item</button>
+                    <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Food Description & Cals</label>
+                    <input type="text" id="food-desc" placeholder="e.g. Avocado Toast (350 kcal)" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
+                    <button type="submit" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Log Food Item</button>
                 </form>
             </div>
         </div>
 
         <!-- 3. SUPPLEMENTS SCREEN -->
         <div id="screen-supplements" class="page-screen">
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand);">
-                <h3 style="font-family: 'Montserrat'; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">💊 Supplement Stack</h3>
+            <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">💊 Supplement Stack</h3>
                 <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Check off what you are currently taking and specify your dosage.</p>
                 <div id="supplements-list-container">
                     <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
-                        <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="supp-check" value="Magnesium Glycinate"> <strong>Magnesium Glycinate</strong> (Dosage: <input type="text" placeholder="e.g. 400mg" style="display:inline-block; width:120px; margin-bottom:0; padding:4px 8px;">)</label>
-                        <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="supp-check" value="Omega-3 Fish Oil"> <strong>Omega-3 Fish Oil</strong> (Dosage: <input type="text" placeholder="e.g. 2000mg" style="display:inline-block; width:120px; margin-bottom:0; padding:4px 8px;">)</label>
-                        <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="supp-check" value="Vitamin D3 + K2"> <strong>Vitamin D3 + K2</strong> (Dosage: <input type="text" placeholder="e.g. 4000 IU" style="display:inline-block; width:120px; margin-bottom:0; padding:4px 8px;">)</label>
-                        <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="supp-check" value="Probiotic Blend"> <strong>Probiotic Blend</strong> (Dosage: <input type="text" placeholder="e.g. 1 capsule" style="display:inline-block; width:120px; margin-bottom:0; padding:4px 8px;">)</label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="supp-check" value="Magnesium Glycinate"> <strong>Magnesium Glycinate</strong> (Dosage: <input type="text" placeholder="e.g. 400mg" style="display:inline-block; width:120px; margin-bottom:0; padding:4px 8px; border:1px solid #ccc; border-radius:4px;">)</label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="supp-check" value="Omega-3 Fish Oil"> <strong>Omega-3 Fish Oil</strong> (Dosage: <input type="text" placeholder="e.g. 2000mg" style="display:inline-block; width:120px; margin-bottom:0; padding:4px 8px; border:1px solid #ccc; border-radius:4px;">)</label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="supp-check" value="Vitamin D3 + K2"> <strong>Vitamin D3 + K2</strong> (Dosage: <input type="text" placeholder="e.g. 4000 IU" style="display:inline-block; width:120px; margin-bottom:0; padding:4px 8px; border:1px solid #ccc; border-radius:4px;">)</label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;"><input type="checkbox" class="supp-check" value="Probiotic Blend"> <strong>Probiotic Blend</strong> (Dosage: <input type="text" placeholder="e.g. 1 capsule" style="display:inline-block; width:120px; margin-bottom:0; padding:4px 8px; border:1px solid #ccc; border-radius:4px;">)</label>
                     </div>
-                    <button type="button" class="btn" style="width: 100%;" onclick="saveSupplements()">Save Supplement Stack</button>
+                    <button type="button" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;" onclick="saveSupplements()">Save Supplement Stack</button>
                 </div>
             </div>
         </div>
 
         <!-- 4. MOOD & JOURNAL SCREEN -->
         <div id="screen-mood" class="page-screen">
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand);">
-                <h3 style="font-family: 'Montserrat'; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">🧠 Mood & Daily Journal</h3>
+            <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">🧠 Mood & Daily Journal</h3>
                 <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">How are you feeling today? Log your mood and write personal notes.</p>
                 <form onsubmit="return saveMoodJournal(event)">
-                    <label>Select Today's Mood</label>
-                    <select id="mood-select" required style="margin-bottom: 1rem;">
+                    <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Select Today's Mood</label>
+                    <select id="mood-select" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
                         <option value="">-- Choose Mood --</option>
                         <option value="😄 Great / Energized">😄 Great / Energized</option>
                         <option value="🙂 Good / Stable">🙂 Good / Stable</option>
@@ -217,43 +219,43 @@
                         <option value="Low / Stressed">Low / Stressed</option>
                         <option value="pain">Pain / Flaring</option>
                     </select>
-                    <label>Journal Notes & Reflections</label>
-                    <textarea id="mood-notes" rows="4" placeholder="Write any reflections, symptom details, or notes for Clare..." style="width: 100%; padding: 0.8rem; border: 1px solid var(--secondary-sand); border-radius: 6px; margin-bottom: 1.2rem; font-family: inherit;"></textarea>
-                    <button type="submit" class="btn" style="width: 100%;">Save Daily Journal</button>
+                    <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Journal Notes & Reflections</label>
+                    <textarea id="mood-notes" rows="4" placeholder="Write any reflections, symptom details, or notes for Clare..." style="width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 1.2rem; font-family: inherit;"></textarea>
+                    <button type="submit" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Save Daily Journal</button>
                 </form>
             </div>
         </div>
 
         <!-- 5. EXERCISE SCREEN -->
         <div id="screen-exercise" class="page-screen">
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand);">
-                <h3 style="font-family: 'Montserrat'; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">🏃 Exercise & Step Tracker</h3>
+            <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">🏃 Exercise & Step Tracker</h3>
                 <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Log your daily steps and workouts, or connect a smart tracker.</p>
                 <form onsubmit="return saveExerciseLog(event)">
-                    <label>Daily Step Count</label>
-                    <input type="number" id="exercise-steps" placeholder="e.g. 8500" style="margin-bottom: 1rem;">
-                    <label>Workout Type</label>
-                    <input type="text" id="exercise-type" placeholder="e.g. Pilates, Walking, Myofascial Stretch" style="margin-bottom: 1rem;">
-                    <label>Duration (Minutes)</label>
-                    <input type="number" id="exercise-duration" placeholder="e.g. 45" style="margin-bottom: 1.2rem;">
-                    <button type="submit" class="btn" style="width: 100%;">Save Activity</button>
+                    <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Daily Step Count</label>
+                    <input type="number" id="exercise-steps" placeholder="e.g. 8500" style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
+                    <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Workout Type</label>
+                    <input type="text" id="exercise-type" placeholder="e.g. Pilates, Walking, Myofascial Stretch" style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
+                    <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Duration (Minutes)</label>
+                    <input type="number" id="exercise-duration" placeholder="e.g. 45" style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1.2rem;">
+                    <button type="submit" style="width: 100%; padding: 0.8rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Save Activity</button>
                 </form>
-                <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--secondary-sand); text-align: center;">
-                    <button type="button" class="btn btn-outline" style="width: 100%; border-color: var(--primary-sage); color: var(--primary-sage);" onclick="alert('Smart tracker sync (Apple Health / Google Fit) is ready to link.')">⌚ Connect Smart Tracker</button>
+                <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e0d8cc; text-align: center;">
+                    <button type="button" style="width: 100%; padding: 0.8rem; background: transparent; border: 2px solid #095d28; color: #095d28; border-radius: 6px; font-weight: bold; cursor: pointer;" onclick="alert('Smart tracker sync (Apple Health / Google Fit) is ready to link.')">⌚ Connect Smart Tracker</button>
                 </div>
             </div>
         </div>
 
         <!-- 6. CHAT SCREEN -->
         <div id="screen-chat" class="page-screen">
-            <div class="dash-card" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid var(--secondary-sand);">
-                <h3 style="font-family: 'Montserrat'; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">💬 Secure Clinical Chat with Clare</h3>
-                <div class="chat-box" id="client-chat-box" style="height: 300px; background: var(--bg-color); border: 1px solid var(--secondary-sand); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; overflow-y: auto;">
+            <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">💬 Secure Clinical Chat with Clare</h3>
+                <div id="client-chat-box" style="height: 300px; background: #f9f8f6; border: 1px solid #e0d8cc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; overflow-y: auto;">
                     <p style="color: #888; font-size: 0.9rem; text-align: center; margin-top: 5rem;">No messages yet. Send a direct note to Clare below!</p>
                 </div>
                 <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.8rem;">
-                    <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1; background: var(--bg-color);" required>
-                    <button type="submit" class="btn" style="padding: 0 1.5rem;">Send</button>
+                    <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1; background: #f9f8f6; padding:0.8rem; border:1px solid #ccc; border-radius:6px;" required>
+                    <button type="submit" style="padding: 0 1.5rem; background: #095d28; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Send</button>
                 </form>
             </div>
         </div>
@@ -332,6 +334,6 @@
         }
     </script>
 
-    <script src="./app.js?version=12"></script>
+    <script src="./app.js?version=13"></script>
 </body>
 </html>
