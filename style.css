@@ -1,12 +1,12 @@
-:root {
-    --bg-color: #f3f1ef;         
+:root { 
+    --bg-color: #f3f1ef;        
     --card-bg: #ffffff;          
     --text-main: #095d28;        
-    --primary-sage: #0d9b46;     
+    --primary-sage: #0d9b46;    
     --sage-hover: #095d28;       
     --gold-accent: #10d358;      
     --bright-accent: #12db14;    
-    --secondary-sand: #d1dcd4;   
+    --secondary-sand: #d1dcd4;  
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -122,16 +122,12 @@ input, select, textarea { width: 100%; padding: 1.1rem 1.2rem; margin-bottom: 2r
 input:focus, select:focus, textarea:focus { border-color: var(--primary-sage); outline: none; background: white; box-shadow: 0 0 0 2px rgba(13,155,70,0.1); }
 textarea { resize: vertical; height: 120px; }
 
-.dashboard-container { max-width: 1300px; margin: 2rem auto 4rem auto; padding: 0 5%; display: grid; grid-template-columns: 1fr; gap: 2rem; }
-.dash-card { background: var(--card-bg); padding: 2.5rem 1.5rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 40px rgba(9, 93, 40, 0.03); margin-bottom: 2rem; }
-.dash-card h3 { color: var(--text-main); margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 1rem; font-size: 1.3rem; font-weight: 700; }
-
 .chat-box { height: 300px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg-color); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 1rem; border: 1px solid var(--secondary-sand); }
 .msg { padding: 1rem; border-radius: 8px; max-width: 85%; font-size: 0.95rem; line-height: 1.5; }
 .msg.client { background: var(--primary-sage); color: white; align-self: flex-end; }
 .msg.admin { background: white; border: 1px solid var(--secondary-sand); align-self: flex-start; box-shadow: 0 4px 15px rgba(9, 93, 40, 0.03); color: var(--text-main); }
 
-.journal-accordion { background-color: var(--bg-color); color: var(--text-main); cursor: pointer; padding: 1.2rem; width: 100%; border: 1px solid var(--secondary-sand); border-radius: 8px; text-align: left; font-size: 0.8rem; font-family: 'Montserrat', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; transition: all 0.3s; }
+.journal-accordion { background-color: var(--bg-color); color: var(--text-main); cursor: pointer; padding: 1.2rem; width: 100%; border: 1px solid var(--secondary-sand); border-radius: 8px; text-align: left; font-size: 0.8rem; font-family: 'Montserrat', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.0rem; transition: all 0.3s; }
 .journal-accordion.active { background-color: var(--primary-sage); color: white; border-color: var(--primary-sage); }
 .journal-panel { padding: 0 1.2rem; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; border-left: 1px solid var(--secondary-sand); border-right: 1px solid var(--secondary-sand); margin-top: -1rem; margin-bottom: 2rem; border-bottom: 1px solid transparent; border-radius: 0 0 8px 8px; }
 .journal-panel.show { padding: 2rem 1.2rem; max-height: 4000px; border-bottom: 1px solid var(--secondary-sand); overflow: visible; }
@@ -174,6 +170,16 @@ footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); col
 .footer-logo-wrapper { width: 100%; border-bottom: 1px solid var(--secondary-sand); padding-bottom: 3rem; margin-bottom: 3rem; margin-top: 4rem; text-align: center; }
 .footer-brand-logo { height: 70px; object-fit: contain; }
 .footer-col h4 { color: var(--text-main); margin-bottom: 1rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
+
+/* Professional Services Grid Fix */
+.services-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 5%;
+}
 
 @media (min-width: 768px) {
     .pathway-grid { grid-template-columns: repeat(2, 1fr); }
