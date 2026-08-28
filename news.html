@@ -4,41 +4,192 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Latest News & PDFs | The Natural Healing Clinic</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css?version=6">
+    
+    <link rel="stylesheet" href="./style.css?version=12">
+
+    <style>
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-brand-logo {
+            height: 50px;
+            width: auto;
+            cursor: pointer;
+        }
+        .desktop-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        /* Mobile Hamburger Toggle */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 32px;
+            height: 26px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+        }
+        .mobile-menu-btn span {
+            width: 100%;
+            height: 3.5px;
+            background-color: #095d28;
+            border-radius: 2px;
+        }
+
+        /* Mobile Drawer Styling */
+        .mobile-drawer {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 350px;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 99999;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.15);
+            transition: right 0.3s ease-in-out;
+            padding: 5rem 2rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .mobile-drawer.open {
+            right: 0;
+        }
+        .mobile-drawer-link {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #222;
+            text-decoration: none;
+            cursor: pointer;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .mobile-drawer-link:hover {
+            color: #095d28;
+        }
+
+        @media (max-width: 1024px) {
+            .desktop-nav-links { display: none !important; }
+            .mobile-menu-btn { display: flex !important; }
+        }
+    </style>
 </head>
 <body>
+
+    <script>
+        function toggleMobileMenu() { 
+            const drawer = document.getElementById('mobile-drawer');
+            if(drawer) {
+                drawer.classList.toggle('open');
+            }
+        }
+    </script>
+
     <nav>
         <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="location.href='./index.html'">
+        
         <div class="desktop-nav-links">
-            <span class="nav-link-text" onclick="location.href='./index.html'">Home</span>
-            <span class="nav-link-text" onclick="location.href='./about.html'">About Clare</span>
-            <span class="nav-link-text" onclick="location.href='./testimonials.html'">Patient Stories</span>
-            <span class="nav-link-text" style="color: var(--primary-sage); font-weight: 700;">Latest News</span>
-            <span class="nav-link-text" onclick="location.href='./contact.html'">Contact</span>
+            <span class="nav-link-text" onclick="location.href='./index.html'" style="cursor: pointer;">Home</span>
+            <span class="nav-link-text" onclick="location.href='./about.html'" style="cursor: pointer;">About Clare</span>
+            <span class="nav-link-text" onclick="location.href='./testimonials.html'" style="cursor: pointer;">Patient Stories</span>
+            <span class="nav-link-text" style="color: #095d28; font-weight: 700;">Latest News</span>
+            <span class="nav-link-text" onclick="location.href='./contact.html'" style="cursor: pointer;">Contact</span>
             <button type="button" class="btn btn-outline" onclick="location.href='./app.html'">Patient Portal</button>
         </div>
+        
+        <button type="button" class="mobile-menu-btn" aria-label="Open navigation menu" onclick="toggleMobileMenu()">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
 
-    <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
-        <span class="section-subtitle">Clinic Updates</span>
-        <h1 style="margin-top: 0.5rem;">Latest News & PDFs</h1>
+    <!-- MOBILE NAVIGATION DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <span style="position: absolute; top: calc(1.5rem + env(safe-area-inset-top)); right: 2rem; font-size: 2rem; cursor: pointer; color: #222;" onclick="toggleMobileMenu()">✕</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./index.html'">Home</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./about.html'">About Clare</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./testimonials.html'">Patient Stories</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./news.html'" style="color: #095d28; font-weight: 700;">Latest News</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./contact.html'">Contact</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./app.html'" style="color: #095d28; font-weight: 700;">Patient Portal</span>
     </div>
 
-    <section class="section" style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
-        <div id="public-news-feed" style="display: flex; flex-direction: column; gap: 2rem;">
-            <p style="color: #888; text-align: center;">Loading latest updates...</p>
+    <!-- HEADER SECTION -->
+    <div style="background-color: var(--card-bg, #f9f8f6); padding: 5rem 6%; border-bottom: 1px solid #e0d8cc; text-align: center;">
+        <span style="display: inline-block; padding: 0.4rem 1.2rem; background: rgba(13, 155, 70, 0.1); border: 1px solid rgba(13, 155, 70, 0.2); border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: #095d28; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;">Clinic Updates</span>
+        <h1 style="font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; color: #222; margin-top: 0; margin-bottom: 1rem;">Latest News & Resources</h1>
+    </div>
+
+    <section style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
+        
+        <!-- RESTORED PDFS SECTION -->
+        <div style="margin-bottom: 4rem;">
+            <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.4rem; color: #095d28; margin-bottom: 1.5rem; border-bottom: 2px solid #e0d8cc; padding-bottom: 0.5rem;">Clinic Resources & Downloads</h2>
+            
+            <!-- PDF Item 1 -->
+            <div style="background: white; border: 1px solid #e0d8cc; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h3 style="margin: 0 0 0.3rem 0; color: #222; font-size: 1.1rem; font-family: 'Montserrat', sans-serif;">Clinic Information & Pricing</h3>
+                    <p style="margin: 0; color: #666; font-size: 0.9rem;">Download our full clinical service guide and price list.</p>
+                </div>
+                <!-- UPDATE THE HREF BELOW TO MATCH YOUR PDF FILENAME -->
+                <a href="./pricing.pdf" target="_blank" style="background: #095d28; color: white; text-decoration: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; text-align: center;">Download PDF</a>
+            </div>
+
+            <!-- PDF Item 2 -->
+            <div style="background: white; border: 1px solid #e0d8cc; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h3 style="margin: 0 0 0.3rem 0; color: #222; font-size: 1.1rem; font-family: 'Montserrat', sans-serif;">Aftercare Advice</h3>
+                    <p style="margin: 0; color: #666; font-size: 0.9rem;">Essential guidance to follow after your physical therapy sessions.</p>
+                </div>
+                <!-- UPDATE THE HREF BELOW TO MATCH YOUR PDF FILENAME -->
+                <a href="./aftercare.pdf" target="_blank" style="background: white; color: #095d28; border: 2px solid #095d28; text-decoration: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; text-align: center;">Download PDF</a>
+            </div>
+            
         </div>
+
+        <!-- DYNAMIC NEWS FEED -->
+        <div>
+            <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.4rem; color: #095d28; margin-bottom: 1.5rem; border-bottom: 2px solid #e0d8cc; padding-bottom: 0.5rem;">Latest Announcements</h2>
+            <div id="public-news-feed" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <p style="color: #888; text-align: center; font-family: 'Montserrat', sans-serif;">Loading latest updates...</p>
+            </div>
+        </div>
+
     </section>
 
     <footer>
-        <div class="footer-logo-wrapper"><img src="./logo.png" alt="Logo" class="footer-brand-logo"></div>
-        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; width: 100%;">
-            <div class="footer-col" style="text-align: left;"><h4>The Natural Healing Clinic</h4><p>13 Cronk Drine, Union Mills, Isle of Man</p></div>
-            <div class="footer-col" style="text-align: right;"><h4>Contact</h4><p>Tel: 07624 202 121</p></div>
+        <div class="footer-logo-wrapper" style="text-align: center; margin-bottom: 2rem;">
+            <img src="./logo.png" alt="Logo" class="footer-brand-logo" style="height: 60px; width: auto;">
+        </div>
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; width: 100%; max-width: 1000px; margin: 0 auto; padding: 0 2rem;">
+            <div class="footer-col" style="text-align: left; flex: 1; min-width: 200px;">
+                <h4 style="font-family: 'Montserrat', sans-serif; color: #222; margin-bottom: 0.5rem;">The Natural Healing Clinic</h4>
+                <p style="color: #666; font-size: 0.9rem; line-height: 1.5; margin: 0;">13 Cronk Drine, Union Mills, Isle of Man</p>
+            </div>
+            <div class="footer-col" style="text-align: right; flex: 1; min-width: 200px;">
+                <h4 style="font-family: 'Montserrat', sans-serif; color: #222; margin-bottom: 0.5rem;">Contact</h4>
+                <p style="color: #666; font-size: 0.9rem; line-height: 1.5; margin: 0;">Tel: 07624 202 121</p>
+            </div>
         </div>
     </footer>
-    <script src="./app.js?v=2"></script>
+    
+    <script src="./app.js?v=12"></script>
 </body>
 </html>
