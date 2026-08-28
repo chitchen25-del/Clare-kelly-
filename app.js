@@ -1,8 +1,6 @@
 const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
 
-const BREVO_API_KEY = 'xkeysib-YOUR_ACTUAL_BREVO_API_KEY_HERE';
-
 // Singleton to prevent iOS PWA storage fragmentation
 let supabaseInstance = null;
 
@@ -133,7 +131,6 @@ window.processClientLogin = async function(e) {
         const passInput = document.getElementById('login-password');
         if(!emailInput || !passInput) throw new Error("Form elements missing.");
 
-        // Lowercasing to fix iOS auto-capitalization bugs
         const email = emailInput.value.trim().toLowerCase();
         const pass = passInput.value.trim();
         const db = getSupabase();
@@ -175,24 +172,13 @@ window.bookNewSession = async function(e) {
             const { error: tierError } = await db.from('client_tiers').upsert([{ client_id: user.id, is_premium: true, unlock_code: vipCode }]);
             if(tierError) console.error("Tier record upsert warning:", tierError);
 
-            const brevoRes = await fetch('https://api.brevo.com/v3/smtp/email', {
-                method: 'POST',
-                headers: {
-                    'accept': 'application/json',
-                    'api-key': BREVO_API_KEY,
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                    sender: { name: "The Natural Healing Clinic", email: "clare@nhc.co.im" },
-                    to: [{ email: user.email, name: clientName }],
-                    subject: "Your VIP App Access Code",
-                    htmlContent: `<html><body><p>Hello ${clientName},</p><p>Your booking for <b>${serviceName}</b> is confirmed.</p><p>Your VIP Code is: <b>${vipCode}</b></p></body></html>`
-                })
+            // Securely call Supabase Edge Function instead of Brevo directly
+            const { error: emailError } = await db.functions.invoke('send-confirmation', {
+                body: { email: user.email, clientName, serviceName, vipCode }
             });
 
-            if (!brevoRes.ok) {
-                const errData = await brevoRes.json();
-                console.error("Brevo Error Response:", errData);
+            if (emailError) {
+                console.error("Email Dispatch Warning:", emailError);
             }
         }
 
@@ -281,15 +267,12 @@ window.processLogout = async function() {
         const db = getSupabase();
         if(db) await db.auth.signOut();
         
-        // Nuclear option: Manually destroy all iPhone storage
         localStorage.clear();
         sessionStorage.clear();
         
-        // Force a hard URL reload to break the visual freeze
         window.location.replace('./app.html?logout=' + new Date().getTime());
     } catch(err) { 
         alert("Logout Error: " + err.message); 
-        // Force it anyway if Supabase fails
         localStorage.clear();
         sessionStorage.clear();
         window.location.replace('./app.html?logout=' + new Date().getTime());
