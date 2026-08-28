@@ -121,6 +121,84 @@
                 height: 100% !important;
             }
         }
+
+        /* ================= AESTHETIC UPGRADES ================= */
+
+        /* 1. Floating Form Labels & Soft Inputs */
+        .floating-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .floating-group input, .floating-group select {
+            width: 100%;
+            padding: 1.6rem 1rem 0.6rem 1rem;
+            font-size: 1rem;
+            background: #fcfcfc;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            color: #222;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        .floating-group select {
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23888888%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem top 50%;
+            background-size: 0.65rem auto;
+        }
+        .floating-group input:focus, .floating-group select:focus {
+            background: #ffffff;
+            border-color: rgba(13, 155, 70, 0.4);
+            box-shadow: 0 0 0 4px rgba(13, 155, 70, 0.05);
+        }
+        .floating-group label {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            font-size: 0.95rem;
+            color: #888;
+            pointer-events: none;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            font-family: 'Montserrat', sans-serif;
+        }
+        /* Float the label on focus or when valid (filled) */
+        .floating-group input:focus ~ label,
+        .floating-group input:valid ~ label,
+        .floating-group select:focus ~ label,
+        .floating-group select:valid ~ label {
+            top: 0.8rem;
+            transform: translateY(0);
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #095d28;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        /* Date inputs always show placeholder UI on iOS, so pre-float them */
+        .floating-group input[type="date"] ~ label {
+            top: 0.8rem;
+            transform: translateY(0);
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #095d28;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 2. Scroll Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
@@ -186,7 +264,7 @@
             
             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(243, 241, 239, 0.7); z-index: 1;"></div>
             
-            <div style="position: relative; z-index: 2; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.8); padding: 3.5rem 2rem; border-radius: 24px; box-shadow: 0 10px 40px rgba(9,93,40,0.06);">
+            <div class="reveal" style="position: relative; z-index: 2; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.8); padding: 3.5rem 2rem; border-radius: 24px; box-shadow: 0 10px 40px rgba(9,93,40,0.06);">
                 
                 <span style="display: inline-block; padding: 0.4rem 1.2rem; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(13, 155, 70, 0.2); border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: var(--primary-sage); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.5rem;">Isle of Man • Clinical Wellness</span>
                 
@@ -203,7 +281,7 @@
         </section>
 
         <section class="section">
-            <div class="section-image-wrapper" style="position: relative; padding-bottom: 2.5rem;">
+            <div class="section-image-wrapper reveal" style="position: relative; padding-bottom: 2.5rem;">
                 <div style="overflow: hidden; border-radius: 200px 200px 10px 10px; box-shadow: 0 20px 40px rgba(9,93,40,0.08); height: 480px; position: relative;">
                     <img src="https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?auto=format&fit=crop&w=800&q=80" 
                          alt="Zen stacked stones" 
@@ -215,7 +293,7 @@
                 </div>
             </div>
 
-            <div class="section-text" style="padding-top: 1rem;">
+            <div class="section-text reveal" style="padding-top: 1rem; transition-delay: 0.1s;">
                 <span class="section-subtitle">Our Philosophy</span>
                 <h2>Results in a Realistic Timeframe</h2>
                 <p style="margin-bottom: 1.5rem;">The main aim of my clinic is to get results, in a quick and realistic timeframe. If you suffer from pain or discomfort, then I am here to help.</p>
@@ -233,7 +311,7 @@
 
         <!-- ================= TIERED CLINICAL SERVICES ================= -->
         <section class="pricing-section" style="padding-top: 6rem; padding-bottom: 6rem; background: #f9f8f6;">
-            <div style="text-align: center; max-width: 800px; margin: 0 auto 4rem auto;">
+            <div class="reveal" style="text-align: center; max-width: 800px; margin: 0 auto 4rem auto;">
                 <span style="display: inline-block; padding: 0.4rem 1.2rem; background: rgba(13, 155, 70, 0.1); border: 1px solid rgba(13, 155, 70, 0.2); border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: #095d28; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;">Treatment Pathways</span>
                 <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; color: #222; margin-bottom: 1rem;">Tailored Clinical Care</h2>
                 <p style="color: #555; font-size: 1.1rem; line-height: 1.6;">From immediate pain relief to complete physiological transformation, choose the level of support that matches your healing goals.</p>
@@ -242,7 +320,7 @@
             <div style="max-width: 1150px; margin: 0 auto; padding: 0 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; align-items: center;">
                 
                 <!-- TIER 2: Packages & Cleanses (Silver) -->
-                <div style="background: white; border-radius: 16px; padding: 2.5rem; border: 1px solid #e0d8cc; box-shadow: 0 10px 30px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%;">
+                <div class="reveal" style="background: white; border-radius: 16px; padding: 2.5rem; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 15px 35px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%;">
                     <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #444; margin-bottom: 0.5rem; font-weight: 600;">Packages & Cleanses</h3>
                     <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px;">Targeted multi-session resets, lymphatic drainage bundles, and biological cleanses.</p>
                     <div style="font-size: 2.5rem; font-family: 'Cormorant Garamond', serif; color: #222; margin-bottom: 2rem; font-weight: 600;">From £70</div>
@@ -255,10 +333,10 @@
                     <button type="button" style="margin-top: auto; width: 100%; padding: 1rem; background: white; color: #095d28; border: 2px solid #095d28; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;" onclick="location.href='#register-section'">View & Book</button>
                 </div>
 
-                <!-- TIER 1: Core Therapies (Bronze) -->
-                <div class="pricing-tier-bronze" style="background: #ffffff; border-radius: 16px; padding: 3rem 2.5rem; border: 2px solid #095d28; box-shadow: 0 20px 40px rgba(9,93,40,0.1); position: relative; transform: scale(1.05); z-index: 2; display: flex; flex-direction: column; height: calc(100% + 2rem);">
-                    <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #095d28; color: white; padding: 0.4rem 1.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">Primary Focus</div>
-                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #095d28; margin-bottom: 0.5rem; font-weight: 700;">Core Therapies</h3>
+                <!-- TIER 1: Core Treatments (Bronze - SOFT SHADOW FIX) -->
+                <div class="pricing-tier-bronze reveal" style="background: #ffffff; border-radius: 16px; padding: 3rem 2.5rem; border: none; box-shadow: 0 25px 60px rgba(9,93,40,0.15), 0 0 20px rgba(9,93,40,0.03); position: relative; transform: scale(1.05); z-index: 2; display: flex; flex-direction: column; height: calc(100% + 2rem); transition-delay: 0.1s;">
+                    <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #095d28; color: white; padding: 0.4rem 1.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(9,93,40,0.2);">Primary Focus</div>
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #095d28; margin-bottom: 0.5rem; font-weight: 700;">Core Treatments</h3>
                     <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px;">Expert hands-on physical therapies designed for immediate pain relief and postural correction.</p>
                     <div style="font-size: 3rem; font-family: 'Cormorant Garamond', serif; color: #222; margin-bottom: 2rem; font-weight: 600;">£70<span style="font-size: 1rem; color: #888; font-family: 'Montserrat', sans-serif; font-weight: 400;"> / Union Mills</span></div>
                     <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
@@ -271,7 +349,7 @@
                 </div>
 
                 <!-- TIER 3: Functional Medicine (Gold) -->
-                <div style="background: linear-gradient(145deg, #095d28, #06401b); border-radius: 16px; padding: 2.5rem; border: 1px solid #053315; box-shadow: 0 15px 35px rgba(0,0,0,0.15); display: flex; flex-direction: column; height: 100%;">
+                <div class="reveal" style="background: linear-gradient(145deg, #095d28, #06401b); border-radius: 16px; padding: 2.5rem; border: none; box-shadow: 0 20px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; height: 100%; transition-delay: 0.2s;">
                     <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #eaddc5; margin-bottom: 0.5rem; font-weight: 600;">Functional Medicine</h3>
                     <p style="color: #b5c7bc; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px;">Our elite, high-touch clinical programmes for uncovering the root drivers of chronic conditions.</p>
                     <div style="font-size: 3rem; font-family: 'Cormorant Garamond', serif; color: white; margin-bottom: 2rem; font-weight: 600;">£350+</div>
@@ -289,63 +367,87 @@
 
         <!-- REGISTRATION / BOOKING ANCHOR SECTION -->
         <div id="register-section" style="padding: 4rem 5%; background: var(--card-bg); border-top: 1px solid var(--secondary-sand);">
-            <div class="form-container" style="margin: 0 auto;">
-                <img src="./logo.png" alt="Logo" class="portal-logo">
+            <div class="form-container reveal" style="margin: 0 auto; max-width: 600px; padding: 0;">
+                <img src="./logo.png" alt="Logo" class="portal-logo" style="margin-bottom: 1rem;">
                 <h2 style="font-size: 1.8rem; margin-bottom: 2.5rem; font-family: 'Montserrat'; font-weight: 600; text-align: center;">Patient Registration</h2>
                 
                 <form id="reg-form" onsubmit="return processRegistration(event)">
-                    <label>Full Name</label><input type="text" id="reg-name" required>
-                    <label>Email Address</label><input type="email" id="reg-email" required>
-                    <label>Create Password</label><input type="password" id="reg-password" required>
                     
-                    <label>Treatment Pathway</label>
-                    <select id="reg-service" required onchange="handleServiceChange(this, 'reg-submit-btn', 'paypal-button-container-index')" style="width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 1.5rem; font-family: 'Montserrat', sans-serif; background: white;">
-                        <option value="" disabled selected>Select a treatment...</option>
+                    <!-- Concierge Step 1 -->
+                    <div style="background: #ffffff; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-bottom: 1.5rem; border: 1px solid #f0f0f0;">
+                        <h4 style="font-family: 'Montserrat'; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin-bottom: 1.5rem;">Step 1: Your Details</h4>
                         
-                        <optgroup label="Core Therapies (Bronze)">
-                            <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release - Union Mills — £70</option>
-                            <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release - Castletown — £80</option>
-                            <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment - Union Mills — £70</option>
-                            <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment - Castletown — £80</option>
-                            <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment - Union Mills — £50</option>
-                            <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment - Castletown — £60</option>
-                        </optgroup>
-
-                        <optgroup label="Packages & Cleanses (Silver)">
-                            <option value="Migraine & Neck Reset Package (£70)">Migraine & Neck Reset Package (2x 30min) — £70</option>
-                            <option value="Clarity Drainage Package (£70)">Clarity Drainage Package (2x 30min) — £70</option>
-                            <option value="Gut Mini Reset (£80)">Gut Mini Reset (10 Days) — £80</option>
-                            <option value="Taster Trio Bundle (£195)">Taster Trio Bundle (All Three) — £195</option>
-                            <option value="Parasite Cleanse (£150)">Parasite Cleanse — £150</option>
-                            <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse — £355</option>
-                        </optgroup>
-
-                        <optgroup label="Functional Medicine (Gold)">
-                            <option value="Free Discovery Call (20 min)">Complimentary Discovery Call (20 min) — Free</option>
-                            <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90 min) — £350</option>
-                            <option value="Functional Testing - Review (£350)">Functional Testing Review (90 min) — £350</option>
-                            <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950 (VIP App Access)</option>
-                        </optgroup>
-                    </select>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                        <div>
-                            <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase;">Appointment Date</label>
-                            <input type="date" id="portal-date-reg" min="2026-01-01" required style="margin-bottom: 0;">
+                        <div class="floating-group">
+                            <input type="text" id="reg-name" required>
+                            <label>Full Name</label>
                         </div>
-                        <div>
-                            <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase;">Preferred Time</label>
-                            <select id="portal-time-reg" required>
-                                <option value="">-- Choose Time --</option>
-                                <option value="09:00">09:00 AM</option>
-                                <option value="10:00">10:00 AM</option>
-                                <option value="11:00">11:00 AM</option>
-                                <option value="12:00">12:00 PM</option>
-                                <option value="13:00">1:00 PM</option>
-                                <option value="14:00">2:00 PM</option>
-                                <option value="15:00">3:00 PM</option>
-                                <option value="16:00">4:00 PM</option>
+                        
+                        <div class="floating-group">
+                            <input type="email" id="reg-email" required>
+                            <label>Email Address</label>
+                        </div>
+                        
+                        <div class="floating-group" style="margin-bottom: 0;">
+                            <input type="password" id="reg-password" required>
+                            <label>Create Password</label>
+                        </div>
+                    </div>
+
+                    <!-- Concierge Step 2 -->
+                    <div style="background: #ffffff; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-bottom: 1.5rem; border: 1px solid #f0f0f0;">
+                        <h4 style="font-family: 'Montserrat'; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin-bottom: 1.5rem;">Step 2: Appointment & Payment</h4>
+                        
+                        <div class="floating-group">
+                            <select id="reg-service" required onchange="handleServiceChange(this, 'reg-submit-btn', 'paypal-button-container-index')">
+                                <option value="" disabled selected hidden></option>
+                                
+                                <optgroup label="Core Therapies (Bronze)">
+                                    <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release - Union Mills — £70</option>
+                                    <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release - Castletown — £80</option>
+                                    <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment - Union Mills — £70</option>
+                                    <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment - Castletown — £80</option>
+                                    <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment - Union Mills — £50</option>
+                                    <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment - Castletown — £60</option>
+                                </optgroup>
+
+                                <optgroup label="Packages & Cleanses (Silver)">
+                                    <option value="Migraine & Neck Reset Package (£70)">Migraine & Neck Reset Package (2x 30min) — £70</option>
+                                    <option value="Clarity Drainage Package (£70)">Clarity Drainage Package (2x 30min) — £70</option>
+                                    <option value="Gut Mini Reset (£80)">Gut Mini Reset (10 Days) — £80</option>
+                                    <option value="Taster Trio Bundle (£195)">Taster Trio Bundle (All Three) — £195</option>
+                                    <option value="Parasite Cleanse (£150)">Parasite Cleanse — £150</option>
+                                    <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse — £355</option>
+                                </optgroup>
+
+                                <optgroup label="Functional Medicine (Gold)">
+                                    <option value="Free Discovery Call (20 min)">Complimentary Discovery Call (20 min) — Free</option>
+                                    <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90 min) — £350</option>
+                                    <option value="Functional Testing - Review (£350)">Functional Testing Review (90 min) — £350</option>
+                                    <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950 (VIP App Access)</option>
+                                </optgroup>
                             </select>
+                            <label>Treatment Pathway</label>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="floating-group" style="margin-bottom: 0;">
+                                <input type="date" id="portal-date-reg" min="2026-01-01" required>
+                                <label>Date</label>
+                            </div>
+                            <div class="floating-group" style="margin-bottom: 0;">
+                                <select id="portal-time-reg" required>
+                                    <option value="" disabled selected hidden></option>
+                                    <option value="09:00">09:00 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="11:00">11:00 AM</option>
+                                    <option value="12:00">12:00 PM</option>
+                                    <option value="13:00">1:00 PM</option>
+                                    <option value="14:00">2:00 PM</option>
+                                    <option value="15:00">3:00 PM</option>
+                                    <option value="16:00">4:00 PM</option>
+                                </select>
+                                <label>Time</label>
+                            </div>
                         </div>
                     </div>
                     
@@ -385,6 +487,23 @@
                     .catch(err => console.log('Service Worker registration failed: ', err));
             });
         }
+    </script>
+
+    <!-- Scroll Animation Observer Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.reveal').forEach((el) => {
+                observer.observe(el);
+            });
+        });
     </script>
 
     <!-- PayPal SDK Sandbox -->
