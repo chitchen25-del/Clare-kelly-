@@ -354,34 +354,39 @@ footer { padding: 0 6% 4rem 6%; border-top: 1px solid var(--secondary-sand); col
     color: #095d28;
 }
 
-/* Mobile Footer Fix */
+/* NUCLEAR MOBILE FOOTER FIX */
 @media (max-width: 768px) {
     .clinic-footer { 
-        padding: 4rem 5% 2rem 5%; 
-        text-align: center; 
+        padding: 3rem 5% !important; 
+        text-align: center !important; 
     }
     .footer-grid { 
-        gap: 2.5rem; 
-        margin-bottom: 2rem; 
+        grid-template-columns: 1fr !important; 
+        gap: 2.5rem !important; 
+        margin-bottom: 2rem !important;
     }
     .footer-brand img { 
-        margin: 0 auto 1.5rem auto; 
-        display: block; 
+        margin: 0 auto 1.5rem auto !important; 
+        display: block !important; 
     }
     .footer-brand p { 
-        margin: 0 auto; 
+        margin: 0 auto !important; 
+    }
+    .footer-col {
+        text-align: center !important;
     }
     .footer-bottom { 
-        flex-direction: column; 
-        gap: 1.5rem; 
+        flex-direction: column !important; 
+        gap: 1.5rem !important; 
     }
     .footer-bottom-links { 
-        margin-top: 0; 
-        display: flex; 
-        justify-content: center; 
-        gap: 1.5rem; 
+        margin-top: 0 !important; 
+        display: flex !important; 
+        flex-direction: column !important; 
+        gap: 1rem !important; 
     }
     .footer-bottom-links a { 
-        margin: 0; 
+        margin: 0 !important; 
     }
+}
 }
