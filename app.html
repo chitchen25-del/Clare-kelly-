@@ -20,7 +20,7 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./style.css?version=25">
+    <link rel="stylesheet" href="./style.css?version=26">
     <style>
         * { box-sizing: border-box; }
         html, body {
@@ -30,9 +30,11 @@
             padding: 0;
             background-color: var(--bg-color, #f3f1ef);
             font-family: 'Montserrat', sans-serif;
+            -webkit-text-size-adjust: 100%;
         }
         .portal-section { display: none; }
         .portal-section.active { display: block; }
+        button { position: relative; z-index: 5; }
     </style>
 </head>
 <body>
@@ -50,7 +52,7 @@
         </div>
     </div>
 
-    <div style="max-width: 900px; margin: 2rem auto; padding: 0 1rem 4rem 1rem;">
+    <div style="max-width: 900px; margin: 2rem auto; padding: 0 1rem 6rem 1rem;">
 
         <div id="section-login" class="portal-section active">
             <div style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid #e0d8cc; max-width: 450px; margin: 3rem auto; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
@@ -235,6 +237,6 @@
         }
     </script>
 
-    <script src="./app.js?version=25"></script>
+    <script src="./app.js?version=26"></script>
 </body>
 </html>
