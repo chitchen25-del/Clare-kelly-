@@ -17,6 +17,76 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="./style.css?version=6">
+
+    <style>
+        /* Bottom Navigation Bar Icon Scaling & Sizing Fix */
+        .bottom-nav, .mobile-tab-bar, nav.bottom-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .bottom-nav img, .bottom-bar img, .mobile-tab-bar img, 
+        .bottom-nav svg, .bottom-bar svg {
+            width: 32px !important;
+            height: 32px !important;
+            object-fit: contain;
+            margin-bottom: 4px;
+        }
+
+        .bottom-nav span, .bottom-bar span, .mobile-tab-bar span {
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Emergency Header Fix */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-brand-logo {
+            height: 50px;
+            width: auto;
+            cursor: pointer;
+        }
+        .desktop-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        .mobile-menu-btn span {
+            width: 100%;
+            height: 3px;
+            background-color: #222;
+            border-radius: 2px;
+        }
+        @media (max-width: 900px) {
+            .desktop-nav-links { display: none; }
+            .mobile-menu-btn { display: flex; }
+            /* Disables the middle card scaling on mobile so they stack cleanly */
+            .pricing-tier-silver {
+                transform: none !important;
+                height: 100% !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -127,80 +197,59 @@
         </section>
 
         <!-- ================= TIERED CLINICAL SERVICES ================= -->
-        <section class="pricing-section" style="padding-top: 6rem; padding-bottom: 6rem;">
-            <div style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto;">
-                <span class="section-subtitle">The Foundation</span>
-                <h2>Core Clinical Therapies</h2>
-                <p style="color: #555;">Our primary, hands-on physical therapies. Designed to provide immediate relief from pain, clear systemic inflammation, and restore structural mobility.</p>
-            </div>
-            
-            <div class="pricing-grid" style="margin-top: 2rem;">
-                <div class="price-card featured" style="transform: none; border-color: var(--primary-sage); box-shadow: 0 10px 30px rgba(13,155,70,0.08);">
-                    <div>
-                        <div class="price-title">Myofascial Release</div>
-                        <div class="price-duration">Hands-On Therapy</div>
-                        <div class="price-amount" style="font-size: 3rem;">£70<span style="font-size: 1rem; color: #888;"> / session</span></div>
-                        <ul class="price-features">
-                            <li>Deep tissue pain relief</li>
-                            <li>Restores structural alignment</li>
-                            <li>Releases chronic tension patterns</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn" style="width: 100%;" onclick="location.href='#register-section'">Book Treatment</button>
-                </div>
-
-                <div class="price-card featured" style="transform: none; border-color: var(--primary-sage); box-shadow: 0 10px 30px rgba(13,155,70,0.08);">
-                    <div>
-                        <div class="price-title">Lymphatic Drainage</div>
-                        <div class="price-duration">Advanced Clearing</div>
-                        <div class="price-amount" style="font-size: 3rem;">£70<span style="font-size: 1rem; color: #888;"> / session</span></div>
-                        <ul class="price-features">
-                            <li>Reduces systemic inflammation</li>
-                            <li>Clears edema and fluid retention</li>
-                            <li>Accelerates injury recovery</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn" style="width: 100%;" onclick="location.href='#register-section'">Book Treatment</button>
-                </div>
-
-                <div class="price-card featured" style="transform: none; border-color: var(--primary-sage); box-shadow: 0 10px 30px rgba(13,155,70,0.08);">
-                    <div>
-                        <div class="price-title">Taster & Reset Bundles</div>
-                        <div class="price-duration">Targeted Relief</div>
-                        <div class="price-amount" style="font-size: 3rem;">£70<span style="font-size: 1rem; color: #888;"> / pkg</span></div>
-                        <ul class="price-features">
-                            <li>Migraine & Neck Reset Package</li>
-                            <li>Clarity Drainage Package</li>
-                            <li>Add-on Infrared Targeted (£15)</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn" style="width: 100%;" onclick="location.href='#register-section'">Book Package</button>
-                </div>
+        <section class="pricing-section" style="padding-top: 6rem; padding-bottom: 6rem; background: #f9f8f6;">
+            <div style="text-align: center; max-width: 800px; margin: 0 auto 4rem auto;">
+                <span style="display: inline-block; padding: 0.4rem 1.2rem; background: rgba(13, 155, 70, 0.1); border: 1px solid rgba(13, 155, 70, 0.2); border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: #095d28; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;">Treatment Pathways</span>
+                <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; color: #222; margin-bottom: 1rem;">Tailored Clinical Care</h2>
+                <p style="color: #555; font-size: 1.1rem; line-height: 1.6;">From immediate pain relief to complete physiological transformation, choose the level of support that matches your healing goals.</p>
             </div>
 
-            <!-- HIGH-END PATHWAYS -->
-            <div style="text-align: center; max-width: 800px; margin: 6rem auto 3rem auto;">
-                <span class="section-subtitle">Deep Transformation</span>
-                <h2>Comprehensive Functional Pathways</h2>
-                <p style="color: #555;">Our most elite, high-touch programs for complex, chronic conditions.</p>
-            </div>
-
-            <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem;">
-                <div style="background: var(--card-bg); border: 1px solid var(--secondary-sand); border-radius: 12px; padding: 3rem; display: flex; flex-wrap: wrap; gap: 3rem; align-items: center; box-shadow: 0 10px 40px rgba(9, 93, 40, 0.03);">
-                    <div style="flex: 1; min-width: 280px;">
-                        <div class="price-duration" style="margin-bottom: 0.5rem;">Intensive Clinical Support</div>
-                        <h3 style="font-family: 'Cormorant Garamond'; font-size: 2.2rem; margin-bottom: 1rem; color: var(--text-main);">90-Day Functional Medicine Programme</h3>
-                        <ul class="price-features" style="margin-bottom: 0;">
-                            <li>Bespoke protocol adapting as you heal over 3 months</li>
-                            <li>Advanced interpretation of Nordic Laboratory tests</li>
-                            <li>VIP App Access (Daily trackers & direct chat with Clare)</li>
-                        </ul>
-                    </div>
-                    <div style="text-align: center; min-width: 200px;">
-                        <div class="price-amount" style="font-size: 3.5rem; margin-bottom: 1rem;">£950</div>
-                        <button type="button" class="btn" style="width: 100%;" onclick="location.href='#register-section'">Apply For Protocol</button>
-                    </div>
+            <!-- CSS Grid for 3-Column Layout -->
+            <div style="max-width: 1150px; margin: 0 auto; padding: 0 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; align-items: center;">
+                
+                <!-- TIER 1: Core (Bronze) -->
+                <div style="background: white; border-radius: 16px; padding: 2.5rem; border: 1px solid #e0d8cc; box-shadow: 0 10px 30px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%;">
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #444; margin-bottom: 0.5rem; font-weight: 600;">Core Therapies</h3>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px;">Essential hands-on physical therapies designed for immediate pain relief.</p>
+                    <div style="font-size: 3rem; font-family: 'Cormorant Garamond', serif; color: #222; margin-bottom: 2rem; font-weight: 600;">£70<span style="font-size: 1rem; color: #888; font-family: 'Montserrat', sans-serif; font-weight: 400;"> / session</span></div>
+                    <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
+                        <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Myofascial Release available</li>
+                        <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Lymphatic Drainage available</li>
+                        <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Restores structural mobility</li>
+                        <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Clears systemic inflammation</li>
+                    </ul>
+                    <button type="button" style="width: 100%; padding: 1rem; background: white; color: #095d28; border: 2px solid #095d28; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;" onclick="location.href='#register-section'">Book Treatment</button>
                 </div>
+
+                <!-- TIER 2: Advanced (Silver - Prominent Center) -->
+                <div class="pricing-tier-silver" style="background: #ffffff; border-radius: 16px; padding: 3rem 2.5rem; border: 2px solid #095d28; box-shadow: 0 20px 40px rgba(9,93,40,0.1); position: relative; transform: scale(1.05); z-index: 2; display: flex; flex-direction: column; height: calc(100% + 2rem);">
+                    <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #095d28; color: white; padding: 0.4rem 1.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">Most Popular</div>
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #095d28; margin-bottom: 0.5rem; font-weight: 700;">Advanced Reset</h3>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px;">Targeted, multi-session packages mapped for persistent issues.</p>
+                    <div style="font-size: 3rem; font-family: 'Cormorant Garamond', serif; color: #222; margin-bottom: 2rem; font-weight: 600;">£210<span style="font-size: 1rem; color: #888; font-family: 'Montserrat', sans-serif; font-weight: 400;"> / package</span></div>
+                    <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
+                        <li style="margin-bottom: 1rem; color: #222; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px; font-weight: 500;"><span style="color: #095d28; font-weight: bold;">✓</span> 3x Targeted Clinic Sessions</li>
+                        <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Migraine & Neck Reset Options</li>
+                        <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Complete Clarity Drainage</li>
+                        <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Infrared Targeted Add-ons included</li>
+                    </ul>
+                    <button type="button" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(9,93,40,0.2); transition: all 0.2s ease;" onclick="location.href='#register-section'">Book Package</button>
+                </div>
+
+                <!-- TIER 3: Functional (Gold) -->
+                <div style="background: linear-gradient(145deg, #095d28, #06401b); border-radius: 16px; padding: 2.5rem; border: 1px solid #053315; box-shadow: 0 15px 35px rgba(0,0,0,0.15); display: flex; flex-direction: column; height: 100%;">
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #eaddc5; margin-bottom: 0.5rem; font-weight: 600;">Functional Medicine</h3>
+                    <p style="color: #b5c7bc; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px;">Our elite, high-touch clinical programme for chronic conditions.</p>
+                    <div style="font-size: 3rem; font-family: 'Cormorant Garamond', serif; color: white; margin-bottom: 2rem; font-weight: 600;">£950<span style="font-size: 1rem; color: #9ab4a3; font-family: 'Montserrat', sans-serif; font-weight: 400;"> / 90 days</span></div>
+                    <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
+                        <li style="margin-bottom: 1rem; color: #fff; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #eaddc5; font-weight: bold;">✓</span> 90-Day Bespoke Protocol</li>
+                        <li style="margin-bottom: 1rem; color: #fff; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #eaddc5; font-weight: bold;">✓</span> Nordic Laboratory test analysis</li>
+                        <li style="margin-bottom: 1rem; color: #fff; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #eaddc5; font-weight: bold;">✓</span> VIP App Access (Daily tracking)</li>
+                        <li style="margin-bottom: 1rem; color: #fff; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #eaddc5; font-weight: bold;">✓</span> Direct clinical chat with Clare</li>
+                    </ul>
+                    <button type="button" style="width: 100%; padding: 1rem; background: #eaddc5; color: #06401b; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.2s ease;" onclick="location.href='#register-section'">Apply For Protocol</button>
+                </div>
+                
             </div>
         </section>
 
@@ -216,8 +265,8 @@
                     <label>Treatment Pathway</label>
                     <select id="reg-service" required>
                         <option value="">-- Choose a Service or Test --</option>
-                        <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
-                        <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70</option>
+                        <option value="Core Therapies (£70)">Core Therapies (Myofascial / Lymphatic) — £70</option>
+                        <option value="Advanced Reset Package (£210)">Advanced Reset Package (3 Sessions) — £210</option>
                         <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950 (VIP App Access)</option>
                     </select>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
