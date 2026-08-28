@@ -223,7 +223,6 @@
             <div id="client-detail-content"></div>
         </div>
 
-        <!-- NEW: TESTIMONIAL APPROVAL DASHBOARD -->
         <div id="view-testimonials" class="app-view">
             <div class="panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -234,6 +233,7 @@
             </div>
         </div>
 
+        <!-- UPDATED NEWS VIEW WITH DELETE MANAGER -->
         <div id="view-news" class="app-view">
             <div class="panel">
                 <h3>Publish Latest News & PDF Article</h3>
@@ -260,6 +260,14 @@
 
                     <button type="submit" id="publish-news-btn" class="btn" style="width: 100%;">Publish Article to Feed</button>
                 </form>
+
+                <!-- NEW: Manage existing posts -->
+                <div style="margin-top: 3.5rem; border-top: 1px solid var(--secondary-sand); padding-top: 2rem;">
+                    <h3>Manage Published News & PDFs</h3>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Deleting a post here will instantly remove it from your public website and permanently delete the files from your storage bucket.</p>
+                    <div id="admin-news-list"><p style="color: #888; font-size: 0.95rem;">Loading published articles...</p></div>
+                </div>
+
             </div>
         </div>
 
@@ -430,7 +438,7 @@
             
             const db = getSupabase();
             if(db) {
-                loadSchedule(db); loadClientDirectory(db); loadAdminInbox(db); loadFinanceMetrics(db); loadPendingTestimonials(db);
+                loadSchedule(db); loadClientDirectory(db); loadAdminInbox(db); loadFinanceMetrics(db); loadPendingTestimonials(db); loadAdminNewsFeed(db);
                 setInterval(() => loadAdminInbox(db, true), 15000);
             }
         }
@@ -502,7 +510,6 @@
                 const { data: msgs } = await db.from('messages').select('*').eq('client_id', clientId).order('created_at', { ascending: false });
                 const { data: pins } = await db.from('body_pins').select('*').eq('client_id', clientId);
                 
-                // Fetch the new questionnaires!
                 const { data: intakes } = await db.from('basic_intake').select('*').eq('client_id', clientId).order('created_at', { ascending: false });
                 
                 const clientName = (appts && appts.length > 0 && appts[0].client_name) ? appts[0].client_name : 'Patient Record';
@@ -536,7 +543,6 @@
                         </div>
 
                         <div id="ctab-soap" class="tab-content">
-                            <!-- NEW INTAKE QUESTIONNAIRE DISPLAY -->
                             <h3 style="margin-bottom: 1rem;">Submitted Health Questionnaires</h3>
                             ${intakes && intakes.length > 0 ? intakes.map(i => `
                                 <div class="data-block" style="border-left: 4px solid var(--primary-sage); background: white;">
@@ -686,6 +692,61 @@
             } catch(err) {}
         }
 
+        // =========================================================
+        // UPDATED: NEWS PUBLISHER & DELETER
+        // =========================================================
+        async function loadAdminNewsFeed(db) {
+            const container = document.getElementById('admin-news-list');
+            try {
+                const { data, error } = await db.from('clinic_news').select('*').order('created_at', { ascending: false });
+                if(error) throw error;
+                if(!data || data.length === 0) {
+                    container.innerHTML = '<p style="color:#888; font-size: 0.95rem;">No published articles found.</p>';
+                    return;
+                }
+                
+                container.innerHTML = data.map(n => `
+                    <div style="background: white; border: 1px solid var(--secondary-sand); padding: 1.2rem; border-radius: 8px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="color: var(--text-main); font-family: 'Montserrat'; font-size: 1.1rem; text-transform: capitalize;">${n.title}</strong><br>
+                            <span style="font-size: 0.8rem; color: #888;">Published: ${new Date(n.created_at).toLocaleDateString()}</span>
+                        </div>
+                        <button class="btn btn-outline" style="color: #a94442; border-color: #a94442; padding: 0.4rem 1rem; min-height: 35px; font-size: 0.75rem;" onclick="deleteNewsPost('${n.id}', '${n.pdf_url || ''}', '${n.image_url || ''}')">Delete Post</button>
+                    </div>
+                `).join('');
+            } catch(err) {
+                container.innerHTML = `<p style="color:#a94442;">Error loading news: ${err.message}</p>`;
+            }
+        }
+
+        window.deleteNewsPost = async function(id, pdfUrl, imageUrl) {
+            if(!confirm("Are you sure you want to permanently delete this post? This will remove it from the live website and delete the files from storage.")) return;
+            
+            try {
+                const db = getSupabase();
+
+                // 1. Delete from database
+                const { error: dbError } = await db.from('clinic_news').delete().eq('id', id);
+                if(dbError) throw dbError;
+
+                // 2. Delete the actual files from the Supabase Storage Bucket to save space
+                if (pdfUrl && pdfUrl.includes('latest-news/')) {
+                    const pdfFileName = pdfUrl.substring(pdfUrl.lastIndexOf('/') + 1);
+                    await db.storage.from('latest-news').remove([pdfFileName]);
+                }
+                
+                if (imageUrl && imageUrl.includes('latest-news/')) {
+                    const imgFileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+                    await db.storage.from('latest-news').remove([imgFileName]);
+                }
+
+                alert("Post and files deleted successfully.");
+                loadAdminNewsFeed(db); // Refresh the list
+            } catch(err) { 
+                alert("Error deleting post: " + err.message); 
+            }
+        }
+
         async function publishNewsArticle(e) {
             e.preventDefault();
             const btn = document.getElementById('publish-news-btn');
@@ -727,7 +788,9 @@
 
                 alert(`Success! "${cleanTitle}" has been formatted and published to your Latest News feed.`);
                 document.querySelector('form').reset();
-                switchAppView('schedule');
+                
+                loadAdminNewsFeed(db); // Refresh the list of published posts
+                switchAppView('news');
 
             } catch (err) { alert('Error publishing article: ' + err.message); } finally { btn.innerText = ogText; }
             return false;
@@ -810,7 +873,6 @@
             return false;
         }
 
-        // ================= TESTIMONIAL APPROVAL ENGINE =================
         async function loadPendingTestimonials(db) {
             const container = document.getElementById('admin-testimonials-list');
             try {
