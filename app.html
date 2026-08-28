@@ -20,7 +20,7 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./style.css?version=26">
+    <link rel="stylesheet" href="./style.css?version=30">
     <style>
         * { box-sizing: border-box; }
         html, body {
@@ -34,10 +34,72 @@
         }
         .portal-section { display: none; }
         .portal-section.active { display: block; }
-        button { position: relative; z-index: 5; }
+        
+        /* Hamburger Menu Styling */
+        .hamburger-menu {
+            position: relative;
+            display: inline-block;
+        }
+        .hamburger-btn {
+            background: white;
+            border: 2px solid #095d28;
+            color: #095d28;
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .dropdown-menu-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
+            border: 1px solid #e0d8cc;
+            border-radius: 8px;
+            z-index: 10001;
+            overflow: hidden;
+        }
+        .dropdown-menu-content a, .dropdown-menu-content button {
+            color: #222;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            background: none;
+            border: none;
+            width: 100%;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .dropdown-menu-content a:hover, .dropdown-menu-content button:hover {
+            background-color: #f9f8f6;
+            color: #095d28;
+        }
+        .show { display: block; }
     </style>
 </head>
 <body>
+
+    <script>
+        function handlePortalServiceChange(selectElement) {
+            const standardBtn = document.getElementById('portal-submit-btn');
+            const paypalContainer = document.getElementById('paypal-button-container-portal');
+            
+            if(selectElement.value.includes('Free')) {
+                standardBtn.style.display = 'block';
+                standardBtn.innerText = 'Complete Free Booking';
+                paypalContainer.style.display = 'none';
+            } else if (selectElement.value !== "") {
+                standardBtn.style.display = 'none';
+                paypalContainer.style.display = 'block';
+            }
+        }
+    </script>
 
     <div style="background-color: #ffffff; padding: max(1rem, env(safe-area-inset-top)) 5% 1rem 5%; border-bottom: 1px solid #e0d8cc; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 9999;">
         <div style="display: flex; align-items: center; gap: 0.8rem;">
@@ -47,13 +109,29 @@
                 <span style="font-size: 0.6rem; color: #095d28; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Isle of Man Practice</span>
             </div>
         </div>
-        <div>
-            <button id="nav-signout-btn" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem; font-weight: 700; color: #a94442; border: 2px solid #a94442; border-radius: 8px; background: white; cursor: pointer; display: none; position: relative; z-index: 10000;" onclick="processLogout()">Sign Out</button>
+        
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <!-- Hamburger Menu Button (Top Right) -->
+            <div class="hamburger-menu" id="header-hamburger-container" style="display: none;">
+                <button type="button" class="hamburger-btn" onclick="toggleHamburgerMenu()">☰</button>
+                <div id="hamburger-dropdown" class="dropdown-menu-content">
+                    <button type="button" onclick="scrollToSection('section-bookings')">📅 Bookings</button>
+                    <button type="button" onclick="scrollToSection('section-questionnaire')">📝 Questionnaire</button>
+                    <button type="button" onclick="scrollToSection('section-vip')">✨ VIP App</button>
+                    <button type="button" onclick="scrollToSection('section-chat')">💬 Clinical Chat</button>
+                    <hr style="margin: 0; border: none; border-top: 1px solid #e0d8cc;">
+                    <button type="button" style="color: #a94442; font-weight: 600;" onclick="processLogout()">Sign Out</button>
+                </div>
+            </div>
+
+            <!-- Fallback Sign Out Button if dashboard is logged out -->
+            <button id="nav-signout-btn" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.85rem; font-weight: 700; color: #a94442; border: 2px solid #a94442; border-radius: 8px; background: white; cursor: pointer; display: none;" onclick="processLogout()">Sign Out</button>
         </div>
     </div>
 
     <div style="max-width: 900px; margin: 2rem auto; padding: 0 1rem 6rem 1rem;">
 
+        <!-- LOGIN SECTION -->
         <div id="section-login" class="portal-section active">
             <div style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid #e0d8cc; max-width: 450px; margin: 3rem auto; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
                 <div style="text-align: center; margin-bottom: 1.5rem;">
@@ -71,6 +149,7 @@
             </div>
         </div>
 
+        <!-- DASHBOARD SECTION -->
         <div id="section-dashboard" class="portal-section">
             
             <div id="vip-launcher-card" style="background: linear-gradient(135deg, #095d28, #0a4d22); color: white; border-radius: 12px; padding: 1.8rem; margin-bottom: 1.5rem; text-align: center; box-shadow: 0 10px 30px rgba(9, 93, 40, 0.15); display: none;">
@@ -87,34 +166,58 @@
                 <button type="button" id="native-install-btn" style="background: #095d28; color: white; width: 100%; font-size: 1rem; padding: 1rem; border-radius: 8px; font-weight: 600; border: none; cursor: pointer;" onclick="handleNativeInstall()">📥 INSTALL APP TO HOME SCREEN</button>
             </div>
 
-            <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
+            <!-- APPOINTMENTS & BOOKINGS SECTION -->
+            <div id="section-bookings" style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
                 <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Your Appointments</h3>
                 <div id="client-appointments-list"><p style="color: #888; font-size: 0.9rem;">Loading schedule...</p></div>
             </div>
 
             <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
                 <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Book Another Session</h3>
+                
                 <form onsubmit="return bookNewSession(event)">
                     <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Treatment Pathway</label>
-                    <select id="portal-service" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem; background: white;">
+                    <select id="portal-service" required onchange="handlePortalServiceChange(this)" style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem; background: white;">
                         <option value="" disabled selected>Select a treatment...</option>
-                        <option value="90-Day Functional Medicine Programme">90-Day Functional Medicine Programme (Functional) — £950</option>
-                        <option value="Gut Reset Protocol">Gut Reset Protocol (Gut Reset) — £450</option>
-                        <option value="Comprehensive Health Audit">Comprehensive Health Audit (Health Audit) — £250</option>
-                        <option value="Initial Naturopathic Consultation">Initial Naturopathic Consultation — £120</option>
-                        <option value="Follow-up Consultation">Follow-up Consultation — £85</option>
-                        <option value="Acupuncture Session">Acupuncture Session — £75</option>
-                        <option value="Herbal Medicine Consultation">Herbal Medicine Consultation — £90</option>
-                        <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
-                        <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70</option>
+                        
+                        <optgroup label="Core Therapies (Bronze)">
+                            <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release - Union Mills — £70</option>
+                            <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release - Castletown — £80</option>
+                            <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment - Union Mills — £70</option>
+                            <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment - Castletown — £80</option>
+                            <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment - Union Mills — £50</option>
+                            <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment - Castletown — £60</option>
+                        </optgroup>
+
+                        <optgroup label="Packages & Cleanses (Silver)">
+                            <option value="Migraine & Neck Reset Package (£70)">Migraine & Neck Reset Package (2x 30min) — £70</option>
+                            <option value="Clarity Drainage Package (£70)">Clarity Drainage Package (2x 30min) — £70</option>
+                            <option value="Gut Mini Reset (£80)">Gut Mini Reset (10 Days) — £80</option>
+                            <option value="Taster Trio Bundle (£195)">Taster Trio Bundle (All Three) — £195</option>
+                            <option value="Parasite Cleanse (£150)">Parasite Cleanse — £150</option>
+                            <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse — £355</option>
+                        </optgroup>
+
+                        <optgroup label="Functional Medicine (Gold)">
+                            <option value="Free Discovery Call (20 min)">Complimentary Discovery Call (20 min) — Free</option>
+                            <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90 min) — £350</option>
+                            <option value="Functional Testing - Review (£350)">Functional Testing Review (90 min) — £350</option>
+                            <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950 (VIP App Access)</option>
+                        </optgroup>
                     </select>
+
                     <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Appointment Date & Time</label>
-                    <input type="datetime-local" id="portal-date" onchange="validateBusinessHours(this)" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
-                    <button type="submit" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2);">Confirm Booking</button>
+                    <input type="datetime-local" id="portal-date" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
+                    
+                    <!-- Dynamic Buttons -->
+                    <div id="paypal-button-container-portal" style="margin: 1.5rem 0; display: none;"></div>
+                    <button type="submit" id="portal-submit-btn" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); display: none;">Confirm Booking</button>
+
                 </form>
             </div>
 
-            <div style="background: white; border-radius: 12px; border: 1px solid #e0d8cc; margin-bottom: 1.5rem; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
+            <!-- QUESTIONNAIRE SECTION -->
+            <div id="section-questionnaire" style="background: white; border-radius: 12px; border: 1px solid #e0d8cc; margin-bottom: 1.5rem; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
                 <div id="questionnaire-header" onclick="toggleAccordion('basic-questionnaire-panel')" style="padding: 1.2rem 1.5rem; background: #f9f8f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <h4 style="font-size: 0.95rem; font-weight: 700; margin: 0; color: #222;">Standard Health Questionnaire</h4>
@@ -141,7 +244,8 @@
                 </div>
             </div>
 
-            <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.02);" id="vip-unlock-card">
+            <!-- VIP APP SECTION -->
+            <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.02);" id="section-vip">
                 <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">Unlock VIP Patient App</h3>
                 <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.2rem;">Enter your 4-digit VIP code from your programme confirmation to unlock your dedicated native app launcher.</p>
                 <form onsubmit="return unlockVipPortal(event)">
@@ -150,7 +254,8 @@
                 </form>
             </div>
 
-            <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border-top: 4px solid #222;">
+            <!-- CHAT SECTION -->
+            <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border-top: 4px solid #222;" id="section-chat">
                 <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Secure Clinical Chat with Clare</h3>
                 <div id="client-chat-box" style="height: 250px; background: #f9f8f6; border: 1px solid #e0d8cc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; overflow-y: auto;">
                     <p style="color: #888; font-size: 0.9rem; text-align: center; margin-top: 4rem;">No messages yet. Send a direct note to Clare below!</p>
@@ -165,7 +270,31 @@
 
     </div>
 
+    <!-- GLOBAL SCRIPTS & HAMBURGER HANDLER -->
     <script>
+        window.toggleHamburgerMenu = function() {
+            const dropdown = document.getElementById('hamburger-dropdown');
+            if (dropdown) dropdown.classList.toggle('show');
+        }
+
+        window.scrollToSection = function(sectionId) {
+            const el = document.getElementById(sectionId);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+                toggleHamburgerMenu();
+            }
+        }
+
+        // Close dropdown if clicked outside
+        window.addEventListener('click', function(e) {
+            if (!e.target.closest('.hamburger-menu')) {
+                const dropdown = document.getElementById('hamburger-dropdown');
+                if (dropdown && dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        });
+
         async function handleLoginSubmit(event) {
             event.preventDefault();
             const btn = document.getElementById('login-submit-btn');
@@ -225,6 +354,51 @@
         }
     </script>
 
+    <!-- PayPal SDK Sandbox -->
+    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=GBP"></script>
+
+    <script>
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                const date = document.getElementById('portal-date').value;
+                if (!date) {
+                    alert("Please select an appointment date and time before paying.");
+                    return actions.reject();
+                }
+
+                const serviceSelect = document.getElementById('portal-service');
+                let amount = "70.00"; 
+                if (serviceSelect && serviceSelect.value) {
+                    if (serviceSelect.value.includes("950")) amount = "950.00";
+                    else if (serviceSelect.value.includes("450")) amount = "450.00";
+                    else if (serviceSelect.value.includes("355")) amount = "355.00";
+                    else if (serviceSelect.value.includes("350")) amount = "350.00";
+                    else if (serviceSelect.value.includes("195")) amount = "195.00";
+                    else if (serviceSelect.value.includes("150")) amount = "150.00";
+                    else if (serviceSelect.value.includes("120")) amount = "120.00";
+                    else if (serviceSelect.value.includes("90")) amount = "90.00";
+                    else if (serviceSelect.value.includes("85")) amount = "85.00";
+                    else if (serviceSelect.value.includes("80")) amount = "80.00";
+                    else if (serviceSelect.value.includes("75")) amount = "75.00";
+                    else if (serviceSelect.value.includes("70")) amount = "70.00";
+                    else if (serviceSelect.value.includes("60")) amount = "60.00";
+                    else if (serviceSelect.value.includes("50")) amount = "50.00";
+                }
+
+                return actions.order.create({
+                    purchase_units: [{ amount: { value: amount } }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // Inject PayPal Transaction ID to window so app.js can pick it up
+                    window.portalPayPalId = details.id;
+                    document.getElementById('portal-submit-btn').click();
+                });
+            }
+        }).render('#paypal-button-container-portal');
+    </script>
+
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(function(registrations) {
@@ -237,6 +411,6 @@
         }
     </script>
 
-    <script src="./app.js?version=26"></script>
+    <script src="./app.js?version=30"></script>
 </body>
 </html>
