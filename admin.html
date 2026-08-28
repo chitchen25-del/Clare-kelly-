@@ -233,7 +233,6 @@
             </div>
         </div>
 
-        <!-- UPDATED NEWS VIEW WITH DELETE MANAGER -->
         <div id="view-news" class="app-view">
             <div class="panel">
                 <h3>Publish Latest News & PDF Article</h3>
@@ -261,7 +260,6 @@
                     <button type="submit" id="publish-news-btn" class="btn" style="width: 100%;">Publish Article to Feed</button>
                 </form>
 
-                <!-- NEW: Manage existing posts -->
                 <div style="margin-top: 3.5rem; border-top: 1px solid var(--secondary-sand); padding-top: 2rem;">
                     <h3>Manage Published News & PDFs</h3>
                     <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Deleting a post here will instantly remove it from your public website and permanently delete the files from your storage bucket.</p>
@@ -693,7 +691,7 @@
         }
 
         // =========================================================
-        // UPDATED: NEWS PUBLISHER & DELETER
+        // UPDATED: NEWS PUBLISHER & DELETER (WITH RLS CATCHER)
         // =========================================================
         async function loadAdminNewsFeed(db) {
             const container = document.getElementById('admin-news-list');
@@ -725,9 +723,15 @@
             try {
                 const db = getSupabase();
 
-                // 1. Delete from database
-                const { error: dbError } = await db.from('clinic_news').delete().eq('id', id);
+                // 1. Delete from database AND force it to return the deleted row (.select())
+                const { data, error: dbError } = await db.from('clinic_news').delete().eq('id', id).select();
+                
                 if(dbError) throw dbError;
+                
+                // If Supabase returns empty, it means RLS is still silently blocking it!
+                if(!data || data.length === 0) {
+                    throw new Error("Supabase blocked the deletion! Please go to your Supabase Dashboard -> Table Editor -> clinic_news, and click 'Disable RLS' in the top right corner.");
+                }
 
                 // 2. Delete the actual files from the Supabase Storage Bucket to save space
                 if (pdfUrl && pdfUrl.includes('latest-news/')) {
@@ -740,7 +744,7 @@
                     await db.storage.from('latest-news').remove([imgFileName]);
                 }
 
-                alert("Post and files deleted successfully.");
+                alert("Post and files permanently deleted successfully.");
                 loadAdminNewsFeed(db); // Refresh the list
             } catch(err) { 
                 alert("Error deleting post: " + err.message); 
