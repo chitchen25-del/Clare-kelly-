@@ -16,7 +16,7 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./style.css?version=7">
+    <link rel="stylesheet" href="./style.css?version=8">
 
     <style>
         /* Bottom Navigation Bar Icon Scaling & Sizing Fix */
@@ -80,7 +80,6 @@
         @media (max-width: 900px) {
             .desktop-nav-links { display: none; }
             .mobile-menu-btn { display: flex; }
-            /* Disables the featured card scaling on mobile so they stack cleanly */
             .pricing-tier-bronze {
                 transform: none !important;
                 height: 100% !important;
@@ -188,13 +187,11 @@
                 <p style="color: #555; font-size: 1.1rem; line-height: 1.6;">From immediate pain relief to complete physiological transformation, choose the level of support that matches your healing goals.</p>
             </div>
 
-            <!-- CSS Grid for 3-Column Layout -->
             <div style="max-width: 1150px; margin: 0 auto; padding: 0 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; align-items: center;">
                 
-                <!-- TIER 2: Packages & Cleanses (Silver - Moved to left) -->
+                <!-- TIER 2: Packages & Cleanses (Silver) -->
                 <div style="background: white; border-radius: 16px; padding: 2.5rem; border: 1px solid #e0d8cc; box-shadow: 0 10px 30px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%;">
                     <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #444; margin-bottom: 0.5rem; font-weight: 600;">Packages & Cleanses</h3>
-                    <!--[span_7](start_span)[span_7](end_span) -->
                     <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px;">Targeted multi-session resets, lymphatic drainage bundles, and biological cleanses.</p>
                     <div style="font-size: 2.5rem; font-family: 'Cormorant Garamond', serif; color: #222; margin-bottom: 2rem; font-weight: 600;">From £70<span style="font-size: 1rem; color: #888; font-family: 'Montserrat', sans-serif; font-weight: 400;"></span></div>
                     <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
@@ -206,11 +203,10 @@
                     <button type="button" style="width: 100%; padding: 1rem; background: white; color: #095d28; border: 2px solid #095d28; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;" onclick="location.href='#register-section'">View & Book</button>
                 </div>
 
-                <!-- TIER 1: Core Therapies (Bronze - Now the prominent center card) -->
+                <!-- TIER 1: Core Therapies (Bronze) -->
                 <div class="pricing-tier-bronze" style="background: #ffffff; border-radius: 16px; padding: 3rem 2.5rem; border: 2px solid #095d28; box-shadow: 0 20px 40px rgba(9,93,40,0.1); position: relative; transform: scale(1.05); z-index: 2; display: flex; flex-direction: column; height: calc(100% + 2rem);">
                     <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #095d28; color: white; padding: 0.4rem 1.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">Primary Focus</div>
                     <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #095d28; margin-bottom: 0.5rem; font-weight: 700;">Core Therapies</h3>
-                    <!--[span_8](start_span)[span_8](end_span) -->
                     <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px;">Our bread and butter. Expert hands-on physical therapies designed for immediate pain relief and postural correction.</p>
                     <div style="font-size: 3rem; font-family: 'Cormorant Garamond', serif; color: #222; margin-bottom: 2rem; font-weight: 600;">£70<span style="font-size: 1rem; color: #888; font-family: 'Montserrat', sans-serif; font-weight: 400;"> / Union Mills</span></div>
                     <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
@@ -222,10 +218,9 @@
                     <button type="button" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(9,93,40,0.2); transition: all 0.2s ease;" onclick="location.href='#register-section'">Book Core Treatment</button>
                 </div>
 
-                <!-- TIER 3: Functional (Gold - Stays on right) -->
+                <!-- TIER 3: Functional Medicine (Gold) -->
                 <div style="background: linear-gradient(145deg, #095d28, #06401b); border-radius: 16px; padding: 2.5rem; border: 1px solid #053315; box-shadow: 0 15px 35px rgba(0,0,0,0.15); display: flex; flex-direction: column; height: 100%;">
                     <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #eaddc5; margin-bottom: 0.5rem; font-weight: 600;">Functional Medicine</h3>
-                    <!--[span_9](start_span)[span_9](end_span) -->
                     <p style="color: #b5c7bc; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px;">Our elite, high-touch clinical programmes for uncovering the root drivers of chronic conditions.</p>
                     <div style="font-size: 3rem; font-family: 'Cormorant Garamond', serif; color: white; margin-bottom: 2rem; font-weight: 600;">£350+<span style="font-size: 1rem; color: #9ab4a3; font-family: 'Montserrat', sans-serif; font-weight: 400;"></span></div>
                     <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
@@ -251,32 +246,32 @@
                     <label>Create Password</label><input type="password" id="reg-password" required>
                     
                     <label>Treatment Pathway</label>
-                    <select id="reg-service" required style="width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 1.5rem; font-family: 'Montserrat', sans-serif;">
-                        <option value="">-- Choose a Service --</option>
+                    <select id="reg-service" required style="width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 1.5rem; font-family: 'Montserrat', sans-serif; background: white;">
+                        <option value="" disabled selected>Select a treatment...</option>
                         
-                        <optgroup label="Bronze - Core Therapies">
-                            <option value="Myofascial Release - Union Mills (£70)">Myofascial Release - Union Mills (£70)</option>
-                            <option value="Myofascial Release - Castletown (£80)">Myofascial Release - Castletown (£80)</option>
-                            <option value="Lymphatic Treatment - Union Mills (£70)">Lymphatic Treatment - Union Mills (£70)</option>
-                            <option value="Lymphatic Treatment - Castletown (£80)">Lymphatic Treatment - Castletown (£80)</option>
-                            <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment - Union Mills (£50)</option>
-                            <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment - Castletown (£60)</option>
+                        <optgroup label="Core Therapies (Bronze)">
+                            <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release - Union Mills — £70</option>
+                            <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release - Castletown — £80</option>
+                            <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment - Union Mills — £70</option>
+                            <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment - Castletown — £80</option>
+                            <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment - Union Mills — £50</option>
+                            <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment - Castletown — £60</option>
                         </optgroup>
 
-                        <optgroup label="Silver - Packages & Cleanses">
-                            <option value="Migraine & Neck Reset Package (£70)">Migraine & Neck Reset Package (2x 30min) - £70</option>
-                            <option value="Clarity Drainage Package (£70)">Clarity Drainage Package (2x 30min) - £70</option>
-                            <option value="Gut Mini Reset (£80)">Gut Mini Reset (10 Days) - £80</option>
-                            <option value="Taster Trio Bundle (£195)">Taster Trio Bundle (All Three) - £195</option>
-                            <option value="Parasite Cleanse (£150)">Parasite Cleanse - £150</option>
-                            <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse - £355</option>
+                        <optgroup label="Packages & Cleanses (Silver)">
+                            <option value="Migraine & Neck Reset Package (£70)">Migraine & Neck Reset Package (2x 30min) — £70</option>
+                            <option value="Clarity Drainage Package (£70)">Clarity Drainage Package (2x 30min) — £70</option>
+                            <option value="Gut Mini Reset (£80)">Gut Mini Reset (10 Days) — £80</option>
+                            <option value="Taster Trio Bundle (£195)">Taster Trio Bundle (All Three) — £195</option>
+                            <option value="Parasite Cleanse (£150)">Parasite Cleanse — £150</option>
+                            <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse — £355</option>
                         </optgroup>
 
-                        <optgroup label="Gold - Functional Medicine">
-                            <option value="Free Discovery Call (20 min)">Complimentary Discovery Call (20 min) - Free</option>
-                            <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90 min) - £350</option>
-                            <option value="Functional Testing - Review (£350)">Functional Testing Review (90 min) - £350</option>
-                            <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme - £950 (VIP App Access)</option>
+                        <optgroup label="Functional Medicine (Gold)">
+                            <option value="Free Discovery Call (20 min)">Complimentary Discovery Call (20 min) — Free</option>
+                            <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90 min) — £350</option>
+                            <option value="Functional Testing - Review (£350)">Functional Testing Review (90 min) — £350</option>
+                            <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950 (VIP App Access)</option>
                         </optgroup>
                     </select>
 
@@ -287,7 +282,7 @@
                         </div>
                         <div>
                             <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase;">Preferred Time</label>
-                            <select id="portal-time-reg" required style="margin-bottom: 0;">
+                            <select id="portal-time-reg" required style="margin-bottom: 0; background: white;">
                                 <option value="">-- Select Time --</option>
                                 <option value="09:00">09:00 AM</option>
                                 <option value="10:00">10:00 AM</option>
@@ -332,6 +327,6 @@
     </script>
 
     <!-- Link to external JS file -->
-    <script src="./app.js?v=7"></script>
+    <script src="./app.js?v=8"></script>
 </body>
 </html>
