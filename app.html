@@ -103,11 +103,17 @@
                 <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Book Another Session</h3>
                 <form onsubmit="return bookNewSession(event)">
                     <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Treatment Pathway</label>
-                    <select id="portal-service" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
-                        <option value="">-- Choose a Service or Test --</option>
+                    <select id="portal-service" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem; background: white;">
+                        <option value="" disabled selected>Select a treatment...</option>
+                        <option value="90-Day Functional Medicine Programme">90-Day Functional Medicine Programme (Functional)</option>
+                        <option value="Gut Reset Protocol">Gut Reset Protocol (Gut Reset)</option>
+                        <option value="Comprehensive Health Audit">Comprehensive Health Audit (Health Audit)</option>
+                        <option value="Initial Naturopathic Consultation">Initial Naturopathic Consultation</option>
+                        <option value="Follow-up Consultation">Follow-up Consultation</option>
+                        <option value="Acupuncture Session">Acupuncture Session</option>
+                        <option value="Herbal Medicine Consultation">Herbal Medicine Consultation</option>
                         <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
                         <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70</option>
-                        <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950</option>
                     </select>
                     <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Appointment Date & Time</label>
                     <input type="datetime-local" id="portal-date" onchange="validateBusinessHours(this)" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
