@@ -199,6 +199,95 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* 3. Premium Footer Styling */
+        .clinic-footer {
+            background-color: #f9f8f6;
+            padding: 6rem 5% 3rem 5%;
+            border-top: 1px solid #eaeaea;
+            font-family: 'Montserrat', sans-serif;
+            color: #555;
+        }
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+        .footer-brand img {
+            height: 55px;
+            margin-bottom: 1.5rem;
+        }
+        .footer-brand p {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #666;
+            max-width: 300px;
+        }
+        .footer-col h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #095d28;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        .footer-col a {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #555;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.8rem;
+            transition: color 0.2s;
+        }
+        .footer-col p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 0.8rem;
+        }
+        .footer-col a:hover {
+            color: #095d28;
+        }
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid #eaeaea;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #999;
+        }
+        .footer-bottom-links a {
+            color: #999;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            transition: color 0.2s;
+        }
+        .footer-bottom-links a:hover {
+            color: #095d28;
+        }
+        @media (max-width: 768px) {
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-bottom-links {
+                margin-top: 1rem;
+            }
+            .footer-bottom-links a {
+                margin: 0 0.8rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -461,19 +550,46 @@
 
     </div>
 
-    <footer>
-        <div class="footer-logo-wrapper">
-            <img src="./logo.png" alt="The Natural Healing Clinic" class="footer-brand-logo">
-        </div>
-        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; width: 100%;">
-            <div class="footer-col" style="text-align: left;">
-                <h4>The Natural Healing Clinic</h4>
-                <p>13 Cronk Drine, Union Mills, Isle of Man, IM4 4NG</p>
+    <!-- ================= PREMIUM REDESIGNED FOOTER ================= -->
+    <footer class="clinic-footer reveal">
+        <div class="footer-grid">
+            
+            <div class="footer-brand">
+                <img src="./logo.png" alt="The Natural Healing Clinic">
+                <p>"Restoring vitality through advanced clinical diagnostics and targeted physical therapies."</p>
             </div>
-            <div class="footer-col" style="text-align: right;">
+            
+            <div class="footer-col">
+                <h4>Clinic Locations</h4>
+                <a href="https://maps.apple.com/?q=13+Cronk+Drine,+Union+Mills,+Isle+of+Man,+IM4+4NG" target="_blank" rel="noopener noreferrer">
+                    <strong>Union Mills Clinic</strong><br>
+                    13 Cronk Drine, Union Mills<br>
+                    Isle of Man, IM4 4NG
+                </a>
+                <a href="https://maps.apple.com/?q=Castletown,+Isle+of+Man" target="_blank" rel="noopener noreferrer" style="margin-top: 1rem;">
+                    <strong>Castletown Clinic</strong><br>
+                    Alternative Practice Suite<br>
+                    Castletown, Isle of Man
+                </a>
+            </div>
+            
+            <div class="footer-col">
                 <h4>Contact & Hours</h4>
-                <p>Tel: 07624 202 121</p>
-                <p>Mon & Fri: 10:00 - 15:00</p>
+                <a href="tel:07624202121"><strong>T:</strong> 07624 202 121</a>
+                <a href="mailto:clare@thenaturalhealingclinic.com"><strong>E:</strong> clare@thenaturalhealingclinic.com</a>
+                <p style="margin-top: 1rem; color: #888; line-height: 1.8;">
+                    <strong style="color: #555;">Mon & Fri:</strong> 10:00 - 15:00<br>
+                    <strong style="color: #555;">Consultations:</strong> By Appointment
+                </p>
+            </div>
+
+        </div>
+        
+        <div class="footer-bottom">
+            <div>&copy; 2026 The Natural Healing Clinic. All rights reserved.</div>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
             </div>
         </div>
     </footer>
