@@ -183,7 +183,7 @@ window.bookNewSession = async function(e) {
                     'content-type': 'application/json'
                 },
                 body: JSON.stringify({
-                    sender: { name: "The Natural Healing Clinic", email: "clare.claretownsend82@gmail.com" },
+                    sender: { name: "The Natural Healing Clinic", email: "clare@nhc.co.im" },
                     to: [{ email: user.email, name: clientName }],
                     subject: "Your VIP App Access Code",
                     htmlContent: `<html><body><p>Hello ${clientName},</p><p>Your booking for <b>${serviceName}</b> is confirmed.</p><p>Your VIP Code is: <b>${vipCode}</b></p></body></html>`
