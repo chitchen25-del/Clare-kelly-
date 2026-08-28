@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <!-- Meta tags to aggressively block caching -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -21,8 +20,7 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Version bumped to 24 -->
-    <link rel="stylesheet" href="./style.css?version=24">
+    <link rel="stylesheet" href="./style.css?version=25">
     <style>
         * { box-sizing: border-box; }
         html, body {
@@ -39,7 +37,6 @@
 </head>
 <body>
 
-    <!-- TOP BRAND & SIGN OUT BAR (Updated with env(safe-area-inset-top) to escape the notch) -->
     <div style="background-color: #ffffff; padding: max(1rem, env(safe-area-inset-top)) 5% 1rem 5%; border-bottom: 1px solid #e0d8cc; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 9999;">
         <div style="display: flex; align-items: center; gap: 0.8rem;">
             <img src="./logo.png" alt="Logo" style="height: 44px; width: auto; object-fit: contain; cursor: pointer;" onclick="location.href='./index.html'">
@@ -53,10 +50,8 @@
         </div>
     </div>
 
-    <!-- MAIN CONTAINER -->
     <div style="max-width: 900px; margin: 2rem auto; padding: 0 1rem 4rem 1rem;">
 
-        <!-- LOGIN SECTION -->
         <div id="section-login" class="portal-section active">
             <div style="background: white; border-radius: 12px; padding: 2rem; border: 1px solid #e0d8cc; max-width: 450px; margin: 3rem auto; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
                 <div style="text-align: center; margin-bottom: 1.5rem;">
@@ -69,31 +64,27 @@
                     <input type="email" id="login-email" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
                     <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Password</label>
                     <input type="password" id="login-password" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1.5rem;">
-                    <button type="submit" id="login-submit-btn" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;">Sign In to Portal</button>
+                    <button type="submit" id="login-submit-btn" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2);">Sign In to Portal</button>
                 </form>
             </div>
         </div>
 
-        <!-- DASHBOARD SECTION -->
         <div id="section-dashboard" class="portal-section">
             
-            <!-- VIP App Launcher Card (Only visible if VIP unlocked) -->
             <div id="vip-launcher-card" style="background: linear-gradient(135deg, #095d28, #0a4d22); color: white; border-radius: 12px; padding: 1.8rem; margin-bottom: 1.5rem; text-align: center; box-shadow: 0 10px 30px rgba(9, 93, 40, 0.15); display: none;">
                 <img src="./logo.png" alt="App Icon" style="height: 45px; width: 45px; background: white; border-radius: 10px; padding: 4px; margin-bottom: 0.8rem; object-fit: contain;">
                 <h3 style="color: white; font-size: 1.1rem; margin-bottom: 0.3rem;">Your VIP App is Unlocked</h3>
                 <p style="font-size: 0.82rem; opacity: 0.95; margin-bottom: 1rem;">Launch your full-screen health tracker with zero browser bars.</p>
-                <button type="button" style="background: white; color: #095d28; width: 100%; font-size: 1rem; padding: 1rem; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.1s ease;" onclick="location.href='./vip.html'">🚀 LAUNCH VIP APP</button>
+                <button type="button" style="background: white; color: #095d28; width: 100%; font-size: 1rem; padding: 1rem; border-radius: 8px; font-weight: 700; border: none; cursor: pointer;" onclick="location.href='./vip.html'">🚀 LAUNCH VIP APP</button>
             </div>
 
-            <!-- App Install Card (Supports Android One-Click & iOS Guide) -->
             <div style="background: #ffffff; color: #222; border-radius: 12px; padding: 1.8rem; margin-bottom: 1.5rem; text-align: center; border: 1px solid #e0d8cc; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
                 <img src="./logo.png" alt="App Icon" style="height: 40px; width: 40px; background: #f3f1ef; border-radius: 10px; padding: 4px; margin-bottom: 0.6rem; object-fit: contain;">
                 <h3 style="font-size: 1.05rem; margin-bottom: 0.3rem; font-weight: 700;">Save App to Phone Screen</h3>
                 <p style="font-size: 0.82rem; color: #666; margin-bottom: 1rem;">Tap below to instantly install your clinic portal shortcut.</p>
-                <button type="button" id="native-install-btn" style="background: #095d28; color: white; width: 100%; font-size: 1rem; padding: 1rem; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;" onclick="handleNativeInstall()">📥 INSTALL APP TO HOME SCREEN</button>
+                <button type="button" id="native-install-btn" style="background: #095d28; color: white; width: 100%; font-size: 1rem; padding: 1rem; border-radius: 8px; font-weight: 600; border: none; cursor: pointer;" onclick="handleNativeInstall()">📥 INSTALL APP TO HOME SCREEN</button>
             </div>
 
-            <!-- Appointments & Booking -->
             <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
                 <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Your Appointments</h3>
                 <div id="client-appointments-list"><p style="color: #888; font-size: 0.9rem;">Loading schedule...</p></div>
@@ -105,23 +96,22 @@
                     <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Treatment Pathway</label>
                     <select id="portal-service" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem; background: white;">
                         <option value="" disabled selected>Select a treatment...</option>
-                        <option value="90-Day Functional Medicine Programme">90-Day Functional Medicine Programme (Functional)</option>
-                        <option value="Gut Reset Protocol">Gut Reset Protocol (Gut Reset)</option>
-                        <option value="Comprehensive Health Audit">Comprehensive Health Audit (Health Audit)</option>
-                        <option value="Initial Naturopathic Consultation">Initial Naturopathic Consultation</option>
-                        <option value="Follow-up Consultation">Follow-up Consultation</option>
-                        <option value="Acupuncture Session">Acupuncture Session</option>
-                        <option value="Herbal Medicine Consultation">Herbal Medicine Consultation</option>
+                        <option value="90-Day Functional Medicine Programme">90-Day Functional Medicine Programme (Functional) — £950</option>
+                        <option value="Gut Reset Protocol">Gut Reset Protocol (Gut Reset) — £450</option>
+                        <option value="Comprehensive Health Audit">Comprehensive Health Audit (Health Audit) — £250</option>
+                        <option value="Initial Naturopathic Consultation">Initial Naturopathic Consultation — £120</option>
+                        <option value="Follow-up Consultation">Follow-up Consultation — £85</option>
+                        <option value="Acupuncture Session">Acupuncture Session — £75</option>
+                        <option value="Herbal Medicine Consultation">Herbal Medicine Consultation — £90</option>
                         <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release (Union Mills) — £70</option>
                         <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment (Union Mills) — £70</option>
                     </select>
                     <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.4rem;">Appointment Date & Time</label>
                     <input type="datetime-local" id="portal-date" onchange="validateBusinessHours(this)" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; margin-bottom: 1rem;">
-                    <button type="submit" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;">Confirm Booking</button>
+                    <button type="submit" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2);">Confirm Booking</button>
                 </form>
             </div>
 
-            <!-- Standard Health Questionnaire Accordion -->
             <div style="background: white; border-radius: 12px; border: 1px solid #e0d8cc; margin-bottom: 1.5rem; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
                 <div id="questionnaire-header" onclick="toggleAccordion('basic-questionnaire-panel')" style="padding: 1.2rem 1.5rem; background: #f9f8f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
                     <div>
@@ -144,22 +134,20 @@
                             <option value="5">5 - Moderate</option>
                             <option value="10">10 - Excruciating</option>
                         </select>
-                        <button type="submit" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;">Submit Questionnaire</button>
+                        <button type="submit" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer;">Submit Questionnaire</button>
                     </form>
                 </div>
             </div>
 
-            <!-- VIP Code Unlock Card (Locked state) -->
             <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.02);" id="vip-unlock-card">
                 <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">Unlock VIP Patient App</h3>
                 <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.2rem;">Enter your 4-digit VIP code from your programme confirmation to unlock your dedicated native app launcher.</p>
                 <form onsubmit="return unlockVipPortal(event)">
                     <input type="text" id="vip-code-input" placeholder="e.g. VIP-4821" required style="width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px; text-transform: uppercase; text-align: center; font-weight: bold; letter-spacing: 2px; margin-bottom:1rem;">
-                    <button type="submit" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;">Unlock VIP App</button>
+                    <button type="submit" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer;">Unlock VIP App</button>
                 </form>
             </div>
 
-            <!-- Secure Clinical Chat -->
             <div style="background: white; border-radius: 12px; padding: 1.8rem; border: 1px solid #e0d8cc; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border-top: 4px solid #222;">
                 <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Secure Clinical Chat with Clare</h3>
                 <div id="client-chat-box" style="height: 250px; background: #f9f8f6; border: 1px solid #e0d8cc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; overflow-y: auto;">
@@ -167,7 +155,7 @@
                 </div>
                 <form onsubmit="return handleClientMessage(event)" style="display: flex; gap: 0.8rem;">
                     <input type="text" id="client-msg-input" placeholder="Message Clare..." style="margin-bottom: 0; flex: 1; background: #f9f8f6; padding:1rem; border:1px solid #ccc; border-radius:8px; font-size: 1rem;" required>
-                    <button type="submit" style="padding: 0 1.8rem; background: #095d28; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 12px rgba(9, 93, 40, 0.2); transition: transform 0.1s ease;">Send</button>
+                    <button type="submit" style="padding: 0 1.8rem; background: #095d28; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer;">Send</button>
                 </form>
             </div>
 
@@ -175,7 +163,6 @@
 
     </div>
 
-    <!-- GLOBAL SCRIPT & SAFETY HANDLER -->
     <script>
         async function handleLoginSubmit(event) {
             event.preventDefault();
@@ -183,7 +170,6 @@
             const originalText = btn.innerText;
             btn.innerText = 'Signing in...';
             btn.disabled = true;
-
             try {
                 if (typeof processClientLogin === 'function') {
                     await processClientLogin(event);
@@ -201,7 +187,6 @@
         }
 
         let deferredInstallPrompt = null;
-
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredInstallPrompt = e;
@@ -238,7 +223,6 @@
         }
     </script>
 
-    <!-- CACHE BUSTER: Force unregister stuck Service Workers -->
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(function(registrations) {
@@ -251,7 +235,6 @@
         }
     </script>
 
-    <!-- Version bumped to 24 -->
-    <script src="./app.js?version=24"></script>
+    <script src="./app.js?version=25"></script>
 </body>
 </html>
