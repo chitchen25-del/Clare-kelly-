@@ -16,7 +16,7 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./style.css?version=9">
+    <link rel="stylesheet" href="./style.css?version=10">
 
     <style>
         .bottom-nav, .mobile-tab-bar, nav.bottom-bar {
@@ -59,20 +59,24 @@
             align-items: center;
             gap: 1.5rem;
         }
+        
+        /* Force explicit display rules for mobile hamburger toggle */
         .mobile-menu-btn {
             display: none;
             flex-direction: column;
             justify-content: space-around;
-            width: 30px;
-            height: 24px;
+            width: 32px;
+            height: 26px;
             background: transparent;
             border: none;
             cursor: pointer;
+            padding: 0;
+            z-index: 1001;
         }
         .mobile-menu-btn span {
             width: 100%;
-            height: 3px;
-            background-color: #222;
+            height: 3.5px;
+            background-color: #095d28;
             border-radius: 2px;
         }
 
@@ -85,7 +89,7 @@
             max-width: 350px;
             height: 100vh;
             background: #ffffff;
-            z-index: 9999;
+            z-index: 99999;
             box-shadow: -5px 0 30px rgba(0,0,0,0.15);
             transition: right 0.3s ease-in-out;
             padding: 5rem 2rem 2rem 2rem;
@@ -109,9 +113,9 @@
             color: #095d28;
         }
 
-        @media (max-width: 900px) {
-            .desktop-nav-links { display: none; }
-            .mobile-menu-btn { display: flex; }
+        @media (max-width: 1024px) {
+            .desktop-nav-links { display: none !important; }
+            .mobile-menu-btn { display: flex !important; }
             .pricing-tier-bronze {
                 transform: none !important;
                 height: 100% !important;
@@ -124,7 +128,9 @@
     <script>
         function toggleMobileMenu() { 
             const drawer = document.getElementById('mobile-drawer');
-            if(drawer) drawer.classList.toggle('open'); 
+            if(drawer) {
+                drawer.classList.toggle('open');
+            }
         }
     </script>
 
@@ -141,7 +147,7 @@
             <button type="button" class="btn" onclick="location.href='#register-section'">Register & Book</button>
         </div>
         
-        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <button type="button" class="mobile-menu-btn" aria-label="Open navigation menu" onclick="toggleMobileMenu()">
             <span></span><span></span><span></span>
         </button>
     </nav>
@@ -154,6 +160,7 @@
         <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./news.html'">Latest News</span>
         <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./contact.html'">Contact</span>
         <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./app.html'" style="color: #095d28; font-weight: 700;">Patient Portal</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='#register-section'" style="color: #095d28; font-weight: 700;">Register & Book</span>
     </div>
 
     <div id="screen-home" class="page-screen visible" style="display: block; position: static;">
@@ -244,4 +251,110 @@
                 </div>
 
                 <div style="background: linear-gradient(145deg, #095d28, #06401b); border-radius: 16px; padding: 2.5rem; border: 1px solid #053315; box-shadow: 0 15px 35px rgba(0,0,0,0.15); display: flex; flex-direction: column; height: 100%;">
-                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem;
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #eaddc5; margin-bottom: 0.5rem; font-weight: 600;">Functional Medicine</h3>
+                    <p style="color: #b5c7bc; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px;">Our elite, high-touch clinical programmes for uncovering the root drivers of chronic conditions.</p>
+                    <div style="font-size: 3rem; font-family: 'Cormorant Garamond', serif; color: white; margin-bottom: 2rem; font-weight: 600;">£350+</div>
+                    <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
+                        <li style="margin-bottom: 1rem; color: #fff; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #eaddc5; font-weight: bold;">✓</span> Complimentary 20-min Discovery Call</li>
+                        <li style="margin-bottom: 1rem; color: #fff; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #eaddc5; font-weight: bold;">✓</span> Comprehensive 90-min Consultations</li>
+                        <li style="margin-bottom: 1rem; color: #fff; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #eaddc5; font-weight: bold;">✓</span> 90-Day Functional Programmes (£950)</li>
+                        <li style="margin-bottom: 1rem; color: #fff; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #eaddc5; font-weight: bold;">✓</span> Functional Testing Reviews</li>
+                    </ul>
+                    <button type="button" style="width: 100%; padding: 1rem; background: #eaddc5; color: #06401b; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.2s ease;" onclick="location.href='#register-section'">Apply For Protocol</button>
+                </div>
+                
+            </div>
+        </section>
+
+        <div id="register-section" style="padding: 4rem 5%; background: var(--card-bg); border-top: 1px solid var(--secondary-sand);">
+            <div class="form-container" style="margin: 0 auto;">
+                <img src="./logo.png" alt="Logo" class="portal-logo">
+                <h2 style="font-size: 1.8rem; margin-bottom: 2.5rem; font-family: 'Montserrat'; font-weight: 600; text-align: center;">Patient Registration</h2>
+                <form onsubmit="return processRegistration(event)">
+                    <label>Full Name</label><input type="text" id="reg-name" required>
+                    <label>Email Address</label><input type="email" id="reg-email" required>
+                    <label>Create Password</label><input type="password" id="reg-password" required>
+                    
+                    <label>Treatment Pathway</label>
+                    <select id="reg-service" required style="width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 1.5rem; font-family: 'Montserrat', sans-serif; background: white;">
+                        <option value="" disabled selected>Select a treatment...</option>
+                        
+                        <optgroup label="Core Therapies (Bronze)">
+                            <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release - Union Mills — £70</option>
+                            <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release - Castletown — £80</option>
+                            <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment - Union Mills — £70</option>
+                            <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment - Castletown — £80</option>
+                            <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment - Union Mills — £50</option>
+                            <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment - Castletown — £60</option>
+                        </optgroup>
+
+                        <optgroup label="Packages & Cleanses (Silver)">
+                            <option value="Migraine & Neck Reset Package (£70)">Migraine & Neck Reset Package (2x 30min) — £70</option>
+                            <option value="Clarity Drainage Package (£70)">Clarity Drainage Package (2x 30min) — £70</option>
+                            <option value="Gut Mini Reset (£80)">Gut Mini Reset (10 Days) — £80</option>
+                            <option value="Taster Trio Bundle (£195)">Taster Trio Bundle (All Three) — £195</option>
+                            <option value="Parasite Cleanse (£150)">Parasite Cleanse — £150</option>
+                            <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse — £355</option>
+                        </optgroup>
+
+                        <optgroup label="Functional Medicine (Gold)">
+                            <option value="Free Discovery Call (20 min)">Complimentary Discovery Call (20 min) — Free</option>
+                            <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90 min) — £350</option>
+                            <option value="Functional Testing - Review (£350)">Functional Testing Review (90 min) — £350</option>
+                            <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950 (VIP App Access)</option>
+                        </optgroup>
+                    </select>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase;">Appointment Date</label>
+                            <input type="date" id="portal-date-reg" min="2026-01-01" required style="margin-bottom: 0;">
+                        </div>
+                        <div>
+                            <label style="font-weight: 600; font-size: 0.85rem; text-transform: uppercase;">Preferred Time</label>
+                            <select id="portal-time-reg" required style="margin-bottom: 0; background: white;">
+                                <option value="">-- Select Time --</option>
+                                <option value="09:00">09:00 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="12:00">12:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;">Create Account & Book</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-logo-wrapper">
+            <img src="./logo.png" alt="The Natural Healing Clinic" class="footer-brand-logo">
+        </div>
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; width: 100%;">
+            <div class="footer-col" style="text-align: left;">
+                <h4>The Natural Healing Clinic</h4>
+                <p>13 Cronk Drine, Union Mills, Isle of Man, IM4 4NG</p>
+            </div>
+            <div class="footer-col" style="text-align: right;">
+                <h4>Contact & Hours</h4>
+                <p>Tel: 07624 202 121</p>
+                <p>Mon & Fri: 10:00 - 15:00</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registered successfully!', reg.scope))
+                    .catch(err => console.log('Service Worker registration failed: ', err));
+            });
+        }
+    </script>
+
+    <script src="./app.js?v=10"></script>
+</body>
+</html>
