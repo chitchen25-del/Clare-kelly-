@@ -11,15 +11,194 @@
     <link rel="stylesheet" href="./style.css?version=14">
 
     <style>
+        /* Unified Navigation Styles */
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background-color: #ffffff; position: sticky; top: 0; z-index: 1000; }
         .nav-brand-logo { height: 50px; width: auto; cursor: pointer; }
         .desktop-nav-links { display: flex; align-items: center; gap: 1.5rem; }
         .mobile-menu-btn { display: none; flex-direction: column; justify-content: space-around; width: 32px; height: 26px; background: transparent; border: none; cursor: pointer; padding: 0; z-index: 1001; }
         .mobile-menu-btn span { width: 100%; height: 3.5px; background-color: #095d28; border-radius: 2px; }
+        
         .mobile-drawer { position: fixed; top: 0; right: -100%; width: 80%; max-width: 350px; height: 100vh; background: #ffffff; z-index: 99999; box-shadow: -5px 0 30px rgba(0,0,0,0.15); transition: right 0.3s ease-in-out; padding: 5rem 2rem 2rem 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
         .mobile-drawer.open { right: 0; }
         .mobile-drawer-link { font-size: 1.1rem; font-weight: 600; color: #222; text-decoration: none; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 1px solid #f0f0f0; }
+        
         @media (max-width: 1024px) { .desktop-nav-links { display: none !important; } .mobile-menu-btn { display: flex !important; } }
+
+        /* Scroll Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ================= SWISH NEWS CARD OVERRIDES ================= */
+        /* This forces the dynamically loaded JS cards to look premium */
+        #dynamic-news-container > div {
+            background: #ffffff !important;
+            border-radius: 16px !important;
+            overflow: hidden !important;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.04) !important;
+            border: 1px solid #fcfcfc !important;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            margin-bottom: 3rem !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        #dynamic-news-container > div:hover {
+            transform: translateY(-8px) !important;
+            box-shadow: 0 25px 60px rgba(9, 93, 40, 0.12) !important;
+        }
+        #dynamic-news-container img {
+            width: 100% !important;
+            height: 320px !important;
+            object-fit: cover !important;
+            border-bottom: 1px solid #eaeaea !important;
+        }
+        /* Targets the text padding inside the JS card */
+        #dynamic-news-container > div > div {
+            padding: 3rem !important;
+        }
+        /* Date / Small labels */
+        #dynamic-news-container span, #dynamic-news-container small {
+            font-family: 'Montserrat', sans-serif !important;
+            font-size: 0.75rem !important;
+            font-weight: 700 !important;
+            color: #888 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 2px !important;
+            margin-bottom: 1rem !important;
+            display: block !important;
+        }
+        /* Article Titles */
+        #dynamic-news-container h2, #dynamic-news-container h3, #dynamic-news-container h4 {
+            font-family: 'Cormorant Garamond', serif !important;
+            font-size: 2.5rem !important;
+            color: #111 !important;
+            margin-top: 0 !important;
+            margin-bottom: 1rem !important;
+            font-weight: 600 !important;
+            line-height: 1.2 !important;
+        }
+        /* Paragraph text */
+        #dynamic-news-container p {
+            font-family: 'Cormorant Garamond', serif !important;
+            font-style: italic !important;
+            font-size: 1.2rem !important;
+            color: #555 !important;
+            line-height: 1.7 !important;
+            margin-bottom: 2.5rem !important;
+        }
+        /* Download Buttons */
+        #dynamic-news-container button, #dynamic-news-container a.btn, #dynamic-news-container a {
+            display: inline-block !important;
+            background: #095d28 !important;
+            color: #ffffff !important;
+            padding: 1rem 2.5rem !important;
+            border-radius: 8px !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-size: 0.85rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1.5px !important;
+            text-decoration: none !important;
+            box-shadow: 0 8px 20px rgba(9, 93, 40, 0.15) !important;
+            transition: all 0.3s ease !important;
+            border: none !important;
+            cursor: pointer !important;
+            width: max-content !important;
+        }
+        #dynamic-news-container button:hover, #dynamic-news-container a:hover {
+            background: #06401b !important;
+            transform: translateY(-3px) !important;
+            box-shadow: 0 12px 25px rgba(9, 93, 40, 0.25) !important;
+        }
+
+        /* ================= PREMIUM FOOTER ================= */
+        .clinic-footer {
+            background-color: #f9f8f6;
+            padding: 6rem 5% 3rem 5%;
+            border-top: 1px solid #eaeaea;
+            font-family: 'Montserrat', sans-serif;
+            color: #555;
+            margin-top: 2rem;
+        }
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+        .footer-brand img {
+            height: 55px;
+            margin-bottom: 1.5rem;
+        }
+        .footer-brand p {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #666;
+            max-width: 300px;
+        }
+        .footer-col h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #095d28;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        .footer-col a {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #555;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.8rem;
+            transition: color 0.2s;
+        }
+        .footer-col p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 0.8rem;
+        }
+        .footer-col a:hover {
+            color: #095d28;
+        }
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid #eaeaea;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #999;
+        }
+        .footer-bottom-links a {
+            color: #999;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            transition: color 0.2s;
+        }
+        .footer-bottom-links a:hover {
+            color: #095d28;
+        }
+        @media (max-width: 768px) {
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .footer-bottom-links { margin-top: 1rem; }
+            .footer-bottom-links a { margin: 0 0.8rem; }
+        }
     </style>
 </head>
 <body>
@@ -56,39 +235,95 @@
         <span class="mobile-drawer-link" onclick="location.href='./app.html'" style="color: #095d28; font-weight: 700;">Patient Portal</span>
     </div>
 
-    <div style="background-color: #f9f8f6; padding: 5rem 6%; border-bottom: 1px solid #e0d8cc; text-align: center;">
-        <span style="display: inline-block; padding: 0.4rem 1.2rem; background: rgba(13, 155, 70, 0.1); border: 1px solid rgba(13, 155, 70, 0.2); border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: #095d28; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;">Clinic Updates</span>
-        <h1 style="font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; color: #222; margin-top: 0; margin-bottom: 1rem;">Latest News & Resources</h1>
+    <div class="reveal" style="background-color: #f9f8f6; padding: 5rem 6%; border-bottom: 1px solid #e0d8cc; text-align: center;">
+        <span style="display: inline-block; padding: 0.4rem 1.2rem; background: rgba(13, 155, 70, 0.1); border: 1px solid rgba(13, 155, 70, 0.2); border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: #095d28; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.5rem;">Clinic Updates</span>
+        <h1 style="font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: #222; margin-top: 0; margin-bottom: 1rem;">Latest News & Resources</h1>
     </div>
 
-    <section style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
+    <section class="reveal" style="max-width: 900px; margin: 0 auto; padding: 5rem 2rem; transition-delay: 0.1s;">
         
         <div style="margin-bottom: 3rem;">
-            <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.4rem; color: #095d28; margin-bottom: 1.5rem; border-bottom: 2px solid #e0d8cc; padding-bottom: 0.5rem;">Announcements & Downloads</h2>
-            
             <!-- AUTOMATIC NEWS FEED CONTAINER -->
             <div id="dynamic-news-container" style="display: flex; flex-direction: column; gap: 2rem;">
-                <p style="text-align: center; color: #888; font-family: 'Montserrat', sans-serif;">Loading latest updates directly from the clinic...</p>
+                <p style="text-align: center; color: #888; font-family: 'Montserrat', sans-serif; padding: 3rem;">Loading latest updates directly from the clinic...</p>
             </div>
-
         </div>
+
     </section>
 
-    <footer>
-        <div class="footer-logo-wrapper" style="text-align: center; margin-bottom: 2rem;">
-            <img src="./logo.png" alt="Logo" class="footer-brand-logo" style="height: 60px; width: auto;">
-        </div>
-        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; max-width: 1000px; margin: 0 auto; padding: 0 2rem;">
-            <div style="text-align: left; flex: 1; min-width: 200px;">
-                <h4 style="font-family: 'Montserrat', sans-serif; color: #222; margin-bottom: 0.5rem;">The Natural Healing Clinic</h4>
-                <p style="color: #666; font-size: 0.9rem; margin: 0;">13 Cronk Drine, Union Mills, Isle of Man</p>
+    <!-- PREMIUM REDESIGNED FOOTER -->
+    <footer class="clinic-footer reveal">
+        <div class="footer-grid">
+            
+            <div class="footer-brand">
+                <img src="./logo.png" alt="The Natural Healing Clinic">
+                <p>"Restoring vitality through advanced clinical diagnostics and targeted physical therapies."</p>
             </div>
-            <div style="text-align: right; flex: 1; min-width: 200px;">
-                <h4 style="font-family: 'Montserrat', sans-serif; color: #222; margin-bottom: 0.5rem;">Contact</h4>
-                <p style="color: #666; font-size: 0.9rem; margin: 0;">Tel: 07624 202 121</p>
+            
+            <div class="footer-col">
+                <h4>Clinic Locations</h4>
+                <a href="https://maps.apple.com/?q=13+Cronk+Drine,+Union+Mills,+Isle+of+Man,+IM4+4NG" target="_blank" rel="noopener noreferrer">
+                    <strong>Union Mills Clinic</strong><br>
+                    13 Cronk Drine, Union Mills<br>
+                    Isle of Man, IM4 4NG
+                </a>
+                <a href="https://maps.apple.com/?q=Castletown,+Isle+of+Man" target="_blank" rel="noopener noreferrer" style="margin-top: 1rem;">
+                    <strong>Castletown Clinic</strong><br>
+                    Alternative Practice Suite<br>
+                    Castletown, Isle of Man
+                </a>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Contact & Hours</h4>
+                <a href="tel:07624202121"><strong>T:</strong> 07624 202 121</a>
+                <a href="mailto:clare@thenaturalhealingclinic.com"><strong>E:</strong> clare@thenaturalhealingclinic.com</a>
+                <p style="margin-top: 1rem; color: #888; line-height: 1.8;">
+                    <strong style="color: #555;">Mon & Fri:</strong> 10:00 - 15:00<br>
+                    <strong style="color: #555;">Consultations:</strong> By Appointment
+                </p>
+            </div>
+
+        </div>
+        
+        <div class="footer-bottom">
+            <div>&copy; 2026 The Natural Healing Clinic. All rights reserved.</div>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
             </div>
         </div>
     </footer>
+
+    <!-- Scroll Animation Observer Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.05 });
+            
+            // Observe existing reveals
+            document.querySelectorAll('.reveal').forEach((el) => { observer.observe(el); });
+
+            // Watch for dynamically loaded news cards to animate them too
+            const newsContainer = document.getElementById('dynamic-news-container');
+            if (newsContainer) {
+                const mutationObserver = new MutationObserver(() => {
+                    Array.from(newsContainer.children).forEach(card => {
+                        if(card.tagName.toLowerCase() === 'div' && !card.classList.contains('reveal')) {
+                            card.classList.add('reveal');
+                            observer.observe(card);
+                        }
+                    });
+                });
+                mutationObserver.observe(newsContainer, { childList: true });
+            }
+        });
+    </script>
     
     <script src="./app.js?v=15"></script>
 </body>
