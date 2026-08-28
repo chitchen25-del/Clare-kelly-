@@ -149,6 +149,76 @@ window.processClientLogin = async function(e) {
     return false;
 }
 
+// NEW FUNCTION: Handles the Main Page Registration & PayPal Integration
+window.processRegistration = async function(e) {
+    e.preventDefault();
+    try {
+        const db = getSupabase();
+        if (!db) throw new Error("Database connection failed.");
+
+        const name = document.getElementById('reg-name').value.trim();
+        const email = document.getElementById('reg-email').value.trim().toLowerCase();
+        const password = document.getElementById('reg-password').value;
+        const service = document.getElementById('reg-service').value;
+        const date = document.getElementById('portal-date-reg').value;
+        const time = document.getElementById('portal-time-reg').value;
+
+        if (!name || !email || !password || !service || !date || !time) {
+            throw new Error("Please complete all registration fields.");
+        }
+
+        // Check if PayPal was processed (or if it's a free service)
+        const paymentId = window.paypalTransactionId || (service.includes('Free') ? "Free Booking" : "Pending/Manual");
+
+        // 1. Register User in Supabase Auth
+        const { data: authData, error: authError } = await db.auth.signUp({
+            email: email,
+            password: password,
+            options: { data: { full_name: name } }
+        });
+        if (authError) throw authError;
+        
+        const user = authData.user;
+        if (!user) throw new Error("Registration failed to create user.");
+
+        // 2. Determine VIP / Functional Status
+        const appointmentTime = `${date}T${time}:00`;
+        const isFunctional = service.includes('Functional') || service.includes('Gut Reset') || service.includes('Health Audit');
+        let vipCode = null;
+
+        if (isFunctional) {
+            vipCode = 'VIP-' + Math.floor(1000 + Math.random() * 9000);
+            await db.from('client_tiers').upsert([{ client_id: user.id, is_premium: true, unlock_code: vipCode }]);
+        }
+
+        // 3. Write Appointment to Database
+        const { error: apptError } = await db.from('appointments').insert([{ 
+            client_id: user.id, 
+            client_name: name, 
+            service_name: service, 
+            appointment_time: appointmentTime, 
+            status: 'confirmed' 
+        }]);
+        if (apptError) throw apptError;
+
+        // 4. Fire Brevo Confirmation Email
+        const { error: emailError } = await db.functions.invoke('send-confirmation', {
+            body: { email: email, clientName: name, serviceName: service, vipCode: vipCode }
+        });
+        if (emailError) console.error("Email Dispatch Warning:", emailError);
+
+        alert(`Registration successful! Payment Reference: ${paymentId}. Redirecting to your patient portal...`);
+        
+        // Auto-login and redirect
+        window.location.href = './app.html';
+
+    } catch (err) {
+        alert("Registration Error: " + err.message);
+    }
+    return false;
+};
+
+// UPDATED: Now handles PayPal references for returning clients
 window.bookNewSession = async function(e) {
     e.preventDefault();
     try {
@@ -164,6 +234,9 @@ window.bookNewSession = async function(e) {
         const appointmentTime = dateInput.value;
         const clientName = user.user_metadata?.full_name || user.email;
 
+        // Check for PayPal ID
+        const paymentId = window.portalPayPalId || (serviceName.includes('Free') ? "Free Booking" : "Pending/Manual");
+
         const isFunctional = serviceName.includes('Functional') || serviceName.includes('Gut Reset') || serviceName.includes('Health Audit');
         let vipCode = null;
 
@@ -171,15 +244,14 @@ window.bookNewSession = async function(e) {
             vipCode = 'VIP-' + Math.floor(1000 + Math.random() * 9000);
             const { error: tierError } = await db.from('client_tiers').upsert([{ client_id: user.id, is_premium: true, unlock_code: vipCode }]);
             if(tierError) console.error("Tier record upsert warning:", tierError);
+        }
 
-            // Securely call Supabase Edge Function instead of Brevo directly
-            const { error: emailError } = await db.functions.invoke('send-confirmation', {
-                body: { email: user.email, clientName, serviceName, vipCode }
-            });
-
-            if (emailError) {
-                console.error("Email Dispatch Warning:", emailError);
-            }
+        // Securely call Supabase Edge Function instead of Brevo directly
+        const { error: emailError } = await db.functions.invoke('send-confirmation', {
+            body: { email: user.email, clientName, serviceName, vipCode }
+        });
+        if (emailError) {
+            console.error("Email Dispatch Warning:", emailError);
         }
 
         const { error: apptError } = await db.from('appointments').insert([{ 
@@ -191,12 +263,16 @@ window.bookNewSession = async function(e) {
         }]);
         if(apptError) throw apptError;
 
-        alert("Appointment booked successfully! Confirmation email dispatched."); 
+        alert(`Appointment booked successfully! Payment Reference: ${paymentId}. Confirmation email dispatched.`); 
+        
+        // Reset state
+        window.portalPayPalId = null;
+        serviceSelect.value = "";
+        dateInput.value = "";
+        
         loadClientDashboard(db, user);
         checkVipStatus(db, user);
 
-        serviceSelect.value = "";
-        dateInput.value = "";
     } catch(err) { 
         alert("Booking Execution Error: " + err.message); 
     }
