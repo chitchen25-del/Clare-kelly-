@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./style.css?version=12">
+    <link rel="stylesheet" href="./style.css?version=13">
 
     <style>
         nav {
@@ -138,18 +138,49 @@
 
     <section style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
         
-        <!-- RESTORED PDFS SECTION -->
+        <!-- CLINIC NEWS & IMAGES SECTION -->
+        <div style="margin-bottom: 4rem;">
+            <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.4rem; color: #095d28; margin-bottom: 1.5rem; border-bottom: 2px solid #e0d8cc; padding-bottom: 0.5rem;">Latest Announcements</h2>
+            
+            <div id="public-news-feed" style="display: flex; flex-direction: column; gap: 2rem;">
+                
+                <!-- NEW IMAGE UPLOAD BLOCK -->
+                <div style="background: white; border: 1px solid #e0d8cc; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- CHANGE "YOUR-NEW-IMAGE-NAME.jpg" BELOW -->
+                    <img src="./YOUR-NEW-IMAGE-NAME.jpg" alt="Clinic Update" style="width: 100%; height: auto; display: block; border-bottom: 1px solid #e0d8cc;">
+                    
+                    <div style="padding: 1.5rem;">
+                        <span style="font-size: 0.8rem; color: #888; font-family: 'Montserrat', sans-serif; font-weight: 600;">August 2026</span>
+                        <h3 style="margin: 0.5rem 0; color: #222; font-size: 1.2rem; font-family: 'Montserrat', sans-serif;">New Clinic Update</h3>
+                        <p style="margin: 0; color: #555; font-size: 0.95rem; line-height: 1.6;">Stay tuned for our latest schedule changes and clinic offerings.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- PDFS & DOWNLOADS SECTION -->
         <div style="margin-bottom: 4rem;">
             <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.4rem; color: #095d28; margin-bottom: 1.5rem; border-bottom: 2px solid #e0d8cc; padding-bottom: 0.5rem;">Clinic Resources & Downloads</h2>
             
+            <!-- NEW UPLOADED PDF -->
+            <div style="background: #f4fbf6; border: 1px solid #c2e2cb; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(9, 93, 40, 0.05); flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h3 style="margin: 0 0 0.3rem 0; color: #095d28; font-size: 1.1rem; font-family: 'Montserrat', sans-serif; font-weight: 700;">New Document Available</h3>
+                    <p style="margin: 0; color: #555; font-size: 0.9rem;">Download our most recently added clinic resource.</p>
+                </div>
+                <!-- CHANGE "YOUR-NEW-FILE.pdf" BELOW -->
+                <a href="./YOUR-NEW-FILE.pdf" target="_blank" style="background: #095d28; color: white; text-decoration: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; text-align: center;">Download PDF</a>
+            </div>
+
             <!-- PDF Item 1 -->
             <div style="background: white; border: 1px solid #e0d8cc; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); flex-wrap: wrap; gap: 1rem;">
                 <div>
                     <h3 style="margin: 0 0 0.3rem 0; color: #222; font-size: 1.1rem; font-family: 'Montserrat', sans-serif;">Clinic Information & Pricing</h3>
                     <p style="margin: 0; color: #666; font-size: 0.9rem;">Download our full clinical service guide and price list.</p>
                 </div>
-                <!-- UPDATE THE HREF BELOW TO MATCH YOUR PDF FILENAME -->
-                <a href="./pricing.pdf" target="_blank" style="background: #095d28; color: white; text-decoration: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; text-align: center;">Download PDF</a>
+                <a href="./pricing.pdf" target="_blank" style="background: white; color: #095d28; border: 2px solid #095d28; text-decoration: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; text-align: center;">Download PDF</a>
             </div>
 
             <!-- PDF Item 2 -->
@@ -158,18 +189,9 @@
                     <h3 style="margin: 0 0 0.3rem 0; color: #222; font-size: 1.1rem; font-family: 'Montserrat', sans-serif;">Aftercare Advice</h3>
                     <p style="margin: 0; color: #666; font-size: 0.9rem;">Essential guidance to follow after your physical therapy sessions.</p>
                 </div>
-                <!-- UPDATE THE HREF BELOW TO MATCH YOUR PDF FILENAME -->
                 <a href="./aftercare.pdf" target="_blank" style="background: white; color: #095d28; border: 2px solid #095d28; text-decoration: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; text-align: center;">Download PDF</a>
             </div>
             
-        </div>
-
-        <!-- DYNAMIC NEWS FEED -->
-        <div>
-            <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.4rem; color: #095d28; margin-bottom: 1.5rem; border-bottom: 2px solid #e0d8cc; padding-bottom: 0.5rem;">Latest Announcements</h2>
-            <div id="public-news-feed" style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <p style="color: #888; text-align: center; font-family: 'Montserrat', sans-serif;">Loading latest updates...</p>
-            </div>
         </div>
 
     </section>
@@ -190,6 +212,6 @@
         </div>
     </footer>
     
-    <script src="./app.js?v=12"></script>
+    <script src="./app.js?v=13"></script>
 </body>
 </html>
