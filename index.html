@@ -16,7 +16,7 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="./style.css?version=10">
+    <link rel="stylesheet" href="./style.css?version=11">
 
     <style>
         .bottom-nav, .mobile-tab-bar, nav.bottom-bar {
@@ -132,6 +132,20 @@
                 drawer.classList.toggle('open');
             }
         }
+
+        function handleServiceChange(selectElement, btnId, paypalContainerId) {
+            const standardBtn = document.getElementById(btnId);
+            const paypalContainer = document.getElementById(paypalContainerId);
+            
+            if(selectElement.value.includes('Free')) {
+                standardBtn.style.display = 'block';
+                standardBtn.innerText = 'Complete Free Booking';
+                paypalContainer.style.display = 'none';
+            } else if (selectElement.value !== "") {
+                standardBtn.style.display = 'none';
+                paypalContainer.style.display = 'block';
+            }
+        }
     </script>
 
     <nav>
@@ -152,6 +166,7 @@
         </button>
     </nav>
 
+    <!-- MOBILE NAVIGATION DRAWER -->
     <div class="mobile-drawer" id="mobile-drawer">
         <span style="position: absolute; top: calc(1.5rem + env(safe-area-inset-top)); right: 2rem; font-size: 2rem; cursor: pointer; color: #222;" onclick="toggleMobileMenu()">✕</span>
         <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./index.html'">Home</span>
@@ -163,8 +178,10 @@
         <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='#register-section'" style="color: #095d28; font-weight: 700;">Register & Book</span>
     </div>
 
+    <!-- ================= HOME SCREEN ================= -->
     <div id="screen-home" class="page-screen visible" style="display: block; position: static;">
         
+        <!-- HERO SECTION -->
         <section class="hero" id="home-hero" style="position: relative; padding: 6rem 5% 5rem 5%; text-align: center; background: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat; border-bottom: 1px solid var(--secondary-sand); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 75vh;">
             
             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(243, 241, 239, 0.7); z-index: 1;"></div>
@@ -214,6 +231,7 @@
             </div>
         </section>
 
+        <!-- ================= TIERED CLINICAL SERVICES ================= -->
         <section class="pricing-section" style="padding-top: 6rem; padding-bottom: 6rem; background: #f9f8f6;">
             <div style="text-align: center; max-width: 800px; margin: 0 auto 4rem auto;">
                 <span style="display: inline-block; padding: 0.4rem 1.2rem; background: rgba(13, 155, 70, 0.1); border: 1px solid rgba(13, 155, 70, 0.2); border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: #095d28; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;">Treatment Pathways</span>
@@ -223,6 +241,7 @@
 
             <div style="max-width: 1150px; margin: 0 auto; padding: 0 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; align-items: center;">
                 
+                <!-- TIER 2: Packages & Cleanses (Silver) -->
                 <div style="background: white; border-radius: 16px; padding: 2.5rem; border: 1px solid #e0d8cc; box-shadow: 0 10px 30px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%;">
                     <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #444; margin-bottom: 0.5rem; font-weight: 600;">Packages & Cleanses</h3>
                     <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px;">Targeted multi-session resets, lymphatic drainage bundles, and biological cleanses.</p>
@@ -236,6 +255,7 @@
                     <button type="button" style="width: 100%; padding: 1rem; background: white; color: #095d28; border: 2px solid #095d28; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;" onclick="location.href='#register-section'">View & Book</button>
                 </div>
 
+                <!-- TIER 1: Core Therapies (Bronze) -->
                 <div class="pricing-tier-bronze" style="background: #ffffff; border-radius: 16px; padding: 3rem 2.5rem; border: 2px solid #095d28; box-shadow: 0 20px 40px rgba(9,93,40,0.1); position: relative; transform: scale(1.05); z-index: 2; display: flex; flex-direction: column; height: calc(100% + 2rem);">
                     <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #095d28; color: white; padding: 0.4rem 1.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">Primary Focus</div>
                     <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #095d28; margin-bottom: 0.5rem; font-weight: 700;">Core Therapies</h3>
@@ -250,6 +270,7 @@
                     <button type="button" style="width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(9,93,40,0.2); transition: all 0.2s ease;" onclick="location.href='#register-section'">Book Core Treatment</button>
                 </div>
 
+                <!-- TIER 3: Functional Medicine (Gold) -->
                 <div style="background: linear-gradient(145deg, #095d28, #06401b); border-radius: 16px; padding: 2.5rem; border: 1px solid #053315; box-shadow: 0 15px 35px rgba(0,0,0,0.15); display: flex; flex-direction: column; height: 100%;">
                     <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #eaddc5; margin-bottom: 0.5rem; font-weight: 600;">Functional Medicine</h3>
                     <p style="color: #b5c7bc; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px;">Our elite, high-touch clinical programmes for uncovering the root drivers of chronic conditions.</p>
@@ -266,17 +287,19 @@
             </div>
         </section>
 
+        <!-- REGISTRATION / BOOKING ANCHOR SECTION -->
         <div id="register-section" style="padding: 4rem 5%; background: var(--card-bg); border-top: 1px solid var(--secondary-sand);">
             <div class="form-container" style="margin: 0 auto;">
                 <img src="./logo.png" alt="Logo" class="portal-logo">
                 <h2 style="font-size: 1.8rem; margin-bottom: 2.5rem; font-family: 'Montserrat'; font-weight: 600; text-align: center;">Patient Registration</h2>
-                <form onsubmit="return processRegistration(event)">
+                
+                <form id="reg-form" onsubmit="return processRegistration(event)">
                     <label>Full Name</label><input type="text" id="reg-name" required>
                     <label>Email Address</label><input type="email" id="reg-email" required>
                     <label>Create Password</label><input type="password" id="reg-password" required>
                     
                     <label>Treatment Pathway</label>
-                    <select id="reg-service" required style="width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 1.5rem; font-family: 'Montserrat', sans-serif; background: white;">
+                    <select id="reg-service" required onchange="handleServiceChange(this, 'reg-submit-btn', 'paypal-button-container-index')" style="width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 1.5rem; font-family: 'Montserrat', sans-serif; background: white;">
                         <option value="" disabled selected>Select a treatment...</option>
                         
                         <optgroup label="Core Therapies (Bronze)">
@@ -321,7 +344,11 @@
                             </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn" style="width: 100%;">Create Account & Book</button>
+                    
+                    <!-- Dynamic Buttons -->
+                    <div id="paypal-button-container-index" style="margin: 1.5rem 0; display: none;"></div>
+                    <button type="submit" id="reg-submit-btn" class="btn" style="width: 100%; display: none;">Create Account & Book</button>
+
                 </form>
             </div>
         </div>
@@ -345,6 +372,7 @@
         </div>
     </footer>
 
+    <!-- Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -355,6 +383,57 @@
         }
     </script>
 
-    <script src="./app.js?v=10"></script>
+    <!-- PayPal SDK Sandbox -->
+    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=GBP"></script>
+
+    <script>
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                // Ensure required form fields are filled before checking out
+                const name = document.getElementById('reg-name').value;
+                const email = document.getElementById('reg-email').value;
+                const date = document.getElementById('portal-date-reg').value;
+                const time = document.getElementById('portal-time-reg').value;
+                
+                if (!name || !email || !date || !time) {
+                    alert("Please fill in all your registration details, date, and time before paying.");
+                    return actions.reject();
+                }
+
+                const serviceSelect = document.getElementById('reg-service');
+                let amount = "70.00"; 
+                if (serviceSelect && serviceSelect.value) {
+                    if (serviceSelect.value.includes("950")) amount = "950.00";
+                    else if (serviceSelect.value.includes("450")) amount = "450.00";
+                    else if (serviceSelect.value.includes("355")) amount = "355.00";
+                    else if (serviceSelect.value.includes("350")) amount = "350.00";
+                    else if (serviceSelect.value.includes("195")) amount = "195.00";
+                    else if (serviceSelect.value.includes("150")) amount = "150.00";
+                    else if (serviceSelect.value.includes("120")) amount = "120.00";
+                    else if (serviceSelect.value.includes("90")) amount = "90.00";
+                    else if (serviceSelect.value.includes("85")) amount = "85.00";
+                    else if (serviceSelect.value.includes("80")) amount = "80.00";
+                    else if (serviceSelect.value.includes("75")) amount = "75.00";
+                    else if (serviceSelect.value.includes("70")) amount = "70.00";
+                    else if (serviceSelect.value.includes("60")) amount = "60.00";
+                    else if (serviceSelect.value.includes("50")) amount = "50.00";
+                }
+
+                return actions.order.create({
+                    purchase_units: [{ amount: { value: amount } }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // Inject PayPal Transaction ID to window so app.js can pick it up
+                    window.paypalTransactionId = details.id;
+                    // Trigger the hidden submit button programmatically
+                    document.getElementById('reg-submit-btn').click();
+                });
+            }
+        }).render('#paypal-button-container-index');
+    </script>
+
+    <script src="./app.js?v=11"></script>
 </body>
 </html>
