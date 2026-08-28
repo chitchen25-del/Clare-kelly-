@@ -157,11 +157,7 @@ async function checkAvailability(db, appointmentTime) {
         .in('status', ['confirmed', 'pending']);
         
     if (error) throw error;
-    
-    // If we find any records matching this exact time, the slot is taken
-    if (data && data.length > 0) {
-        return false; 
-    }
+    if (data && data.length > 0) { return false; }
     return true; 
 }
 
@@ -184,7 +180,6 @@ window.processRegistration = async function(e) {
 
         const appointmentTime = `${date}T${time}:00`;
 
-        // DOUBLE-BOOKING CHECK
         const isAvailable = await checkAvailability(db, appointmentTime);
         if (!isAvailable) {
             throw new Error("Alert: This time slot was just booked by another patient! If you have just paid, please contact Clare immediately to reschedule or receive a full refund.");
@@ -192,7 +187,6 @@ window.processRegistration = async function(e) {
 
         const paymentId = window.paypalTransactionId || (service.includes('Free') ? "Free Booking" : "Pending/Manual");
 
-        // 1. Register User in Supabase Auth
         const { data: authData, error: authError } = await db.auth.signUp({
             email: email,
             password: password,
@@ -203,7 +197,6 @@ window.processRegistration = async function(e) {
         const user = authData.user;
         if (!user) throw new Error("Registration failed to create user.");
 
-        // 2. Determine VIP / Functional Status
         const isFunctional = service.includes('Functional') || service.includes('Gut Reset') || service.includes('Health Audit');
         let vipCode = null;
 
@@ -212,7 +205,6 @@ window.processRegistration = async function(e) {
             await db.from('client_tiers').upsert([{ client_id: user.id, is_premium: true, unlock_code: vipCode }]);
         }
 
-        // 3. Write Appointment to Database
         const { error: apptError } = await db.from('appointments').insert([{ 
             client_id: user.id, 
             client_name: name, 
@@ -222,14 +214,12 @@ window.processRegistration = async function(e) {
         }]);
         if (apptError) throw apptError;
 
-        // 4. Fire Brevo Confirmation Email
         const { error: emailError } = await db.functions.invoke('send-confirmation', {
             body: { email: email, clientName: name, serviceName: service, vipCode: vipCode }
         });
         if (emailError) console.error("Email Dispatch Warning:", emailError);
 
         alert(`Registration successful! Payment Reference: ${paymentId}. Redirecting to your patient portal...`);
-        
         window.location.href = './app.html';
 
     } catch (err) {
@@ -252,7 +242,6 @@ window.bookNewSession = async function(e) {
         const serviceName = serviceSelect.value;
         const appointmentTime = dateInput.value;
         
-        // DOUBLE-BOOKING CHECK
         const isAvailable = await checkAvailability(db, appointmentTime);
         if (!isAvailable) {
             throw new Error("Alert: This time slot was just booked by another patient! If you have just paid, please contact Clare immediately to reschedule or receive a full refund.");
@@ -273,9 +262,7 @@ window.bookNewSession = async function(e) {
         const { error: emailError } = await db.functions.invoke('send-confirmation', {
             body: { email: user.email, clientName, serviceName, vipCode }
         });
-        if (emailError) {
-            console.error("Email Dispatch Warning:", emailError);
-        }
+        if (emailError) console.error("Email Dispatch Warning:", emailError);
 
         const { error: apptError } = await db.from('appointments').insert([{ 
             client_id: user.id, 
@@ -301,24 +288,18 @@ window.bookNewSession = async function(e) {
     return false;
 };
 
-// CANCELLATION PING ADDED
 window.cancelAppointment = async function(id) {
     if(!confirm("Are you sure you wish to cancel this scheduled appointment?")) return;
     try {
         const db = getSupabase();
-        
-        // 1. Fetch appointment details so we know what is being cancelled
         const { data: appt, error: fetchError } = await db.from('appointments').select('*').eq('id', id).single();
         if(fetchError) throw fetchError;
 
-        // 2. Delete from database
         const { error: deleteError } = await db.from('appointments').delete().eq('id', id);
         if(deleteError) throw deleteError;
 
         const { data: { user } } = await db.auth.getUser();
 
-        // 3. Fire cancellation email ping via Edge Function 
-        // (Includes an isCancellation flag so Brevo or the Edge Function knows it's a cancellation alert)
         if (user && appt) {
             await db.functions.invoke('send-confirmation', {
                 body: { 
@@ -332,7 +313,6 @@ window.cancelAppointment = async function(id) {
         }
 
         alert("Appointment cancelled successfully. The clinic has been notified.");
-        
         if(user) loadClientDashboard(db, user);
     } catch(err) { 
         alert("Cancellation Error: " + err.message); 
@@ -345,7 +325,6 @@ window.rescheduleAppointment = async function(id) {
     try {
         const db = getSupabase();
         
-        // Check if the new requested slot is already taken
         const isAvailable = await checkAvailability(db, newDate);
         if (!isAvailable) {
             throw new Error("The time slot you requested is already booked. Please try a different time.");
@@ -414,3 +393,60 @@ window.submitBasicIntake = async function(e) {
     e.target.reset();
     return false;
 }
+
+// =========================================================================
+// AUTOMATED NEWS FEED ENGINE (Connects to admin.html uploads)
+// =========================================================================
+async function loadDynamicNews() {
+    const container = document.getElementById('dynamic-news-container');
+    if (!container) return; // Only runs on news.html
+
+    try {
+        const db = getSupabase();
+        if(!db) throw new Error("Could not connect to database.");
+
+        const { data: newsPosts, error } = await db.from('clinic_news').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+
+        if (!newsPosts || newsPosts.length === 0) {
+            container.innerHTML = `<p style="text-align: center; color: #666;">No recent updates at this time.</p>`;
+            return;
+        }
+
+        container.innerHTML = newsPosts.map(post => `
+            <div style="background: white; border: 1px solid #e0d8cc; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
+                
+                ${post.image_url ? `<img src="${post.image_url}" alt="Clinic Image" style="width: 100%; height: auto; max-height: 400px; object-fit: cover; display: block; border-bottom: 1px solid #e0d8cc;">` : ''}
+                
+                <div style="padding: 1.5rem;">
+                    <span style="font-size: 0.75rem; color: #095d28; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                        ${new Date(post.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </span>
+                    
+                    <h3 style="margin: 0.5rem 0; color: #222; font-size: 1.3rem; font-family: 'Montserrat', sans-serif; text-transform: capitalize;">${post.title}</h3>
+                    
+                    ${post.description ? `<p style="margin: 0 0 1rem 0; color: #555; font-size: 0.95rem; line-height: 1.6;">${post.description}</p>` : ''}
+                    
+                    ${post.pdf_url ? `
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0d8cc;">
+                            <a href="${post.pdf_url}" target="_blank" style="display: inline-block; background: #095d28; color: white; text-decoration: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; font-family: 'Montserrat', sans-serif;">
+                                📥 Download PDF Document
+                            </a>
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `).join('');
+
+    } catch (err) {
+        console.error("Failed to load news feed:", err);
+        container.innerHTML = `<p style="text-align: center; color: #a94442;">Could not load updates right now.</p>`;
+    }
+}
+
+// Make sure the news loader fires when news.html is opened
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('dynamic-news-container')) {
+        loadDynamicNews();
+    }
+});
