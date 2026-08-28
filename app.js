@@ -149,7 +149,22 @@ window.processClientLogin = async function(e) {
     return false;
 }
 
-// NEW FUNCTION: Handles the Main Page Registration & PayPal Integration
+// HELPER FUNCTION: Double-Booking Blocker
+async function checkAvailability(db, appointmentTime) {
+    const { data, error } = await db.from('appointments')
+        .select('id')
+        .eq('appointment_time', appointmentTime)
+        .in('status', ['confirmed', 'pending']);
+        
+    if (error) throw error;
+    
+    // If we find any records matching this exact time, the slot is taken
+    if (data && data.length > 0) {
+        return false; 
+    }
+    return true; 
+}
+
 window.processRegistration = async function(e) {
     e.preventDefault();
     try {
@@ -167,7 +182,14 @@ window.processRegistration = async function(e) {
             throw new Error("Please complete all registration fields.");
         }
 
-        // Check if PayPal was processed (or if it's a free service)
+        const appointmentTime = `${date}T${time}:00`;
+
+        // DOUBLE-BOOKING CHECK
+        const isAvailable = await checkAvailability(db, appointmentTime);
+        if (!isAvailable) {
+            throw new Error("Alert: This time slot was just booked by another patient! If you have just paid, please contact Clare immediately to reschedule or receive a full refund.");
+        }
+
         const paymentId = window.paypalTransactionId || (service.includes('Free') ? "Free Booking" : "Pending/Manual");
 
         // 1. Register User in Supabase Auth
@@ -182,7 +204,6 @@ window.processRegistration = async function(e) {
         if (!user) throw new Error("Registration failed to create user.");
 
         // 2. Determine VIP / Functional Status
-        const appointmentTime = `${date}T${time}:00`;
         const isFunctional = service.includes('Functional') || service.includes('Gut Reset') || service.includes('Health Audit');
         let vipCode = null;
 
@@ -209,7 +230,6 @@ window.processRegistration = async function(e) {
 
         alert(`Registration successful! Payment Reference: ${paymentId}. Redirecting to your patient portal...`);
         
-        // Auto-login and redirect
         window.location.href = './app.html';
 
     } catch (err) {
@@ -218,7 +238,6 @@ window.processRegistration = async function(e) {
     return false;
 };
 
-// UPDATED: Now handles PayPal references for returning clients
 window.bookNewSession = async function(e) {
     e.preventDefault();
     try {
@@ -232,9 +251,14 @@ window.bookNewSession = async function(e) {
 
         const serviceName = serviceSelect.value;
         const appointmentTime = dateInput.value;
-        const clientName = user.user_metadata?.full_name || user.email;
+        
+        // DOUBLE-BOOKING CHECK
+        const isAvailable = await checkAvailability(db, appointmentTime);
+        if (!isAvailable) {
+            throw new Error("Alert: This time slot was just booked by another patient! If you have just paid, please contact Clare immediately to reschedule or receive a full refund.");
+        }
 
-        // Check for PayPal ID
+        const clientName = user.user_metadata?.full_name || user.email;
         const paymentId = window.portalPayPalId || (serviceName.includes('Free') ? "Free Booking" : "Pending/Manual");
 
         const isFunctional = serviceName.includes('Functional') || serviceName.includes('Gut Reset') || serviceName.includes('Health Audit');
@@ -246,7 +270,6 @@ window.bookNewSession = async function(e) {
             if(tierError) console.error("Tier record upsert warning:", tierError);
         }
 
-        // Securely call Supabase Edge Function instead of Brevo directly
         const { error: emailError } = await db.functions.invoke('send-confirmation', {
             body: { email: user.email, clientName, serviceName, vipCode }
         });
@@ -265,7 +288,6 @@ window.bookNewSession = async function(e) {
 
         alert(`Appointment booked successfully! Payment Reference: ${paymentId}. Confirmation email dispatched.`); 
         
-        // Reset state
         window.portalPayPalId = null;
         serviceSelect.value = "";
         dateInput.value = "";
@@ -279,14 +301,38 @@ window.bookNewSession = async function(e) {
     return false;
 };
 
+// CANCELLATION PING ADDED
 window.cancelAppointment = async function(id) {
     if(!confirm("Are you sure you wish to cancel this scheduled appointment?")) return;
     try {
         const db = getSupabase();
-        const { error } = await db.from('appointments').delete().eq('id', id);
-        if(error) throw error;
+        
+        // 1. Fetch appointment details so we know what is being cancelled
+        const { data: appt, error: fetchError } = await db.from('appointments').select('*').eq('id', id).single();
+        if(fetchError) throw fetchError;
+
+        // 2. Delete from database
+        const { error: deleteError } = await db.from('appointments').delete().eq('id', id);
+        if(deleteError) throw deleteError;
 
         const { data: { user } } = await db.auth.getUser();
+
+        // 3. Fire cancellation email ping via Edge Function 
+        // (Includes an isCancellation flag so Brevo or the Edge Function knows it's a cancellation alert)
+        if (user && appt) {
+            await db.functions.invoke('send-confirmation', {
+                body: { 
+                    email: user.email, 
+                    clientName: appt.client_name, 
+                    serviceName: appt.service_name, 
+                    appointmentTime: appt.appointment_time,
+                    isCancellation: true 
+                }
+            }).catch(err => console.error("Could not send cancellation ping:", err));
+        }
+
+        alert("Appointment cancelled successfully. The clinic has been notified.");
+        
         if(user) loadClientDashboard(db, user);
     } catch(err) { 
         alert("Cancellation Error: " + err.message); 
@@ -298,6 +344,13 @@ window.rescheduleAppointment = async function(id) {
     if(!newDate) return;
     try {
         const db = getSupabase();
+        
+        // Check if the new requested slot is already taken
+        const isAvailable = await checkAvailability(db, newDate);
+        if (!isAvailable) {
+            throw new Error("The time slot you requested is already booked. Please try a different time.");
+        }
+
         const { error } = await db.from('appointments').update({ appointment_time: newDate }).eq('id', id);
         if(error) throw error;
 
