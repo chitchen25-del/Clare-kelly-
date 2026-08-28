@@ -4,57 +4,346 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Contact The Clinic | The Natural Healing Clinic</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="./style.css?version=6">
+
+    <style>
+        /* Unified Navigation Styles */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background-color: #ffffff; position: sticky; top: 0; z-index: 1000; }
+        .nav-brand-logo { height: 50px; width: auto; cursor: pointer; }
+        .desktop-nav-links { display: flex; align-items: center; gap: 1.5rem; }
+        .mobile-menu-btn { display: none; flex-direction: column; justify-content: space-around; width: 32px; height: 26px; background: transparent; border: none; cursor: pointer; padding: 0; z-index: 1001; }
+        .mobile-menu-btn span { width: 100%; height: 3.5px; background-color: #095d28; border-radius: 2px; }
+        
+        .mobile-drawer { position: fixed; top: 0; right: -100%; width: 80%; max-width: 350px; height: 100vh; background: #ffffff; z-index: 99999; box-shadow: -5px 0 30px rgba(0,0,0,0.15); transition: right 0.3s ease-in-out; padding: 5rem 2rem 2rem 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
+        .mobile-drawer.open { right: 0; }
+        .mobile-drawer-link { font-size: 1.1rem; font-weight: 600; color: #222; text-decoration: none; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 1px solid #f0f0f0; }
+        .mobile-drawer-link:hover { color: #095d28; }
+        
+        @media (max-width: 1024px) { .desktop-nav-links { display: none !important; } .mobile-menu-btn { display: flex !important; } }
+
+        /* Scroll Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating Form Labels for Contact */
+        .floating-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .floating-group input, .floating-group textarea {
+            width: 100%;
+            padding: 1.6rem 1rem 0.6rem 1rem;
+            font-size: 1rem;
+            background: #fcfcfc;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            color: #222;
+        }
+        .floating-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            padding-top: 1.8rem;
+        }
+        .floating-group input:focus, .floating-group textarea:focus {
+            background: #ffffff;
+            border-color: rgba(13, 155, 70, 0.4);
+            box-shadow: 0 0 0 4px rgba(13, 155, 70, 0.05);
+        }
+        .floating-group label {
+            position: absolute;
+            left: 1rem;
+            font-size: 0.95rem;
+            color: #888;
+            pointer-events: none;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            font-family: 'Montserrat', sans-serif;
+        }
+        .floating-group input ~ label {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .floating-group textarea ~ label {
+            top: 1.2rem;
+        }
+        /* Float the label on focus or when valid (filled). 
+           Note: placeholder=" " is used below to trigger :not(:placeholder-shown) for optional fields */
+        .floating-group input:focus ~ label,
+        .floating-group input:valid ~ label,
+        .floating-group input:not(:placeholder-shown) ~ label,
+        .floating-group textarea:focus ~ label,
+        .floating-group textarea:valid ~ label,
+        .floating-group textarea:not(:placeholder-shown) ~ label {
+            top: 0.8rem;
+            transform: translateY(0);
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #095d28;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Premium Footer Styling */
+        .clinic-footer {
+            background-color: #f9f8f6;
+            padding: 6rem 5% 3rem 5%;
+            border-top: 1px solid #eaeaea;
+            font-family: 'Montserrat', sans-serif;
+            color: #555;
+            margin-top: 4rem;
+        }
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+        .footer-brand img {
+            height: 55px;
+            margin-bottom: 1.5rem;
+        }
+        .footer-brand p {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #666;
+            max-width: 300px;
+        }
+        .footer-col h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #095d28;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        .footer-col a {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #555;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.8rem;
+            transition: color 0.2s;
+        }
+        .footer-col p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 0.8rem;
+        }
+        .footer-col a:hover {
+            color: #095d28;
+        }
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid #eaeaea;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #999;
+        }
+        .footer-bottom-links a {
+            color: #999;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            transition: color 0.2s;
+        }
+        .footer-bottom-links a:hover {
+            color: #095d28;
+        }
+        @media (max-width: 768px) {
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .footer-bottom-links { margin-top: 1rem; }
+            .footer-bottom-links a { margin: 0 0.8rem; }
+        }
+    </style>
 </head>
 <body>
+
+    <script>
+        function toggleMobileMenu() { 
+            const drawer = document.getElementById('mobile-drawer');
+            if(drawer) drawer.classList.toggle('open');
+        }
+    </script>
+
     <nav>
         <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="location.href='./index.html'">
         <div class="desktop-nav-links">
-            <span class="nav-link-text" onclick="location.href='./index.html'">Home</span>
-            <span class="nav-link-text" onclick="location.href='./about.html'">About Clare</span>
-            <span class="nav-link-text" onclick="location.href='./testimonials.html'">Patient Stories</span>
-            <span class="nav-link-text" onclick="location.href='./news.html'">Latest News</span>
-            <span class="nav-link-text" style="color: var(--primary-sage); font-weight: 700;">Contact</span>
+            <span class="nav-link-text" onclick="location.href='./index.html'" style="cursor: pointer;">Home</span>
+            <span class="nav-link-text" onclick="location.href='./about.html'" style="cursor: pointer;">About Clare</span>
+            <span class="nav-link-text" onclick="location.href='./testimonials.html'" style="cursor: pointer;">Patient Stories</span>
+            <span class="nav-link-text" onclick="location.href='./news.html'" style="cursor: pointer;">Latest News</span>
+            <span class="nav-link-text" style="color: #095d28; font-weight: 700;">Contact</span>
             <button type="button" class="btn btn-outline" onclick="location.href='./app.html'">Patient Portal</button>
         </div>
+        <button type="button" class="mobile-menu-btn" aria-label="Open navigation menu" onclick="toggleMobileMenu()">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
 
-    <div style="background-color: var(--card-bg); padding: 5rem 6%; border-bottom: 1px solid var(--secondary-sand); text-align: center;">
-        <span class="section-subtitle">Get In Touch</span>
-        <h1 style="margin-top: 0.5rem;">Contact The Clinic</h1>
-        <p style="color: #666; max-width: 600px; margin: 1rem auto 0 auto;">Have a question before booking? Send Clare a direct message.</p>
+    <!-- MOBILE NAVIGATION DRAWER -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <span style="position: absolute; top: calc(1.5rem + env(safe-area-inset-top)); right: 2rem; font-size: 2rem; cursor: pointer; color: #222;" onclick="toggleMobileMenu()">✕</span>
+        <span class="mobile-drawer-link" onclick="location.href='./index.html'">Home</span>
+        <span class="mobile-drawer-link" onclick="location.href='./about.html'">About Clare</span>
+        <span class="mobile-drawer-link" onclick="location.href='./testimonials.html'">Patient Stories</span>
+        <span class="mobile-drawer-link" onclick="location.href='./news.html'">Latest News</span>
+        <span class="mobile-drawer-link" onclick="location.href='./contact.html'" style="color: #095d28; font-weight: 700;">Contact</span>
+        <span class="mobile-drawer-link" onclick="location.href='./app.html'" style="color: #095d28; font-weight: 700;">Patient Portal</span>
     </div>
 
-    <section class="section" style="padding: 4rem 5%; display: flex; justify-content: center;">
-        <div style="width: 100%; max-width: 600px; background: white; padding: 3rem 2.5rem; border-radius: 12px; border: 1px solid var(--secondary-sand); box-shadow: 0 10px 30px rgba(9, 93, 40, 0.05);">
+    <!-- HEADER SECTION -->
+    <div class="reveal" style="background-color: #f9f8f6; padding: 5rem 6%; border-bottom: 1px solid #e0d8cc; text-align: center;">
+        <span style="display: inline-block; padding: 0.4rem 1.2rem; background: rgba(13, 155, 70, 0.1); border: 1px solid rgba(13, 155, 70, 0.2); border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: #095d28; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.5rem;">Get In Touch</span>
+        <h1 style="font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: #222; margin-top: 0; margin-bottom: 1rem;">Contact The Clinic</h1>
+        <p style="color: #666; max-width: 600px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">Have a question about our functional medicine programmes or need help booking your physical therapy session? We are here to assist.</p>
+    </div>
+
+    <!-- SPLIT-SCREEN CONTACT SECTION -->
+    <section class="section" style="max-width: 1200px; margin: 4rem auto; padding: 0 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 4rem; align-items: start;">
+        
+        <!-- Left: Direct Contact Details -->
+        <div class="reveal" style="padding-top: 1rem;">
+            <h2 style="font-size: 2.2rem; color: #111; margin-bottom: 1.5rem;">Direct Contact</h2>
+            <p style="color: #555; line-height: 1.8; margin-bottom: 2.5rem; font-size: 1.05rem;">
+                We aim to respond to all digital inquiries within 24 hours. For immediate assistance regarding an existing appointment, please call the clinic directly.
+            </p>
+
+            <div style="margin-bottom: 2rem;">
+                <h4 style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: #095d28; margin-bottom: 0.5rem; font-weight: 700;">Phone</h4>
+                <a href="tel:07624202121" style="font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: #222; text-decoration: none; transition: color 0.2s;">07624 202 121</a>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h4 style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: #095d28; margin-bottom: 0.5rem; font-weight: 700;">Email</h4>
+                <a href="mailto:clare@thenaturalhealingclinic.com" style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: #222; text-decoration: none; transition: color 0.2s;">clare@thenaturalhealingclinic.com</a>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h4 style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: #095d28; margin-bottom: 0.5rem; font-weight: 700;">Main Clinic</h4>
+                <p style="font-family: 'Montserrat', sans-serif; font-size: 1rem; color: #555; line-height: 1.6; margin: 0;">
+                    13 Cronk Drine<br>
+                    Union Mills, Isle of Man<br>
+                    IM4 4NG
+                </p>
+            </div>
+        </div>
+
+        <!-- Right: Premium Floating Contact Form -->
+        <div class="reveal" style="background: #ffffff; padding: 3.5rem 2.5rem; border-radius: 16px; box-shadow: 0 25px 60px rgba(9, 93, 40, 0.1), 0 0 20px rgba(9, 93, 40, 0.03); border: none; transition-delay: 0.1s;">
             <form onsubmit="return submitPublicContact(event)">
-                <label>Your Name</label>
-                <input type="text" id="contact-name" required placeholder="e.g. Jane Doe">
                 
-                <label>Email Address</label>
-                <input type="email" id="contact-email" required placeholder="To reply to you">
+                <div class="floating-group">
+                    <input type="text" id="contact-name" required placeholder=" ">
+                    <label>Your Full Name</label>
+                </div>
                 
-                <label>Phone Number (Optional)</label>
-                <input type="tel" id="contact-phone" placeholder="If you'd prefer a text or call">
+                <div class="floating-group">
+                    <input type="email" id="contact-email" required placeholder=" ">
+                    <label>Email Address</label>
+                </div>
+                
+                <div class="floating-group">
+                    <input type="tel" id="contact-phone" placeholder=" ">
+                    <label>Phone Number (Optional)</label>
+                </div>
 
-                <label>How can we help?</label>
-                <textarea id="contact-message" required placeholder="Ask about treatments, availability, or your specific condition..." style="height: 150px;"></textarea>
+                <div class="floating-group">
+                    <textarea id="contact-message" required placeholder=" "></textarea>
+                    <label>How can we help you?</label>
+                </div>
 
-                <button type="submit" id="contact-btn" class="btn" style="width: 100%;">Send Message</button>
-                <p style="font-size: 0.75rem; color: #888; text-align: center; margin-top: 1rem; margin-bottom: 0;">We aim to respond to all inquiries within 24 hours.</p>
+                <button type="submit" id="contact-btn" class="btn" style="width: 100%; padding: 1.2rem; font-size: 0.85rem; margin-top: 0.5rem; box-shadow: 0 10px 20px rgba(9, 93, 40, 0.15);">Send Message</button>
+                <p style="font-size: 0.75rem; color: #888; text-align: center; margin-top: 1.5rem; margin-bottom: 0; font-family: 'Montserrat', sans-serif;">Your information is kept strictly confidential.</p>
             </form>
         </div>
+        
     </section>
 
-    <footer>
-        <div class="footer-logo-wrapper"><img src="./logo.png" alt="Logo" class="footer-brand-logo"></div>
-        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; width: 100%;">
-            <div class="footer-col" style="text-align: left;"><h4>The Natural Healing Clinic</h4><p>13 Cronk Drine, Union Mills, Isle of Man</p></div>
-            <div class="footer-col" style="text-align: right;"><h4>Contact</h4><p>Tel: 07624 202 121</p></div>
+    <!-- PREMIUM REDESIGNED FOOTER -->
+    <footer class="clinic-footer reveal">
+        <div class="footer-grid">
+            
+            <div class="footer-brand">
+                <img src="./logo.png" alt="The Natural Healing Clinic">
+                <p>"Restoring vitality through advanced clinical diagnostics and targeted physical therapies."</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Clinic Locations</h4>
+                <a href="https://maps.apple.com/?q=13+Cronk+Drine,+Union+Mills,+Isle+of+Man,+IM4+4NG" target="_blank" rel="noopener noreferrer">
+                    <strong>Union Mills Clinic</strong><br>
+                    13 Cronk Drine, Union Mills<br>
+                    Isle of Man, IM4 4NG
+                </a>
+                <a href="https://maps.apple.com/?q=Castletown,+Isle+of+Man" target="_blank" rel="noopener noreferrer" style="margin-top: 1rem;">
+                    <strong>Castletown Clinic</strong><br>
+                    Alternative Practice Suite<br>
+                    Castletown, Isle of Man
+                </a>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Contact & Hours</h4>
+                <a href="tel:07624202121"><strong>T:</strong> 07624 202 121</a>
+                <a href="mailto:clare@thenaturalhealingclinic.com"><strong>E:</strong> clare@thenaturalhealingclinic.com</a>
+                <p style="margin-top: 1rem; color: #888; line-height: 1.8;">
+                    <strong style="color: #555;">Mon & Fri:</strong> 10:00 - 15:00<br>
+                    <strong style="color: #555;">Consultations:</strong> By Appointment
+                </p>
+            </div>
+
+        </div>
+        
+        <div class="footer-bottom">
+            <div>&copy; 2026 The Natural Healing Clinic. All rights reserved.</div>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
         </div>
     </footer>
+
+    <!-- Scroll Animation Observer Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.reveal').forEach((el) => {
+                observer.observe(el);
+            });
+        });
+    </script>
+
     <script src="./app.js?v=2"></script>
 </body>
 </html>
