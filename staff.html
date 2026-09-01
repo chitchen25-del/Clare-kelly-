@@ -10,21 +10,25 @@
 <link rel="stylesheet" href="./vip.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
 <style>
-  .row{background:var(--card);border:1px solid var(--line);border-radius:12px;
-       padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;
-       cursor:pointer;width:100%;text-align:left;font-family:inherit;font-size:1rem}
+  .row{background:var(--card);border:1px solid var(--hair);border-radius:18px;
+       padding:19px 20px;margin-bottom:11px;display:flex;align-items:center;gap:14px;
+       cursor:pointer;width:100%;text-align:left;font-family:inherit;font-size:1rem;
+       box-shadow:var(--lift-sm);transition:box-shadow .15s ease}
+  .row:active{box-shadow:var(--lift)}
   .row .who{flex:1;min-width:0}
   .row .nm{font-weight:600;font-size:.98rem}
-  .row .sub{font-size:.8rem;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .pill{font-size:.68rem;font-weight:700;padding:4px 10px;border-radius:20px;flex:none}
-  .pill.on{background:rgba(13,155,70,.12);color:var(--green)}
-  .pill.off{background:var(--thread-empty);color:var(--ink-soft)}
+  .row .sub{font-size:.78rem;color:var(--ink-faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+  .pill{font-size:.6rem;font-weight:700;padding:5px 11px;border-radius:20px;flex:none;
+        letter-spacing:.09em;text-transform:uppercase}
+  .pill.on{background:rgba(23,160,74,.12);color:var(--forest-mid)}
+  .pill.off{background:var(--bone);color:var(--ink-faint)}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .back{background:none;border:none;color:var(--green);font-family:inherit;
-        font-weight:600;font-size:.9rem;padding:8px 0;cursor:pointer}
-  .subtle{font-size:.85rem;color:var(--ink-soft)}
-  .logline{display:flex;justify-content:space-between;gap:10px;padding:10px 0;
-           border-bottom:1px solid var(--line);font-size:.9rem}
+  .back{background:none;border:none;color:var(--forest-mid);font-family:inherit;
+        font-weight:700;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+        padding:22px 0 12px;cursor:pointer}
+  .subtle{font-size:.82rem;color:var(--ink-faint)}
+  .logline{display:flex;justify-content:space-between;gap:12px;padding:13px 0;
+           border-bottom:1px solid var(--hair);font-size:.9rem}
   .logline:last-child{border-bottom:none}
   .view{display:none}.view.on{display:block}
 </style>
@@ -53,10 +57,10 @@
 
   <!-- PATIENT LIST -->
   <div id="v-list" class="view">
-    <header>
+    <div class="band">
       <p class="greet" id="whoami">&nbsp;</p>
-      <p class="display" style="font-size:2rem">Patients</p>
-    </header>
+      <p class="display" style="font-size:2.5rem">Patients</p>
+    </div>
     <div id="alert2"></div>
     <div id="patientList"></div>
     <button type="button" class="ghost danger" id="signOut" style="margin-top:24px">Sign out</button>
@@ -65,10 +69,10 @@
   <!-- PATIENT DETAIL -->
   <div id="v-detail" class="view">
     <button type="button" class="back" id="backBtn">&larr; All patients</button>
-    <header style="padding-top:4px">
+    <div class="band" style="margin-top:0">
       <p class="greet" id="dEmail">&nbsp;</p>
-      <p class="display" style="font-size:1.9rem" id="dName">&nbsp;</p>
-    </header>
+      <p class="display" style="font-size:2.2rem" id="dName">&nbsp;</p>
+    </div>
     <div id="alert3"></div>
 
     <section>

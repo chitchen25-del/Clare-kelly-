@@ -15,20 +15,20 @@
 <body>
 
 <div class="wrap">
-  <header>
+  <div class="band">
     <p class="greet" id="greet">&nbsp;</p>
     <p class="display" id="dayLine"><span class="skeleton" style="width:7ch">&nbsp;</span></p>
-  </header>
+
+    <div class="thread" id="thread" role="img" aria-label="Programme progress"></div>
+    <p class="thread-key" id="threadKey"></p>
+
+    <div class="phase" id="phase" hidden>
+      <h2 id="phaseName"></h2>
+      <p id="phaseNote"></p>
+    </div>
+  </div>
 
   <div id="alert"></div>
-
-  <div class="thread" id="thread" role="img" aria-label="Programme progress"></div>
-  <p class="thread-key" id="threadKey"></p>
-
-  <div class="phase" id="phase" hidden>
-    <h2 id="phaseName"></h2>
-    <p id="phaseNote"></p>
-  </div>
 
   <section>
     <h3>How is today?</h3>
