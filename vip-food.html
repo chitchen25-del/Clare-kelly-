@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Pinch-zoom deliberately enabled. Do not add user-scalable=no. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Food | The Natural Healing Clinic</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Clinic">
+<link rel="apple-touch-icon" href="./logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./vip.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <p class="greet">What you ate, and how it left you</p>
+    <p class="display" style="font-size:2rem">Food</p>
+  </header>
+
+  <div id="alert"></div>
+
+  <section>
+    <h3>Today</h3>
+    <div id="todayList"></div>
+  </section>
+
+  <section id="addSection">
+    <h3>Add a meal</h3>
+    <div id="addBody"></div>
+  </section>
+
+  <section>
+    <h3>Earlier</h3>
+    <div id="historyList"></div>
+  </section>
+</div>
+
+<script src="./vip-shared.js"></script>
+<script>
+const FELT = [
+  { v:1, label:'Rough' },
+  { v:2, label:'Meh' },
+  { v:3, label:'Fine' },
+  { v:4, label:'Good' },
+  { v:5, label:'Great' }
+];
+const SLOTS = ['breakfast','lunch','dinner','snack'];
+
+const state = { active:false, draft:{ slot:null, felt:null }, uid:null };
+
+async function boot(){
+  const session = await requireSession();
+  if(!session) return;
+  state.uid = session.user.id;
+  renderNav('food');
+
+  const programme = await currentProgramme();
+  state.active = !!(programme && programme.is_active);
+  readOnlyBanner(programme);
+
+  const { data, error } = await db.from('food_log')
+    .select('*').order('log_date', { ascending:false })
+    .order('created_at', { ascending:false }).limit(60);
+
+  if(error){ showError('Could not load your food log. Refresh to try again.'); return; }
+
+  const t = today();
+  renderList(document.getElementById('todayList'),
+             (data||[]).filter(r => r.log_date === t),
+             'Nothing logged yet today.');
+  renderList(document.getElementById('historyList'),
+             (data||[]).filter(r => r.log_date !== t),
+             'Meals you log will build up here.');
+  renderForm();
+}
+
+function renderList(host, rows, emptyText){
+  host.replaceChildren();
+  if(rows.length === 0){
+    host.append(el('div', { class:'empty', text: emptyText }));
+    return;
+  }
+
+  let lastDate = null;
+  rows.forEach(r => {
+    if(r.log_date !== lastDate && host.id === 'historyList'){
+      lastDate = r.log_date;
+      const h = el('p', { text: new Date(r.log_date + 'T00:00:00')
+        .toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long' }) });
+      h.style.cssText = 'font-size:.78rem;color:var(--ink-soft);font-weight:600;margin:16px 0 8px';
+      host.append(h);
+    }
+
+    const card = el('div', { class:'meal' });
+    const img = el('img', { attrs:{ alt:'', loading:'lazy' } });
+    if(r.photo_path) signedPhoto(r.photo_path).then(u => { if(u) img.src = u; });
+    card.append(img);
+
+    const body = el('div', { class:'meal-body' });
+    body.append(el('p', { class:'meal-slot', text: r.meal_slot }));
+    body.append(el('p', { class:'meal-desc', text: r.description || 'No description' }));
+    if(r.felt_after){
+      const f = FELT.find(x => x.v === r.felt_after);
+      body.append(el('p', { class:'meal-felt', text:'Felt after: ' + (f ? f.label : r.felt_after) }));
+    }
+    card.append(body);
+    host.append(card);
+  });
+}
+
+async function signedPhoto(path){
+  const { data } = await db.storage.from('meal-photos').createSignedUrl(path, 3600);
+  return data ? data.signedUrl : null;
+}
+
+function chipRow(label, options, key){
+  const wrap = document.createElement('div');
+  wrap.append(el('p', { class:'q', text: label }));
+  const row = el('div', { class:'scale', attrs:{ role:'group', 'aria-label':label } });
+
+  options.forEach(o => {
+    const b = el('button', { text:o.label, attrs:{ type:'button', 'aria-pressed':'false' } });
+    b.addEventListener('click', () => {
+      state.draft[key] = o.value;
+      [...row.children].forEach(c => c.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');
+      document.getElementById('saveMeal').disabled = !state.draft.slot;
+    });
+    row.append(b);
+  });
+
+  wrap.append(row);
+  return wrap;
+}
+
+function renderForm(){
+  const host = document.getElementById('addBody');
+  host.replaceChildren();
+
+  if(!state.active){
+    host.append(el('div', { class:'empty',
+      text:'Your programme has ended, so new entries are closed. Everything you logged is still here.' }));
+    return;
+  }
+
+  const panel = el('div', { class:'panel' });
+
+  panel.append(chipRow('Which meal?',
+    SLOTS.map(s => ({ label: s[0].toUpperCase() + s.slice(1), value: s })), 'slot'));
+
+  panel.append(el('p', { class:'q', text:'What was it?' }));
+  panel.append(el('textarea', { attrs:{ id:'desc', 'aria-label':'What was it?',
+    placeholder:'Porridge with berries and a spoon of almond butter' } }));
+
+  const ph = el('p', { class:'q', text:'Photo' });
+  ph.style.marginTop = '18px';
+  panel.append(ph);
+  panel.append(el('input', { attrs:{ type:'file', id:'photo', accept:'image/*', capture:'environment' } }));
+
+  panel.append(chipRow('How did it leave you feeling?',
+    FELT.map(f => ({ label:f.label, value:f.v })), 'felt'));
+
+  const btn = el('button', { class:'primary', text:'Save meal',
+    attrs:{ type:'button', id:'saveMeal' } });
+  btn.disabled = true;
+  btn.addEventListener('click', saveMeal);
+  panel.append(btn);
+
+  host.append(panel);
+}
+
+async function saveMeal(){
+  const btn = document.getElementById('saveMeal');
+  btn.disabled = true;
+  btn.textContent = 'Saving';
+  clearError();
+
+  let photoPath = null;
+  const file = document.getElementById('photo').files[0];
+
+  if(file){
+    if(file.size > 5 * 1024 * 1024){
+      showError('That photo is over 5MB. Try a smaller one.');
+      btn.disabled = false; btn.textContent = 'Save meal';
+      return;
+    }
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+    const path = state.uid + '/' + Date.now() + '.' + ext;
+    const { error: upErr } = await db.storage.from('meal-photos')
+      .upload(path, file, { contentType: file.type });
+    if(upErr){
+      showError('The photo would not upload. You can save the meal without it.');
+      btn.disabled = false; btn.textContent = 'Save meal';
+      return;
+    }
+    photoPath = path;
+  }
+
+  const { error } = await db.from('food_log').insert({
+    client_id: state.uid,
+    log_date: today(),
+    meal_slot: state.draft.slot,
+    description: document.getElementById('desc').value.trim() || null,
+    photo_path: photoPath,
+    felt_after: state.draft.felt
+  });
+
+  if(error){
+    showError('That did not save. Check your connection and try again.');
+    btn.disabled = false; btn.textContent = 'Save meal';
+    return;
+  }
+
+  state.draft = { slot:null, felt:null };
+  boot();
+}
+
+boot().catch(() => showError('Something went wrong loading your food log.'));
+</script>
+</body>
+</html>

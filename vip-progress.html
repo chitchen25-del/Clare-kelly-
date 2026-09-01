@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Pinch-zoom deliberately enabled. Do not add user-scalable=no. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Progress | The Natural Healing Clinic</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Clinic">
+<link rel="apple-touch-icon" href="./logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./vip.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <p class="greet" id="range">&nbsp;</p>
+    <p class="display" style="font-size:2rem">Progress</p>
+  </header>
+
+  <div id="alert"></div>
+  <div id="charts"></div>
+
+  <section>
+    <h3>Your notes</h3>
+    <div id="notes"></div>
+  </section>
+</div>
+
+<script src="./vip-shared.js"></script>
+<script>
+async function boot(){
+  if(!await requireSession()) return;
+  renderNav('progress');
+
+  const programme = await currentProgramme();
+  readOnlyBanner(programme);
+
+  const { data, error } = await db.from('daily_checkins')
+    .select('*').order('log_date', { ascending:true });
+
+  if(error){ showError('Could not load your progress. Refresh to try again.'); return; }
+
+  const rows = data || [];
+  const host = document.getElementById('charts');
+
+  if(rows.length === 0){
+    host.append(el('div', { class:'empty',
+      text:'Once you have a few check-ins, your trends will show up here.' }));
+    document.getElementById('notes').append(el('div', { class:'empty',
+      text:'Notes you leave on your daily check-in will collect here.' }));
+    return;
+  }
+
+  document.getElementById('range').textContent =
+    rows.length + (rows.length === 1 ? ' check-in' : ' check-ins') + ' so far';
+
+  host.append(chart('Energy', rows.map(r => r.energy), 1, 5, 'higher is better'));
+  host.append(chart('Sleep',  rows.map(r => r.sleep),  1, 5, 'higher is better'));
+  host.append(chart('Pain',   rows.map(r => r.pain),   0, 10, 'lower is better'));
+
+  renderNotes(rows.filter(r => r.note));
+}
+
+/* Plain SVG. No charting library, so nothing extra to load and
+   nothing to break when a CDN changes. */
+function chart(title, values, min, max, hint){
+  const clean = values.filter(v => v !== null && v !== undefined);
+  const card = el('div', { class:'chart' });
+  card.append(el('h4', { text:title }));
+
+  if(clean.length === 0){
+    card.append(el('p', { class:'avg', text:'No data yet' }));
+    return card;
+  }
+
+  const avg = clean.reduce((a,b) => a+b, 0) / clean.length;
+  const first = clean.slice(0, Math.ceil(clean.length/2));
+  const last  = clean.slice(Math.ceil(clean.length/2));
+  let trend = '';
+
+  if(last.length > 0 && first.length > 0){
+    const fa = first.reduce((a,b)=>a+b,0)/first.length;
+    const la = last.reduce((a,b)=>a+b,0)/last.length;
+    const diff = la - fa;
+    if(Math.abs(diff) >= 0.4){
+      trend = diff > 0 ? ' · trending up' : ' · trending down';
+    } else {
+      trend = ' · holding steady';
+    }
+  }
+
+  card.append(el('p', { class:'avg',
+    text:'Average ' + avg.toFixed(1) + ' of ' + max + ' · ' + hint + trend }));
+
+  const W = 300, H = 80, pad = 4;
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  svg.setAttribute('preserveAspectRatio','none');
+  svg.setAttribute('role','img');
+  svg.setAttribute('aria-label', title + ' averaging ' + avg.toFixed(1) + ' out of ' + max);
+
+  const x = i => clean.length === 1 ? W/2 : (i / (clean.length - 1)) * W;
+  const y = v => pad + (1 - (v - min) / (max - min)) * (H - pad*2);
+
+  const area = document.createElementNS('http://www.w3.org/2000/svg','path');
+  let d = 'M ' + x(0) + ' ' + y(clean[0]);
+  clean.forEach((v,i) => { if(i>0) d += ' L ' + x(i) + ' ' + y(v); });
+  const line = document.createElementNS('http://www.w3.org/2000/svg','path');
+  line.setAttribute('d', d);
+  line.setAttribute('fill','none');
+  line.setAttribute('stroke','#0d9b46');
+  line.setAttribute('stroke-width','2');
+  line.setAttribute('stroke-linejoin','round');
+  line.setAttribute('vector-effect','non-scaling-stroke');
+
+  area.setAttribute('d', d + ' L ' + x(clean.length-1) + ' ' + H + ' L ' + x(0) + ' ' + H + ' Z');
+  area.setAttribute('fill','#0d9b46');
+  area.setAttribute('opacity','0.08');
+
+  svg.append(area, line);
+  card.append(svg);
+  return card;
+}
+
+function renderNotes(rows){
+  const host = document.getElementById('notes');
+  host.replaceChildren();
+
+  if(rows.length === 0){
+    host.append(el('div', { class:'empty',
+      text:'Notes you leave on your daily check-in will collect here.' }));
+    return;
+  }
+
+  rows.slice().reverse().slice(0, 20).forEach(r => {
+    const card = el('div', { class:'panel' });
+    card.style.marginBottom = '10px';
+    const date = el('p', { text: new Date(r.log_date + 'T00:00:00')
+      .toLocaleDateString('en-GB', { day:'numeric', month:'long' }) });
+    date.style.cssText = 'font-size:.75rem;color:var(--ink-soft);font-weight:600;margin-bottom:5px';
+    card.append(date);
+    card.append(el('p', { text: r.note }));
+    host.append(card);
+  });
+}
+
+boot().catch(() => showError('Something went wrong loading your progress.'));
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Pinch-zoom deliberately enabled. Do not add user-scalable=no. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Account | The Natural Healing Clinic</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Clinic">
+<link rel="apple-touch-icon" href="./logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./vip.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <p class="greet" id="email">&nbsp;</p>
+    <p class="display" style="font-size:2rem">Account</p>
+  </header>
+
+  <div id="alert"></div>
+
+  <section>
+    <h3>Your programme</h3>
+    <div id="programmeBox"></div>
+  </section>
+
+  <section>
+    <h3>Your data</h3>
+    <div class="panel">
+      <p style="font-size:.92rem;color:var(--ink-soft);margin-bottom:4px">
+        Everything you've logged, as a file you can keep. Worth doing before your
+        programme ends — logs are deleted six months after that.
+      </p>
+      <button type="button" class="primary" id="exportBtn">Download my data</button>
+      <button type="button" class="ghost" id="installBtn">Add app to home screen</button>
+    </div>
+  </section>
+
+  <section>
+    <h3>Privacy</h3>
+    <div class="panel">
+      <p style="font-size:.92rem;color:var(--ink-soft)">
+        Clare can see your check-ins, food log and supplement ticks — that's how she
+        prepares for your reviews. Nobody else can. Your logs are deleted six months
+        after your programme ends.
+      </p>
+      <p style="font-size:.92rem;color:var(--ink-soft);margin-top:10px">
+        To have your account and everything in it deleted sooner, message Clare
+        and she'll action it.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <button type="button" class="ghost danger" id="signOutBtn">Sign out</button>
+  </section>
+</div>
+
+<script src="./vip-shared.js"></script>
+<script>
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; });
+
+async function boot(){
+  const session = await requireSession();
+  if(!session) return;
+  renderNav('account');
+
+  document.getElementById('email').textContent = session.user.email || '';
+
+  const p = await currentProgramme();
+  const box = document.getElementById('programmeBox');
+
+  if(!p){
+    box.append(el('div', { class:'empty', text:'No programme set up yet.' }));
+  } else {
+    const panel = el('div', { class:'panel' });
+    panel.append(el('p', { text: p.name }));
+    const dates = el('p', { text:
+      new Date(p.start_date + 'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) +
+      ' \u2013 ' +
+      new Date(p.end_date + 'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) });
+    dates.style.cssText = 'font-size:.85rem;color:var(--ink-soft);margin-top:4px';
+    panel.append(dates);
+
+    const status = el('p', { text: p.is_active
+      ? 'Day ' + p.day_number + ' of ' + p.total_days
+      : 'Finished \u00b7 read only' });
+    status.style.cssText = 'font-size:.85rem;color:var(--green);font-weight:600;margin-top:8px';
+    panel.append(status);
+    box.append(panel);
+  }
+}
+
+document.getElementById('exportBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('exportBtn');
+  btn.disabled = true;
+  btn.textContent = 'Gathering';
+  clearError();
+
+  try{
+    const [prog, checks, food, supps, log] = await Promise.all([
+      db.from('my_programme').select('*'),
+      db.from('daily_checkins').select('*').order('log_date'),
+      db.from('food_log').select('*').order('log_date'),
+      db.from('client_supplements').select('*'),
+      db.from('supplement_log').select('*').order('log_date')
+    ]);
+
+    const bundle = {
+      exported_at: new Date().toISOString(),
+      clinic: 'The Natural Healing Clinic',
+      programmes: prog.data || [],
+      daily_checkins: checks.data || [],
+      food_log: food.data || [],
+      supplements: supps.data || [],
+      supplement_log: log.data || []
+    };
+
+    const blob = new Blob([JSON.stringify(bundle, null, 2)], { type:'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = el('a', { attrs:{ href:url, download:'my-clinic-data-' + today() + '.json' } });
+    document.body.append(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch {
+    showError('The export did not finish. Try again in a moment.');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Download my data';
+});
+
+document.getElementById('installBtn').addEventListener('click', async () => {
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    return;
+  }
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  document.getElementById('alert').replaceChildren(el('div', { class:'readonly',
+    text: isIOS
+      ? 'Tap the Share button in Safari, then choose Add to Home Screen.'
+      : 'Open your browser menu and choose Install app, or Add to Home Screen.' }));
+});
+
+document.getElementById('signOutBtn').addEventListener('click', async () => {
+  await db.auth.signOut();
+  location.replace('./vip-login.html');
+});
+
+boot().catch(() => showError('Something went wrong loading your account.'));
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Pinch-zoom deliberately enabled. Do not add user-scalable=no. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sign in | The Natural Healing Clinic</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Clinic">
+<link rel="apple-touch-icon" href="./logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./vip.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
+</head>
+<body class="no-nav">
+
+<div class="wrap" style="max-width:420px">
+  <div style="text-align:center;padding:56px 0 28px">
+    <img src="./logo.png" alt="The Natural Healing Clinic" style="height:64px;width:auto;object-fit:contain">
+    <h1 class="display" style="font-size:2rem;margin-top:18px">Your programme</h1>
+    <p style="font-size:.9rem;color:var(--ink-soft);margin-top:4px">Sign in to pick up where you left off.</p>
+  </div>
+
+  <div id="alert"></div>
+
+  <div class="panel">
+    <form id="loginForm" novalidate>
+      <label for="email">Email</label>
+      <input type="email" id="email" autocomplete="email" inputmode="email" required
+             style="margin-bottom:16px">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" autocomplete="current-password" required>
+
+      <button type="submit" class="primary" id="submitBtn">Sign in</button>
+    </form>
+
+    <button type="button" class="ghost" id="resetBtn">I've forgotten my password</button>
+  </div>
+
+  <p style="font-size:.82rem;color:var(--ink-soft);text-align:center;margin-top:24px;line-height:1.6">
+    Your account is set up by Clare when your programme begins.
+    If you can't get in, message her directly.
+  </p>
+
+  <p style="text-align:center;margin-top:20px">
+    <a href="./index.html" style="font-size:.85rem;color:var(--green);font-weight:600">Back to the website</a>
+  </p>
+</div>
+
+<script src="./vip-shared.js"></script>
+<script>
+(async function () {
+  // Already signed in? Skip the form.
+  const { data: { session } } = await db.auth.getSession();
+  if (session) { location.replace('./vip-home.html'); return; }
+
+  const form = document.getElementById('loginForm');
+  const btn  = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    clearError();
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!email || !password) {
+      showError('Enter your email and password to sign in.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Signing in';
+
+    const { error } = await db.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      // Deliberately vague: naming which half was wrong tells an
+      // attacker which email addresses exist.
+      showError('That email and password did not match. Try again.');
+      btn.disabled = false;
+      btn.textContent = 'Sign in';
+      return;
+    }
+
+    location.replace('./vip-home.html');
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', async () => {
+    const email = document.getElementById('email').value.trim();
+    if (!email) {
+      showError('Type your email above first, then tap this again.');
+      return;
+    }
+    await db.auth.resetPasswordForEmail(email, {
+      redirectTo: location.origin + '/vip-reset.html'
+    });
+    // Same message whether or not the address exists.
+    clearError();
+    document.getElementById('alert').replaceChildren(
+      el('div', { class: 'readonly',
+        text: 'If that address has an account, a reset link is on its way. Check your junk folder too.' })
+    );
+  });
+})();
+</script>
+</body>
+</html>

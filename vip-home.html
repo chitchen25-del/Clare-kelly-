@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Pinch-zoom deliberately enabled. Do not add user-scalable=no. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Today | The Natural Healing Clinic</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Clinic">
+<link rel="apple-touch-icon" href="./logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./vip.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <p class="greet" id="greet">&nbsp;</p>
+    <p class="display" id="dayLine"><span class="skeleton" style="width:7ch">&nbsp;</span></p>
+  </header>
+
+  <div id="alert"></div>
+
+  <div class="thread" id="thread" role="img" aria-label="Programme progress"></div>
+  <p class="thread-key" id="threadKey"></p>
+
+  <div class="phase" id="phase" hidden>
+    <h2 id="phaseName"></h2>
+    <p id="phaseNote"></p>
+  </div>
+
+  <section>
+    <h3>How is today?</h3>
+    <div id="checkinBody"></div>
+  </section>
+
+  <section>
+    <h3>Your stack</h3>
+    <div id="stackBody"></div>
+  </section>
+</div>
+
+<script src="./vip-shared.js"></script>
+<script>
+const state = { programme:null, checkin:null, active:false,
+                draft:{ energy:null, sleep:null, pain:null } };
+
+async function boot(){
+  if(!await requireSession()) return;
+  document.getElementById('greet').textContent = greeting();
+  renderNav('home');
+
+  const [prog, checks, todays, stack] = await Promise.all([
+    db.from('my_programme').select('*').limit(1).maybeSingle(),
+    db.from('daily_checkins').select('log_date').order('log_date'),
+    db.from('daily_checkins').select('*').eq('log_date', today()).maybeSingle(),
+    db.from('client_supplements').select('*').eq('active', true).order('sort_order')
+  ]);
+
+  if(prog.error){ showError('Could not load your programme. Refresh to try again.'); return; }
+
+  state.programme = prog.data;
+  state.checkin   = todays.data || null;
+  state.active    = !!(prog.data && prog.data.is_active);
+
+  renderHeader();
+  renderThread((checks.data || []).map(r => r.log_date));
+  renderCheckin();
+  renderStack(stack.data || []);
+}
+
+function renderHeader(){
+  const p = state.programme;
+  const line = document.getElementById('dayLine');
+
+  if(!p){
+    line.textContent = 'No programme yet';
+    document.getElementById('threadKey').textContent =
+      'Clare will set this up before your first session.';
+    return;
+  }
+
+  const day = Math.min(Math.max(p.day_number, 1), p.total_days);
+  line.replaceChildren(document.createTextNode('Day ' + day + ' '),
+                       el('span', { text: 'of ' + p.total_days }));
+
+  if(p.phase){
+    document.getElementById('phase').hidden = false;
+    document.getElementById('phaseName').textContent = p.phase;
+    document.getElementById('phaseNote').textContent = p.phase_note || '';
+  }
+
+  readOnlyBanner(p);
+}
+
+function renderThread(dates){
+  const p = state.programme;
+  const host = document.getElementById('thread');
+  host.replaceChildren();
+  if(!p) return;
+
+  const logged = new Set(dates);
+  const start = new Date(p.start_date + 'T00:00:00');
+  const t = today();
+  let count = 0;
+
+  for(let i = 0; i < p.total_days; i++){
+    const d = new Date(start);
+    d.setDate(d.getDate() + i);
+    const iso = isoOf(d);
+
+    const m = el('div', { class: 'mark' });
+    if(logged.has(iso)){ m.classList.add('done'); count++; }
+    else if(iso === t){ m.classList.add('today'); }
+    else if(iso > t){ m.classList.add('future'); }
+    host.append(m);
+  }
+
+  host.setAttribute('aria-label', count + ' of ' + p.total_days + ' days logged');
+  document.getElementById('threadKey').textContent =
+    count === 0 ? 'Your first check-in starts the thread.'
+                : count + (count === 1 ? ' day logged' : ' days logged');
+}
+
+function scaleRow(label, key, opts){
+  const wrap = document.createElement('div');
+  wrap.append(el('p', { class:'q', text: label }));
+
+  const row = el('div', { class: 'scale' + (opts.length > 5 ? ' wide' : ''),
+                          attrs: { role:'group', 'aria-label': label } });
+
+  opts.forEach(o => {
+    const b = el('button', { text: String(o), attrs: { type:'button', 'aria-pressed':'false' } });
+    b.addEventListener('click', () => {
+      state.draft[key] = o;
+      [...row.children].forEach(c => c.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');
+      document.getElementById('saveBtn').disabled =
+        state.draft.energy === null || state.draft.sleep === null || state.draft.pain === null;
+    });
+    row.append(b);
+  });
+
+  wrap.append(row);
+  return wrap;
+}
+
+function renderCheckin(){
+  const host = document.getElementById('checkinBody');
+  host.replaceChildren();
+
+  if(state.checkin){
+    const d = el('div', { class:'done-note' });
+    d.append(el('strong', { text:'Logged for today' }));
+    d.append(document.createTextNode(
+      'Energy ' + state.checkin.energy + '/5 \u00b7 Sleep ' + state.checkin.sleep +
+      '/5 \u00b7 Pain ' + state.checkin.pain + '/10'));
+    if(state.checkin.note){
+      const n = el('p', { text: state.checkin.note });
+      n.style.marginTop = '8px';
+      d.append(n);
+    }
+    host.append(d);
+    return;
+  }
+
+  if(!state.active){
+    host.append(el('div', { class:'empty',
+      text:'Check-ins are closed now your programme has ended.' }));
+    return;
+  }
+
+  const panel = el('div', { class:'panel' });
+  panel.append(scaleRow('Energy', 'energy', [1,2,3,4,5]));
+  panel.append(scaleRow('Sleep', 'sleep', [1,2,3,4,5]));
+  panel.append(scaleRow('Pain', 'pain', [0,1,2,3,4,5,6,7,8,9,10]));
+
+  panel.append(el('p', { class:'q', text:'Anything you want Clare to know?' }));
+  const ta = el('textarea', { attrs:{ id:'note', 'aria-label':'Anything you want Clare to know?',
+                                      placeholder:'Optional' } });
+  panel.append(ta);
+
+  const btn = el('button', { class:'primary', text:'Save today',
+                             attrs:{ type:'button', id:'saveBtn' } });
+  btn.disabled = true;
+  btn.addEventListener('click', saveCheckin);
+  panel.append(btn);
+
+  host.append(panel);
+}
+
+async function saveCheckin(){
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving';
+  clearError();
+
+  const { data:{ user } } = await db.auth.getUser();
+  const { data, error } = await db.from('daily_checkins').upsert({
+    client_id: user.id,
+    log_date: today(),
+    energy: state.draft.energy,
+    sleep: state.draft.sleep,
+    pain: state.draft.pain,
+    note: document.getElementById('note').value.trim() || null
+  }, { onConflict: 'client_id,log_date' }).select().single();
+
+  if(error){
+    showError('That did not save. Check your connection and try again.');
+    btn.disabled = false;
+    btn.textContent = 'Save today';
+    return;
+  }
+
+  state.checkin = data;
+  renderCheckin();
+  const checks = await db.from('daily_checkins').select('log_date').order('log_date');
+  renderThread((checks.data || []).map(r => r.log_date));
+}
+
+function renderStack(items){
+  const host = document.getElementById('stackBody');
+  host.replaceChildren();
+
+  if(items.length === 0){
+    host.append(el('div', { class:'empty',
+      text:'Clare has not added any supplements yet. They will appear here once she does.' }));
+    return;
+  }
+
+  const ul = el('ul', { class:'stack' });
+  items.forEach(s => {
+    const li = document.createElement('li');
+    const box = el('div', { class:'name', text: s.name });
+    if(s.dosage || s.timing){
+      box.append(el('span', { class:'dose',
+        text: [s.dosage, s.timing].filter(Boolean).join(' \u00b7 ') }));
+    }
+    li.append(box);
+
+    const t = el('button', { class:'tick', text:'\u2713',
+      attrs:{ type:'button', 'aria-pressed':'false',
+              'aria-label':'Mark ' + s.name + ' as taken' } });
+    t.disabled = !state.active;
+    t.addEventListener('click', () => toggleSupplement(s, t));
+    li.append(t);
+    ul.append(li);
+  });
+
+  host.append(ul);
+}
+
+async function toggleSupplement(s, btn){
+  const on = btn.getAttribute('aria-pressed') === 'true';
+  btn.setAttribute('aria-pressed', on ? 'false' : 'true');
+
+  const { data:{ user } } = await db.auth.getUser();
+  const slot = new Date().getHours() < 14 ? 'morning' : 'evening';
+
+  const { error } = await db.from('supplement_log').upsert({
+    client_id: user.id, supplement_id: s.id, log_date: today(), slot, taken: !on
+  }, { onConflict: 'supplement_id,log_date,slot' });
+
+  if(error){
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    showError('Could not save that. Try again in a moment.');
+  }
+}
+
+boot().catch(() => showError('Something went wrong loading your programme.'));
+</script>
+</body>
+</html>
