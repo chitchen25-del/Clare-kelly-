@@ -2,95 +2,103 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Patient Stories & Testimonials | The Natural Healing Clinic</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Pinch-zoom deliberately enabled. Do not add user-scalable=no or maximum-scale. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Patient Stories | The Natural Healing Clinic</title>
+
+    <link rel="apple-touch-icon" href="./logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="./style.css?version=99">
+    <link rel="stylesheet" href="./style.css?version=100">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
 
     <style>
-        /* Unified Navigation Styles */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background-color: #ffffff; position: sticky; top: 0; z-index: 1000; }
+        /* style.css sets user-select:none on body, which stops visitors copying
+           the clinic address, phone number or email. Undone here. */
+        body { -webkit-user-select: text; user-select: text; }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
         .nav-brand-logo { height: 50px; width: auto; cursor: pointer; }
         .desktop-nav-links { display: flex; align-items: center; gap: 1.5rem; }
-        .mobile-menu-btn { display: none; flex-direction: column; justify-content: space-around; width: 32px; height: 26px; background: transparent; border: none; cursor: pointer; padding: 0; z-index: 1001; }
-        .mobile-menu-btn span { width: 100%; height: 3.5px; background-color: #095d28; border-radius: 2px; }
-        
-        .mobile-drawer { position: fixed; top: 0; right: -100%; width: 80%; max-width: 350px; height: 100vh; background: #ffffff; z-index: 99999; box-shadow: -5px 0 30px rgba(0,0,0,0.15); transition: right 0.3s ease-in-out; padding: 5rem 2rem 2rem 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
-        .mobile-drawer.open { right: 0; }
-        .mobile-drawer-link { font-size: 1.1rem; font-weight: 600; color: #222; text-decoration: none; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 1px solid #f0f0f0; }
-        .mobile-drawer-link:hover { color: #095d28; }
-        
-        @media (max-width: 1024px) { .desktop-nav-links { display: none !important; } .mobile-menu-btn { display: flex !important; } }
 
-        /* Scroll Animation Classes */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 32px;
+            height: 26px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+        }
+        .mobile-menu-btn span {
+            width: 100%;
+            height: 3.5px;
+            background-color: #095d28;
+            border-radius: 2px;
+        }
+
+        .mobile-drawer {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 350px;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 99999;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.15);
+            transition: right 0.3s ease-in-out;
+            padding: 5rem 2rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .mobile-drawer.open { right: 0; }
+        .mobile-drawer-link {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #222;
+            text-decoration: none;
+            cursor: pointer;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .mobile-drawer-link:hover { color: #095d28; }
+
+        @media (max-width: 1024px) {
+            .desktop-nav-links { display: none !important; }
+            .mobile-menu-btn { display: flex !important; }
+        }
+
+        a:focus-visible, button:focus-visible, .mobile-drawer-link:focus-visible,
+        .nav-link-text:focus-visible {
+            outline: 2px solid #095d28;
+            outline-offset: 3px;
+            border-radius: 6px;
+        }
+
         .reveal {
             opacity: 0;
             transform: translateY(35px);
             transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; transform: none; transition: none; }
+            * { animation: none !important; }
         }
 
-        /* ================= SWISH TESTIMONIAL CARD OVERRIDES ================= */
-        /* This forces the dynamically loaded JS cards to look high-end and uniform */
-        #testimonial-feed > div {
-            background: #ffffff !important;
-            border-radius: 16px !important;
-            padding: 3rem 2.5rem !important;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.04) !important;
-            border: 1px solid #fcfcfc !important;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: space-between !important;
-            position: relative;
-        }
-        #testimonial-feed > div:hover {
-            transform: translateY(-8px) !important;
-            box-shadow: 0 25px 60px rgba(9, 93, 40, 0.12) !important;
-        }
-        
-        /* The Quote Text */
-        #testimonial-feed > div > p:first-of-type {
-            font-family: 'Cormorant Garamond', serif !important;
-            font-style: italic !important;
-            font-size: 1.25rem !important;
-            color: #444 !important;
-            line-height: 1.7 !important;
-            margin-bottom: 2rem !important;
-            position: relative;
-        }
-        /* Add a subtle quotation mark design element */
-        #testimonial-feed > div > p:first-of-type::before {
-            content: '"';
-            font-size: 4rem;
-            color: rgba(13, 155, 70, 0.1);
-            position: absolute;
-            top: -2rem;
-            left: -1rem;
-            font-family: 'Montserrat', sans-serif;
-            line-height: 1;
-        }
-
-        /* The Patient Name / Date */
-        #testimonial-feed > div > p:last-of-type, #testimonial-feed > div > small {
-            font-family: 'Montserrat', sans-serif !important;
-            font-size: 0.8rem !important;
-            font-weight: 700 !important;
-            color: #095d28 !important;
-            text-transform: uppercase !important;
-            letter-spacing: 2px !important;
-            margin: 0 !important;
-            border-top: 1px solid #eaeaea !important;
-            padding-top: 1.5rem !important;
-        }
-
-        /* ================= PREMIUM FOOTER ================= */
         .clinic-footer {
             background-color: #f9f8f6;
             padding: 6rem 5% 3rem 5%;
@@ -107,10 +115,7 @@
             gap: 4rem;
             margin-bottom: 4rem;
         }
-        .footer-brand img {
-            height: 55px;
-            margin-bottom: 1.5rem;
-        }
+        .footer-brand img { height: 55px; margin-bottom: 1.5rem; }
         .footer-brand p {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
@@ -142,9 +147,7 @@
             color: #555;
             margin-bottom: 0.8rem;
         }
-        .footer-col a:hover {
-            color: #095d28;
-        }
+        .footer-col a:hover { color: #095d28; }
         .footer-bottom {
             max-width: 1200px;
             margin: 0 auto;
@@ -164,35 +167,110 @@
             margin-left: 1.5rem;
             transition: color 0.2s;
         }
-        .footer-bottom-links a:hover {
-            color: #095d28;
-        }
+        .footer-bottom-links a:hover { color: #095d28; }
         @media (max-width: 768px) {
-            .footer-bottom { flex-direction: column; text-align: center; }
-            .footer-bottom-links { margin-top: 1rem; }
-            .footer-bottom-links a { margin: 0 0.8rem; }
+            .clinic-footer { padding: 4rem 5% 2rem 5%; text-align: center; }
+            .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; margin-bottom: 2rem; }
+            .footer-brand img { margin: 0 auto 1.5rem auto; display: block; }
+            .footer-brand p { margin: 0 auto; }
+            .footer-col { text-align: center; }
+            .footer-bottom { flex-direction: column; gap: 1.5rem; }
+            .footer-bottom-links {
+                margin-top: 0;
+                display: flex;
+                justify-content: center;
+                gap: 1.5rem;
+            }
+            .footer-bottom-links a { margin: 0; }
+        }
+
+        .story-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+        .story {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.04);
+            border: 1px solid #fcfcfc;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        .story .quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.25rem;
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .story .quote::before {
+            content: '"';
+            font-size: 4rem;
+            color: rgba(13, 155, 70, 0.1);
+            position: absolute;
+            top: -2rem;
+            left: -1rem;
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1;
+        }
+        .story .who {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #095d28;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+            border-top: 1px solid #eaeaea;
+            padding-top: 1.5rem;
+        }
+        .story .stars {
+            font-size: 0.9rem;
+            color: #0d9b46;
+            letter-spacing: 2px;
+            margin-bottom: 0.8rem;
+        }
+        .feed-note {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #888;
+            font-family: 'Montserrat', sans-serif;
+            padding: 3rem;
+            font-size: 0.95rem;
         }
     </style>
 </head>
 <body>
 
     <script>
-        function toggleMobileMenu() { 
+        const BOOKING_URL = 'https://l.bttr.to/Msx8s';
+        function goBook() { window.open(BOOKING_URL, '_blank', 'noopener'); }
+        function toggleMobileMenu() {
             const drawer = document.getElementById('mobile-drawer');
-            if(drawer) drawer.classList.toggle('open');
+            if (drawer) drawer.classList.toggle('open');
         }
     </script>
 
     <nav>
         <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="location.href='./index.html'">
+
         <div class="desktop-nav-links">
             <span class="nav-link-text" onclick="location.href='./index.html'" style="cursor: pointer;">Home</span>
             <span class="nav-link-text" onclick="location.href='./about.html'" style="cursor: pointer;">About Clare</span>
             <span class="nav-link-text" style="color: #095d28; font-weight: 700;">Patient Stories</span>
             <span class="nav-link-text" onclick="location.href='./news.html'" style="cursor: pointer;">Latest News</span>
             <span class="nav-link-text" onclick="location.href='./contact.html'" style="cursor: pointer;">Contact</span>
-            <button type="button" class="btn btn-outline" onclick="location.href='./app.html'">Patient Portal</button>
+            <button type="button" class="btn btn-outline" onclick="location.href='./vip-login.html'">My Programme</button>
+            <button type="button" class="btn" onclick="goBook()">Book Now</button>
         </div>
+
         <button type="button" class="mobile-menu-btn" aria-label="Open navigation menu" onclick="toggleMobileMenu()">
             <span></span><span></span><span></span>
         </button>
@@ -200,49 +278,44 @@
 
     <!-- MOBILE NAVIGATION DRAWER -->
     <div class="mobile-drawer" id="mobile-drawer">
-        <span style="position: absolute; top: calc(1.5rem + env(safe-area-inset-top)); right: 2rem; font-size: 2rem; cursor: pointer; color: #222;" onclick="toggleMobileMenu()">✕</span>
-        <span class="mobile-drawer-link" onclick="location.href='./index.html'">Home</span>
-        <span class="mobile-drawer-link" onclick="location.href='./about.html'">About Clare</span>
-        <span class="mobile-drawer-link" onclick="location.href='./testimonials.html'" style="color: #095d28; font-weight: 700;">Patient Stories</span>
-        <span class="mobile-drawer-link" onclick="location.href='./news.html'">Latest News</span>
-        <span class="mobile-drawer-link" onclick="location.href='./contact.html'">Contact</span>
-        <span class="mobile-drawer-link" onclick="location.href='./app.html'" style="color: #095d28; font-weight: 700;">Patient Portal</span>
+        <span style="position: absolute; top: calc(1.5rem + env(safe-area-inset-top)); right: 2rem; font-size: 2rem; cursor: pointer; color: #222;" onclick="toggleMobileMenu()">&#10005;</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./index.html'">Home</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./about.html'">About Clare</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu()" style="color: #095d28; font-weight: 700;">Patient Stories</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./news.html'">Latest News</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./contact.html'">Contact</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./vip-login.html'" style="color: #095d28; font-weight: 700;">My Programme</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); goBook()" style="color: #095d28; font-weight: 700;">Book Now</span>
     </div>
 
-    <!-- HEADER SECTION -->
     <div class="reveal" style="background-color: #f9f8f6; padding: 5rem 6%; border-bottom: 1px solid #e0d8cc; text-align: center;">
-        <span style="display: inline-block; padding: 0.4rem 1.2rem; background: rgba(13, 155, 70, 0.1); border: 1px solid rgba(13, 155, 70, 0.2); border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: #095d28; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.5rem;">Verified Patient Stories</span>
+        <span style="display: inline-block; padding: 0.4rem 1.2rem; background: rgba(13, 155, 70, 0.1); border: 1px solid rgba(13, 155, 70, 0.2); border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: #095d28; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.5rem;">Patient Stories</span>
         <h1 style="font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: #222; margin-top: 0; margin-bottom: 1rem;">Testimonials</h1>
-        <p style="color: #666; max-width: 600px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">Read about the experiences of our patients. If you are an existing patient, sign in to share your healing journey.</p>
+        <p style="color: #666; max-width: 600px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">Experiences shared by people Clare has treated, published with their permission.</p>
     </div>
 
-    <section class="section" style="padding-top: 4rem; padding-bottom: 4rem; flex-direction: column; align-items: center; max-width: 1100px; margin: 0 auto; padding: 4rem 5%;">
-        
-        <!-- SUBMISSION BOX -->
-        <div id="auth-testimonial-box" class="reveal" style="width: 100%; max-width: 700px; margin-bottom: 5rem; text-align: center; transition-delay: 0.1s;">
-            <div id="testimonial-login-prompt" style="background: #ffffff; padding: 3rem 2.5rem; border-radius: 16px; box-shadow: 0 15px 45px rgba(0,0,0,0.04); border: 1px solid #fcfcfc;">
-                <h4 style="margin-bottom: 1rem; color: #111; font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 600;">Share Your Experience</h4>
-                <p style="font-size: 1rem; color: #666; margin-bottom: 2rem; line-height: 1.6;">To maintain authenticity, we only accept testimonials from verified patients. Please log in to your secure portal to submit your review.</p>
-                <button class="btn" style="padding: 1rem 2.5rem; box-shadow: 0 10px 20px rgba(9, 93, 40, 0.15);" onclick="location.href='./app.html'">Sign In to Post</button>
-            </div>
+    <section style="max-width: 1100px; margin: 0 auto; padding: 4rem 5%;">
+
+        <div id="testimonial-feed" class="story-grid">
+            <p class="feed-note">Loading patient stories&hellip;</p>
         </div>
 
-        <!-- PUBLIC FEED -->
-        <div id="testimonial-feed" style="width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem;">
-            <!-- Fallback loading text before app.js populates the grid -->
-            <p style="color: #888; text-align: center; width: 100%; font-family: 'Montserrat', sans-serif; padding: 3rem;">Loading patient stories...</p>
+        <div class="reveal" style="max-width: 640px; margin: 5rem auto 0 auto; background: #ffffff; padding: 3rem 2.5rem; border-radius: 16px; box-shadow: 0 15px 45px rgba(0,0,0,0.04); text-align: center;">
+            <h2 style="margin-bottom: 1rem; color: #111; font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 600;">Share your experience</h2>
+            <p style="font-size: 1rem; color: #666; margin-bottom: 2rem; line-height: 1.6;">If Clare has treated you and you'd be happy for your story to appear here, send it over. Nothing is published without your say-so, and you choose how your name appears.</p>
+            <a class="btn" href="mailto:clare@thenaturalhealingclinic.com?subject=My%20patient%20story" style="text-decoration: none;">Send your story</a>
         </div>
+
     </section>
 
-    <!-- PREMIUM REDESIGNED FOOTER -->
     <footer class="clinic-footer reveal">
         <div class="footer-grid">
-            
+
             <div class="footer-brand">
                 <img src="./logo.png" alt="The Natural Healing Clinic">
                 <p>"Restoring vitality through advanced clinical diagnostics and targeted physical therapies."</p>
             </div>
-            
+
             <div class="footer-col">
                 <h4>Clinic Locations</h4>
                 <a href="https://maps.apple.com/?q=13+Cronk+Drine,+Union+Mills,+Isle+of+Man,+IM4+4NG" target="_blank" rel="noopener noreferrer">
@@ -256,58 +329,132 @@
                     Castletown, Isle of Man
                 </a>
             </div>
-            
+
             <div class="footer-col">
-                <h4>Contact & Hours</h4>
+                <h4>Contact &amp; Hours</h4>
                 <a href="tel:07624202121"><strong>T:</strong> 07624 202 121</a>
                 <a href="mailto:clare@thenaturalhealingclinic.com"><strong>E:</strong> clare@thenaturalhealingclinic.com</a>
                 <p style="margin-top: 1rem; color: #888; line-height: 1.8;">
-                    <strong style="color: #555;">Mon & Fri:</strong> 10:00 - 15:00<br>
+                    <strong style="color: #555;">Mon &amp; Fri:</strong> 10:00 - 15:00<br>
                     <strong style="color: #555;">Consultations:</strong> By Appointment
                 </p>
             </div>
 
         </div>
-        
+
         <div class="footer-bottom">
             <div>&copy; 2026 The Natural Healing Clinic. All rights reserved.</div>
             <div class="footer-bottom-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
+                <a href="./privacy.html">Privacy Policy</a>
+                <a href="./terms.html">Terms of Service</a>
             </div>
         </div>
     </footer>
 
-    <!-- Scroll Animation Observer Script -->
+    <!-- Clear the old service worker and its caches. The previous sw.js cached
+         app.html and the old stylesheet, so returning visitors keep seeing the
+         old site until it is removed. -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations()
+                .then(regs => regs.forEach(r => r.unregister()))
+                .catch(() => {});
+        }
+        if (window.caches && caches.keys) {
+            caches.keys().then(keys => keys.forEach(k => caches.delete(k))).catch(() => {});
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const items = document.querySelectorAll('.reveal');
+            if (!('IntersectionObserver' in window)) {
+                items.forEach(el => el.classList.add('active'));
+                return;
+            }
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
+                    if (entry.isIntersecting) entry.target.classList.add('active');
                 });
             }, { threshold: 0.1 });
-            
-            // Observe existing reveals
-            document.querySelectorAll('.reveal').forEach((el) => { observer.observe(el); });
+            items.forEach((el) => observer.observe(el));
+        });
+    </script>
+    <script>
+        const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // Watch for dynamically loaded testimonial cards to animate them too
-            const feedContainer = document.getElementById('testimonial-feed');
-            if (feedContainer) {
-                const mutationObserver = new MutationObserver(() => {
-                    Array.from(feedContainer.children).forEach(card => {
-                        if(card.tagName.toLowerCase() === 'div' && !card.classList.contains('reveal')) {
-                            card.classList.add('reveal');
-                            observer.observe(card);
-                        }
-                    });
-                });
-                mutationObserver.observe(feedContainer, { childList: true });
+        /* Every value from the database goes in with textContent. Never innerHTML. */
+        function el(tag, o) {
+            o = o || {};
+            const n = document.createElement(tag);
+            if (o.class) n.className = o.class;
+            if (o.text != null) n.textContent = o.text;
+            if (o.style) n.style.cssText = o.style;
+            if (o.attrs) for (const k in o.attrs) n.setAttribute(k, o.attrs[k]);
+            return n;
+        }
+
+        /* A stored URL could be a javascript: link. Only http(s) is allowed out. */
+        function safeUrl(raw) {
+            if (!raw) return null;
+            try {
+                const u = new URL(raw, location.origin);
+                return (u.protocol === 'http:' || u.protocol === 'https:') ? u.href : null;
+            } catch (e) { return null; }
+        }
+
+        const longDate = d => new Date(d).toLocaleDateString('en-GB',
+            { day: 'numeric', month: 'long', year: 'numeric' });
+    </script>
+
+    <script>
+        (async function () {
+            const host = document.getElementById('testimonial-feed');
+
+            const { data, error } = await db.from('testimonials')
+                .select('client_name, content, rating, created_at')
+                .order('created_at', { ascending: false })
+                .limit(30);
+
+            host.replaceChildren();
+
+            if (error) {
+                host.append(el('p', { class: 'feed-note',
+                    text: 'Patient stories could not be loaded right now. Please try again shortly.' }));
+                return;
             }
+
+            if (!data || data.length === 0) {
+                host.append(el('p', { class: 'feed-note',
+                    text: 'The first patient stories will appear here soon.' }));
+                return;
+            }
+
+            data.forEach(t => {
+                const card = el('div', { class: 'story reveal' });
+
+                if (t.rating) {
+                    const r = Math.max(1, Math.min(5, t.rating));
+                    card.append(el('p', { class: 'stars', text: '\u2605'.repeat(r) }));
+                }
+
+                card.append(el('p', { class: 'quote', text: t.content }));
+
+                const who = t.client_name +
+                    (t.created_at ? ' \u00b7 ' + longDate(t.created_at) : '');
+                card.append(el('p', { class: 'who', text: who }));
+
+                host.append(card);
+                requestAnimationFrame(() => card.classList.add('active'));
+            });
+        })().catch(() => {
+            const host = document.getElementById('testimonial-feed');
+            host.replaceChildren(el('p', { class: 'feed-note',
+                text: 'Patient stories could not be loaded right now. Please try again shortly.' }));
         });
     </script>
 
-    <script src="./app.js?v=2"></script>
 </body>
 </html>

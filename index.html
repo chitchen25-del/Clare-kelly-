@@ -2,42 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- Pinch-zoom deliberately enabled. Do not add user-scalable=no or maximum-scale. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>The Natural Healing Clinic | Isle of Man</title>
-    
+    <meta name="description" content="Functional medicine and advanced soft-tissue therapy on the Isle of Man. Clinics in Union Mills and Castletown.">
+
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Clinic App">
+    <meta name="apple-mobile-web-app-title" content="Clinic">
 
-    <link rel="apple-touch-icon" href="/logo.png">
+    <link rel="apple-touch-icon" href="./logo.png">
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiVGhlIE5hdHVyYWwgSGVhbGluZyBDbGluaWMiLCJzaG9ydF9uYW1lIjoiQ2xpbmljIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmM2YxZWYiLCJ0aGVtZV9jb2xvciI6IiMwOTVkMjgiLCJpY29ucyI6W3sic3JjIjoiLi9sb2dvLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="./style.css?version=99">
+
+    <link rel="stylesheet" href="./style.css?version=100">
 
     <style>
-        .bottom-nav, .mobile-tab-bar, nav.bottom-bar {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 0;
-        }
-
-        .bottom-nav img, .bottom-bar img, .mobile-tab-bar img, 
-        .bottom-nav svg, .bottom-bar svg {
-            width: 32px !important;
-            height: 32px !important;
-            object-fit: contain;
-            margin-bottom: 4px;
-        }
-
-        .bottom-nav span, .bottom-bar span, .mobile-tab-bar span {
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
+        /* style.css sets user-select:none on body, which stops visitors copying
+           the clinic address, phone number or email. Undone here. */
+        body { -webkit-user-select: text; user-select: text; }
 
         nav {
             display: flex;
@@ -59,8 +43,7 @@
             align-items: center;
             gap: 1.5rem;
         }
-        
-        /* Force explicit display rules for mobile hamburger toggle */
+
         .mobile-menu-btn {
             display: none;
             flex-direction: column;
@@ -80,7 +63,6 @@
             border-radius: 2px;
         }
 
-        /* Mobile Drawer Styling */
         .mobile-drawer {
             position: fixed;
             top: 0;
@@ -97,9 +79,7 @@
             flex-direction: column;
             gap: 1.5rem;
         }
-        .mobile-drawer.open {
-            right: 0;
-        }
+        .mobile-drawer.open { right: 0; }
         .mobile-drawer-link {
             font-size: 1.1rem;
             font-weight: 600;
@@ -109,9 +89,7 @@
             padding-bottom: 0.5rem;
             border-bottom: 1px solid #f0f0f0;
         }
-        .mobile-drawer-link:hover {
-            color: #095d28;
-        }
+        .mobile-drawer-link:hover { color: #095d28; }
 
         @media (max-width: 1024px) {
             .desktop-nav-links { display: none !important; }
@@ -122,74 +100,14 @@
             }
         }
 
-        /* ================= AESTHETIC UPGRADES ================= */
-
-        /* 1. Floating Form Labels & Soft Inputs */
-        .floating-group {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-        .floating-group input, .floating-group select {
-            width: 100%;
-            padding: 1.6rem 1rem 0.6rem 1rem;
-            font-size: 1rem;
-            background: #fcfcfc;
-            border: 1px solid #eaeaea;
-            border-radius: 8px;
-            outline: none;
-            transition: all 0.3s ease;
-            font-family: 'Montserrat', sans-serif;
-            color: #222;
-            appearance: none;
-            -webkit-appearance: none;
-        }
-        .floating-group select {
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23888888%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem top 50%;
-            background-size: 0.65rem auto;
-        }
-        .floating-group input:focus, .floating-group select:focus {
-            background: #ffffff;
-            border-color: rgba(13, 155, 70, 0.4);
-            box-shadow: 0 0 0 4px rgba(13, 155, 70, 0.05);
-        }
-        .floating-group label {
-            position: absolute;
-            top: 50%;
-            left: 1rem;
-            transform: translateY(-50%);
-            font-size: 0.95rem;
-            color: #888;
-            pointer-events: none;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            font-family: 'Montserrat', sans-serif;
-        }
-        /* Float the label on focus or when valid (filled) */
-        .floating-group input:focus ~ label,
-        .floating-group input:valid ~ label,
-        .floating-group select:focus ~ label,
-        .floating-group select:valid ~ label {
-            top: 0.8rem;
-            transform: translateY(0);
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: #095d28;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        /* Date inputs always show placeholder UI on iOS, so pre-float them */
-        .floating-group input[type="date"] ~ label {
-            top: 0.8rem;
-            transform: translateY(0);
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: #095d28;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        /* Visible keyboard focus — the whole site was missing this */
+        a:focus-visible, button:focus-visible, .mobile-drawer-link:focus-visible {
+            outline: 2px solid #095d28;
+            outline-offset: 3px;
+            border-radius: 6px;
         }
 
-        /* 2. Scroll Animation Classes */
+        /* Scroll reveal */
         .reveal {
             opacity: 0;
             transform: translateY(35px);
@@ -199,8 +117,142 @@
             opacity: 1;
             transform: translateY(0);
         }
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; transform: none; transition: none; }
+            * { animation: none !important; }
+        }
 
-        /* 3. Premium Footer Styling */
+        /* ================= BOOKING HANDOFF ================= */
+        .booking-card {
+            background: #ffffff;
+            border: 1px solid #f0f0f0;
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 15px 40px rgba(9,93,40,0.06);
+            text-align: center;
+        }
+        .booking-card h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 6vw, 2.6rem);
+            color: #222;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            line-height: 1.15;
+        }
+        .booking-card > p {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.7;
+            max-width: 46ch;
+            margin: 0 auto 2rem auto;
+        }
+        .booking-btn {
+            display: inline-block;
+            width: 100%;
+            max-width: 380px;
+            padding: 1.15rem 2rem;
+            background: #095d28;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 8px 22px rgba(9,93,40,0.22);
+            transition: background 0.2s ease;
+        }
+        .booking-btn:hover { background: #06401b; }
+        .booking-steps {
+            list-style: none;
+            padding: 0;
+            margin: 2.5rem auto 0 auto;
+            max-width: 420px;
+            text-align: left;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 2rem;
+        }
+        .booking-steps li {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            margin-bottom: 1.1rem;
+            font-size: 0.92rem;
+            color: #555;
+            line-height: 1.6;
+        }
+        .booking-steps li:last-child { margin-bottom: 0; }
+        .booking-steps .step-no {
+            flex: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(13,155,70,0.1);
+            color: #095d28;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .booking-alt {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #888;
+            line-height: 1.8;
+        }
+        .booking-alt a {
+            color: #095d28;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .programme-strip {
+            max-width: 600px;
+            margin: 2rem auto 0 auto;
+            background: linear-gradient(145deg, #095d28, #06401b);
+            border-radius: 16px;
+            padding: 2rem 2.5rem;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+        .programme-strip h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            color: #ffffff;
+            font-weight: 500;
+            margin-bottom: 0.6rem;
+        }
+        .programme-strip p {
+            color: #b5c7bc;
+            font-size: 0.92rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            max-width: 44ch;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .programme-strip a {
+            display: inline-block;
+            padding: 0.9rem 2.2rem;
+            background: #eaddc5;
+            color: #06401b;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        @media (max-width: 600px) {
+            .booking-card { padding: 2.25rem 1.5rem; }
+            .programme-strip { padding: 1.75rem 1.5rem; }
+        }
+
+        /* ================= FOOTER ================= */
         .clinic-footer {
             background-color: #f9f8f6;
             padding: 6rem 5% 3rem 5%;
@@ -216,10 +268,7 @@
             gap: 4rem;
             margin-bottom: 4rem;
         }
-        .footer-brand img {
-            height: 55px;
-            margin-bottom: 1.5rem;
-        }
+        .footer-brand img { height: 55px; margin-bottom: 1.5rem; }
         .footer-brand p {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
@@ -251,9 +300,7 @@
             color: #555;
             margin-bottom: 0.8rem;
         }
-        .footer-col a:hover {
-            color: #095d28;
-        }
+        .footer-col a:hover { color: #095d28; }
         .footer-bottom {
             max-width: 1200px;
             margin: 0 auto;
@@ -273,79 +320,56 @@
             margin-left: 1.5rem;
             transition: color 0.2s;
         }
-        .footer-bottom-links a:hover {
-            color: #095d28;
-        }
+        .footer-bottom-links a:hover { color: #095d28; }
         @media (max-width: 768px) {
-            .clinic-footer { 
-                padding: 4rem 5% 2rem 5%; 
-                text-align: center; 
+            .clinic-footer { padding: 4rem 5% 2rem 5%; text-align: center; }
+            .footer-grid { gap: 2.5rem; margin-bottom: 2rem; }
+            .footer-brand img { margin: 0 auto 1.5rem auto; display: block; }
+            .footer-brand p { margin: 0 auto; }
+            .footer-bottom { flex-direction: column; gap: 1.5rem; }
+            .footer-bottom-links {
+                margin-top: 0;
+                display: flex;
+                justify-content: center;
+                gap: 1.5rem;
             }
-            .footer-grid { 
-                gap: 2.5rem; 
-                margin-bottom: 2rem; 
-            }
-            .footer-brand img { 
-                margin: 0 auto 1.5rem auto; 
-                display: block; 
-            }
-            .footer-brand p { 
-                margin: 0 auto; 
-            }
-            .footer-bottom { 
-                flex-direction: column; 
-                gap: 1.5rem; 
-            }
-            .footer-bottom-links { 
-                margin-top: 0; 
-                display: flex; 
-                justify-content: center; 
-                gap: 1.5rem; 
-            }
-            .footer-bottom-links a { 
-                margin: 0; 
-            }
+            .footer-bottom-links a { margin: 0; }
         }
     </style>
 </head>
 <body>
 
     <script>
-        function toggleMobileMenu() { 
-            const drawer = document.getElementById('mobile-drawer');
-            if(drawer) {
-                drawer.classList.toggle('open');
-            }
+        /* Bookings, intake and payment all live in Practice Better.
+           One constant so the link changes in a single place.
+           Per-service links can be generated in Practice Better under
+           Settings (gear) > Share My Link, if you want each pricing tier
+           to land on its own service rather than the full bookings page. */
+        const BOOKING_URL = 'https://l.bttr.to/Msx8s';
+
+        function goBook() {
+            window.open(BOOKING_URL, '_blank', 'noopener');
         }
 
-        function handleServiceChange(selectElement, btnId, paypalContainerId) {
-            const standardBtn = document.getElementById(btnId);
-            const paypalContainer = document.getElementById(paypalContainerId);
-            
-            if(selectElement.value.includes('Free')) {
-                standardBtn.style.display = 'block';
-                standardBtn.innerText = 'Complete Free Booking';
-                paypalContainer.style.display = 'none';
-            } else if (selectElement.value !== "") {
-                standardBtn.style.display = 'none';
-                paypalContainer.style.display = 'block';
-            }
+        function toggleMobileMenu() {
+            const drawer = document.getElementById('mobile-drawer');
+            if (drawer) drawer.classList.toggle('open');
         }
     </script>
 
     <nav>
         <img src="./logo.png" alt="The Natural Healing Clinic" class="nav-brand-logo" onclick="location.href='./index.html'">
-        
+
         <div class="desktop-nav-links">
             <span class="nav-link-text" style="color: var(--primary-sage); font-weight: 700;">Home</span>
             <span class="nav-link-text" onclick="location.href='./about.html'" style="cursor: pointer;">About Clare</span>
             <span class="nav-link-text" onclick="location.href='./testimonials.html'" style="cursor: pointer;">Patient Stories</span>
             <span class="nav-link-text" onclick="location.href='./news.html'" style="cursor: pointer;">Latest News</span>
             <span class="nav-link-text" onclick="location.href='./contact.html'" style="cursor: pointer;">Contact</span>
-            <button type="button" class="btn btn-outline" onclick="location.href='./app.html'">Patient Portal</button>
-            <button type="button" class="btn" onclick="location.href='#register-section'">Register & Book</button>
+            <button type="button" class="btn btn-outline" onclick="location.href='./vip-login.html'">My Programme</button>
+            <button type="button" class="btn" onclick="goBook()">Book Now</button>
         </div>
-        
+
         <button type="button" class="mobile-menu-btn" aria-label="Open navigation menu" onclick="toggleMobileMenu()">
             <span></span><span></span><span></span>
         </button>
@@ -359,40 +383,41 @@
         <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./testimonials.html'">Patient Stories</span>
         <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./news.html'">Latest News</span>
         <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./contact.html'">Contact</span>
-        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./app.html'" style="color: #095d28; font-weight: 700;">Patient Portal</span>
-        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='#register-section'" style="color: #095d28; font-weight: 700;">Register & Book</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); location.href='./vip-login.html'" style="color: #095d28; font-weight: 700;">My Programme</span>
+        <span class="mobile-drawer-link" onclick="toggleMobileMenu(); goBook()" style="color: #095d28; font-weight: 700;">Book Now</span>
     </div>
 
     <!-- ================= HOME SCREEN ================= -->
     <div id="screen-home" class="page-screen visible" style="display: block; position: static;">
-        
+
         <!-- HERO SECTION -->
-        <section class="hero" id="home-hero" style="position: relative; padding: 6rem 5% 5rem 5%; text-align: center; background: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat; border-bottom: 1px solid var(--secondary-sand); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 75vh;">
-            
-            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(243, 241, 239, 0.7); z-index: 1;"></div>
-            
+        <section class="hero" id="home-hero" style="position: relative; padding: 6rem 5% 5rem 5%; text-align: center; background: url('./Back.jpg') center/cover no-repeat; border-bottom: 1px solid var(--secondary-sand); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 75vh;">
+
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(243, 241, 239, 0.55); z-index: 1;"></div>
+
             <div class="reveal" style="position: relative; z-index: 2; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.8); padding: 3.5rem 2rem; border-radius: 24px; box-shadow: 0 10px 40px rgba(9,93,40,0.06);">
-                
+
                 <span style="display: inline-block; padding: 0.4rem 1.2rem; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(13, 155, 70, 0.2); border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700; color: var(--primary-sage); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.5rem;">Isle of Man • Clinical Wellness</span>
-                
+
                 <h1 style="font-size: clamp(2.8rem, 8vw, 4.5rem); margin-bottom: 1rem; color: var(--text-main); line-height: 1.1; font-weight: 600;">Healing From<br>The Inside Out</h1>
-                
+
                 <p style="font-size: 1.2rem; color: #333; font-style: italic; margin: 0 auto 2.5rem auto; font-family: 'Cormorant Garamond', serif; max-width: 550px; line-height: 1.5; font-weight: 500;">"Imagine a life without chronic pain. Meticulous functional medicine and advanced soft-tissue therapy designed for your exact biology."</p>
-                
+
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; width: 100%;">
-                    <button type="button" class="btn" style="padding: 1rem 2.5rem; font-size: 0.85rem;" onclick="location.href='#register-section'">Make An Appointment</button>
+                    <button type="button" class="btn" style="padding: 1rem 2.5rem; font-size: 0.85rem;" onclick="goBook()">Make An Appointment</button>
                     <button type="button" class="btn btn-outline" style="padding: 1rem 2.5rem; font-size: 0.85rem; background: white; border-color: var(--primary-sage);" onclick="location.href='./about.html'">Meet Clare</button>
                 </div>
-                
+
             </div>
         </section>
 
         <section class="section">
             <div class="section-image-wrapper reveal" style="position: relative; padding-bottom: 2.5rem;">
-                <div style="overflow: hidden; border-radius: 200px 200px 10px 10px; box-shadow: 0 20px 40px rgba(9,93,40,0.08); height: 480px; position: relative;">
-                    <img src="https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?auto=format&fit=crop&w=800&q=80" 
-                         alt="Zen stacked stones" 
-                         style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="overflow: hidden; border-radius: 200px 200px 10px 10px; box-shadow: 0 20px 40px rgba(9,93,40,0.08); height: 560px; position: relative;">
+                    <img src="./Practicing.jpg"
+                         alt="Treatment room at the clinic, with a therapist working on a patient"
+                         width="896" height="1195" loading="lazy"
+                         style="width: 100%; height: 100%; object-fit: cover; object-position: center 40%;">
                 </div>
                 <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.8); padding: 1.5rem 2rem; border-radius: 12px; width: 85%; text-align: center; box-shadow: 0 15px 35px rgba(9,93,40,0.12); z-index: 10;">
                     <span style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--primary-sage); text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 0.5rem;">Evidence-Informed Care</span>
@@ -407,11 +432,11 @@
                 <p style="margin-bottom: 2.5rem;">I offer a holistic approach to modern-day aches and pains. The Natural Healing Clinic is complementary to mainstream medical protocols.</p>
                 <h4 style="margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;">Do You Need Help With:</h4>
                 <ul class="help-list">
-                    <li>Pain Management & Muscular Pain</li>
+                    <li>Pain Management &amp; Muscular Pain</li>
                     <li>Neck, Shoulder or Back Pain</li>
-                    <li>Chronic Fatigue & Long Covid</li>
-                    <li>Fibromyalgia & Sports Injuries</li>
-                    <li>Migraines & Digestive Complaints</li>
+                    <li>Chronic Fatigue &amp; Long Covid</li>
+                    <li>Fibromyalgia &amp; Sports Injuries</li>
+                    <li>Migraines &amp; Digestive Complaints</li>
                 </ul>
             </div>
         </section>
@@ -425,22 +450,22 @@
             </div>
 
             <div style="max-width: 1150px; margin: 0 auto; padding: 0 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; align-items: center;">
-                
+
                 <!-- TIER 2: Packages & Cleanses (Silver) -->
                 <div class="reveal" style="background: white; border-radius: 16px; padding: 2.5rem; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 15px 35px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%;">
-                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #444; margin-bottom: 0.5rem; font-weight: 600;">Packages & Cleanses</h3>
+                    <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #444; margin-bottom: 0.5rem; font-weight: 600;">Packages &amp; Cleanses</h3>
                     <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; min-height: 40px;">Targeted multi-session resets, lymphatic drainage bundles, and biological cleanses.</p>
                     <div style="font-size: 2.5rem; font-family: 'Cormorant Garamond', serif; color: #222; margin-bottom: 2rem; font-weight: 600;">From £70</div>
                     <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1;">
-                        <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Migraine & Neck Reset (2 sessions) - £70</li>
+                        <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Migraine &amp; Neck Reset (2 sessions) - £70</li>
                         <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Clarity Drainage (2 sessions) - £70</li>
                         <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Taster Trio Bundle (Saves £25) - £195</li>
-                        <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Parasite Cleanse & 30-Day Kickstarts</li>
+                        <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Parasite Cleanse &amp; 30-Day Kickstarts</li>
                     </ul>
-                    <button type="button" style="margin-top: auto; width: 100%; padding: 1rem; background: white; color: #095d28; border: 2px solid #095d28; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;" onclick="location.href='#register-section'">View & Book</button>
+                    <button type="button" style="margin-top: auto; width: 100%; padding: 1rem; background: white; color: #095d28; border: 2px solid #095d28; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;" onclick="goBook()">View &amp; Book</button>
                 </div>
 
-                <!-- TIER 1: Core Treatments (Bronze - SOFT SHADOW FIX) -->
+                <!-- TIER 1: Core Treatments (Bronze) -->
                 <div class="pricing-tier-bronze reveal" style="background: #ffffff; border-radius: 16px; padding: 3rem 2.5rem; border: none; box-shadow: 0 25px 60px rgba(9,93,40,0.15), 0 0 20px rgba(9,93,40,0.03); position: relative; transform: scale(1.05); z-index: 2; display: flex; flex-direction: column; height: calc(100% + 2rem); transition-delay: 0.1s;">
                     <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #095d28; color: white; padding: 0.4rem 1.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(9,93,40,0.2);">Primary Focus</div>
                     <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #095d28; margin-bottom: 0.5rem; font-weight: 700;">Core Treatments</h3>
@@ -452,7 +477,7 @@
                         <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Infrared Add-ons available (£15)</li>
                         <li style="margin-bottom: 1rem; color: #444; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #095d28; font-weight: bold;">✓</span> Castletown Clinic options (£80)</li>
                     </ul>
-                    <button type="button" style="margin-top: auto; width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(9,93,40,0.2); transition: all 0.2s ease;" onclick="location.href='#register-section'">Book Core Treatment</button>
+                    <button type="button" style="margin-top: auto; width: 100%; padding: 1rem; background: #095d28; color: white; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(9,93,40,0.2); transition: all 0.2s ease;" onclick="goBook()">Book Core Treatment</button>
                 </div>
 
                 <!-- TIER 3: Functional Medicine (Gold) -->
@@ -466,117 +491,75 @@
                         <li style="margin-bottom: 1rem; color: #fff; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #eaddc5; font-weight: bold;">✓</span> 90-Day Functional Programmes (£950)</li>
                         <li style="margin-bottom: 1rem; color: #fff; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px;"><span style="color: #eaddc5; font-weight: bold;">✓</span> Functional Testing Reviews</li>
                     </ul>
-                    <button type="button" style="margin-top: auto; width: 100%; padding: 1rem; background: #eaddc5; color: #06401b; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.2s ease;" onclick="location.href='#register-section'">Apply For Protocol</button>
+                    <button type="button" style="margin-top: auto; width: 100%; padding: 1rem; background: #eaddc5; color: #06401b; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.2s ease;" onclick="goBook()">Apply For Protocol</button>
                 </div>
-                
+
             </div>
         </section>
 
-        <!-- REGISTRATION / BOOKING ANCHOR SECTION -->
-        <div id="register-section" style="padding: 4rem 5%; background: var(--card-bg); border-top: 1px solid var(--secondary-sand);">
-            <div class="form-container reveal" style="margin: 0 auto; max-width: 600px; padding: 0;">
-                <img src="./logo.png" alt="Logo" class="portal-logo" style="margin-bottom: 1rem;">
-                <h2 style="font-size: 1.8rem; margin-bottom: 2.5rem; font-family: 'Montserrat'; font-weight: 600; text-align: center;">Patient Registration</h2>
-                
-                <form id="reg-form" onsubmit="return processRegistration(event)">
-                    
-                    <!-- Concierge Step 1 -->
-                    <div style="background: #ffffff; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-bottom: 1.5rem; border: 1px solid #f0f0f0;">
-                        <h4 style="font-family: 'Montserrat'; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin-bottom: 1.5rem;">Step 1: Your Details</h4>
-                        
-                        <div class="floating-group">
-                            <input type="text" id="reg-name" required>
-                            <label>Full Name</label>
-                        </div>
-                        
-                        <div class="floating-group">
-                            <input type="email" id="reg-email" required>
-                            <label>Email Address</label>
-                        </div>
-                        
-                        <div class="floating-group" style="margin-bottom: 0;">
-                            <input type="password" id="reg-password" required>
-                            <label>Create Password</label>
-                        </div>
-                    </div>
+        <!-- Desk.jpg carries its own headline, so it runs full width and uncropped.
+             Nothing is overlaid on it. -->
+        <div class="reveal" style="line-height: 0; background: var(--card-bg);">
+            <img src="./Desk.jpg"
+                 alt="Your journey to wholeness begins here"
+                 width="1584" height="672" loading="lazy"
+                 style="width: 100%; height: auto; display: block;">
+        </div>
 
-                    <!-- Concierge Step 2 -->
-                    <div style="background: #ffffff; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-bottom: 1.5rem; border: 1px solid #f0f0f0;">
-                        <h4 style="font-family: 'Montserrat'; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin-bottom: 1.5rem;">Step 2: Appointment & Payment</h4>
-                        
-                        <div class="floating-group">
-                            <select id="reg-service" required onchange="handleServiceChange(this, 'reg-submit-btn', 'paypal-button-container-index')">
-                                <option value="" disabled selected hidden></option>
-                                
-                                <optgroup label="Core Therapies (Bronze)">
-                                    <option value="Myofascial Release - Union Mills Clinic (£70)">Myofascial Release - Union Mills — £70</option>
-                                    <option value="Myofascial Release - Castletown Clinic (£80)">Myofascial Release - Castletown — £80</option>
-                                    <option value="Lymphatic Treatment - Union Mills Clinic (£70)">Lymphatic Treatment - Union Mills — £70</option>
-                                    <option value="Lymphatic Treatment - Castletown Clinic (£80)">Lymphatic Treatment - Castletown — £80</option>
-                                    <option value="Infrared Targeted Treatment - Union Mills (£50)">Infrared Targeted Treatment - Union Mills — £50</option>
-                                    <option value="Infrared Targeted Treatment - Castletown (£60)">Infrared Targeted Treatment - Castletown — £60</option>
-                                </optgroup>
+        <!-- ================= BOOKING ================= -->
+        <div id="register-section" style="padding: 4rem 5% 5rem 5%; background: var(--card-bg); border-top: none;">
+            <div class="reveal" style="max-width: 620px; margin: 0 auto;">
 
-                                <optgroup label="Packages & Cleanses (Silver)">
-                                    <option value="Migraine & Neck Reset Package (£70)">Migraine & Neck Reset Package (2x 30min) — £70</option>
-                                    <option value="Clarity Drainage Package (£70)">Clarity Drainage Package (2x 30min) — £70</option>
-                                    <option value="Gut Mini Reset (£80)">Gut Mini Reset (10 Days) — £80</option>
-                                    <option value="Taster Trio Bundle (£195)">Taster Trio Bundle (All Three) — £195</option>
-                                    <option value="Parasite Cleanse (£150)">Parasite Cleanse — £150</option>
-                                    <option value="30-Day Kickstart Cleanse (£355)">30-Day Kickstart Cleanse — £355</option>
-                                </optgroup>
+                <div class="booking-card">
+                    <img src="./logo.png" alt="" style="height: 56px; width: auto; object-fit: contain; margin-bottom: 1.5rem;">
 
-                                <optgroup label="Functional Medicine (Gold)">
-                                    <option value="Free Discovery Call (20 min)">Complimentary Discovery Call (20 min) — Free</option>
-                                    <option value="Functional Medicine Consultation (£350)">Functional Medicine Consultation (90 min) — £350</option>
-                                    <option value="Functional Testing - Review (£350)">Functional Testing Review (90 min) — £350</option>
-                                    <option value="90-Day Functional Medicine Programme (£950)">90-Day Functional Medicine Programme — £950 (VIP App Access)</option>
-                                </optgroup>
-                            </select>
-                            <label>Treatment Pathway</label>
-                        </div>
+                    <h2>Book your appointment</h2>
 
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div class="floating-group" style="margin-bottom: 0;">
-                                <input type="date" id="portal-date-reg" min="2026-01-01" required>
-                                <label>Date</label>
-                            </div>
-                            <div class="floating-group" style="margin-bottom: 0;">
-                                <select id="portal-time-reg" required>
-                                    <option value="" disabled selected hidden></option>
-                                    <option value="09:00">09:00 AM</option>
-                                    <option value="10:00">10:00 AM</option>
-                                    <option value="11:00">11:00 AM</option>
-                                    <option value="12:00">12:00 PM</option>
-                                    <option value="13:00">1:00 PM</option>
-                                    <option value="14:00">2:00 PM</option>
-                                    <option value="15:00">3:00 PM</option>
-                                    <option value="16:00">4:00 PM</option>
-                                </select>
-                                <label>Time</label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Dynamic Buttons -->
-                    <div id="paypal-button-container-index" style="margin: 1.5rem 0; display: none;"></div>
-                    <button type="submit" id="reg-submit-btn" class="btn" style="width: 100%; display: none;">Create Account & Book</button>
+                    <p>Appointments, forms and payment are all handled in the clinic's booking system. Pick a treatment and a time that suits you, and you'll be set up in a couple of minutes.</p>
 
-                </form>
+                    <a href="https://l.bttr.to/Msx8s" class="booking-btn" target="_blank" rel="noopener noreferrer">Book an appointment</a>
+
+                    <ul class="booking-steps">
+                        <li>
+                            <span class="step-no" aria-hidden="true">1</span>
+                            <span>Choose your treatment, clinic and time from Clare's live diary.</span>
+                        </li>
+                        <li>
+                            <span class="step-no" aria-hidden="true">2</span>
+                            <span>Create your patient account the first time you book. After that you sign straight in.</span>
+                        </li>
+                        <li>
+                            <span class="step-no" aria-hidden="true">3</span>
+                            <span>Complete your health questionnaire and pay securely before your visit.</span>
+                        </li>
+                    </ul>
+
+                    <p class="booking-alt">
+                        Not sure which treatment is right for you? Start with the free 20-minute discovery call, or
+                        call <a href="tel:07624202121">07624 202 121</a>.
+                    </p>
+                </div>
+
+                <div class="programme-strip">
+                    <h3>On the 90-Day Functional Programme?</h3>
+                    <p>Your daily check-ins, food log and supplement tracker live in your programme app. Clare sets your account up when you begin.</p>
+                    <a href="./vip-login.html">Open my programme</a>
+                </div>
+
             </div>
         </div>
 
     </div>
 
-    <!-- ================= PREMIUM REDESIGNED FOOTER ================= -->
+    <!-- ================= FOOTER ================= -->
     <footer class="clinic-footer reveal">
         <div class="footer-grid">
-            
+
             <div class="footer-brand">
                 <img src="./logo.png" alt="The Natural Healing Clinic">
                 <p>"Restoring vitality through advanced clinical diagnostics and targeted physical therapies."</p>
             </div>
-            
+
             <div class="footer-col">
                 <h4>Clinic Locations</h4>
                 <a href="https://maps.apple.com/?q=13+Cronk+Drine,+Union+Mills,+Isle+of+Man,+IM4+4NG" target="_blank" rel="noopener noreferrer">
@@ -590,107 +573,59 @@
                     Castletown, Isle of Man
                 </a>
             </div>
-            
+
             <div class="footer-col">
-                <h4>Contact & Hours</h4>
+                <h4>Contact &amp; Hours</h4>
                 <a href="tel:07624202121"><strong>T:</strong> 07624 202 121</a>
                 <a href="mailto:clare@thenaturalhealingclinic.com"><strong>E:</strong> clare@thenaturalhealingclinic.com</a>
                 <p style="margin-top: 1rem; color: #888; line-height: 1.8;">
-                    <strong style="color: #555;">Mon & Fri:</strong> 10:00 - 15:00<br>
+                    <strong style="color: #555;">Mon &amp; Fri:</strong> 10:00 - 15:00<br>
                     <strong style="color: #555;">Consultations:</strong> By Appointment
                 </p>
             </div>
 
         </div>
-        
+
         <div class="footer-bottom">
             <div>&copy; 2026 The Natural Healing Clinic. All rights reserved.</div>
             <div class="footer-bottom-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
+                <a href="./privacy.html">Privacy Policy</a>
+                <a href="./terms.html">Terms of Service</a>
             </div>
         </div>
     </footer>
 
-    <!-- Service Worker Registration -->
+    <!-- Clear the old service worker and its caches.
+         The previous sw.js cached app.html and the old stylesheet, so returning
+         visitors would keep seeing the old site. This removes it. If a proper
+         offline cache is wanted later, add a fresh sw.js and register it here. -->
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Service Worker registered successfully!', reg.scope))
-                    .catch(err => console.log('Service Worker registration failed: ', err));
-            });
+            navigator.serviceWorker.getRegistrations()
+                .then(regs => regs.forEach(r => r.unregister()))
+                .catch(() => {});
+        }
+        if (window.caches && caches.keys) {
+            caches.keys().then(keys => keys.forEach(k => caches.delete(k))).catch(() => {});
         }
     </script>
 
-    <!-- Scroll Animation Observer Script -->
+    <!-- Scroll reveal -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
+            const items = document.querySelectorAll('.reveal');
+            if (!('IntersectionObserver' in window)) {
+                items.forEach(el => el.classList.add('active'));
+                return;
+            }
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
+                    if (entry.isIntersecting) entry.target.classList.add('active');
                 });
             }, { threshold: 0.1 });
-            
-            document.querySelectorAll('.reveal').forEach((el) => {
-                observer.observe(el);
-            });
+            items.forEach((el) => observer.observe(el));
         });
     </script>
 
-    <!-- PayPal SDK Sandbox -->
-    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=GBP"></script>
-
-    <script>
-        paypal.Buttons({
-            createOrder: function(data, actions) {
-                // Ensure required form fields are filled before checking out
-                const name = document.getElementById('reg-name').value;
-                const email = document.getElementById('reg-email').value;
-                const date = document.getElementById('portal-date-reg').value;
-                const time = document.getElementById('portal-time-reg').value;
-                
-                if (!name || !email || !date || !time) {
-                    alert("Please fill in all your registration details, date, and time before paying.");
-                    return actions.reject();
-                }
-
-                const serviceSelect = document.getElementById('reg-service');
-                let amount = "70.00"; 
-                if (serviceSelect && serviceSelect.value) {
-                    if (serviceSelect.value.includes("950")) amount = "950.00";
-                    else if (serviceSelect.value.includes("450")) amount = "450.00";
-                    else if (serviceSelect.value.includes("355")) amount = "355.00";
-                    else if (serviceSelect.value.includes("350")) amount = "350.00";
-                    else if (serviceSelect.value.includes("195")) amount = "195.00";
-                    else if (serviceSelect.value.includes("150")) amount = "150.00";
-                    else if (serviceSelect.value.includes("120")) amount = "120.00";
-                    else if (serviceSelect.value.includes("90")) amount = "90.00";
-                    else if (serviceSelect.value.includes("85")) amount = "85.00";
-                    else if (serviceSelect.value.includes("80")) amount = "80.00";
-                    else if (serviceSelect.value.includes("75")) amount = "75.00";
-                    else if (serviceSelect.value.includes("70")) amount = "70.00";
-                    else if (serviceSelect.value.includes("60")) amount = "60.00";
-                    else if (serviceSelect.value.includes("50")) amount = "50.00";
-                }
-
-                return actions.order.create({
-                    purchase_units: [{ amount: { value: amount } }]
-                });
-            },
-            onApprove: function(data, actions) {
-                return actions.order.capture().then(function(details) {
-                    // Inject PayPal Transaction ID to window so app.js can pick it up
-                    window.paypalTransactionId = details.id;
-                    // Trigger the hidden submit button programmatically
-                    document.getElementById('reg-submit-btn').click();
-                });
-            }
-        }).render('#paypal-button-container-index');
-    </script>
-
-    <script src="./app.js?v=11"></script>
 </body>
 </html>
