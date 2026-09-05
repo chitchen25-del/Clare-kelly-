@@ -146,6 +146,13 @@
             max-width: 46ch;
             margin: 0 auto 2rem auto;
         }
+        #register-section { scroll-margin-top: 90px; }
+        .better-inline-booking-widget { position: relative; overflow: hidden; }
+        .better-inline-booking-widget iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border: 0; border-radius: 12px;
+        }
+        #booking-widget-wrap { margin-bottom: 2rem; }
         .booking-btn {
             display: inline-block;
             width: 100%;
@@ -340,16 +347,33 @@
 <body>
 
     <script>
-        /* Bookings, intake and payment all live in Practice Better.
-           One constant so the link changes in a single place.
-           Per-service links can be generated in Practice Better under
-           Settings (gear) > Share My Link, if you want each pricing tier
-           to land on its own service rather than the full bookings page. */
+        /* Booking lives in the Practice Better widget in #register-section.
+           The direct link is kept as a fallback for anyone the widget fails. */
         const BOOKING_URL = 'https://l.bttr.to/Msx8s';
 
         function goBook() {
-            window.open(BOOKING_URL, '_blank', 'noopener');
+            const target = document.getElementById('register-section');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                window.open(BOOKING_URL, '_blank', 'noopener');
+            }
         }
+
+        /* If the widget script hasn't produced an iframe within 8 seconds —
+           blocked script, content blocker, flaky connection — say so plainly
+           and push people to the direct link rather than leaving a blank box. */
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                const wrap = document.getElementById('booking-widget-wrap');
+                const fallback = document.getElementById('booking-fallback');
+                if (!wrap || !fallback) return;
+                if (!wrap.querySelector('iframe')) {
+                    wrap.hidden = true;
+                    fallback.hidden = false;
+                }
+            }, 8000);
+        });
 
         function toggleMobileMenu() {
             const drawer = document.getElementById('mobile-drawer');
@@ -517,7 +541,27 @@
 
                     <p>Appointments, forms and payment are all handled in the clinic's booking system. Pick a treatment and a time that suits you, and you'll be set up in a couple of minutes.</p>
 
-                    <a href="https://l.bttr.to/Msx8s" class="booking-btn" target="_blank" rel="noopener noreferrer">Book an appointment</a>
+                    <!-- Practice Better Booking Widget: start -->
+                    <div id="booking-widget-wrap">
+                        <div class="better-inline-booking-widget"
+                             data-url="https://my.practicebetter.io"
+                             data-booking-page="6a5337395d5349e9b7b5afc8"
+                             data-hash="6a2f054a9c7118556a60266a"
+                             data-theme="32a363"
+                             data-theme-accent="33cc33"
+                             data-scrollbar-visible="false"
+                             style="width:100%;max-width:550px;height:800px;margin:0 auto;"></div>
+                    </div>
+                    <!-- Practice Better Booking Widget: end -->
+
+                    <div id="booking-fallback" hidden>
+                        <p style="color:#8a3a32;font-size:0.9rem;line-height:1.6;margin-bottom:1.5rem;">
+                            The booking form isn't loading. You can book on the clinic's booking page instead.
+                        </p>
+                    </div>
+
+                    <a href="https://l.bttr.to/Msx8s" class="booking-btn" target="_blank" rel="noopener noreferrer">Open the booking page</a>
+                    <p style="font-size:0.82rem;color:#999;margin-top:0.9rem;">Opens in a new tab &mdash; useful if the form above is awkward on your phone.</p>
 
                     <ul class="booking-steps">
                         <li>
@@ -594,6 +638,8 @@
             </div>
         </div>
     </footer>
+
+    <script src="https://cdn.practicebetter.io/assets/js/booking.widget.js"></script>
 
     <!-- Clear the old service worker and its caches.
          The previous sw.js cached app.html and the old stylesheet, so returning

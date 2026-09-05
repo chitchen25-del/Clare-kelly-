@@ -254,7 +254,8 @@
 
     <script>
         const BOOKING_URL = 'https://l.bttr.to/Msx8s';
-        function goBook() { window.open(BOOKING_URL, '_blank', 'noopener'); }
+        /* Booking happens in the Practice Better widget on the homepage. */
+        function goBook() { location.href = './index.html#register-section'; }
         function toggleMobileMenu() {
             const drawer = document.getElementById('mobile-drawer');
             if (drawer) drawer.classList.toggle('open');

@@ -31,6 +31,28 @@
            border-bottom:1px solid var(--hair);font-size:.9rem}
   .logline:last-child{border-bottom:none}
   .view{display:none}.view.on{display:block}
+
+  /* Patients / News switch */
+  .seg{display:flex;gap:6px;background:var(--bone);border-radius:12px;padding:4px;margin-bottom:22px}
+  .seg button{flex:1;min-height:42px;border:none;border-radius:9px;background:transparent;
+       font-family:inherit;font-size:.7rem;font-weight:700;letter-spacing:.1em;
+       text-transform:uppercase;color:var(--ink-soft);cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--card);color:var(--forest);box-shadow:var(--lift-sm)}
+
+  /* News */
+  .post{background:var(--card);border:1px solid var(--hair);border-radius:18px;
+        padding:16px;margin-bottom:12px;display:flex;gap:14px;box-shadow:var(--lift-sm)}
+  .post img{width:64px;height:64px;flex:none;border-radius:12px;object-fit:cover;background:var(--bone)}
+  .post .body{flex:1;min-width:0}
+  .post .t{font-weight:600;font-size:.95rem;line-height:1.35}
+  .post .d{font-size:.74rem;color:var(--ink-faint);margin-top:3px;letter-spacing:.04em}
+  .post .tags{font-size:.66rem;color:var(--forest-mid);font-weight:700;letter-spacing:.1em;
+        text-transform:uppercase;margin-top:6px}
+  .binbtn{width:38px;height:38px;flex:none;border:1px solid var(--err-line);border-radius:50%;
+        background:var(--card);color:var(--err-ink);font-size:1rem;cursor:pointer;align-self:center}
+  .filehint{font-size:.74rem;color:var(--ink-faint);margin:-8px 0 16px;line-height:1.5}
+  .ok{background:rgba(23,160,74,.1);border:1px solid rgba(23,160,74,.3);color:var(--forest);
+      border-radius:12px;padding:14px 16px;font-size:.88rem;margin-bottom:20px}
 </style>
 </head>
 <body class="no-nav">
@@ -61,9 +83,58 @@
       <p class="greet" id="whoami">&nbsp;</p>
       <p class="display" style="font-size:2.5rem">Patients</p>
     </div>
+
+    <div class="seg" role="group" aria-label="Section">
+      <button type="button" id="segPatients" aria-pressed="true">Patients</button>
+      <button type="button" id="segNews" aria-pressed="false">News</button>
+    </div>
+
     <div id="alert2"></div>
     <div id="patientList"></div>
     <button type="button" class="ghost danger" id="signOut" style="margin-top:24px">Sign out</button>
+  </div>
+
+  <!-- NEWS -->
+  <div id="v-news" class="view">
+    <div class="band">
+      <p class="greet">Published to the Latest News page</p>
+      <p class="display" style="font-size:2.5rem">News</p>
+    </div>
+
+    <div class="seg" role="group" aria-label="Section">
+      <button type="button" id="segPatients2" aria-pressed="false">Patients</button>
+      <button type="button" id="segNews2" aria-pressed="true">News</button>
+    </div>
+
+    <div id="alert4"></div>
+
+    <section>
+      <h3>Add a post</h3>
+      <div class="panel">
+        <label for="nTitle">Title</label>
+        <input type="text" id="nTitle" placeholder="Migraine September Offer" style="margin-bottom:16px">
+
+        <label for="nDesc">What you want people to read</label>
+        <textarea id="nDesc" placeholder="In support of migraine awareness week in September, the clinic is offering&hellip;"></textarea>
+
+        <label for="nImage" style="margin-top:16px">Photo (optional)</label>
+        <input type="file" id="nImage" accept="image/*">
+        <p class="filehint">Shown at the top of the post. JPG, PNG, WEBP or HEIC, up to 10MB.</p>
+
+        <label for="nPdf">PDF (optional)</label>
+        <input type="file" id="nPdf" accept="application/pdf">
+        <p class="filehint">Adds a download button to the post. Up to 10MB.</p>
+
+        <button type="button" class="primary" id="nPublish">Publish post</button>
+      </div>
+    </section>
+
+    <section>
+      <h3>Published</h3>
+      <div id="newsList"></div>
+    </section>
+
+    <button type="button" class="ghost danger" id="signOut2" style="margin-top:24px">Sign out</button>
   </div>
 
   <!-- PATIENT DETAIL -->
@@ -103,6 +174,12 @@ const SUPABASE_URL = 'https://oegojjgvnsyjuffxtkuv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Twf2fn7Ay35v_ZEIw3iliA_UQwzuBgU';
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+const NEWS_BUCKET = 'latest-news';
+const MAX_UPLOAD = 10 * 1024 * 1024;
+
+/* Every value from the database goes in with textContent, never innerHTML.
+   A patient can type into some of these fields; a practitioner session must
+   never execute what they typed. */
 function el(tag, o = {}){
   const n = document.createElement(tag);
   if(o.class) n.className = o.class;
@@ -113,10 +190,16 @@ function el(tag, o = {}){
 const today = () => new Date().toLocaleDateString('en-CA');
 const fmt = d => new Date(d + 'T00:00:00').toLocaleDateString('en-GB',
   { day:'numeric', month:'short', year:'numeric' });
+const fmtStamp = d => new Date(d).toLocaleDateString('en-GB',
+  { day:'numeric', month:'long', year:'numeric' });
 
 function say(msg, host = 'alert'){
   const h = document.getElementById(host);
   if(h) h.replaceChildren(el('div', { class:'err', text: msg }));
+}
+function good(msg, host = 'alert'){
+  const h = document.getElementById(host);
+  if(h) h.replaceChildren(el('div', { class:'ok', text: msg }));
 }
 function clear(host = 'alert'){
   const h = document.getElementById(host);
@@ -169,9 +252,150 @@ async function afterLogin(){
   loadPatients();
 }
 
-document.getElementById('signOut').addEventListener('click', async () => {
-  await db.auth.signOut();
-  location.reload();
+['signOut','signOut2'].forEach(id => {
+  document.getElementById(id).addEventListener('click', async () => {
+    await db.auth.signOut();
+    location.reload();
+  });
+});
+
+/* ---------------- Section switch ---------------- */
+
+['segNews','segNews2'].forEach(id =>
+  document.getElementById(id).addEventListener('click', () => { show('news'); loadNews(); }));
+['segPatients','segPatients2'].forEach(id =>
+  document.getElementById(id).addEventListener('click', () => { show('list'); loadPatients(); }));
+
+/* ---------------- News ---------------- */
+
+async function loadNews(){
+  const host = document.getElementById('newsList');
+  host.replaceChildren(el('p', { class:'subtle', text:'Loading…' }));
+
+  const { data, error } = await db.from('clinic_news')
+    .select('*').order('created_at', { ascending:false });
+
+  host.replaceChildren();
+
+  if(error){ say('Could not load the news posts.', 'alert4'); return; }
+
+  if(!data || data.length === 0){
+    host.append(el('div', { class:'empty',
+      text:'Nothing published yet. Posts you add appear on the Latest News page straight away.' }));
+    return;
+  }
+
+  data.forEach(post => {
+    const card = el('div', { class:'post' });
+
+    const img = el('img', { attrs:{ alt:'', loading:'lazy' } });
+    if(post.image_url) img.src = post.image_url;
+    card.append(img);
+
+    const body = el('div', { class:'body' });
+    body.append(el('p', { class:'t', text: post.title }));
+    if(post.created_at) body.append(el('p', { class:'d', text: fmtStamp(post.created_at) }));
+
+    const tags = [];
+    if(post.image_url) tags.push('Photo');
+    if(post.pdf_url) tags.push('PDF');
+    if(tags.length) body.append(el('p', { class:'tags', text: tags.join(' \u00b7 ') }));
+    card.append(body);
+
+    const bin = el('button', { class:'binbtn', text:'\u00d7',
+      attrs:{ type:'button', 'aria-label':'Delete ' + post.title } });
+    bin.addEventListener('click', () => deletePost(post, bin));
+    card.append(bin);
+
+    host.append(card);
+  });
+}
+
+/* Storage path back out of a public URL, so deleting a post also removes
+   its files instead of leaving them orphaned in the bucket. */
+function pathFromUrl(url){
+  if(!url) return null;
+  const marker = '/object/public/' + NEWS_BUCKET + '/';
+  const i = url.indexOf(marker);
+  return i === -1 ? null : decodeURIComponent(url.slice(i + marker.length));
+}
+
+async function deletePost(post, btn){
+  if(!confirm('Delete "' + post.title + '" from the news page?')) return;
+  btn.disabled = true;
+  clear('alert4');
+
+  const { error } = await db.from('clinic_news').delete().eq('id', post.id);
+  if(error){
+    say('Could not delete that post.', 'alert4');
+    btn.disabled = false;
+    return;
+  }
+
+  const paths = [pathFromUrl(post.image_url), pathFromUrl(post.pdf_url)].filter(Boolean);
+  if(paths.length) await db.storage.from(NEWS_BUCKET).remove(paths);
+
+  loadNews();
+}
+
+/* Strip anything that would make an awkward storage key. */
+function safeName(name){
+  return name.replace(/[^A-Za-z0-9._-]/g, '_').slice(-60);
+}
+
+async function uploadNewsFile(file){
+  if(file.size > MAX_UPLOAD){
+    throw new Error('"' + file.name + '" is over 10MB. Try a smaller file.');
+  }
+  const path = Date.now() + '-' + safeName(file.name);
+  const { error } = await db.storage.from(NEWS_BUCKET)
+    .upload(path, file, { contentType: file.type, upsert: false });
+  if(error) throw new Error('Could not upload "' + file.name + '". ' + error.message);
+  return db.storage.from(NEWS_BUCKET).getPublicUrl(path).data.publicUrl;
+}
+
+document.getElementById('nPublish').addEventListener('click', async () => {
+  const btn = document.getElementById('nPublish');
+  const title = document.getElementById('nTitle').value.trim();
+  const desc  = document.getElementById('nDesc').value.trim();
+  const image = document.getElementById('nImage').files[0];
+  const pdf   = document.getElementById('nPdf').files[0];
+
+  clear('alert4');
+
+  if(!title){ say('Give the post a title.', 'alert4'); return; }
+  if(!desc){ say('Add some text for people to read.', 'alert4'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Publishing';
+
+  const uploaded = [];
+  try{
+    let imageUrl = null, pdfUrl = null;
+    if(image){ imageUrl = await uploadNewsFile(image); uploaded.push(imageUrl); }
+    if(pdf){   pdfUrl   = await uploadNewsFile(pdf);   uploaded.push(pdfUrl); }
+
+    const { error } = await db.from('clinic_news').insert({
+      title, description: desc, image_url: imageUrl, pdf_url: pdfUrl
+    });
+    if(error) throw new Error('The post did not save. ' + error.message);
+
+    document.getElementById('nTitle').value = '';
+    document.getElementById('nDesc').value = '';
+    document.getElementById('nImage').value = '';
+    document.getElementById('nPdf').value = '';
+
+    good('Published. It is live on the news page now.', 'alert4');
+    loadNews();
+  } catch(err){
+    // Don't leave uploaded files behind if the row failed to save.
+    const paths = uploaded.map(pathFromUrl).filter(Boolean);
+    if(paths.length) await db.storage.from(NEWS_BUCKET).remove(paths);
+    say(err.message, 'alert4');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Publish post';
 });
 
 /* ---------------- Patient list ---------------- */
@@ -355,15 +579,31 @@ function renderSupplements(items){
         text: [s.dosage, s.timing, s.active ? null : 'stopped'].filter(Boolean).join(' \u00b7 ') }));
       li.append(box);
 
-      const rm = el('button', { class:'tick', text:'\u00d7',
-        attrs:{ type:'button', 'aria-label':'Remove ' + s.name } });
-      rm.style.color = 'var(--err-ink)';
-      rm.addEventListener('click', async () => {
-        if(!confirm('Remove ' + s.name + ' from this patient\u2019s stack?')) return;
-        const { error } = await db.from('client_supplements').delete().eq('id', s.id);
-        if(error) say('Could not remove that.', 'alert3'); else openPatient(current);
-      });
-      li.append(rm);
+      /* Stopping marks it inactive rather than deleting. Deleting cascades away
+         the patient's tick history, which is the record of what they took. */
+      if(s.active){
+        const stop = el('button', { class:'tick', text:'\u00d7',
+          attrs:{ type:'button', 'aria-label':'Stop ' + s.name } });
+        stop.style.color = 'var(--err-ink)';
+        stop.addEventListener('click', async () => {
+          if(!confirm('Stop ' + s.name + '? It disappears from their list but the history is kept.')) return;
+          const { error } = await db.from('client_supplements')
+            .update({ active:false }).eq('id', s.id);
+          if(error) say('Could not stop that.', 'alert3'); else openPatient(current);
+        });
+        li.append(stop);
+      } else {
+        const restart = el('button', { class:'tick', text:'\u21ba',
+          attrs:{ type:'button', 'aria-label':'Restart ' + s.name } });
+        restart.style.color = 'var(--forest-mid)';
+        restart.addEventListener('click', async () => {
+          const { error } = await db.from('client_supplements')
+            .update({ active:true }).eq('id', s.id);
+          if(error) say('Could not restart that.', 'alert3'); else openPatient(current);
+        });
+        li.append(restart);
+      }
+
       ul.append(li);
     });
     host.append(ul);
